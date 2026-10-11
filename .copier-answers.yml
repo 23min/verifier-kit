@@ -4,6 +4,7 @@ _src_path: gh:23min/devcontainer-kit
 aiwf: false
 apt_packages:
 - python3
+- python3-yaml
 data_dir: false
 dood: false
 extra_extensions: []
