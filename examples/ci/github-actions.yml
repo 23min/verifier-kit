@@ -1,0 +1,54 @@
+# Example only: copy to .github/workflows/verify.yml.
+#
+# The job calls ./verify and nothing else, so this file stays small and the same checks run
+# locally, in agent hooks and here. To make it a gate, mark the "verify" job as a required
+# status check on the default branch (branch protection or a ruleset). On GitHub Free that
+# works for public repositories only; private repositories need a paid plan.
+#
+# Action versions were current in October 2026. Many teams pin actions to a commit SHA.
+name: verify
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0            # the path guard diffs against the base commit
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
+      - run: pip install pyyaml
+
+      - name: verify
+        shell: bash                 # bash with -e and pipefail, so tee keeps the exit code
+        env:
+          # The guard runs on pull requests only: it checks which role changed which paths.
+          VERIFY_BASE: ${{ github.event.pull_request.base.sha }}
+          VERIFY_BRANCH: ${{ github.head_ref }}
+          VERIFY_REPORTS: reports
+        run: |
+          {
+            echo '```'
+            ./verify --full && status=0 || status=$?
+            echo '```'
+            exit "$status"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: verify-reports
+          path: reports/
+          if-no-files-found: ignore

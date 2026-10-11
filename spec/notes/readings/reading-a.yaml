@@ -1,0 +1,44 @@
+# Interpreter A's reading of chapter 4 ("Trash")
+machine: note
+section: chapter-4-trash
+vars:
+  role: [owner, editor, viewer]
+states:
+  draft:   {kind: policy}
+  active:  {kind: policy}
+  trashed: {kind: design}
+  purged:  {kind: fact, terminal: true}
+initial: draft
+events: [publish, edit, trash, restore, purge]
+rules:
+  - {from: draft, event: publish, when: "role == 'owner'", to: active}
+  - {from: draft, event: publish, when: "role != 'owner'", reject: true}
+  - {from: draft, event: edit, when: "role != 'viewer'", stay: true}
+  - {from: draft, event: edit, when: "role == 'viewer'", reject: true}
+  - {from: draft, event: trash, when: "role == 'owner'", to: trashed}
+  - {from: draft, event: trash, when: "role != 'owner'", reject: true}
+  - {from: draft, event: restore, ignore: true}
+  - {from: draft, event: purge, reject: true}
+
+  - {from: active, event: publish, ignore: true}
+  - {from: active, event: edit, when: "role == 'owner'", stay: true}
+  - {from: active, event: edit, when: "role == 'editor'", stay: true}
+  - {from: active, event: trash, when: "role == 'owner'", to: trashed}
+  - {from: active, event: trash, when: "role != 'owner'", reject: true}
+  - {from: active, event: restore, ignore: true}
+  - {from: active, event: purge, reject: true}
+
+  - {from: trashed, event: publish, reject: true}
+  - {from: trashed, event: edit, reject: true}
+  - {from: trashed, event: trash, ignore: true}
+  - {from: trashed, event: restore, when: "role == 'owner'", to: active}
+  - {from: trashed, event: restore, when: "role != 'owner'", reject: true}
+  - {from: trashed, event: purge, when: "role == 'owner'", to: purged}
+  - {from: trashed, event: purge, when: "role != 'owner'", reject: true}
+examples:
+  - name: owner trashes and restores
+    steps: ["publish role=owner", "trash role=owner", "restore role=owner"]
+    expect: active
+  - name: viewer cannot trash
+    steps: ["publish role=owner", "trash role=viewer"]
+    expect: rejected

@@ -1,0 +1,1 @@
+steps: ["publish role=owner", "trash role=owner", "restore role=editor"]

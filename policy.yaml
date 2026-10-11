@@ -1,0 +1,16 @@
+# Which paths each role may change. The driver names an agent's branch when it starts
+# the agent, so the role follows from the branch. The first matching pattern wins.
+branches:
+  "build/*": builder
+  "spec/*": spec-author
+  "*": person
+roles:
+  builder:
+    allow: ["src/*", "docs/*", "README.md"]
+    deny: ["spec/*", "conformance/*", "checks/*", "mutation/*", "tools/*", "examples/*",
+           "verify", "policy.yaml", ".claude/*", ".github/*", ".gitlab/*", ".gitlab-ci.yml", "CODEOWNERS"]
+  spec-author:
+    allow: ["spec/*", "checks/*", "conformance/*"]
+    deny: ["src/*"]
+  person:
+    allow: ["*"]

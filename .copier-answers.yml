@@ -1,0 +1,15 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v0.4.3
+_src_path: gh:23min/devcontainer-kit
+aiwf: false
+apt_packages:
+- python3
+data_dir: false
+dood: false
+extra_extensions: []
+languages: []
+ports: {}
+project_slug: verifier-kit
+readonly_data: []
+siblings: []
+writable_siblings: []

@@ -1,0 +1,51 @@
+# The toolkit's own gate: the sample oracle must hold (./verify --full) and every seeded
+# fault must be caught (demo/faults.sh). Make the "verify" job a required check on main.
+name: verify
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0            # the path guard diffs against the base commit
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
+      - run: pip install -r requirements.txt
+
+      - name: verify
+        shell: bash
+        env:
+          VERIFY_BASE: ${{ github.event.pull_request.base.sha }}
+          VERIFY_BRANCH: ${{ github.head_ref }}
+          VERIFY_REPORTS: reports
+        run: |
+          {
+            echo '```'
+            ./verify --full && status=0 || status=$?
+            echo '```'
+            exit "$status"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: seeded faults
+        shell: bash
+        run: demo/faults.sh
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: verify-reports
+          path: reports/
+          if-no-files-found: ignore

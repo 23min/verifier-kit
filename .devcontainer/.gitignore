@@ -1,0 +1,7 @@
+# Written by initialize.sh on the host; never commit.
+.host.env
+.refresh
+# Written by the devcontainer CLI at build time; pins feature packages. Ignored so features stay
+# on their latest release (the kit's version rule). A repo that needs fixed features stops
+# ignoring it and commits it.
+devcontainer-lock.json

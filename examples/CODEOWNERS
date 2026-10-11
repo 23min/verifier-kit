@@ -1,0 +1,14 @@
+# Example only. GitHub reads .github/CODEOWNERS (or CODEOWNERS at the root or in docs/);
+# GitLab reads CODEOWNERS at the root, in .gitlab/ or in docs/.
+# GitHub: turn on "Require review from Code Owners" for the default branch.
+# GitLab: Code Owners needs Premium or Ultimate; on Free, rely on the path guard in ./verify.
+#
+# The oracle is owned by people. The builder agent owns nothing here.
+/spec/           @you
+/checks/         @you
+/conformance/    @you
+/mutation/       @you
+/tools/          @you
+/verify          @you
+/policy.yaml     @you
+/examples/       @you
