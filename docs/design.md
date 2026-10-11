@@ -18,8 +18,11 @@ must pass on it, and `demo/faults.sh` must catch every seeded fault.
    doesn't. The oracle is the fixed reference signal in a control loop.
 2. **Judgment lives in executable checks.** Prose decays and can't be run; approval of
    generated code is lost when the code is regenerated. Checks survive regeneration.
-3. **The builder never touches the oracle.** Checks that share a source with the code prove
-   consistency, not intent.
+3. **The builder never touches the oracle.** Independent readings make the gaps between intent
+   and code visible; that is where loom found its value on real code (loom
+   `work/decisions/D-0006-loom-loop-qualified-proceed-to-build-the-thin-tool.md`).
+   Readers can share a misreading, so they should differ: other models, separate contexts. And
+   checks that share a source with the code prove consistency, not intent.
 4. **Models may raise doubts, never clear them.** Only a command settles a claim: expected
    result, observed output, environment.
 5. **One place per fact.** Normative docs describe the system as it is now; proposals,
@@ -225,7 +228,15 @@ From here on, progress is tracked in GitHub issues, not in this table.
 ## Where to be skeptical
 
 - A spine that is complete and wrong passes every check; ratification is the only check on intent.
-- Agents optimize the checks, not the intent; read-only access and holdouts reduce this.
+- Gaming is real but narrower than often assumed. loom's pre-registered tests found no
+  spec-weakening when an agent was graded on its own implementation (three fresh subjects, all
+  NO-GO; loom
+  `work/decisions/D-0002-build-loom-light-does-the-gaming-effect-re-validate-on-fresh-subjects.md`
+  and
+  `work/decisions/D-0005-reallocate-two-dimension-verdict-no-go-neither-failure-mode-reproduced.md`),
+  but did see agents over-claim what they had shown. Agents have also been seen editing or
+  deleting tests to make them pass (ImpossibleBench). The path guard and deny rules are there
+  for that; read-only access and holdouts reduce it.
 - Two interpreters can share a misreading.
 - The best-known successes had an oracle for free; business rules rarely do.
 - Specs as practiced (linked tickets) haven't been shown to reduce defects; executable checks
@@ -243,6 +254,16 @@ From here on, progress is tracked in GitHub issues, not in this table.
 - The retirement rule for checks.
 - The adapter protocol for other languages.
 - Python or a single Go binary for distribution at work.
+
+## Relation to loom
+
+[loom](https://github.com/23min/loom) checks a short set of formal claims against modules written
+for a verifier (Dafny proofs, or the TLC model checker) and reports what it could not establish
+as gaps. verifier-kit runs the real code against an intent model, up to a bounded number of
+events (`spine conform`). They are complementary. loom links to real code only through
+hand-written examples; its gap G-0020
+(`work/gaps/G-0020-no-tooling-derives-host-language-tests-from-verified-claims.md`) asks for
+tests derived from verified claims and run against the real implementation.
 
 ## Key sources
 
