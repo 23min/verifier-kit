@@ -5,9 +5,7 @@ executable oracle that people own. The tools are plain command-line programs; ag
 hooks and CI call them through one script, `./verify`.
 
 Read before changing anything: `README.md`, `docs/design.md` (the design, normative) and
-`docs/reference/` (the tool contract and spine format). Background on how the design came
-about: the v3 design page, https://claude.ai/artifact/KpK8WdmF62ia7PdupQv4At.
-Where it and this repo differ, this repo wins.
+`docs/reference/` (the tool contract and spine format).
 
 ## Rules
 
