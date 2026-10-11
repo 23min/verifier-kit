@@ -1,9 +1,12 @@
-# Oracle toolkit
+# verifier-kit
 
 A small, standalone toolkit for keeping an AI builder honest: people own an
 oracle (a state-machine "spine" plus checks), the builder owns only the code, and one script,
 `./verify`, decides whether the code matches the oracle. Every gate (agent hook, git hook,
 CI) calls that script and nothing else.
+
+"Oracle" here is the software-testing term: a *test oracle* is whatever decides whether an
+output is correct.
 
 It is a prototype for learning the process on something small. The example is a notes
 service with drafts, publishing, trash and roles; it doubles as the toolkit's acceptance test.
@@ -21,6 +24,11 @@ pip install -r requirements.txt   # PyYAML, the only dependency; or: uv venv && 
 demo/faults.sh              # acceptance test: seeds one fault at a time and checks the right part catches it
 demo/live-builder.sh        # optional: a real Claude Code builder session against the oracle
 ```
+
+Or open the repo in its devcontainer (`.devcontainer/`, "Dev Containers: Reopen in Container"),
+which has Python 3, uv, gh and Claude Code. It was made for the author's machines: it mounts
+the host's `~/.claude`, `~/.config/gh` and `~/.guidance`, so on another machine you may need
+to trim `.devcontainer/devcontainer.json` or just use a local Python.
 
 ## Layout and who owns what
 
