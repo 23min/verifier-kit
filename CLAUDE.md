@@ -6,7 +6,7 @@ hooks and CI call them through one script, `./verify`.
 
 Read before changing anything: `README.md`, `docs/design.md` (the design, normative) and
 `docs/reference/` (the tool contract and spine format). Background on how the design came
-about: the "Three-Agent Oracle Loop" v3 page, https://claude.ai/artifact/KpK8WdmF62ia7PdupQv4At.
+about: the v3 design page, https://claude.ai/artifact/KpK8WdmF62ia7PdupQv4At.
 Where it and this repo differ, this repo wins.
 
 ## Rules

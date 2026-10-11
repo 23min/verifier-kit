@@ -1,6 +1,6 @@
-# Design: the oracle loop
+# Design: verifier-kit
 
-This is the normative design for the toolkit, taken from the "Three-Agent Oracle Loop" v3 page
+This is the normative design for the toolkit, taken from the v3 design page
 (11 October 2026). From now on this file is the current truth: change it here, in the same
 pull request as the code it describes. The v3 page is background and history.
 
