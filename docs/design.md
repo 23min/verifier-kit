@@ -30,6 +30,9 @@ must pass on it, and `demo/faults.sh` must catch every seeded fault.
    switch to properties and examples.
 8. **Same process at every size.** Small projects test the mechanics; long-running ones show
    drift.
+9. **Nothing is skipped silently.** A check that does not run says so and why; a missing piece
+   is an error, not a pass. Green means "as far as the oracle measures", so the output must
+   show how far that was.
 
 ## Decisions taken
 

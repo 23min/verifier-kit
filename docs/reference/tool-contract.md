@@ -15,6 +15,8 @@ needs an issue and the owner's approval first (see `CLAUDE.md`).
 - **Output:** text by default; `--format json` for machines; `--junit FILE` additionally
   writes a JUnit XML report (one test case per error, or one passing case).
 - **Dependencies:** the Python standard library plus PyYAML (`requirements.txt`).
+- **Nothing is skipped silently.** Whatever is not checked is reported with the reason; a
+  missing piece that a check needs is an error finding, never a pass.
 
 ## Findings
 
@@ -121,14 +123,28 @@ A changed file fails if any `deny` pattern matches, or if no `allow` pattern doe
 
 ## `./verify`
 
-Runs, per `spec/<machine>/spine.yaml`: `check`, then (if present) `behaviors`, `stale` over
-`checks/<machine>`, and `conform` with `conformance/adapter_<machine>.py`. Then the content
-checks under `checks/`, and with `--full` every `mutation/mutate_*.py`. With `VERIFY_BASE`
-set it first runs `guard` over the diff. Output is one `ok`, `FAIL` or `skip` line per step,
-with error lines under failing steps, and a final `--` summary line. Environment: `VERIFY_BASE`,
-`VERIFY_BRANCH`, `VERIFY_REPORTS`, `VERIFY_VERBOSE`, `PYTHON`. Exit codes as above.
+Runs, per `spec/<machine>/spine.yaml`: `check`, then `behaviors` over `spec/<machine>/behaviors`,
+`stale` over `checks/<machine>`, and `conform` with `conformance/adapter_<machine>.py`. Then the
+content checks under `checks/`, and with `--full` every `mutation/mutate_*.py`. With
+`VERIFY_BASE` set it first runs `guard` over the diff. Output is one `ok`, `FAIL` or `skip` line
+per step, with error lines under failing steps, and a final `--` summary line. Environment:
+`VERIFY_BASE`, `VERIFY_BRANCH`, `VERIFY_REPORTS`, `VERIFY_VERBOSE`, `PYTHON`. Exit codes as above.
+
+Every step that does not run prints `skip  <step> (<reason>)`: the guard without `VERIFY_BASE`,
+behaviors without `spec/<machine>/behaviors/`, `stale` without `checks/<machine>/`, mutation
+without `--full`, and (in one line) a machine's remaining steps when its spine is not sound. A
+missing piece is an error instead:
+
+| Code | Severity | From | Meaning |
+|---|---|---|---|
+| `no-machines` | error | `./verify` | no `spec/*/spine.yaml` at all |
+| `no-adapter` | error | `./verify` | a machine has no `conformance/adapter_<machine>.py` |
+| `no-checks` | error | `run_checks.py --require-checks` | no `test_*` functions under the folder, which may be missing; `./verify` passes the flag |
+| `no-mutation` | error | `./verify --full` | no `mutation/mutate_*.py` |
 
 `tools/run_checks.py` and `mutation/mutate_*.py` follow the same exit codes and line format.
+Without `--require-checks`, `run_checks.py` passes on zero checks, so that the mutation script,
+which counts a failing run as a caught mutant, is not fooled by an empty folder.
 
 ## Known gaps
 

@@ -83,8 +83,10 @@ examples/                        CI, agent and git hook files, to copy when you 
 | content checks | `run_checks.py` | wrong text, values, formats | whatever no check asserts |
 | mutants killed (`--full`) | `mutate_notes.py` | an oracle too weak to notice a planted bug | bugs unlike the planted ones |
 
-When the spine itself is not sound, the steps that depend on it are skipped. Output is one
-line per step, with error lines only for failing steps. `VERIFY_REPORTS=dir` writes JUnit XML
+Nothing is skipped silently. A step that does not run prints `skip` with the reason (no
+`VERIFY_BASE`, no behaviors folder, no `--full`, or a spine that is not sound), and a missing
+piece is an error: no spine at all, no adapter, no content checks, or no mutation script under
+`--full`. Output is one line per step, with error lines only for failing steps. `VERIFY_REPORTS=dir` writes JUnit XML
 for the spine steps; `spine ... --format json` gives machine-readable findings. Exit codes:
 0 pass, 1 findings, 2 misuse.
 
@@ -160,7 +162,8 @@ current hashes.
 Everything is keyed by folder name, so for a machine called `invoice`:
 `spec/invoice/spine.yaml`, optional `spec/invoice/behaviors/{valid,invalid}/`,
 `checks/invoice/`, `conformance/adapter_invoice.py` (three functions: `new()`, `apply()`,
-`observe()`), and optionally `mutation/mutate_invoice.py`. `./verify` picks them up.
+`observe()`), and optionally `mutation/mutate_invoice.py`. `./verify` picks them up, and fails
+with `no-adapter` until the adapter exists.
 
 ## Limits
 

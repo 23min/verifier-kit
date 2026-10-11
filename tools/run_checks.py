@@ -2,7 +2,8 @@
 """Run every test_* function in test_*.py files under a folder. No dependencies.
 
 Use pytest instead if you have it; this exists so the sample runs on a bare Python.
-Exit 1 if any check fails.
+Exit 1 if any check fails. With --require-checks, finding no checks at all is an error too
+(./verify passes it; callers that only want a pass/fail on existing checks leave it off).
 """
 import importlib.util
 import sys
@@ -10,7 +11,7 @@ import traceback
 from pathlib import Path
 
 
-def main(folder):
+def main(folder, require=False):
     failures = passed = 0
     for path in sorted(Path(folder).rglob("test_*.py")):
         spec = importlib.util.spec_from_file_location(path.stem, path)
@@ -24,9 +25,16 @@ def main(folder):
                 failures += 1
                 last = traceback.format_exc().strip().splitlines()[-1]
                 print(f"error   check-failed       {path}::{name}: {last}")
-    print(f"-- {failures} errors, {passed + failures} checks run")
+    run = passed + failures
+    if run == 0 and require:
+        failures = 1
+        print(f"{'error':7} {'no-checks':18} {folder}: no test_* functions found")
+    print(f"-- {failures} errors, {run} checks run")
     return 1 if failures else 0
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else "checks"))
+    args = sys.argv[1:]
+    require = "--require-checks" in args
+    folders = [a for a in args if a != "--require-checks"]
+    sys.exit(main(folders[0] if folders else "checks", require))
