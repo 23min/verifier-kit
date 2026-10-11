@@ -127,6 +127,17 @@ if scenario 7 "The agent's Stop hook on a failing tree" \
   expect 0 '"systemMessage"' "attempt cap (1) is reached"
 fi
 
+if scenario 8 "The adapter, the content checks and the mutation script are removed" \
+   "each missing piece is an error; nothing is skipped silently"; then
+  mv "$W/conformance/adapter_notes.py" "$W/conformance/adapter_notes.py.off"
+  rm "$W/checks/notes/test_content.py"
+  rm -r "$W/mutation"
+  show ./verify --full
+  expect 1 "no-adapter         notes: conformance/adapter_notes.py not found" \
+    "no-checks          checks: no test_* functions found" \
+    "no-mutation        mutation: no mutation/mutate_*.py"
+fi
+
 echo
 if [ "$RAN" = 0 ]; then echo "-- no scenario named ${ONLY}"; exit 2; fi
 if [ "$FAILS" = 0 ]; then
