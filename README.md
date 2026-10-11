@@ -26,9 +26,17 @@ demo/live-builder.sh        # optional: a real Claude Code builder session again
 ```
 
 Or open the repo in its devcontainer (`.devcontainer/`, "Dev Containers: Reopen in Container"),
-which has Python 3 with PyYAML, uv, gh and Claude Code. It was made for the author's machines:
-it mounts the host's `~/.claude`, `~/.config/gh` and `~/.guidance`, so on another machine you
-may need to trim `.devcontainer/devcontainer.json` or just use a local Python.
+which has Python 3 with PyYAML, uv, gh and Claude Code. It needs Docker and VS Code with the Dev
+Containers extension, on macOS or Linux (Windows is untested; open the repo from WSL). Before
+each start it mounts these folders from your home into the container, read-write, and creates
+any that are missing: `~/.claude`, `~/.claude-linux/plugins`, `~/.codex-linux`, `~/.config/gh`,
+`~/.guidance`. Whatever is in them, such as your Claude Code or gh login, is visible inside the
+container. None of them are needed for `./verify`; sign in to gh or Claude Code inside the
+container only if you want those tools there. Each start also prints a note about personal
+guidance (`~/.guidance`): those are the author's own rules for AI assistants, public at
+[23min/guidance](https://github.com/23min/guidance) for reference. Don't install them; they
+would apply to every project on your machine. If you'd rather not share these folders, use a
+local Python.
 
 ## Layout and who owns what
 
