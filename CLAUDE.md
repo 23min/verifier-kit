@@ -37,6 +37,7 @@ demo/faults.sh 4     # one scenario
 python3 tools/spine.py --help
 ```
 
-Setup needs Python 3 with PyYAML. In the devcontainer: `uv venv && uv pip install -r
+Setup needs Python 3 with PyYAML. The devcontainer image has both; don't create a `.venv`
+there (the repo is shared with the host). Elsewhere: `uv venv && uv pip install -r
 requirements.txt`; `./verify` and `demo/faults.sh` use `.venv` automatically when it exists.
 `demo/live-builder.sh` starts a real Claude Code session and costs money; run it only when asked.

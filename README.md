@@ -26,9 +26,9 @@ demo/live-builder.sh        # optional: a real Claude Code builder session again
 ```
 
 Or open the repo in its devcontainer (`.devcontainer/`, "Dev Containers: Reopen in Container"),
-which has Python 3, uv, gh and Claude Code. It was made for the author's machines: it mounts
-the host's `~/.claude`, `~/.config/gh` and `~/.guidance`, so on another machine you may need
-to trim `.devcontainer/devcontainer.json` or just use a local Python.
+which has Python 3 with PyYAML, uv, gh and Claude Code. It was made for the author's machines:
+it mounts the host's `~/.claude`, `~/.config/gh` and `~/.guidance`, so on another machine you
+may need to trim `.devcontainer/devcontainer.json` or just use a local Python.
 
 ## Layout and who owns what
 

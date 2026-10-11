@@ -61,7 +61,7 @@ USER root
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update \
-    && apt-get install -y --no-install-recommends python3
+    && apt-get install -y --no-install-recommends python3 python3-yaml
 USER vscode
 # Image-level steps this repo needs (runs as vscode; use sudo for root). Edit project/image.sh.
 COPY --chmod=0755 project/image.sh /tmp/devkit-project-image.sh
