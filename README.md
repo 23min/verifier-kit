@@ -8,8 +8,10 @@ CI) calls that script and nothing else.
 "Oracle" here is the software-testing term: a *test oracle* is whatever decides whether an
 output is correct.
 
-It is a prototype for learning the process on something small. The example is a notes
-service with drafts, publishing, trash and roles; it doubles as the toolkit's acceptance test.
+It is a prototype for learning the process on something small. Each worked example lives in
+`examples/<name>/`, laid out like a project that uses the toolkit. The first,
+[`examples/notes/`](examples/notes/README.md), is a notes service with drafts, publishing, trash
+and roles; it doubles as the toolkit's acceptance test.
 
 The design is in [`docs/design.md`](docs/design.md); the exact tool contract and spine format
 are in [`docs/reference/`](docs/reference/). Rules for agents working here are in
@@ -19,8 +21,9 @@ are in [`docs/reference/`](docs/reference/). Rules for agents working here are i
 
 ```sh
 pip install -r requirements.txt   # PyYAML, the only dependency; or: uv venv && uv pip install -r requirements.txt
-./verify                    # fast checks, about a second
+./verify                    # fast checks on every example, about a second each
 ./verify --full             # also breaks the code on purpose to check the checks
+./verify examples/notes     # one example only
 demo/faults.sh              # acceptance test: seeds one fault at a time and checks the right part catches it
 demo/live-builder.sh        # optional: a real Claude Code builder session against the oracle
 ```
@@ -41,6 +44,19 @@ local Python.
 ## Layout and who owns what
 
 ```
+verify                           the single entry point
+tools/spine.py, run_checks.py    the tools (no knowledge of any CI or agent)
+policy.yaml                      which branch role may change which paths
+examples/<name>/                 one worked example each, laid out like a project (below)
+demo/                            the toolkit's demos on the notes example: faults.sh, live-builder.sh
+integrations/                    CI, agent and git hook files, to copy when you want them
+docs/                            design (normative), architecture, decisions (adr/), reference
+.github/workflows/verify.yml     this repo's own CI: ./verify --full and demo/faults.sh
+```
+
+Inside an example, for instance `examples/notes/`:
+
+```
 spec/notes/chapter.md            the prose chapter you write with an LLM            person
 spec/notes/readings/*.yaml       two independent readings of the chapter            interpreters
 spec/notes/spine.yaml            the ratified state machine: the oracle's spine     person
@@ -48,15 +64,13 @@ spec/notes/behaviors/            example runs: valid/ must be allowed, invalid/ 
 checks/notes/                    content checks the spine cannot see; each cites a spine cell
 conformance/adapter_notes.py     translates spine events into calls on the service
 mutation/mutate_notes.py         deliberate bugs the oracle must catch
-tools/spine.py, run_checks.py    the tools (no knowledge of any CI or agent)
-verify                           the single entry point
-policy.yaml                      which branch role may change which paths
 src/notes_app.py                 the service                                        builder
-demo/                            the service as first written (two bugs), faults.sh, live-builder.sh
-docs/                            design (normative) and reference: tool contract, spine format
-.github/workflows/verify.yml     this repo's own CI: ./verify --full and demo/faults.sh
-examples/                        CI, agent and git hook files, to copy when you want them
+demo/notes_app_as_written.py     the service as first written (two bugs)
+README.md                        what the example shows and how to run it
 ```
+
+A project that uses the toolkit has the same folders at its own root, next to `verify` and
+`tools/`.
 
 ## The three loops
 
@@ -92,18 +106,18 @@ for the spine steps; `spine ... --format json` gives machine-readable findings. 
 
 ## Jacking it in
 
-Nothing here assumes a particular CI, agent or workflow tool. The files in `examples/` show
-how each layer would call `./verify`. They are examples, linted but not run on a real
-GitHub or GitLab instance.
+Nothing here assumes a particular CI, agent or workflow tool. The files in `integrations/`
+show how each layer would call `./verify` in a project with `spec/` at its root. They are
+examples, linted but not run on a real GitHub or GitLab instance.
 
 | Layer | Example | What it does | Can it be bypassed? |
 |---|---|---|---|
-| Agent harness | `examples/claude-code/settings.json` and `hooks/stop-verify.sh` | deny rules keep Claude's file tools out of the oracle; a Stop hook sends Claude back to work while `./verify` fails, with the failing lines as feedback, and gives up after 5 attempts | yes: deny rules do not cover shell commands that write files (use the OS sandbox for that) |
-| Git | `examples/git-hooks/pre-commit` | runs fast checks before each commit | yes: `--no-verify` |
-| CI, GitHub | `examples/ci/github-actions.yml` | runs `./verify --full` and the path guard on pull requests | not when the job is a required check on a protected branch (private repos need a paid plan) |
-| CI, GitLab | `examples/ci/gitlab-ci.yml` | the same, in merge request pipelines, with JUnit in the MR widget | not with "Pipelines must succeed" and a protected branch (both on Free) |
-| Review | `examples/CODEOWNERS` | people approve any change to the oracle | GitLab Code Owner approvals need Premium; on Free the guard step stands in |
-| aiwf | `examples/aiwf/README.md` | aiwf contracts can call `spine` like any other caller | |
+| Agent harness | `integrations/claude-code/settings.json` and `hooks/stop-verify.sh` | deny rules keep Claude's file tools out of the oracle; a Stop hook sends Claude back to work while `./verify` fails, with the failing lines as feedback, and gives up after 5 attempts | yes: deny rules do not cover shell commands that write files (use the OS sandbox for that) |
+| Git | `integrations/git-hooks/pre-commit` | runs fast checks before each commit | yes: `--no-verify` |
+| CI, GitHub | `integrations/ci/github-actions.yml` | runs `./verify --full` and the path guard on pull requests | not when the job is a required check on a protected branch (private repos need a paid plan) |
+| CI, GitLab | `integrations/ci/gitlab-ci.yml` | the same, in merge request pipelines, with JUnit in the MR widget | not with "Pipelines must succeed" and a protected branch (both on Free) |
+| Review | `integrations/CODEOWNERS` | people approve any change to the oracle | GitLab Code Owner approvals need Premium; on Free the guard step stands in |
+| aiwf | `integrations/aiwf/README.md` | aiwf contracts can call `spine` like any other caller | |
 
 Only CI with a required check is a gate; the agent and git layers make failures cheap to
 fix early. The path guard maps a branch name to a role (`build/*` is the builder), so it is
@@ -111,8 +125,9 @@ only as strong as the rule about who may push which branch names; protect those 
 
 ## A live run
 
-`demo/live-builder.sh` starts Claude Code (Sonnet) as the builder in a scratch copy, with
-the service as first written and the example settings. The builder is told about one bug
+`demo/live-builder.sh` starts Claude Code (Sonnet) as the builder in a scratch project made
+from the notes example and the toolkit, with the service as first written and the settings from
+`integrations/claude-code/`. The builder is told about one bug
 ("users can edit notes in the trash") and has no shell, so it cannot run `./verify` itself.
 What happened, in the runs we tried:
 
@@ -154,13 +169,18 @@ Conditions use a tiny language (declared variables, literals, `==`, `!=`, `in`, 
 rule for every state, event and variable combination.
 
 A content check cites the cell it depends on with a comment like
-`# covers: trashed/restore@95f9c8204e9f`; `spine hash spec/notes/spine.yaml` prints the
-current hashes.
+`# covers: trashed/restore@95f9c8204e9f`; `spine hash examples/notes/spec/notes/spine.yaml`
+prints the current hashes.
 
-## Adding another machine
+## Adding an example or a machine
 
-Everything is keyed by folder name, so for a machine called `invoice`:
-`spec/invoice/spine.yaml`, optional `spec/invoice/behaviors/{valid,invalid}/`,
+An example is a folder `examples/<name>/` with the layout above and a `README.md`. Plain
+`./verify` picks it up; `./verify examples/<name>` runs it alone. Each example needs at least
+one content check and, for `--full`, one mutation script; a missing piece is an error for that
+example only.
+
+Within an example (or a project), everything is keyed by folder name, so for a machine called
+`invoice`: `spec/invoice/spine.yaml`, optional `spec/invoice/behaviors/{valid,invalid}/`,
 `checks/invoice/`, `conformance/adapter_invoice.py` (three functions: `new()`, `apply()`,
 `observe()`), and optionally `mutation/mutate_invoice.py`. `./verify` picks them up, and fails
 with `no-adapter` until the adapter exists.

@@ -11,9 +11,11 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
 
 - **Before you finish any change,** `./verify --full` and `demo/faults.sh` both pass. Show their
   last lines. Don't call something done because it looks right; show the command and its output.
-- **The notes example is the acceptance fixture.** Don't edit `spec/notes/`, `checks/notes/`,
-  `conformance/`, `src/notes_app.py`, `mutation/` or `demo/` to make a failure go away. If a
-  tool change needs the fixture to change, stop and say why.
+- **The notes example is the acceptance fixture.** Don't edit `examples/notes/` (its spec,
+  checks, conformance adapter, `src/notes_app.py`, mutation and demo) or `demo/` to make a
+  failure go away. If a tool change needs the fixture to change, stop and say why.
+- **Each example lives in `examples/<name>/`,** laid out like a project that uses the toolkit
+  (`docs/adr/0001-examples-layout.md`); `./verify examples/<name>` runs one alone.
 - **The spine format and the tool contract are fixed** (`docs/reference/`). Changing them,
   including exit codes, JSON shape or finding codes, needs a GitHub issue the owner has
   approved. New finding codes may be added; existing ones are never renamed or reused.
@@ -30,8 +32,9 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
 ## Commands
 
 ```sh
-./verify             # fast checks on the notes example, about a second
+./verify             # fast checks on every example, about a second each
 ./verify --full      # also checks the checker (mutation)
+./verify examples/notes --full   # one example only
 demo/faults.sh       # acceptance test: every seeded fault must be caught; exits 1 otherwise
 demo/faults.sh 4     # one scenario
 python3 tools/spine.py --help
