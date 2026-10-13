@@ -4,7 +4,8 @@ How the repo fits together today: who calls what, what `./verify` runs, how the 
 is wired, and how the toolkit checks itself. The rules each piece follows are in
 `docs/reference/`; the reasons are in `docs/design.md`. In the diagrams, `{m}` is a machine's
 folder name, such as `notes`, and `{root}` is the folder `./verify` checks: a project laid out
-with `spec/`, `checks/`, `conformance/`, `src/` and `mutation/`. Today that is the repo itself.
+with `spec/`, `checks/`, `conformance/`, `src/` and `mutation/`. In this repo each
+`examples/<name>/` is a root; a project that uses the toolkit is its own root.
 
 ## Layers
 
@@ -14,8 +15,8 @@ files they are given.
 ```mermaid
 flowchart LR
   subgraph callers["Callers"]
-    stop["Claude Code Stop hook<br/>examples/claude-code/hooks/stop-verify.sh"]
-    pre["git pre-commit<br/>examples/git-hooks/pre-commit"]
+    stop["Claude Code Stop hook<br/>integrations/claude-code/hooks/stop-verify.sh"]
+    pre["git pre-commit<br/>integrations/git-hooks/pre-commit"]
     ci["CI job<br/>.github/workflows/verify.yml"]
     faults["demo/faults.sh"]
     person["a person"]
@@ -25,10 +26,10 @@ flowchart LR
     spine["tools/spine.py<br/>check, behaviors, stale, conform, guard"]
     rc["tools/run_checks.py"]
   end
-  mut["mutation/mutate_*.py"]
+  mut["{root}/mutation/mutate_*.py"]
   subgraph files["Files in the repo"]
-    oracle["the oracle<br/>spec/, checks/, conformance/"]
-    code["the code<br/>src/"]
+    oracle["the oracle, per root<br/>spec/, checks/, conformance/"]
+    code["the code, per root<br/>src/"]
     policy["policy.yaml"]
   end
   stop -->|"./verify, fast checks"| verify
@@ -86,8 +87,9 @@ anywhere under the root's `checks/` (`no-checks`), or no mutation script under `
 
 ## The notes example
 
-The only machine today. Its files are spread across five top-level folders and tied together
-by the name `notes`, by Python imports, and by the cell hashes the checks cite.
+The only example today, in `examples/notes/`; the paths below are relative to it. Its files
+are tied together by the name `notes`, by Python imports, and by the cell hashes the checks
+cite.
 
 ```mermaid
 flowchart LR
@@ -113,14 +115,15 @@ Who may change what, from `policy.yaml` (enforced by `spine guard` when `VERIFY_
 
 | Branch | Role | May change | May not change |
 |---|---|---|---|
-| `build/*` | builder | `src/`, `docs/`, `README.md` | `spec/`, `checks/`, `conformance/`, `mutation/`, `tools/`, `examples/`, `verify`, `policy.yaml`, `.claude/`, `.github/`, `.gitlab/`, CODEOWNERS |
-| `spec/*` | spec-author | `spec/`, `checks/`, `conformance/` | `src/` |
+| `build/*` | builder | `examples/*/src/`, `docs/`, `README.md` | `examples/*/spec/`, `examples/*/checks/`, `examples/*/conformance/`, `examples/*/mutation/`, `tools/`, `integrations/`, `verify`, `policy.yaml`, `.claude/`, `.github/`, `.gitlab/`, CODEOWNERS |
+| `spec/*` | spec-author | `examples/*/spec/`, `examples/*/checks/`, `examples/*/conformance/` | `examples/*/src/` |
 | anything else | person | everything | |
 
 ## Checking the checker
 
-`./verify --full` runs `mutation/mutate_notes.py`, which breaks the service on purpose and
-expects the oracle to notice.
+`./verify --full` runs `examples/notes/mutation/mutate_notes.py`, which breaks the service on
+purpose and expects the oracle to notice. It runs from the example's folder and finds `tools/`
+above it.
 
 ```mermaid
 sequenceDiagram
@@ -131,7 +134,7 @@ sequenceDiagram
   loop each of 5 hand-picked edits to src/notes_app.py
     M->>T: write notes_app.py with one edit
     M->>C: run with PYTHONPATH=temp:src:conformance
-    M->>R: run over all of checks/, same PYTHONPATH
+    M->>R: run over the example's checks/, same PYTHONPATH
     Note over M: killed if either exits 1
   end
   Note over M: exits 1 if any mutant survived
@@ -159,11 +162,11 @@ flowchart LR
 | 1 | the service as first written | `./verify` | two `diverges` lines with their sequences |
 | 2 | the notes spine lets editors restore | `./verify` | `behavior-allowed`, `stale-check`, `diverges` |
 | 3 | `on:` instead of `event:` in the notes spine | `./verify` | `yaml-boolean-key`, and the notes steps skipped |
-| 4 | a `build/*` branch edits the notes spine | `VERIFY_BASE=main ./verify` | `path-denied spec/notes/spine.yaml` |
+| 4 | a `build/*` branch edits the notes spine | `VERIFY_BASE=main ./verify` | `path-denied examples/notes/spec/notes/spine.yaml` |
 | 5 | none (two readings) | `spine diff` on the notes readings | two `case-disagrees` lines |
 | 6 | notes content checks deleted | `./verify --full` | `mutant-survived` for the upper-case mutant |
 | 7 | the service as first written | the Stop hook, twice | a block, then the attempt-cap warning |
-| 8 | notes adapter, notes checks and `mutation/` removed | `./verify --full` | `no-adapter`, `no-checks`, `no-mutation` |
+| 8 | the notes adapter, content checks and mutation removed | `./verify --full` | `no-adapter`, `no-checks`, `no-mutation` |
 
 This repo's CI (`.github/workflows/verify.yml`) runs `./verify --full`, then
 `demo/faults.sh`, on every pull request and push to `main`. It does not set `VERIFY_BASE`, so
@@ -175,8 +178,9 @@ the path guard runs here only inside scenario 4.
 |---|---|---|
 | `spine check`, `behaviors`, `stale`, `conform` | per machine | `{root}/spec/{m}/`, `{root}/checks/{m}/`, `{root}/conformance/adapter_{m}.py` |
 | content checks | per root: one run over all of `{root}/checks/` | every `test_*.py` under `{root}/checks/` |
-| mutation | per root: every `{root}/mutation/mutate_*.py` under `--full` | file name pattern; `mutate_notes.py` itself runs all of `checks/` |
+| mutation | per root: every `{root}/mutation/mutate_*.py` under `--full` | file name pattern; `mutate_notes.py` itself runs all of its root's `checks/` |
 | `src/` | per root, on `PYTHONPATH` | module name (`notes_app`) |
-| path guard, deny rules, CODEOWNERS | repo-wide | top-level folder patterns |
-| `demo/faults.sh` | notes only | hard-coded notes paths |
+| path guard | repo-wide | `policy.yaml` patterns over `examples/*/` and the toolkit's folders |
+| deny rules, CODEOWNERS (`integrations/`) | a project's root | folder patterns for a project with `spec/` at its root |
+| `demo/faults.sh`, `demo/live-builder.sh` | notes only | hard-coded `examples/notes/` paths |
 | choosing what to run | one root per call | `./verify ROOT`; without it, the discovery rule above |
