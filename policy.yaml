@@ -4,13 +4,15 @@ branches:
   "build/*": builder
   "spec/*": spec-author
   "*": person
+# Patterns cover every example under examples/; `*` also matches `/`.
 roles:
   builder:
-    allow: ["src/*", "docs/*", "README.md"]
-    deny: ["spec/*", "conformance/*", "checks/*", "mutation/*", "tools/*", "examples/*",
-           "verify", "policy.yaml", ".claude/*", ".github/*", ".gitlab/*", ".gitlab-ci.yml", "CODEOWNERS"]
+    allow: ["examples/*/src/*", "docs/*", "README.md"]
+    deny: ["examples/*/spec/*", "examples/*/conformance/*", "examples/*/checks/*",
+           "examples/*/mutation/*", "tools/*", "integrations/*", "verify", "policy.yaml",
+           ".claude/*", ".github/*", ".gitlab/*", ".gitlab-ci.yml", "CODEOWNERS"]
   spec-author:
-    allow: ["spec/*", "checks/*", "conformance/*"]
-    deny: ["src/*"]
+    allow: ["examples/*/spec/*", "examples/*/checks/*", "examples/*/conformance/*"]
+    deny: ["examples/*/src/*"]
   person:
     allow: ["*"]

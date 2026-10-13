@@ -6,7 +6,7 @@
       "Edit(/conformance/**)",
       "Edit(/mutation/**)",
       "Edit(/tools/**)",
-      "Edit(/examples/**)",
+      "Edit(/integrations/**)",
       "Edit(/verify)",
       "Edit(/policy.yaml)",
       "Edit(/.claude/**)"
@@ -18,7 +18,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/examples/claude-code/hooks/stop-verify.sh",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/integrations/claude-code/hooks/stop-verify.sh",
             "timeout": 300
           }
         ]
