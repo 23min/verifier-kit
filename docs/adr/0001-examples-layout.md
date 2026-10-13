@@ -36,8 +36,9 @@ notes checks are removed. Examples could also not be run on their own.
 - `verify` has two ways to find roots, and the tool contract states both.
 - Every example gets the same roles in the path guard. An example copied out into its own repo
   needs its own `policy.yaml`.
-- The Claude Code deny rules in `integrations/claude-code/` are written for a project's root
-  layout; how `demo/live-builder.sh` applies them to `examples/notes/` is open in #15.
+- The files in `integrations/` are written for a project with `spec/` at its root. So
+  `demo/live-builder.sh` builds its scratch project from `examples/notes/` plus the toolkit,
+  shaped like an adopting project, and the shipped Claude Code settings apply unchanged.
 
 ## Alternatives considered
 
