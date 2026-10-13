@@ -15,6 +15,9 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+# The toolkit's tools/: in ROOT for a project, further up for an example under examples/.
+TOOLS = next((d / "tools" for d in (ROOT, *ROOT.parents) if (d / "tools" / "spine.py").is_file()),
+             None)
 
 MUTANTS = [
     ("editors may restore",
@@ -30,13 +33,16 @@ MUTANTS = [
 ]
 
 ORACLE = {
-    "conformance": [sys.executable, "tools/spine.py", "conform", "spec/notes/spine.yaml",
+    "conformance": [sys.executable, str(TOOLS / "spine.py"), "conform", "spec/notes/spine.yaml",
                     "--adapter", "conformance/adapter_notes.py"],
-    "checks": [sys.executable, "tools/run_checks.py", "checks"],
-}
+    "checks": [sys.executable, str(TOOLS / "run_checks.py"), "checks"],
+} if TOOLS else {}
 
 
 def main():
+    if TOOLS is None:
+        print(f"mutate_notes: no tools/spine.py in {ROOT} or above it", file=sys.stderr)
+        return 2
     source = (ROOT / "src" / "notes_app.py").read_text()
     survivors = 0
     for name, find, replace in MUTANTS:
