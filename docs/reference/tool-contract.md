@@ -123,21 +123,32 @@ A changed file fails if any `deny` pattern matches, or if no `allow` pattern doe
 
 ## `./verify`
 
+`./verify [ROOT] [--full]`. A root is a folder laid out like a project, with `spec/`,
+`checks/`, `conformance/`, `src/` and `mutation/`; every path below is relative to it. A
+relative ROOT is taken from the caller's working directory. Without ROOT, the roots are every
+`examples/*/` folder in turn (sorted) when the folder `verify` is in has no `spec/` but has
+`examples/*/`; otherwise the root is that folder itself.
+
 Runs, per `spec/<machine>/spine.yaml`: `check`, then `behaviors` over `spec/<machine>/behaviors`,
-`stale` over `checks/<machine>`, and `conform` with `conformance/adapter_<machine>.py`. Then the
-content checks under `checks/`, and with `--full` every `mutation/mutate_*.py`. With
-`VERIFY_BASE` set it first runs `guard` over the diff. Output is one `ok`, `FAIL` or `skip` line
-per step, with error lines under failing steps, and a final `--` summary line. Environment:
-`VERIFY_BASE`, `VERIFY_BRANCH`, `VERIFY_REPORTS`, `VERIFY_VERBOSE`, `PYTHON`. Exit codes as above.
+`stale` over `checks/<machine>`, and `conform` with `conformance/adapter_<machine>.py`, with
+`src/` and `conformance/` on `PYTHONPATH`. Then the content checks under `checks/`, with `src/`
+on `PYTHONPATH`, and with `--full` every `mutation/mutate_*.py`. With `VERIFY_BASE` set it
+first runs `guard` over the diff, once, with the `policy.yaml` next to `verify`, whatever the
+roots are. Output is one `ok`, `FAIL` or `skip` line per step, with error lines under failing
+steps, and a final `--` summary line. A root other than the folder `verify` is in starts with a
+`== <root>` line, and its failed steps are named `<root>: <step>` in the summary. JUnit
+report names then start with the root, slashes turned into dashes. Environment:
+`VERIFY_BASE`, `VERIFY_BRANCH`, `VERIFY_REPORTS`, `VERIFY_VERBOSE`, `PYTHON`. Exit codes as
+above; more than one ROOT, or a ROOT that is not a folder, is a usage error.
 
 Every step that does not run prints `skip  <step> (<reason>)`: the guard without `VERIFY_BASE`,
 behaviors without `spec/<machine>/behaviors/`, `stale` without `checks/<machine>/`, mutation
 without `--full`, and (in one line) a machine's remaining steps when its spine is not sound. A
-missing piece is an error instead:
+missing piece is an error instead, reported per root:
 
 | Code | Severity | From | Meaning |
 |---|---|---|---|
-| `no-machines` | error | `./verify` | no `spec/*/spine.yaml` at all |
+| `no-machines` | error | `./verify` | no `spec/*/spine.yaml` at all, including an `examples/*/` folder without `spec/` |
 | `no-adapter` | error | `./verify` | a machine has no `conformance/adapter_<machine>.py` |
 | `no-checks` | error | `run_checks.py --require-checks` | no `test_*` functions under the folder, which may be missing; `./verify` passes the flag |
 | `no-mutation` | error | `./verify --full` | no `mutation/mutate_*.py` |

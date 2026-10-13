@@ -2,9 +2,12 @@
 # One entry point for every gate: CI, git hooks and agent hooks all call this script and
 # nothing else, so they cannot drift apart.
 #
-#   ./verify          fast checks (seconds): spine soundness, behaviors, stale checks,
-#                     conformance, content checks, and the path guard when a base is given
-#   ./verify --full   also checks the checker (mutation)
+#   ./verify [ROOT]          fast checks (seconds): spine soundness, behaviors, stale checks,
+#                            conformance, content checks, and the path guard when a base is given
+#   ./verify [ROOT] --full   also checks the checker (mutation)
+#
+# ROOT is a folder laid out like a project: spec/, checks/, conformance/, src/, mutation/.
+# Without ROOT: this folder when it has spec/, otherwise every examples/*/ in turn.
 #
 # Nothing is skipped silently: a step that does not run prints a skip line with the reason,
 # and a missing piece (no spine, no adapter, no content checks, no mutation script under
@@ -19,22 +22,29 @@
 #
 # Exit 0 when everything passes, 1 when any step fails, 2 when the script is misused.
 set -uo pipefail
+CALLER="$PWD"
 cd "$(dirname "$0")" || exit 2
+HERE="$(pwd -P)"
 
 if [ -n "${PYTHON:-}" ]; then PY="$PYTHON"
 elif [ -x .venv/bin/python ]; then PY=.venv/bin/python
 else PY=python3
 fi
 FULL=0
+ROOT=""
 for arg in "$@"; do
   case "$arg" in
     --full) FULL=1 ;;
-    -h|--help) sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
-    *) echo "verify: unknown argument $arg" >&2; exit 2 ;;
+    -h|--help) sed -n '2,23p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -*) echo "verify: unknown argument $arg" >&2; exit 2 ;;
+    *)
+      if [ -n "$ROOT" ]; then echo "verify: only one ROOT, got $ROOT and $arg" >&2; exit 2; fi
+      ROOT="$arg" ;;
   esac
 done
 
 failed=()
+label=""   # the root's name in the summary line; empty for this folder
 
 # run NAME COMMAND... : run one step, print a one-line verdict, show output on failure.
 run() {
@@ -47,7 +57,7 @@ run() {
   else
     printf 'FAIL  %s\n' "$name"
     printf '%s\n' "$out" | grep -v '^info ' | sed 's/^/      /'
-    failed+=("$name")
+    failed+=("$label$name")
   fi
   return "$status"
 }
@@ -56,7 +66,7 @@ run() {
 missing() {
   printf 'FAIL  %s\n' "$1"
   printf '      %-7s %-18s %s: %s\n' error "$2" "$3" "$4"
-  failed+=("$1")
+  failed+=("$label$1")
 }
 
 skip() { printf 'skip  %s (%s)\n' "$1" "$2"; }  # skip NAME REASON
@@ -66,6 +76,27 @@ junit() {  # junit STEP : extra arguments for a JUnit report, when reports are w
 }
 
 spine() { "$PY" tools/spine.py "$@"; }
+
+# prefix ABSOLUTE_PATH : what goes in front of spec/, checks/ ... for that root: nothing for
+# this folder, a relative path for a folder inside it, the absolute path otherwise.
+prefix() {
+  if [ "$1" = "$HERE" ]; then printf ''
+  elif [ "${1#"$HERE"/}" != "$1" ]; then printf '%s/' "${1#"$HERE"/}"
+  else printf '%s/' "$1"
+  fi
+}
+
+# ---- which roots to check ----------------------------------------------------------
+roots=()
+if [ -n "$ROOT" ]; then
+  abs="$(CDPATH= cd -- "$CALLER" && CDPATH= cd -- "$ROOT" 2>/dev/null && pwd -P)" || {
+    echo "verify: ROOT is not a folder: $ROOT" >&2; exit 2; }
+  roots+=("$(prefix "$abs")")
+elif [ -d spec ] || ! compgen -G 'examples/*/' >/dev/null; then
+  roots+=("")
+else
+  for d in examples/*/; do roots+=("$d"); done
+fi
 
 # ---- path guard: which role changed which files ------------------------------------
 if [ -n "${VERIFY_BASE:-}" ]; then
@@ -79,63 +110,70 @@ else
   skip guard "VERIFY_BASE not set"
 fi
 
-# ---- per machine: everything keyed by the spine's folder name ----------------------
-machines=0
-for spec in spec/*/spine.yaml; do
-  [ -e "$spec" ] || continue
-  machines=$((machines + 1))
-  m="$(basename "$(dirname "$spec")")"
+# verify_root PREFIX : every step for one root; PREFIX is empty or ends in a slash.
+verify_root() {
+  local p="$1" jp="${1//\//-}" spec m machines=0 mutate mutants=0
+  label="${p:+${p%/}: }"
+  [ -n "$p" ] && printf '== %s\n' "${p%/}"
 
-  mapfile -t extra < <(junit "$m-check")
-  if ! run "$m: spine is sound" spine check "$spec" "${extra[@]}"; then
-    printf 'skip  %s: other steps need a sound spine\n' "$m"
-    continue
-  fi
+  # ---- per machine: everything keyed by the spine's folder name --------------------
+  for spec in "${p}"spec/*/spine.yaml; do
+    [ -e "$spec" ] || continue
+    machines=$((machines + 1))
+    m="$(basename "$(dirname "$spec")")"
 
-  if [ -d "spec/$m/behaviors" ]; then
-    mapfile -t extra < <(junit "$m-behaviors")
-    run "$m: behaviors match spine" spine behaviors "$spec" "spec/$m/behaviors" "${extra[@]}"
-  else
-    skip "$m: behaviors match spine" "no spec/$m/behaviors/"
-  fi
+    mapfile -t extra < <(junit "$jp$m-check")
+    if ! run "$m: spine is sound" spine check "$spec" "${extra[@]}"; then
+      printf 'skip  %s: other steps need a sound spine\n' "$m"
+      continue
+    fi
 
-  if [ -d "checks/$m" ]; then
-    mapfile -t extra < <(junit "$m-stale")
-    run "$m: checks cite current spine" spine stale "$spec" "checks/$m" "${extra[@]}"
-  else
-    skip "$m: checks cite current spine" "no checks/$m/"
-  fi
+    if [ -d "${p}spec/$m/behaviors" ]; then
+      mapfile -t extra < <(junit "$jp$m-behaviors")
+      run "$m: behaviors match spine" spine behaviors "$spec" "${p}spec/$m/behaviors" "${extra[@]}"
+    else
+      skip "$m: behaviors match spine" "no ${p}spec/$m/behaviors/"
+    fi
 
-  if [ -f "conformance/adapter_$m.py" ]; then
-    mapfile -t extra < <(junit "$m-conform")
-    run "$m: code conforms to spine" env PYTHONPATH="src:conformance" \
-        "$PY" tools/spine.py conform "$spec" --adapter "conformance/adapter_$m.py" "${extra[@]}"
-  else
-    missing "$m: code conforms to spine" no-adapter "$m" "conformance/adapter_$m.py not found"
-  fi
-done
-if [ "$machines" = 0 ]; then
-  missing "spines found" no-machines spec "no spec/*/spine.yaml"
-fi
+    if [ -d "${p}checks/$m" ]; then
+      mapfile -t extra < <(junit "$jp$m-stale")
+      run "$m: checks cite current spine" spine stale "$spec" "${p}checks/$m" "${extra[@]}"
+    else
+      skip "$m: checks cite current spine" "no ${p}checks/$m/"
+    fi
 
-# ---- content checks: what the spine cannot see -------------------------------------
-# --require-checks: finding none (a missing checks/ folder included) is a no-checks error.
-run "content checks" env PYTHONPATH="src" "$PY" tools/run_checks.py checks --require-checks
-
-# ---- check the checker --------------------------------------------------------------
-if [ "$FULL" = 1 ]; then
-  mutants=0
-  for mutate in mutation/mutate_*.py; do
-    [ -e "$mutate" ] || continue
-    mutants=$((mutants + 1))
-    run "mutants killed ($(basename "$mutate" .py))" "$PY" "$mutate"
+    if [ -f "${p}conformance/adapter_$m.py" ]; then
+      mapfile -t extra < <(junit "$jp$m-conform")
+      run "$m: code conforms to spine" env PYTHONPATH="${p}src:${p}conformance" \
+          "$PY" tools/spine.py conform "$spec" --adapter "${p}conformance/adapter_$m.py" "${extra[@]}"
+    else
+      missing "$m: code conforms to spine" no-adapter "$m" "${p}conformance/adapter_$m.py not found"
+    fi
   done
-  if [ "$mutants" = 0 ]; then
-    missing "mutants killed" no-mutation mutation "no mutation/mutate_*.py"
+  if [ "$machines" = 0 ]; then
+    missing "spines found" no-machines "${p}spec" "no ${p}spec/*/spine.yaml"
   fi
-else
-  skip "mutants killed" "fast mode; --full runs them"
-fi
+
+  # ---- content checks: what the spine cannot see -----------------------------------
+  # --require-checks: finding none (a missing checks/ folder included) is a no-checks error.
+  run "content checks" env PYTHONPATH="${p}src" "$PY" tools/run_checks.py "${p}checks" --require-checks
+
+  # ---- check the checker ------------------------------------------------------------
+  if [ "$FULL" = 1 ]; then
+    for mutate in "${p}"mutation/mutate_*.py; do
+      [ -e "$mutate" ] || continue
+      mutants=$((mutants + 1))
+      run "mutants killed ($(basename "$mutate" .py))" "$PY" "$mutate"
+    done
+    if [ "$mutants" = 0 ]; then
+      missing "mutants killed" no-mutation "${p}mutation" "no ${p}mutation/mutate_*.py"
+    fi
+  else
+    skip "mutants killed" "fast mode; --full runs them"
+  fi
+}
+
+for r in "${roots[@]}"; do verify_root "$r"; done
 
 if [ "${#failed[@]}" -gt 0 ]; then
   joined="$(printf '%s, ' "${failed[@]}")"
