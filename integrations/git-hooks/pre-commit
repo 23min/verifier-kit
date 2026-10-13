@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Example git pre-commit hook: run the fast checks before every commit.
-#   cp examples/git-hooks/pre-commit .git/hooks/pre-commit
-# or point git at this folder:  git config core.hooksPath examples/git-hooks
+#   cp integrations/git-hooks/pre-commit .git/hooks/pre-commit
+# or point git at this folder:  git config core.hooksPath integrations/git-hooks
 #
 # Git hooks are a convenience, not a gate: `git commit --no-verify` skips them, and an
 # agent with a shell can too. CI is where the check is authoritative.

@@ -62,7 +62,7 @@ fi
 
 if scenario 1 "The service as first written" \
    "conformance finds the two bugs, each with the shortest event sequence that shows it"; then
-  cp "$W/demo/notes_app_as_written.py" "$W/src/notes_app.py"
+  cp "$W/examples/notes/demo/notes_app_as_written.py" "$W/examples/notes/src/notes_app.py"
   show ./verify
   expect 1 "diverges           draft/trash role=owner" "diverges           trashed/edit role=owner"
 fi
@@ -72,14 +72,14 @@ if scenario 2 "Someone loosens the spine: editors may restore" \
   sed -i.bak \
     -e "s/{from: trashed, event: restore, when: \"role == 'owner'\", to: active}/{from: trashed, event: restore, when: \"role != 'viewer'\", to: active}/" \
     -e "s/{from: trashed, event: restore, when: \"role != 'owner'\", reject: true}/{from: trashed, event: restore, when: \"role == 'viewer'\", reject: true}/" \
-    "$W/spec/notes/spine.yaml" && rm -f "$W/spec/notes/spine.yaml.bak"
+    "$W/examples/notes/spec/notes/spine.yaml" && rm -f "$W/examples/notes/spec/notes/spine.yaml.bak"
   show ./verify
   expect 1 "behavior-allowed" "stale-check" "diverges           trashed/restore role=editor"
 fi
 
 if scenario 3 "A YAML slip: a rule written with 'on:' instead of 'event:'" \
    "spine check refuses the file and says why ('on' is read as true in YAML 1.1)"; then
-  "$PY" - "$W/spec/notes/spine.yaml" <<'EOF'
+  "$PY" - "$W/examples/notes/spec/notes/spine.yaml" <<'EOF'
 import sys
 p = sys.argv[1]
 s = open(p).read()
@@ -93,49 +93,49 @@ if scenario 4 "The builder's branch also edits the spec" \
    "the path guard refuses the spec change; the code change is fine"; then
   (cd "$W" && git init -q -b main && git add -A && git -c user.name=demo -c user.email=demo@example.com commit -qm base \
      && git switch -qc build/purge-confirmation \
-     && echo "# builder was here" >> src/notes_app.py \
-     && echo "# and here" >> spec/notes/spine.yaml \
+     && echo "# builder was here" >> examples/notes/src/notes_app.py \
+     && echo "# and here" >> examples/notes/spec/notes/spine.yaml \
      && git -c user.name=demo -c user.email=demo@example.com commit -qam "builder change")
   show env VERIFY_BASE=main ./verify
-  expect 1 "path-denied        spec/notes/spine.yaml"
+  expect 1 "path-denied        examples/notes/spec/notes/spine.yaml"
 fi
 
 if scenario 5 "Two readings of the chapter disagree (interpretation loop, not a gate)" \
    "spine diff lists each disagreement with a witness: the question to put to the spec author"; then
-  show "$PY" tools/spine.py diff spec/notes/readings/reading-a.yaml spec/notes/readings/reading-b.yaml
+  show "$PY" tools/spine.py diff examples/notes/spec/notes/readings/reading-a.yaml examples/notes/spec/notes/readings/reading-b.yaml
   expect 1 "case-disagrees     draft/trash: role=owner" "case-disagrees     trashed/restore: role=editor"
 fi
 
 if scenario 6 "Checking the checker: the content checks are deleted" \
    "the mutant that upper-cases text survives, because only the content checks could see it"; then
-  rm "$W/checks/notes/test_content.py"
+  rm "$W/examples/notes/checks/notes/test_content.py"
   show ./verify --full
   expect 1 "mutant-survived    edits are stored in upper case"
 fi
 
 if scenario 7 "The agent's Stop hook on a failing tree" \
    "first a block with the failing lines as feedback, then (after the attempt cap) a warning and a stop"; then
-  cp "$W/demo/notes_app_as_written.py" "$W/src/notes_app.py"
+  cp "$W/examples/notes/demo/notes_app_as_written.py" "$W/examples/notes/src/notes_app.py"
   (cd "$W" && git init -q -b main)
   echo "    -- attempt 1"
   show env CLAUDE_PROJECT_DIR="$W" VERIFY_MAX_ATTEMPTS=1 \
-    bash -c 'echo "{\"session_id\": \"demo\"}" | examples/claude-code/hooks/stop-verify.sh'
+    bash -c 'echo "{\"session_id\": \"demo\"}" | integrations/claude-code/hooks/stop-verify.sh'
   expect 0 '"decision": "block"' "draft/trash role=owner"
   echo "    -- attempt 2"
   show env CLAUDE_PROJECT_DIR="$W" VERIFY_MAX_ATTEMPTS=1 \
-    bash -c 'echo "{\"session_id\": \"demo\"}" | examples/claude-code/hooks/stop-verify.sh'
+    bash -c 'echo "{\"session_id\": \"demo\"}" | integrations/claude-code/hooks/stop-verify.sh'
   expect 0 '"systemMessage"' "attempt cap (1) is reached"
 fi
 
 if scenario 8 "The adapter, the content checks and the mutation script are removed" \
    "each missing piece is an error; nothing is skipped silently"; then
-  mv "$W/conformance/adapter_notes.py" "$W/conformance/adapter_notes.py.off"
-  rm "$W/checks/notes/test_content.py"
-  rm -r "$W/mutation"
+  mv "$W/examples/notes/conformance/adapter_notes.py" "$W/examples/notes/conformance/adapter_notes.py.off"
+  rm "$W/examples/notes/checks/notes/test_content.py"
+  rm -r "$W/examples/notes/mutation"
   show ./verify --full
-  expect 1 "no-adapter         notes: conformance/adapter_notes.py not found" \
-    "no-checks          checks: no test_* functions found" \
-    "no-mutation        mutation: no mutation/mutate_*.py"
+  expect 1 "no-adapter         notes: examples/notes/conformance/adapter_notes.py not found" \
+    "no-checks          examples/notes/checks: no test_* functions found" \
+    "no-mutation        examples/notes/mutation: no examples/notes/mutation/mutate_*.py"
 fi
 
 echo
