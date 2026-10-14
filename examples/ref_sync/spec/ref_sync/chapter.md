@@ -90,7 +90,7 @@ The client follows these rules, in this order:
 What the client can observe depends on where the operation is. While it is queued, the client
 fetches, checks the intent and builds a candidate, and pushes nothing. While it is prepared, the
 client is pushing and observes only the remote's answer. While it is uncertain, the client only
-fetches. A restart can happen in any of them.
+fetches. A restart can happen in any of them. Any other event is refused.
 
 A fetch that fails changes nothing; the client tries again later.
 
