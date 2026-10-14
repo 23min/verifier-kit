@@ -1,0 +1,2 @@
+steps: [prepare, accepted]
+expect: confirmed

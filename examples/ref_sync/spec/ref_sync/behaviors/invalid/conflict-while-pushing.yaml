@@ -1,0 +1,2 @@
+# A conflict is found only after a fetch, never while a candidate is pushed.
+steps: [prepare, invalidated]
