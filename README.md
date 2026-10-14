@@ -50,6 +50,7 @@ local Python.
 ```
 verify                           the single entry point
 tools/spine.py, run_checks.py    the tools (no knowledge of any CI or agent)
+tools/adapter_shim.py            serves a Python adapter over the adapter protocol
 policy.yaml                      which branch role may change which paths
 examples/<name>/                 one worked example each, laid out like a project (below)
 demo/                            the toolkit's demos on the notes example: faults.sh, live-builder.sh
@@ -198,8 +199,11 @@ with `no-adapter` until the adapter exists.
   general one.
 - **The spine sees states and permissions, not content.** Text, totals and formats need
   ordinary checks; the mutation step exists to show where that gap is.
-- **The adapter is Python and in-process.** Code in another language would need a process
-  adapter (for example JSON lines over stdin and stdout). Not built yet.
+- **`./verify` runs Python adapters only, in process.** `spine conform --adapter-cmd` runs an
+  adapter in any language as a program speaking JSON lines over stdin and stdout, and
+  `tools/adapter_shim.py` serves a Python adapter that way; `./verify` does not look for one
+  yet. Each request is a round trip between processes, about 0.2 ms here, so notes' 1,426
+  sequences take about 2.3 s through the shim against 0.2 s in process.
 - **The adapter is part of the oracle.** It must only translate, never decide; a person
   reviews it like the spine.
 - **One machine, one variable.** Real features have several interacting machines and more

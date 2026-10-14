@@ -22,6 +22,8 @@ import importlib.util
 import itertools
 import json
 import re
+import shlex
+import subprocess
 import sys
 import xml.etree.ElementTree as ET
 from collections import deque
@@ -450,11 +452,16 @@ def trace(spec, path):
 # ---------- conform ----------
 
 class AdapterFailed(Exception):
-    """The adapter could not be loaded, or its new() or observe() raised: no comparison is possible."""
+    """The adapter could not be loaded or started, its new() or observe() raised, or it broke the
+    adapter protocol: no comparison is possible."""
+
+
+class AdapterError(Exception):
+    """An {"error": ...} reply from an adapter command: the exception it reports, already described."""
 
 
 def describe(exc):
-    return f"{type(exc).__name__}: {exc}"
+    return str(exc) if isinstance(exc, AdapterError) else f"{type(exc).__name__}: {exc}"
 
 
 def steps_text(steps):
@@ -477,10 +484,70 @@ def load_adapter(path):
     return module
 
 
+class CommandAdapter:
+    """An adapter run as a program and spoken to in JSON lines (tool-contract.md, "The adapter
+    protocol"). It has the same new(), apply() and observe() as a Python adapter, so replay()
+    drives both alike. A reply that breaks the protocol raises AdapterFailed.
+    """
+    REPLIES = {"new": ("ok", '{"ok": true}'), "apply": ("result", '{"result": ...}'),
+               "observe": ("state", '{"state": ...}')}
+
+    def __init__(self, command):
+        try:
+            argv = shlex.split(command)
+            if not argv:
+                raise ValueError("the command is empty")
+            self.proc = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                         encoding="utf-8", errors="replace")
+        except (OSError, ValueError) as exc:
+            raise AdapterFailed(f"cannot be started: {describe(exc)}") from exc
+
+    def new(self):
+        self.ask({"op": "new"})
+
+    def apply(self, handle, event, env):
+        return self.ask({"op": "apply", "event": event, "env": env})
+
+    def observe(self, handle):
+        return self.ask({"op": "observe"})
+
+    def ask(self, request):
+        op = request["op"]
+        try:
+            self.proc.stdin.write(json.dumps(request) + "\n")
+            self.proc.stdin.flush()
+            line = self.proc.stdout.readline()
+        except OSError:                          # a broken pipe: it has exited
+            line = ""
+        if not line:
+            raise AdapterFailed(f"exited with status {self.proc.wait()} before replying to {op}")
+        try:
+            reply = json.loads(line)
+        except ValueError:
+            raise AdapterFailed(f"replied to {op} with a line that is not JSON: {line.rstrip()!r}") from None
+        key, shape = self.REPLIES[op]
+        if isinstance(reply, dict) and list(reply) == ["error"]:
+            raise AdapterError(str(reply["error"]))
+        if not isinstance(reply, dict) or list(reply) != [key] or (op == "new" and reply[key] is not True):
+            raise AdapterFailed(f"replied to {op} with {line.rstrip()}, not {shape} or {{\"error\": ...}}")
+        return reply[key]
+
+    def close(self, kill=False):
+        if kill:
+            self.proc.kill()
+        try:
+            self.proc.stdin.close()              # the end of input ends the adapter
+        except OSError:
+            pass
+        self.proc.wait()
+
+
 def call_adapter(adapter, name, steps, *args):
     """Call new() or observe(). Unlike apply(), an exception here is the adapter's failure."""
     try:
         return getattr(adapter, name)(*args)
+    except AdapterFailed:
+        raise
     except Exception as exc:
         after = f" after {steps_text(steps)}" if steps else ""
         raise AdapterFailed(f"{name}() raised {describe(exc)}{after}") from exc
@@ -490,7 +557,7 @@ def replay(spec, adapter, seq, exercised):
     """Run one event sequence against the spine (prediction) and the code (through the adapter).
 
     Returns (divergence or None, spine state afterwards, kind of the last outcome). Raises
-    AdapterFailed when new() or observe() raises.
+    AdapterFailed when new() or observe() raises, or an adapter command breaks the protocol.
     """
     handle = call_adapter(adapter, "new", ())
     state = spec["initial"]
@@ -508,6 +575,8 @@ def replay(spec, adapter, seq, exercised):
         expect = ("rejected" if kind == "reject" else "ok", target if kind == "to" else state)
         try:
             result = adapter.apply(handle, event, env)
+        except AdapterFailed:
+            raise
         except Exception as exc:                # a crash is a divergence too
             result = f"crashed ({describe(exc)})"
         got = (result, call_adapter(adapter, "observe", seq[: i + 1], handle))
@@ -519,24 +588,35 @@ def replay(spec, adapter, seq, exercised):
     return None, state, kind
 
 
-def conform(spec, adapter_path, depth):
+def conform(spec, adapter_path, depth, command=None):
+    """Compare code with the spine through a Python adapter file or, given command, an adapter program."""
     out = Findings()
+    where = adapter_path if command is None else command
     try:
-        adapter = load_adapter(adapter_path)
+        adapter = load_adapter(adapter_path) if command is None else CommandAdapter(command)
     except AdapterFailed as exc:
-        out.add("adapter-failed", adapter_path, str(exc))
+        out.add("adapter-failed", where, str(exc))
         return out
+    failed = False
+    try:
+        compare(spec, adapter, depth, out)
+    except AdapterFailed as exc:              # keep what was found; past this, nothing compares
+        out.add("adapter-failed", where, str(exc))
+        failed = True
+    if command is not None:
+        adapter.close(kill=failed)
+    return out
+
+
+def compare(spec, adapter, depth, out):
+    """Replay every event sequence up to depth, adding findings to out. Raises AdapterFailed."""
     terminal = terminal_states(spec)
     steps = [(e, env) for e in spec["events"] for env in assignments(spec)]
     exercised, reported, runs, queue = set(), set(), 0, deque([()])
     while queue:
         seq = queue.popleft()
         runs += 1
-        try:
-            divergence, state, kind = replay(spec, adapter, seq, exercised)
-        except AdapterFailed as exc:          # keep what was found; past this, nothing compares
-            out.add("adapter-failed", adapter_path, str(exc))
-            return out
+        divergence, state, kind = replay(spec, adapter, seq, exercised)
         if divergence:
             if divergence["key"] not in reported:
                 reported.add(divergence["key"])
@@ -547,7 +627,6 @@ def conform(spec, adapter_path, depth):
     total = sum(1 for s in spec["states"] if s not in terminal) * len(steps)
     out.add("coverage", f"{runs} sequences up to {depth} steps",
             f"{len(exercised)} of {total} state/event/variable cases exercised", "info")
-    return out
 
 
 # ---------- guard ----------
@@ -612,7 +691,10 @@ def main(argv=None):
     t.add_argument("behavior")
     k = sub.add_parser("conform", parents=[common])
     k.add_argument("spec")
-    k.add_argument("--adapter", required=True, help="Python file defining new(), apply(), observe()")
+    how = k.add_mutually_exclusive_group(required=True)
+    how.add_argument("--adapter", help="Python file defining new(), apply(), observe()")
+    how.add_argument("--adapter-cmd", metavar="COMMAND",
+                     help="a program speaking the adapter protocol; split like a shell would, run without one")
     k.add_argument("--depth", type=int, default=4)
     g = sub.add_parser("guard", parents=[common])
     g.add_argument("policy")
@@ -645,7 +727,7 @@ def main(argv=None):
                 "stale": lambda: stale(specs[0], args.checks),
                 "behaviors": lambda: behaviors(specs[0], args.directory),
                 "trace": lambda: trace(specs[0], args.behavior),
-                "conform": lambda: conform(specs[0], args.adapter, args.depth),
+                "conform": lambda: conform(specs[0], args.adapter, args.depth, args.adapter_cmd),
             }[args.cmd]
             findings.extend(handler())
 
