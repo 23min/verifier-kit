@@ -25,6 +25,7 @@ flowchart LR
   subgraph tools["Tools: files in, findings out"]
     spine["tools/spine.py<br/>check, behaviors, stale, conform, guard"]
     rc["tools/run_checks.py"]
+    shim["tools/adapter_shim.py<br/>a Python adapter over JSON lines"]
   end
   mut["{root}/mutation/mutate_*.py"]
   subgraph files["Files in the repo"]
@@ -39,6 +40,7 @@ flowchart LR
   person --> verify
   verify --> spine
   verify --> rc
+  spine -.->|"conform --adapter-cmd, when a caller asks"| shim
   verify -->|"--full only"| mut
   mut -->|"runs as subprocesses"| spine
   mut --> rc

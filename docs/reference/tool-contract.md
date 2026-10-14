@@ -48,7 +48,7 @@ are part of the contract: new codes may be added, existing codes are never renam
 | `stale` | `SPEC CHECKS_DIR` | Finds `covers: state/event@hash` citations in files under `CHECKS_DIR` and reports stale, orphaned and uncovered cells |
 | `behaviors` | `SPEC DIR` | Replays every file in `DIR/valid/` (must be allowed) and `DIR/invalid/` (must be refused) |
 | `trace` | `SPEC FILE` | Replays one behavior file; for callers that run a validator once per fixture |
-| `conform` | `SPEC --adapter FILE [--depth N]` | Runs every event sequence up to N steps (default 4) against the spine and against the code through the adapter, and reports where they differ |
+| `conform` | `SPEC (--adapter FILE \| --adapter-cmd COMMAND) [--depth N]` | Runs every event sequence up to N steps (default 4) against the spine and against the code through the adapter, and reports where they differ. The adapter is a Python file, or a program that speaks the adapter protocol (below) |
 | `guard` | `POLICY --branch NAME [FILES...]` | Maps the branch to a role and reports changed files that role may not touch; reads files from stdin when none are given |
 
 All commands accept `--format text|json` and `--junit FILE`. Every command that takes a spine
@@ -89,7 +89,7 @@ validates it first and stops with the validation findings if it is invalid.
 | `spine-unsound` | error | `trace` | the spine fails `check` |
 | `diverges` | error | `conform` | code and spine disagree; the message carries the sequence |
 | `coverage` | info | `conform` | sequences run and cases exercised |
-| `adapter-failed` | error | `conform` | the adapter can't be imported, lacks `new`, `apply` or `observe`, or its `new()` or `observe()` raised; `conform` stops there |
+| `adapter-failed` | error | `conform` | the adapter can't be imported, lacks `new`, `apply` or `observe`, or its `new()` or `observe()` raised; an adapter command can't be started or breaks the protocol. `conform` stops there |
 | `path-denied` | error | `guard` | a deny pattern for the role matches a changed file |
 | `path-not-allowed` | error | `guard` | no allow pattern for the role matches a changed file |
 | `unknown-role` | error | `guard` | no branch pattern matches |
@@ -108,6 +108,39 @@ An exception from `new()` or `observe()`, or while importing the file, is `adapt
 divergence: without a fresh instance or a reading of its state there is nothing to compare.
 
 The adapter translates and never decides whether an action is allowed.
+
+### The adapter protocol
+
+`spine conform --adapter-cmd COMMAND` runs the adapter as a program instead of importing a
+Python file, so the code under test can be in any language. `--adapter` and `--adapter-cmd`
+exclude each other. COMMAND is one string, split by shell quoting rules and run without a shell
+(no pipes, variables or globs), in `conform`'s working directory and environment.
+
+`conform` writes one JSON request per line to the program's stdin and reads one JSON reply per
+line from its stdout, in UTF-8. The program must flush stdout after every reply. Its stderr is its own;
+`conform` passes it through and never reads it.
+
+| Request | Reply | Same as |
+|---|---|---|
+| `{"op": "new"}` | `{"ok": true}` | `new()`: a fresh instance in the spine's initial state; it replaces the previous one |
+| `{"op": "apply", "event": "trash", "env": {"role": "owner"}}` | `{"result": "ok"}` or `{"result": "rejected"}` | `apply()`, on the current instance |
+| `{"op": "observe"}` | `{"state": "draft"}` | `observe()`, on the current instance |
+
+There are no handles: a program holds one instance at a time. Any request may instead get
+`{"error": "<what went wrong>"}`. For `apply` that counts as a divergence, as an exception from
+`apply()` does, and the text appears as `crashed (<text>)`; for `new` or `observe` it is
+`adapter-failed`. A program replies `{"error": ...}` to a request it does not recognize.
+
+`conform` starts the program once, before the first `new`, and closes its stdin when done; the
+program then exits. Each of these is `adapter-failed`, after which `conform` stops the program:
+it can't be started, it exits before replying, a reply is not JSON, or a reply has the wrong
+shape (other keys, more than one key, or anything but `true` for `ok`). There is no timeout: a
+program that never replies makes `conform` wait.
+
+`tools/adapter_shim.py ADAPTER_FILE` serves a Python adapter over this protocol unchanged, for
+example `--adapter-cmd "python3 tools/adapter_shim.py conformance/adapter_notes.py"`. It sends
+the adapter's own printing to stderr, and exits 1 with the reason on stderr when the adapter
+can't be imported.
 
 ## The policy file
 
@@ -169,5 +202,7 @@ which counts a failing run as a caught mutant, is not fooled by an empty folder.
 - A worked example or behavior file missing `steps` or `expect`, or a step without `=` in a
   variable, crashes instead of producing a finding.
 - No SARIF output yet.
-- Adapters are Python and run in-process; other languages need a process protocol.
+- `./verify` runs only Python adapters, in process; another language needs
+  `spine conform --adapter-cmd`, run by hand or by the caller.
+- An adapter command that never replies makes `conform` wait; there is no timeout.
 - `guard` trusts the branch name; protect branch patterns in the forge.
