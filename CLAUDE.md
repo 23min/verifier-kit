@@ -32,7 +32,7 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
 ## Commands
 
 ```sh
-./verify             # fast checks on every example, about a second each
+./verify             # fast checks on every example, a few seconds
 ./verify --full      # also checks the checker (mutation)
 ./verify examples/notes --full   # one example only
 demo/faults.sh       # acceptance test: every seeded fault must be caught; exits 1 otherwise
@@ -40,7 +40,8 @@ demo/faults.sh 4     # one scenario
 python3 tools/spine.py --help
 ```
 
-Setup needs Python 3 with PyYAML. The devcontainer image has both; don't create a `.venv`
-there (the repo is shared with the host). Elsewhere: `uv venv && uv pip install -r
-requirements.txt`; `./verify` and `demo/faults.sh` use `.venv` automatically when it exists.
+Setup needs Python 3 with PyYAML, and the `git` program for the ref_sync example's checks.
+The devcontainer image has all three; don't create a `.venv` there (the repo is shared with the
+host). Elsewhere: `uv venv && uv pip install -r requirements.txt`; `./verify` and
+`demo/faults.sh` use `.venv` automatically when it exists.
 `demo/live-builder.sh` starts a real Claude Code session and costs money; run it only when asked.
