@@ -213,6 +213,7 @@ flowchart LR
 | 7 | the service as first written | the Stop hook, twice | a block, then the attempt-cap warning |
 | 8 | the notes adapter, content checks and mutation removed | `./verify --full` | `no-adapter`, `no-checks`, `no-mutation` |
 | 9 | the notes service imports a module that doesn't exist | `./verify examples/notes` | `adapter-failed`, `check-unloadable` |
+| 10 | the service as first written | `spine conform --adapter-cmd` through the shim | the same `diverges` lines as scenario 1 |
 
 This repo's CI (`.github/workflows/verify.yml`) runs `./verify --full`, then
 `demo/faults.sh`, on every pull request and push to `main`. It does not set `VERIFY_BASE`, so
