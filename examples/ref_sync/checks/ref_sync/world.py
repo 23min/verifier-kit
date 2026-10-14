@@ -208,6 +208,9 @@ def _commit_problems(before, after, cid, events):
     removed = sorted(set(before) - set(after))
     changed = sorted(p for p in set(before) & set(after) if before[p] != after[p])
     new_events = [p for p in added if p.startswith("events/")]
+    republished = _republished(before, after, cid, changed, new_events, events)
+    if republished:
+        return republished
     if len(new_events) != 1:
         return [f"S4: commit {cid} adds {len(new_events)} event records, not one"]
     event = json.loads(after[new_events[0]])
@@ -216,9 +219,6 @@ def _commit_problems(before, after, cid, events):
     if removed or changed != [entity] or added != new_events:
         out.append(f"S4: commit {cid} adds event {event.get('event_id')} but changes "
                    f"{changed or 'no entity'}, adds {added}, removes {removed}")
-    if event.get("event_id") in events:
-        out.append(f"S2: event {event.get('event_id')} is published twice, in commits "
-                   f"{events[event.get('event_id')]} and {cid}")
     events[event.get("event_id")] = cid
     if entity in before and entity in after:
         old, new = json.loads(before[entity]), json.loads(after[entity])
@@ -229,4 +229,32 @@ def _commit_problems(before, after, cid, events):
         elif new != {"value": event.get("value"), "version": old.get("version", 0) + 1}:
             out.append(f"S4: commit {cid} sets {event.get('entity')} to {new}, which is not "
                        f"what event {event.get('event_id')} says")
+    return out
+
+
+def _republished(before, after, cid, changed, new_events, events):
+    """S2: a commit that rewrites a published event's record, or applies a published event again.
+
+    A record lives at events/<event_id>.json, so publishing an event ID a second time rewrites
+    that file, or leaves it as it was, rather than adding a second record. A change that matches
+    what a published event did, made without a new record, is taken as that event applied again.
+    """
+    out = []
+    for path in changed:
+        if path.startswith("events/"):
+            old, new = json.loads(before[path]), json.loads(after[path])
+            out.append(f"S2: commit {cid} rewrites the record of event {old.get('event_id')}, "
+                       f"published in commit {events.get(old.get('event_id'))}, with digest "
+                       f"{new.get('digest')} instead of {old.get('digest')}")
+    if new_events:
+        return out
+    for eid, published in events.items():
+        event = json.loads(before.get(f"events/{eid}.json", "{}"))
+        entity = f"entities/{event.get('entity')}.json"
+        if entity in changed:
+            old, new = json.loads(before[entity]), json.loads(after[entity])
+            if new == {"value": event.get("value"), "version": old.get("version", 0) + 1}:
+                out.append(f"S2: commit {cid} applies event {eid}, published in commit "
+                           f"{published}, again: it sets {event.get('entity')} to {new} "
+                           f"without adding an event record")
     return out
