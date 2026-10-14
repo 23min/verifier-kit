@@ -158,6 +158,9 @@ missing piece is an error instead, reported per root:
 | `no-mutation` | error | `./verify --full` | no `mutation/mutate_*.py` |
 
 `tools/run_checks.py` and `mutation/mutate_*.py` follow the same exit codes and line format.
+`run_checks.py` reports `check-failed` (error) for a `test_*` function that raised, with the
+exception's last line, and `check-unloadable` (error) for a `test_*.py` file it can't import,
+then runs the other files.
 Without `--require-checks`, `run_checks.py` passes on zero checks, so that the mutation script,
 which counts a failing run as a caught mutant, is not fooled by an empty folder.
 
