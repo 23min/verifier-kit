@@ -1,0 +1,45 @@
+# Reading B of the ref-sync chapter, by claude-haiku-5-5, 2026-10-14. Made from (git hash-object):
+# chapter.md 55f731a321e3823b8eaaaeb1db0b6386826be3fd, readings/prompt.md 7824b5af69dfdc5bb3b72dad41781e235619ca63,
+# docs/reference/spine-format.md 04b4b857832084ae13468238fb9936cc80832262. The reply below is unedited.
+machine: ref_sync
+section: chapter-2-publishing-one-event
+states:
+  queued: {kind: design}
+  prepared: {kind: design}
+  uncertain: {kind: design}
+  confirmed: {kind: fact, terminal: true}
+  conflicted: {kind: fact, terminal: true}
+  protocol_error: {kind: fact, terminal: true}
+initial: queued
+events: [prepare, accepted, non_fast_forward, response_lost, seen_on_remote, absent_on_remote, digest_mismatch, invalidated, restart]
+rules:
+  # queued
+  - {from: queued, event: prepare, to: prepared}
+  # undecided: a queued client pushes nothing (section 2), so the chapter does not say what a remote push answer means here
+  # undecided: a queued client pushes nothing (section 2), so the chapter does not say what a remote push answer means here
+  # undecided: a queued client pushes nothing (section 2), so the chapter does not say what a lost push reply means here
+  - {from: queued, event: seen_on_remote, to: confirmed}
+  - {from: queued, event: absent_on_remote, stay: true}
+  - {from: queued, event: digest_mismatch, to: protocol_error}
+  - {from: queued, event: invalidated, to: conflicted}
+  - {from: queued, event: restart, stay: true}
+  # prepared
+  # undecided: the chapter does not say what a second prepare does while a candidate is already being pushed
+  - {from: prepared, event: accepted, to: confirmed}
+  - {from: prepared, event: non_fast_forward, to: queued}
+  - {from: prepared, event: response_lost, to: uncertain}
+  # undecided: while prepared the client observes only the remote's answer (section 2), so the chapter does not say what this fetch result does
+  # undecided: while prepared the client observes only the remote's answer (section 2), so the chapter does not say what this fetch result does
+  # undecided: while prepared the client observes only the remote's answer (section 2), so the chapter does not say what this fetch result does
+  # undecided: while prepared the client observes only the remote's answer (section 2), so the chapter does not say what this fetch result does
+  - {from: prepared, event: restart, to: queued}
+  # uncertain
+  # undecided: while uncertain the client only fetches (section 2), so the chapter does not say whether a candidate may be built
+  # undecided: while uncertain the client only fetches (section 2), so the chapter does not say what a push answer means here
+  # undecided: while uncertain the client only fetches (section 2), so the chapter does not say what a push answer means here
+  # undecided: while uncertain the client only fetches (section 2), so the chapter does not say whether a second lost push reply changes the operation
+  - {from: uncertain, event: seen_on_remote, to: confirmed}
+  - {from: uncertain, event: absent_on_remote, to: queued}
+  - {from: uncertain, event: digest_mismatch, to: protocol_error}
+  # undecided: while uncertain the client only fetches and rule 7 names no version check, so the chapter does not say what invalidated means here
+  - {from: uncertain, event: restart, to: queued}
