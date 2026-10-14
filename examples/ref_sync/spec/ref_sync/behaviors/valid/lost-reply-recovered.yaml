@@ -1,0 +1,2 @@
+steps: [prepare, response_lost, seen_on_remote]
+expect: confirmed

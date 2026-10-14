@@ -1,0 +1,2 @@
+steps: [prepare, non_fast_forward, prepare, accepted]
+expect: confirmed

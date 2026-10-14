@@ -1,0 +1,2 @@
+steps: [prepare, response_lost, digest_mismatch]
+expect: protocol_error
