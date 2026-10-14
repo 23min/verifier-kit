@@ -151,7 +151,9 @@ transitions, sequence rules and the spine judge the same trace.
 ### The adapter
 
 `new()`, `apply()`, `observe()`; translates, never decides; owned by the oracle side; observes
-real side effects. Details in `docs/reference/tool-contract.md`.
+real side effects. A Python file runs in process; an adapter in any other language runs as a
+program speaking the same three operations as JSON lines over stdin and stdout
+(`docs/adr/0003-adapter-protocol.md`). Details in `docs/reference/tool-contract.md`.
 
 ### Checking the checker
 
@@ -223,7 +225,8 @@ growth; "still true" stamps later contradicted by an audit.
 | Docs checks, doc reader | designed |
 | Source link, review diff, surface check | designed |
 | Migration tables, dispute channel, `status` command | designed |
-| Adapter protocol for other languages, SARIF | designed |
+| Adapter protocol for other languages, with a Python shim | built; `./verify` uses Python adapters only |
+| SARIF | designed |
 | Production replay | later |
 
 From here on, progress is tracked in GitHub issues, not in this table.
@@ -255,7 +258,6 @@ From here on, progress is tracked in GitHub issues, not in this table.
 - Agreement for decision tables: generated inputs and equality.
 - The dispute format.
 - The retirement rule for checks.
-- The adapter protocol for other languages.
 - Python or a single Go binary for distribution at work.
 
 ## Relation to loom
