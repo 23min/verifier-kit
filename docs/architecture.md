@@ -1,7 +1,7 @@
 # Architecture
 
-How the repo fits together today: who calls what, what `./verify` runs, how the notes example
-is wired, and how the toolkit checks itself. The rules each piece follows are in
+How the repo fits together today: who calls what, what `./verify` runs, how the examples are
+wired, and how the toolkit checks itself. The rules each piece follows are in
 `docs/reference/`; the reasons are in `docs/design.md`. In the diagrams, `{m}` is a machine's
 folder name, such as `notes`, and `{root}` is the folder `./verify` checks: a project laid out
 with `spec/`, `checks/`, `conformance/`, `src/` and `mutation/`. In this repo each
@@ -87,7 +87,7 @@ anywhere under the root's `checks/` (`no-checks`), or no mutation script under `
 
 ## The notes example
 
-The only example today, in `examples/notes/`; the paths below are relative to it. Its files
+The first example, in `examples/notes/`; the paths below are relative to it. Its files
 are tied together by the name `notes`, by Python imports, and by the cell hashes the checks
 cite.
 
@@ -119,11 +119,53 @@ Who may change what, from `policy.yaml` (enforced by `spine guard` when `VERIFY_
 | `spec/*` | spec-author | `examples/*/spec/`, `examples/*/checks/`, `examples/*/conformance/` | `examples/*/src/` |
 | anything else | person | everything | |
 
+## The ref_sync example
+
+In `examples/ref_sync/`; the paths below are relative to it. Its spine is one operation's
+lifecycle, which `spine conform` checks through the client's pure `transition()`. Two clients
+racing, lost replies and crashes are checked by its own explorer, and Git's assumed behavior by
+checks against real Git. The adapter's docstring is the whole contract between the oracle and
+`src/`.
+
+```mermaid
+flowchart LR
+  chapter["spec/ref_sync/chapter.md<br/>rules, S1-S7, C01-C12"]
+  readings["spec/ref_sync/readings/*.yaml<br/>two readings"]
+  spineY["spec/ref_sync/spine.yaml<br/>one operation's lifecycle"]
+  behav["spec/ref_sync/behaviors/<br/>valid/ and invalid/"]
+  adapter["conformance/adapter_ref_sync.py<br/>new, apply, observe"]
+  client["src/ref_sync_client.py<br/>transition, Client, GitRemote"]
+  proto["checks/ref_sync/test_protocol.py<br/>C01-C08"]
+  explore["checks/ref_sync/explore.py<br/>breadth-first search"]
+  world["checks/ref_sync/world.py<br/>simulated remote, faults, S1-S5, S7"]
+  gitc["checks/ref_sync/test_git_ref.py<br/>C09-C11, S6"]
+  git[("git program<br/>throwaway repositories")]
+  mutate["mutation/mutate_ref_sync.py"]
+  chapter -->|"read by two interpreters"| readings
+  readings -->|"spine diff; a person ratifies"| spineY
+  behav -->|"spine behaviors replays them"| spineY
+  spineY -->|"spine conform: every sequence up to 4 events"| adapter
+  adapter -->|"calls transition"| client
+  proto --> explore
+  proto --> world
+  world -->|"reads the states"| spineY
+  world -->|"steps two Clients against a simulated remote"| client
+  gitc -->|"publishes with GitRemote"| client
+  gitc --> git
+  client -->|"GitRemote runs"| git
+  mutate -->|"an edited copy shadows it"| client
+```
+
+The explorer is generic: `explore.py` knows nothing of Git, and `world.py` holds the moves, the
+faults and the invariants. `git` is a dependency of this example only; without it the Git
+checks fail.
+
 ## Checking the checker
 
-`./verify --full` runs `examples/notes/mutation/mutate_notes.py`, which breaks the service on
-purpose and expects the oracle to notice. It runs from the example's folder and finds `tools/`
-above it.
+`./verify --full` runs each example's mutation script. `examples/notes/mutation/mutate_notes.py`
+breaks the service on purpose and expects the oracle to notice. It runs from the example's
+folder and finds `tools/` above it. `examples/ref_sync/mutation/mutate_ref_sync.py` works the
+same way with six edits to `src/ref_sync_client.py`, and names every check that failed.
 
 ```mermaid
 sequenceDiagram
@@ -144,7 +186,8 @@ sequenceDiagram
 
 `demo/faults.sh` is the toolkit's own acceptance test. Each scenario makes a fresh copy of the
 repo (without `.git`) in a temp folder, seeds one fault, runs a command there, and checks the
-exit code and the lines it must print.
+exit code and the lines it must print. The faults are all in the notes example, but `./verify`
+in the copy checks every example, so ref_sync's checks run in each scenario too.
 
 ```mermaid
 flowchart LR
@@ -178,9 +221,10 @@ the path guard runs here only inside scenario 4.
 |---|---|---|
 | `spine check`, `behaviors`, `stale`, `conform` | per machine | `{root}/spec/{m}/`, `{root}/checks/{m}/`, `{root}/conformance/adapter_{m}.py` |
 | content checks | per root: one run over all of `{root}/checks/` | every `test_*.py` under `{root}/checks/` |
-| mutation | per root: every `{root}/mutation/mutate_*.py` under `--full` | file name pattern; `mutate_notes.py` itself runs all of its root's `checks/` |
-| `src/` | per root, on `PYTHONPATH` | module name (`notes_app`) |
+| mutation | per root: every `{root}/mutation/mutate_*.py` under `--full` | file name pattern; each script runs all of its root's `checks/` |
+| `src/` | per root, on `PYTHONPATH` | module name (`notes_app`, `ref_sync_client`) |
 | path guard | repo-wide | `policy.yaml` patterns over `examples/*/` and the toolkit's folders |
 | deny rules, CODEOWNERS (`integrations/`) | a project's root | folder patterns for a project with `spec/` at its root |
-| `demo/faults.sh`, `demo/live-builder.sh` | notes only | hard-coded `examples/notes/` paths |
+| `demo/faults.sh` | seeds faults in notes only; its `./verify` runs every example | hard-coded `examples/notes/` paths |
+| `demo/live-builder.sh` | notes only | hard-coded `examples/notes/` paths |
 | choosing what to run | one root per call | `./verify ROOT`; without it, the discovery rule above |

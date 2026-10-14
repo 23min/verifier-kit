@@ -11,7 +11,10 @@ output is correct.
 It is a prototype for learning the process on something small. Each worked example lives in
 `examples/<name>/`, laid out like a project that uses the toolkit. The first,
 [`examples/notes/`](examples/notes/README.md), is a notes service with drafts, publishing, trash
-and roles; it doubles as the toolkit's acceptance test.
+and roles; it doubles as the toolkit's acceptance test. The second,
+[`examples/ref_sync/`](examples/ref_sync/README.md), is a protocol: two clients publishing
+workflow events to one Git ref, checked through every interleaving of their steps, lost
+replies and crashes up to a bound, and against real Git.
 
 The design is in [`docs/design.md`](docs/design.md); the exact tool contract and spine format
 are in [`docs/reference/`](docs/reference/). Rules for agents working here are in
@@ -20,10 +23,11 @@ are in [`docs/reference/`](docs/reference/). Rules for agents working here are i
 ## Try it
 
 ```sh
-pip install -r requirements.txt   # PyYAML, the only dependency; or: uv venv && uv pip install -r requirements.txt
-./verify                    # fast checks on every example, about a second each
+pip install -r requirements.txt   # PyYAML, the only Python dependency; or: uv venv && uv pip install -r requirements.txt
+./verify                    # fast checks on every example, a few seconds
 ./verify --full             # also breaks the code on purpose to check the checks
 ./verify examples/notes     # one example only
+./verify examples/ref_sync  # the protocol example; it also needs the git program
 demo/faults.sh              # acceptance test: seeds one fault at a time and checks the right part catches it
 demo/live-builder.sh        # optional: a real Claude Code builder session against the oracle
 ```
@@ -95,7 +99,7 @@ A project that uses the toolkit has the same folders at its own root, next to `v
 | checks cite current spine | `spine stale` | content checks that cite a spine cell which has since changed | checks that never cite anything (listed as info) |
 | code conforms to spine | `spine conform` | any state/event/role case where the code allows, refuses or ends up somewhere other than the spine says, with the shortest sequence that shows it | anything beyond 4 steps; data the adapter does not observe |
 | content checks | `run_checks.py` | wrong text, values, formats | whatever no check asserts |
-| mutants killed (`--full`) | `mutate_notes.py` | an oracle too weak to notice a planted bug | bugs unlike the planted ones |
+| mutants killed (`--full`) | `mutation/mutate_*.py` | an oracle too weak to notice a planted bug | bugs unlike the planted ones |
 
 Nothing is skipped silently. A step that does not run prints `skip` with the reason (no
 `VERIFY_BASE`, no behaviors folder, no `--full`, or a spine that is not sound), and a missing
@@ -189,6 +193,9 @@ with `no-adapter` until the adapter exists.
 
 - **Bounded, not proven.** Conformance replays every sequence up to 4 steps. That finds most
   logic slips in small machines (the small-scope hypothesis), but it is testing, not proof.
+- **Concurrency needs checks of its own.** `spine conform` runs one lifecycle at a time. The
+  ref_sync example adds an explorer for two clients in its own `checks/`; the toolkit has no
+  general one.
 - **The spine sees states and permissions, not content.** Text, totals and formats need
   ordinary checks; the mutation step exists to show where that gap is.
 - **The adapter is Python and in-process.** Code in another language would need a process
