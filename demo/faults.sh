@@ -138,6 +138,14 @@ if scenario 8 "The adapter, the content checks and the mutation script are remov
     "no-mutation        examples/notes/mutation: no examples/notes/mutation/mutate_*.py"
 fi
 
+if scenario 9 "The service cannot be imported: it imports a module that does not exist" \
+   "the adapter and the content checks each report it as a finding, not a traceback"; then
+  echo "import no_such_module" >> "$W/examples/notes/src/notes_app.py"
+  show ./verify examples/notes
+  expect 1 "adapter-failed     examples/notes/conformance/adapter_notes.py: new() raised ModuleNotFoundError: No module named 'no_such_module'" \
+    "check-unloadable   examples/notes/checks/notes/test_content.py: cannot be imported: ModuleNotFoundError"
+fi
+
 echo
 if [ "$RAN" = 0 ]; then echo "-- no scenario named ${ONLY}"; exit 2; fi
 if [ "$FAILS" = 0 ]; then

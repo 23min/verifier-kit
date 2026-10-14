@@ -210,6 +210,7 @@ flowchart LR
 | 6 | notes content checks deleted | `./verify --full` | `mutant-survived` for the upper-case mutant |
 | 7 | the service as first written | the Stop hook, twice | a block, then the attempt-cap warning |
 | 8 | the notes adapter, content checks and mutation removed | `./verify --full` | `no-adapter`, `no-checks`, `no-mutation` |
+| 9 | the notes service imports a module that doesn't exist | `./verify examples/notes` | `adapter-failed`, `check-unloadable` |
 
 This repo's CI (`.github/workflows/verify.yml`) runs `./verify --full`, then
 `demo/faults.sh`, on every pull request and push to `main`. It does not set `VERIFY_BASE`, so
