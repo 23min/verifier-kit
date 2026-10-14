@@ -1,0 +1,46 @@
+# Reading A of the ref-sync chapter, by claude-sonnet-5-5, 2026-10-14. Made from (git hash-object):
+# chapter.md 55f731a321e3823b8eaaaeb1db0b6386826be3fd, readings/prompt.md 7824b5af69dfdc5bb3b72dad41781e235619ca63,
+# docs/reference/spine-format.md 04b4b857832084ae13468238fb9936cc80832262. The reply below is unedited.
+machine: ref_sync
+states:
+  queued:         {kind: design}
+  prepared:       {kind: design}
+  uncertain:      {kind: design}
+  confirmed:      {kind: fact, terminal: true}
+  conflicted:     {kind: fact, terminal: true}
+  protocol_error: {kind: fact, terminal: true}
+initial: queued
+events: [prepare, accepted, non_fast_forward, response_lost, seen_on_remote, absent_on_remote, digest_mismatch, invalidated, restart]
+rules:
+  # queued: the client fetches, checks the intent and builds a candidate; it pushes nothing
+  - {from: queued, event: prepare, to: prepared}
+  - {from: queued, event: accepted, reject: true}
+  - {from: queued, event: non_fast_forward, reject: true}
+  - {from: queued, event: response_lost, reject: true}
+  - {from: queued, event: seen_on_remote, to: confirmed}
+  - {from: queued, event: absent_on_remote, stay: true}
+  - {from: queued, event: digest_mismatch, to: protocol_error}
+  - {from: queued, event: invalidated, to: conflicted}
+  - {from: queued, event: restart, stay: true}
+
+  # prepared: the client is pushing and observes only the remote's answer
+  - {from: prepared, event: prepare, reject: true}
+  - {from: prepared, event: accepted, to: confirmed}
+  - {from: prepared, event: non_fast_forward, to: queued}
+  - {from: prepared, event: response_lost, to: uncertain}
+  - {from: prepared, event: seen_on_remote, reject: true}
+  - {from: prepared, event: absent_on_remote, reject: true}
+  - {from: prepared, event: digest_mismatch, reject: true}
+  - {from: prepared, event: invalidated, reject: true}
+  - {from: prepared, event: restart, to: queued}
+
+  # uncertain: the client only fetches
+  - {from: uncertain, event: prepare, reject: true}
+  - {from: uncertain, event: accepted, reject: true}
+  - {from: uncertain, event: non_fast_forward, reject: true}
+  - {from: uncertain, event: response_lost, reject: true}
+  - {from: uncertain, event: seen_on_remote, to: confirmed}
+  - {from: uncertain, event: absent_on_remote, to: queued}
+  - {from: uncertain, event: digest_mismatch, to: protocol_error}
+  - {from: uncertain, event: invalidated, reject: true}
+  - {from: uncertain, event: restart, to: queued}
