@@ -89,6 +89,7 @@ validates it first and stops with the validation findings if it is invalid.
 | `spine-unsound` | error | `trace` | the spine fails `check` |
 | `diverges` | error | `conform` | code and spine disagree; the message carries the sequence |
 | `coverage` | info | `conform` | sequences run and cases exercised |
+| `adapter-failed` | error | `conform` | the adapter can't be imported, lacks `new`, `apply` or `observe`, or its `new()` or `observe()` raised; `conform` stops there |
 | `path-denied` | error | `guard` | a deny pattern for the role matches a changed file |
 | `path-not-allowed` | error | `guard` | no allow pattern for the role matches a changed file |
 | `unknown-role` | error | `guard` | no branch pattern matches |
@@ -102,6 +103,9 @@ A Python file with three functions, owned by the oracle side:
 - `apply(handle, event, env)` performs one spine event, with `env` holding the variable values
   (for example `{"role": "editor"}`), and returns `"ok"` or `"rejected"`. Any exception counts as a divergence.
 - `observe(handle)` returns the name of the spine state the system is in, read from its real data.
+
+An exception from `new()` or `observe()`, or while importing the file, is `adapter-failed`, not a
+divergence: without a fresh instance or a reading of its state there is nothing to compare.
 
 The adapter translates and never decides whether an action is allowed.
 

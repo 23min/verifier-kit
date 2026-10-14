@@ -449,25 +449,52 @@ def trace(spec, path):
 
 # ---------- conform ----------
 
+class AdapterFailed(Exception):
+    """The adapter could not be loaded, or its new() or observe() raised: no comparison is possible."""
+
+
+def describe(exc):
+    return f"{type(exc).__name__}: {exc}"
+
+
+def steps_text(steps):
+    return " -> ".join(f"{e}({envstr(v)})" for e, v in steps)
+
+
 def load_adapter(path):
     sys.path.insert(0, str(Path(path).resolve().parent))
     module_spec = importlib.util.spec_from_file_location("spine_adapter", path)
+    if module_spec is None:
+        raise AdapterFailed("cannot be imported: not a Python file")
     module = importlib.util.module_from_spec(module_spec)
-    module_spec.loader.exec_module(module)
-    for name in ("new", "apply", "observe"):
-        if not callable(getattr(module, name, None)):
-            raise SystemExit(f"spine: adapter {path} must define {name}()")
+    try:
+        module_spec.loader.exec_module(module)
+    except Exception as exc:
+        raise AdapterFailed(f"cannot be imported: {describe(exc)}") from exc
+    missing = [f"{name}()" for name in ("new", "apply", "observe") if not callable(getattr(module, name, None))]
+    if missing:
+        raise AdapterFailed(f"does not define {', '.join(missing)}")
     return module
+
+
+def call_adapter(adapter, name, steps, *args):
+    """Call new() or observe(). Unlike apply(), an exception here is the adapter's failure."""
+    try:
+        return getattr(adapter, name)(*args)
+    except Exception as exc:
+        after = f" after {steps_text(steps)}" if steps else ""
+        raise AdapterFailed(f"{name}() raised {describe(exc)}{after}") from exc
 
 
 def replay(spec, adapter, seq, exercised):
     """Run one event sequence against the spine (prediction) and the code (through the adapter).
 
-    Returns (divergence or None, spine state afterwards, kind of the last outcome).
+    Returns (divergence or None, spine state afterwards, kind of the last outcome). Raises
+    AdapterFailed when new() or observe() raises.
     """
-    handle = adapter.new()
+    handle = call_adapter(adapter, "new", ())
     state = spec["initial"]
-    observed = adapter.observe(handle)
+    observed = call_adapter(adapter, "observe", (), handle)
     if observed != state:
         return ({"key": ("start",), "where": "start",
                  "message": f"spine starts in {state}, code starts in {observed}"}, state, None)
@@ -482,12 +509,11 @@ def replay(spec, adapter, seq, exercised):
         try:
             result = adapter.apply(handle, event, env)
         except Exception as exc:                # a crash is a divergence too
-            result = f"crashed ({type(exc).__name__}: {exc})"
-        got = (result, adapter.observe(handle))
+            result = f"crashed ({describe(exc)})"
+        got = (result, call_adapter(adapter, "observe", seq[: i + 1], handle))
         if got != expect:
-            trace_text = " -> ".join(f"{e}({envstr(v)})" for e, v in seq[: i + 1])
             return ({"key": (state, event, tuple(env.items())), "where": f"{state}/{event} {envstr(env)}",
-                     "message": f"after {trace_text}: spine expects {expect[0]} in {expect[1]}, "
+                     "message": f"after {steps_text(seq[: i + 1])}: spine expects {expect[0]} in {expect[1]}, "
                                 f"code gave {got[0]} in {got[1]}"}, state, kind)
         state = expect[1]
     return None, state, kind
@@ -495,14 +521,22 @@ def replay(spec, adapter, seq, exercised):
 
 def conform(spec, adapter_path, depth):
     out = Findings()
-    adapter = load_adapter(adapter_path)
+    try:
+        adapter = load_adapter(adapter_path)
+    except AdapterFailed as exc:
+        out.add("adapter-failed", adapter_path, str(exc))
+        return out
     terminal = terminal_states(spec)
     steps = [(e, env) for e in spec["events"] for env in assignments(spec)]
     exercised, reported, runs, queue = set(), set(), 0, deque([()])
     while queue:
         seq = queue.popleft()
         runs += 1
-        divergence, state, kind = replay(spec, adapter, seq, exercised)
+        try:
+            divergence, state, kind = replay(spec, adapter, seq, exercised)
+        except AdapterFailed as exc:          # keep what was found; past this, nothing compares
+            out.add("adapter-failed", adapter_path, str(exc))
+            return out
         if divergence:
             if divergence["key"] not in reported:
                 reported.add(divergence["key"])
