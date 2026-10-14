@@ -146,6 +146,15 @@ if scenario 9 "The service cannot be imported: it imports a module that does not
     "check-unloadable   examples/notes/checks/notes/test_content.py: cannot be imported: ModuleNotFoundError"
 fi
 
+if scenario 10 "The service as first written, through the adapter protocol" \
+   "spine conform --adapter-cmd, through the shim, finds the same two bugs as scenario 1"; then
+  cp "$W/examples/notes/demo/notes_app_as_written.py" "$W/examples/notes/src/notes_app.py"
+  show env PYTHONPATH=examples/notes/src:examples/notes/conformance "$PY" tools/spine.py conform \
+    examples/notes/spec/notes/spine.yaml \
+    --adapter-cmd "$(printf %q "$PY") tools/adapter_shim.py examples/notes/conformance/adapter_notes.py"
+  expect 1 "diverges           draft/trash role=owner" "diverges           trashed/edit role=owner"
+fi
+
 echo
 if [ "$RAN" = 0 ]; then echo "-- no scenario named ${ONLY}"; exit 2; fi
 if [ "$FAILS" = 0 ]; then
