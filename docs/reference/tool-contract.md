@@ -62,7 +62,7 @@ validates it first and stops with the validation findings if it is invalid.
 | `spec-shape` | error | all | a section of an input file has the wrong type |
 | `missing-key` | error | all | a required key of an input file is missing |
 | `unknown-key` | error | all | a key outside an input file's format |
-| `yaml-boolean-key` | error | all | a key YAML read as a boolean (`on`, `yes`, `y`) |
+| `yaml-boolean-key` | error | all | a key YAML read as a boolean (`on`, `off`, `yes`, `no`) |
 | `yaml-boolean-value` | error | all | a value YAML read as a boolean where a name was meant |
 | `bad-value` | error | all | a value outside its closed set, such as a state kind, or a role the policy does not define |
 | `bad-outcome` | error | all | a rule without exactly one outcome |

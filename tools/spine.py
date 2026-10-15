@@ -53,7 +53,7 @@ EXAMPLE_KEYS = {"name", "steps", "expect"}
 BEHAVIOR_KEYS = {"steps", "expect"}
 POLICY_KEYS = {"branches", "roles"}
 ROLE_KEYS = {"allow", "deny"}
-BOOL_KEY_HINT = "YAML reads keys such as `on`, `yes` and `y` as true; spell the key as `event` or quote it"
+BOOL_KEY_HINT = "YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it"
 
 
 def read_yaml(path, out):
