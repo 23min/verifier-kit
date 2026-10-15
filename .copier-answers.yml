@@ -8,7 +8,8 @@ apt_packages:
 data_dir: false
 dood: false
 extra_extensions: []
-languages: []
+languages:
+- go
 ports: {}
 project_slug: verifier-kit
 readonly_data: []
