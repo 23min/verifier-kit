@@ -1,0 +1,12 @@
+# fnmatch's corners: classes, negation, ranges that are empty or reversed, and * across slashes.
+branches:
+  "feature/[0-9]*": feature
+  "release-?": release
+  "[!x]*": other
+roles:
+  feature:
+    allow: ["src/[a-c]*.py", "*.[ch]", "docs/**", "lib/[]]x", "a[b-]c", "q[z-a]", "r[!]s]", "t[a-c-e]"]
+    deny: ["src/*secret*", "[*]", "u[!-a]"]
+  release:
+    allow: ["*"]
+  other:

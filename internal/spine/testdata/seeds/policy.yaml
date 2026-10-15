@@ -1,0 +1,9 @@
+branches:
+  "build/*": builder
+  main: owner
+roles:
+  builder:
+    allow: ["src/*", "tests/*"]
+    deny: ["src/secret*"]
+  owner:
+    allow: ["*"]

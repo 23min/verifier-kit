@@ -1,0 +1,32 @@
+# Names that need escaping in JSON, or quoting in text, and a cell with several rules.
+machine: "naïve"
+section: "§ 2"
+vars:
+  "wer": ["ja", "nein ", "日本"]
+states:
+  "café": {kind: fact}
+  "日本": {}
+  'quote"d': {}
+  "back\\slash": {}
+  "tab\tname": {}
+  "emoji 🙂": {terminal: true}
+  "\x7f\u0085": {}
+initial: "café"
+events: ["über", "ev\"q", "über"]
+rules:
+  - {from: "café", event: "über", when: "wer == 'ja'", to: "日本"}
+  - {from: "café", event: "über", when: "wer != 'ja'", stay: true}
+  - {from: "café", event: "ev\"q", to: 'quote"d'}
+  - {from: "日本", event: "über", when: "wer in ['日本', 'nein ']", to: "back\\slash"}
+  - {from: "日本", event: "über", when: "not wer in ['日本', 'nein ']", reject: true}
+  - {from: "日本", event: "ev\"q", ignore: true}
+  - {from: 'quote"d', event: "über", to: "tab\tname"}
+  - {from: 'quote"d', event: "ev\"q", to: "emoji 🙂"}
+  - {from: "back\\slash", event: "über", to: "\x7f\u0085"}
+  - {from: "back\\slash", event: "ev\"q", reject: true}
+  - {from: "tab\tname", event: "über", stay: true}
+  - {from: "tab\tname", event: "ev\"q", stay: true}
+  - {from: "\x7f\u0085", event: "über", ignore: true}
+  - {from: "\x7f\u0085", event: "ev\"q", ignore: true}
+examples:
+  - {name: "ein Weg", steps: ["über wer=ja", "ev\"q wer=日本"], expect: "日本"}

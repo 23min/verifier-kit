@@ -15,7 +15,8 @@ needs an issue and the owner's approval first (see `CLAUDE.md`).
 - **Output:** text by default; `--format json` for machines; `--junit FILE` additionally
   writes a JUnit XML report (one test case per error, or one passing case). `spine hash` is
   the exception: it prints hashes to copy, not findings, and takes neither option.
-- **Dependencies:** the Python standard library plus PyYAML (`requirements.txt`).
+- **Dependencies:** the Python standard library plus PyYAML (`requirements.txt`). The Go
+  `spine` uses the Go standard library plus `go.yaml.in/yaml/v4` (`go.mod`).
 - **Nothing is skipped silently.** Whatever is not checked is reported with the reason; a
   missing piece that a check needs is an error finding, never a pass.
 
@@ -51,6 +52,10 @@ are part of the contract: new codes may be added, existing codes are never renam
 | `trace` | `SPEC FILE` | Replays one behavior file; for callers that run a validator once per fixture |
 | `conform` | `SPEC (--adapter FILE \| --adapter-cmd COMMAND) [--depth N]` | Runs every event sequence up to N steps (default 4) against the spine and against the code through the adapter, and reports where they differ. The adapter is a Python file, or a program that speaks the adapter protocol (below) |
 | `guard` | `POLICY --branch NAME [FILES...]` | Maps the branch to a role and reports changed files that role may not touch; reads files from stdin when none are given |
+
+`bin/spine`, built from `cmd/spine/`, is the Go port of `tools/spine.py` and follows the same
+contract. It has every command above except `diff` and `conform`, which it refuses as usage
+errors (exit 2) until they are ported. `go test ./...` runs both on the same inputs.
 
 All commands except `hash` accept `--format text|json` and `--junit FILE`. Every command that
 takes a spine validates it first and stops with the validation findings if it is invalid.

@@ -1,0 +1,28 @@
+# Valid, but check finds something of every kind: unknown states and events, undecided cells,
+# missing cases, overlaps, a terminal exit, an unreachable state and failing examples.
+machine: unsound
+vars:
+  role: [owner, guest, "édi tor"]
+  mode: [a, b]
+states:
+  s: {}
+  t: {}
+  island: {kind: policy}
+  end: {terminal: true}
+initial: s
+events: [go, stop, go]
+rules:
+  - {from: s, event: go, when: "role == 'owner'", to: t}
+  - {from: s, event: go, when: "role == 'owner' and mode == 'a'", reject: true}
+  - {from: s, event: go, when: "role == 'owner' and mode == 'a'", reject: true}
+  - {from: t, event: go, when: "mode == 'a'", to: end}
+  - {from: t, event: stop, stay: true}
+  - {from: end, event: go, to: s}
+  - {from: end, event: stop, ignore: true}
+  - {from: nowhere, event: go, to: elsewhere}
+  - {from: s, event: fly, ignore: true}
+examples:
+  - {name: wrong end, steps: ["go role=owner mode=b"], expect: s}
+  - {name: refused, steps: ["go mode=b role=owner", "stop role=guest mode=a"], expect: rejected}
+  - {name: undecided, steps: ["stop role=guest mode=b"], expect: undefined}
+  - {name: empty, steps: [], expect: s}
