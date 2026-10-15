@@ -90,8 +90,10 @@ that isn't text is an `unknown-key`, and any other value a `spec-shape`.
 
 ## Steps, examples and behaviors
 
-A step is `"<event> <var>=<value> ..."`, for example `"restore role=editor"`; anything else is
-a `bad-step`. `steps` is always a list of steps, possibly empty.
+A step is `"<event> <var>=<value> ..."`, for example `"restore role=editor"`. It gives every
+declared variable exactly once, with one of that variable's values, and no other variable, so
+it names one whole case; anything else is a `bad-step`. `steps` is always a list of steps,
+possibly empty.
 
 - **Examples** in the spine have `name`, `steps` and `expect`, all required and nothing else,
   where `expect` is the end state, `rejected` (some step is refused) or `undefined` (some step
