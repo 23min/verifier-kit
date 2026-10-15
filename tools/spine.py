@@ -563,7 +563,12 @@ def stale(spec, checks_dir):
     for path in sorted(Path(checks_dir).rglob("*")):
         if not path.is_file() or "__pycache__" in path.parts:
             continue
-        for s, e, h in COVERS.findall(path.read_text(errors="replace")):
+        try:
+            text = path.read_text(errors="replace")
+        except OSError as exc:
+            out.add("spec-unreadable", path, f"cannot be read: {exc.strerror}")
+            continue
+        for s, e, h in COVERS.findall(text):
             cell = f"{s}/{e}"
             if s not in spec["states"] or e not in spec["events"] or not rules_for(spec, s, e):
                 out.add("orphan-check", path, f"covers {cell}, which the spec no longer defines")

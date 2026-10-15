@@ -59,7 +59,7 @@ takes a spine validates it first and stops with the validation findings if it is
 
 | Code | Severity | From | Meaning |
 |---|---|---|---|
-| `spec-unreadable` | error | all | an input file (spine, reading, behavior file, policy) can't be read, isn't UTF-8 or isn't YAML |
+| `spec-unreadable` | error | all | an input file (spine, reading, behavior file, policy) can't be read, isn't UTF-8 or isn't YAML, or a check file `stale` searches can't be read |
 | `spec-shape` | error | all | a section of an input file has the wrong type, or a name or value isn't text |
 | `missing-key` | error | all | a required key of an input file is missing |
 | `unknown-key` | error | all | a key outside an input file's format, or a key that isn't text |
