@@ -834,7 +834,11 @@ def main(argv=None):
     g.add_argument("policy")
     g.add_argument("--branch", required=True)
     g.add_argument("files", nargs="*", help="changed files; read from stdin when omitted")
-    args = p.parse_args(argv)
+    args, extra = p.parse_known_args(argv)
+    if extra:                       # argparse can't place FILES given after --branch itself
+        if args.cmd != "guard" or any(e.startswith("-") for e in extra):
+            p.error(f"unrecognized arguments: {' '.join(extra)}")
+        args.files += extra
 
     findings = Findings()
     if args.cmd == "guard":
