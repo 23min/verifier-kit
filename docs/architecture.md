@@ -215,9 +215,14 @@ flowchart LR
 | 9 | the notes service imports a module that doesn't exist | `./verify examples/notes` | `adapter-failed`, `check-unloadable` |
 | 10 | the service as first written | `spine conform --adapter-cmd` through the shim | the same `diverges` lines as scenario 1 |
 
-This repo's CI (`.github/workflows/verify.yml`) runs `./verify --full`, then
-`demo/faults.sh`, on every pull request and push to `main`. It does not set `VERIFY_BASE`, so
-the path guard runs here only inside scenario 4.
+This repo's CI (`.github/workflows/verify.yml`) runs `go vet` and `go test`, then
+`./verify --full`, then `demo/faults.sh`, on every pull request and push to `main`. It does
+not set `VERIFY_BASE`, so the path guard runs here only inside scenario 4.
+
+`go test` holds the differential test (`internal/spine/differential_test.go`). The Go `spine`
+(`cmd/spine/`, `internal/spine/`) and `tools/spine.py` run on the same inputs, among them the
+repo's spines, behaviors, checks and policy and the faults scenarios 2 to 4 seed, and must give
+the same exit codes and output. Nothing else calls the Go `spine` yet.
 
 ## Per machine, per root and repo-wide
 
