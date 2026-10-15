@@ -80,14 +80,16 @@ write variable values as strings, since steps pass them as text.
 
 ## Steps, examples and behaviors
 
-A step is `"<event> <var>=<value> ..."`, for example `"restore role=editor"`.
+A step is `"<event> <var>=<value> ..."`, for example `"restore role=editor"`; anything else is
+a `bad-step`. `steps` is always a list of steps, possibly empty.
 
-- **Examples** in the spine have `name`, `steps` and `expect`, where `expect` is the end state,
-  `rejected` (some step is refused) or `undefined` (some step has no rule).
+- **Examples** in the spine have `name`, `steps` and `expect`, all required and nothing else,
+  where `expect` is the end state, `rejected` (some step is refused) or `undefined` (some step
+  has no rule).
 - **Behavior files** live in `spec/<machine>/behaviors/valid/` and `.../invalid/`, one YAML file
-  each, with `steps` and an optional `expect` (end state). Files in `valid/` must be allowed and
-  end as expected. Files in `invalid/` must not be: some step is refused or undecided, or the
-  run ends somewhere other than `expect`.
+  each: a mapping with `steps` and an optional `expect` (end state), and nothing else. Files in
+  `valid/` must be allowed and end as expected. Files in `invalid/` must not be: some step is
+  refused or undecided, or the run ends somewhere other than `expect`.
 
 ## Readings
 

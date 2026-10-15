@@ -49,24 +49,118 @@ STATE_KEYS = {"kind", "terminal"}
 STATE_KINDS = {"fact", "policy", "design"}
 RULE_KEYS = {"from", "event", "when", "to", "reject", "ignore", "stay"}
 OUTCOMES = ("to", "reject", "ignore", "stay")
+EXAMPLE_KEYS = {"name", "steps", "expect"}
+BEHAVIOR_KEYS = {"steps", "expect"}
+POLICY_KEYS = {"branches", "roles"}
+ROLE_KEYS = {"allow", "deny"}
 BOOL_KEY_HINT = "YAML reads keys such as `on`, `yes` and `y` as true; spell the key as `event` or quote it"
 
 
-def load_yaml(path):
-    with open(path) as f:
-        return yaml.safe_load(f)
+def read_yaml(path, out):
+    """The file's YAML. A file that can't be read, isn't UTF-8 or isn't YAML adds a
+    spec-unreadable finding to out and gives None, as an empty file does."""
+    try:
+        data = Path(path).read_bytes()
+    except OSError as exc:
+        out.add("spec-unreadable", path, f"cannot be read: {exc.strerror}")
+        return None
+    try:
+        text = data.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        out.add("spec-unreadable", path, f"not UTF-8: byte 0x{data[exc.start]:02x} at offset {exc.start}")
+        return None
+    try:
+        return yaml.safe_load(text)
+    except yaml.YAMLError as exc:
+        out.add("spec-unreadable", path, str(exc).splitlines()[0])
+        return None
+
+
+def check_keys(mapping, allowed, where, what, out):
+    """unknown-key or yaml-boolean-key for each key of mapping outside allowed."""
+    for key in mapping:
+        if not isinstance(key, str):
+            out.add("yaml-boolean-key", where,
+                    f"{what} key read as {key!r}; YAML reads `on`, `off`, `yes` and `no` as true or false, so quote it")
+        elif key not in allowed:
+            out.add("unknown-key", where, f'unknown {what} key "{key}"')
+
+
+def check_steps(steps, where, out):
+    """spec-shape unless steps is a list of text; bad-step for each step that can't be parsed."""
+    if not isinstance(steps, list) or not all(isinstance(s, str) for s in steps):
+        out.add("spec-shape", where, '"steps" must be a list of steps such as "restore role=editor"')
+        return
+    for i, text in enumerate(steps, 1):
+        try:
+            parse_step(text)
+        except ValueError as exc:
+            out.add("bad-step", where, f'step {i} "{text}": {exc}')
 
 
 def load_spec(path):
     """Load and validate a spine file. Returns (spec, findings); spec is None when invalid."""
-    try:
-        spec = load_yaml(path)
-    except (OSError, yaml.YAMLError) as exc:
-        out = Findings()
-        out.add("spec-unreadable", path, str(exc).splitlines()[0])
+    out = Findings()
+    spec = read_yaml(path, out)
+    if out.errors:
         return None, out
     out = validate(spec, path)
     return (None if out.errors else spec), out
+
+
+def load_behavior(path):
+    """Load and validate a behavior file. Returns (behavior, findings); behavior is None when invalid."""
+    out = Findings()
+    behavior = read_yaml(path, out)
+    if out.errors:
+        return None, out
+    if not isinstance(behavior, dict):
+        out.add("spec-shape", path, 'a behavior file must be a mapping with "steps" and an optional "expect"')
+        return None, out
+    check_keys(behavior, BEHAVIOR_KEYS, path, "behavior", out)
+    if "steps" not in behavior:
+        out.add("missing-key", path, 'a behavior needs "steps"')
+    else:
+        check_steps(behavior["steps"], path, out)
+    if "expect" in behavior and not isinstance(behavior["expect"], str):
+        out.add("spec-shape", path, '"expect" must be the name of a state')
+    return (None if out.errors else behavior), out
+
+
+def load_policy(path):
+    """Load and validate a policy file. Returns (policy, findings); policy is None when invalid."""
+    out = Findings()
+    policy = read_yaml(path, out)
+    if out.errors:
+        return None, out
+    if not isinstance(policy, dict):
+        out.add("spec-shape", path, 'the policy must be a mapping with "branches" and "roles"')
+        return None, out
+    check_keys(policy, POLICY_KEYS, path, "policy", out)
+    for key in sorted(POLICY_KEYS - set(policy)):
+        out.add("missing-key", path, f'the policy needs "{key}"')
+    if out.errors:
+        return None, out
+    branches, roles = policy["branches"], policy["roles"]
+    if not isinstance(branches, dict) or not all(isinstance(k, str) and isinstance(v, str)
+                                                 for k, v in branches.items()):
+        out.add("spec-shape", path, '"branches" must map branch patterns to role names')
+    if not isinstance(roles, dict) or not all(isinstance(k, str) for k in roles):
+        out.add("spec-shape", path, '"roles" must map role names to their allow and deny lists')
+    if out.errors:
+        return None, out
+    for name, rules in roles.items():
+        if not isinstance(rules or {}, dict):
+            out.add("spec-shape", path, f'role "{name}" must be a mapping with "allow" and "deny" lists')
+            continue
+        check_keys(rules or {}, ROLE_KEYS, path, f'role "{name}"', out)
+        for key in ROLE_KEYS & set(rules or {}):
+            if not isinstance(rules[key], list) or not all(isinstance(p, str) for p in rules[key]):
+                out.add("spec-shape", path, f'"{key}" of role "{name}" must be a list of path patterns')
+    for pattern, role in branches.items():
+        if role not in roles:
+            out.add("bad-value", path, f'branch pattern "{pattern}" names role "{role}", which "roles" does not define')
+    return (None if out.errors else policy), out
 
 
 def validate(spec, path):
@@ -96,7 +190,7 @@ def validate(spec, path):
         for key in meta:
             if key not in STATE_KEYS:
                 out.add("unknown-key", f"states/{name}", f'unknown state key "{key}"')
-        if "kind" in meta and meta["kind"] not in STATE_KINDS:
+        if "kind" in meta and (not isinstance(meta["kind"], str) or meta["kind"] not in STATE_KINDS):
             out.add("bad-value", f"states/{name}", f'kind must be one of {sorted(STATE_KINDS)}')
     if not isinstance(events, list) or not all(isinstance(e, str) for e in events):
         out.add("spec-shape", "events", "events must be a list of names")
@@ -109,7 +203,9 @@ def validate(spec, path):
             out.add("spec-shape", f"vars/{name}", "each variable needs a non-empty list of values")
         elif any(isinstance(v, bool) for v in values):
             out.add("yaml-boolean-value", f"vars/{name}", "a value was read as true/false; quote it")
-    if spec["initial"] not in states:
+    if isinstance(spec["initial"], (list, dict)):
+        out.add("spec-shape", "initial", "initial must be the name of a state")
+    elif spec["initial"] not in states:
         out.add("unknown-state", "initial", f'initial state "{spec["initial"]}" is not declared')
 
     if not isinstance(spec["rules"], list):
@@ -128,6 +224,9 @@ def validate(spec, path):
         for key in ("from", "event"):
             if key not in rule:
                 out.add("missing-key", where, f'rule needs "{key}"')
+        for key in ("from", "event", "to"):
+            if isinstance(rule.get(key), (list, dict)):
+                out.add("spec-shape", where, f'"{key}" must be a name')
         given = [k for k in OUTCOMES if k in rule]
         if len(given) != 1:
             out.add("bad-outcome", where, f"a rule needs exactly one of {', '.join(OUTCOMES)}")
@@ -138,6 +237,24 @@ def validate(spec, path):
                 compile_condition(rule["when"], variables)
             except ValueError as exc:
                 out.add("bad-condition", where, str(exc))
+
+    examples = spec.get("examples")
+    if examples is not None and not isinstance(examples, list):
+        out.add("spec-shape", "examples", "examples must be a list")
+        return out
+    for i, ex in enumerate(examples or [], 1):
+        where = f"examples[{i}]"
+        if not isinstance(ex, dict):
+            out.add("spec-shape", where, "each example must be a mapping")
+            continue
+        check_keys(ex, EXAMPLE_KEYS, where, "example", out)
+        for key in sorted(EXAMPLE_KEYS - set(ex)):
+            out.add("missing-key", where, f'example needs "{key}"')
+        for key in ("name", "expect"):
+            if key in ex and not isinstance(ex[key], str):
+                out.add("spec-shape", where, f'"{key}" must be text')
+        if "steps" in ex:
+            check_steps(ex["steps"], where, out)
     return out
 
 
@@ -149,11 +266,11 @@ _COMPILED = {}
 
 
 def compile_condition(text, variables):
+    if not isinstance(text, str):
+        raise ValueError(f"condition must be text, got {text!r}")
     key = (text, tuple(sorted(variables)))
     if key in _COMPILED:
         return _COMPILED[key]
-    if not isinstance(text, str):
-        raise ValueError(f"condition must be text, got {text!r}")
     try:
         tree = ast.parse(text, mode="eval").body
     except SyntaxError:
@@ -258,7 +375,13 @@ def envstr(env):
 
 
 def parse_step(text):
-    event, *pairs = text.split()
+    """'restore role=editor' -> ('restore', {'role': 'editor'}). ValueError when malformed."""
+    event, *pairs = text.split() or [""]
+    if not event:
+        raise ValueError("a step needs an event")
+    for pair in pairs:
+        if "=" not in pair:
+            raise ValueError(f'"{pair}" is not variable=value')
     return event, dict(p.split("=", 1) for p in pairs)
 
 
@@ -409,7 +532,7 @@ def stale(spec, checks_dir):
 def replay_behavior(spec, behavior):
     """Returns (allowed, explanation)."""
     state = spec["initial"]
-    for i, text in enumerate(behavior.get("steps") or [], 1):
+    for i, text in enumerate(behavior["steps"], 1):
         event, env = parse_step(text)
         state, verdict = step(spec, state, event, env)
         if verdict:
@@ -421,11 +544,16 @@ def replay_behavior(spec, behavior):
 
 def behaviors(spec, directory):
     out = Findings()
-    counted = 0
+    counted = checked = 0
     for folder, must_allow in (("valid", True), ("invalid", False)):
         for path in sorted(Path(directory, folder).glob("*.y*ml")):
             counted += 1
-            allowed, why = replay_behavior(spec, load_yaml(path))
+            behavior, problems = load_behavior(path)
+            out.extend(problems)
+            if behavior is None:
+                continue
+            checked += 1
+            allowed, why = replay_behavior(spec, behavior)
             if must_allow and not allowed:
                 out.add("behavior-refused", path, f"marked valid, but the spine refuses it: {why}")
             elif not must_allow and allowed:
@@ -433,7 +561,7 @@ def behaviors(spec, directory):
     if counted == 0:
         out.add("no-behaviors", directory, "no behavior files found under valid/ or invalid/", "warning")
     else:
-        out.add("behaviors", directory, f"{counted} behavior files checked", "info")
+        out.add("behaviors", directory, f"{checked} behavior files checked", "info")
     return out
 
 
@@ -443,7 +571,11 @@ def trace(spec, path):
     if problems:
         out.add("spine-unsound", "spec", f"{len(problems)} errors from spine check; run it for details")
         return out
-    allowed, why = replay_behavior(spec, load_yaml(path))
+    behavior, problems = load_behavior(path)
+    out.extend(problems)
+    if behavior is None:
+        return out
+    allowed, why = replay_behavior(spec, behavior)
     if not allowed:
         out.add("refused", path, why)
     return out
@@ -637,7 +769,7 @@ def guard(policy, branch, files):
     if role is None:
         out.add("unknown-role", branch, "no policy entry matches this branch")
         return out
-    rules = policy["roles"][role]
+    rules = policy["roles"][role] or {}
     for f in files:
         if any(fnmatch.fnmatch(f, p) for p in rules.get("deny", [])):
             out.add("path-denied", f, f"the {role} role may not change this path")
@@ -704,8 +836,10 @@ def main(argv=None):
 
     findings = Findings()
     if args.cmd == "guard":
-        files = args.files or [line.strip() for line in sys.stdin if line.strip()]
-        findings = guard(load_yaml(args.policy), args.branch, files)
+        policy, findings = load_policy(args.policy)
+        if policy is not None:
+            files = args.files or [line.strip() for line in sys.stdin if line.strip()]
+            findings.extend(guard(policy, args.branch, files))
     else:
         paths = [args.a, args.b] if args.cmd == "diff" else [args.spec]
         specs = []

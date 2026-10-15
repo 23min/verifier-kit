@@ -58,15 +58,16 @@ validates it first and stops with the validation findings if it is invalid.
 
 | Code | Severity | From | Meaning |
 |---|---|---|---|
-| `spec-unreadable` | error | all | the file can't be read or parsed as YAML |
-| `spec-shape` | error | all | a section has the wrong type |
-| `missing-key` | error | all | a required key is missing |
-| `unknown-key` | error | all | a key outside the format |
+| `spec-unreadable` | error | all | an input file (spine, reading, behavior file, policy) can't be read, isn't UTF-8 or isn't YAML |
+| `spec-shape` | error | all | a section of an input file has the wrong type |
+| `missing-key` | error | all | a required key of an input file is missing |
+| `unknown-key` | error | all | a key outside an input file's format |
 | `yaml-boolean-key` | error | all | a key YAML read as a boolean (`on`, `yes`, `y`) |
 | `yaml-boolean-value` | error | all | a value YAML read as a boolean where a name was meant |
-| `bad-value` | error | all | a value outside its closed set, such as a state kind |
+| `bad-value` | error | all | a value outside its closed set, such as a state kind, or a role the policy does not define |
 | `bad-outcome` | error | all | a rule without exactly one outcome |
 | `bad-condition` | error | all | a condition outside the condition language |
+| `bad-step` | error | all | a step in a worked example or behavior file that isn't `event var=value ...` |
 | `unknown-state`, `unknown-event` | error | `check` | a rule or `initial` names something undeclared |
 | `undecided-cell` | error | `check` | no rule at all for a state and event |
 | `missing-case` | error | `check` | no rule matches some variable values |
@@ -156,7 +157,9 @@ roles:
 ```
 
 A changed file fails if any `deny` pattern matches, or if no `allow` pattern does. Patterns use
-`fnmatch`, where `*` also matches `/`.
+`fnmatch`, where `*` also matches `/`. `branches` and `roles` are required and nothing else is
+allowed; every role a branch pattern names must be in `roles`, and a role holds only `allow`
+and `deny`, each a list of patterns and each optional. Anything else is a finding.
 
 ## `./verify`
 
@@ -199,8 +202,6 @@ which counts a failing run as a caught mutant, is not fooled by an empty folder.
 
 ## Known gaps
 
-- A worked example or behavior file missing `steps` or `expect`, or a step without `=` in a
-  variable, crashes instead of producing a finding.
 - No SARIF output yet.
 - `./verify` runs only Python adapters, in process; another language needs
   `spine conform --adapter-cmd`, run by hand or by the caller.
