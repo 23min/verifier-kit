@@ -73,10 +73,20 @@ one rule must match. `check` reports `undecided-cell`, `missing-case` and `overl
 - `==`, `!=`, `in`, `not in`;
 - `and`, `or`, `not`.
 
-Anything else (calls, attributes, arithmetic, undeclared names) is a `bad-condition`. Numeric
-rules ("over 1,000") are split into named ranges at the thresholds the chapter gives, so the
-cases stay enumerable. Quote values YAML would read as booleans (`"yes"`, `"no"`, `"on"`), and
-write variable values as strings, since steps pass them as text.
+Anything else (calls, attributes, arithmetic, undeclared names) is a `bad-condition`, and so is
+an `in` that can't be evaluated: its right side must be a list, or text or a variable with text
+or a variable on its left (`'own' in role` tests for a substring). Numeric rules ("over 1,000")
+are split into named ranges at the thresholds the chapter gives, so the cases stay enumerable.
+
+## Text only
+
+Every key, and every name and value the format defines, is text: the machine and section,
+state names, events, `initial`, a rule's `from`, `event`, `to` and `when`, variable names and
+values, and in worked examples and behavior files `name`, `expect` and each step. Steps pass
+values as text, so a number could never match one. Quote anything YAML would read as something
+else: `"yes"`, `"no"`, `"on"`, `"off"`, `"012"`, `"1.5"`, `"2026-10-14"`, `"null"`. A key read
+as true or false is a `yaml-boolean-key` and such a value a `yaml-boolean-value`; any other key
+that isn't text is an `unknown-key`, and any other value a `spec-shape`.
 
 ## Steps, examples and behaviors
 

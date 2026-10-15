@@ -171,7 +171,8 @@ examples:
 
 Conditions use a tiny language (declared variables, literals, `==`, `!=`, `in`, `not in`,
 `and`, `or`, `not`), so every case can be enumerated. `spine check` requires exactly one
-rule for every state, event and variable combination.
+rule for every state, event and variable combination. Every name and value is text: quote
+anything YAML would read as something else, such as `"yes"`, `"012"` or `"2026-10-14"`.
 
 A content check cites the cell it depends on with a comment like
 `# covers: trashed/restore@95f9c8204e9f`; `spine hash examples/notes/spec/notes/spine.yaml`

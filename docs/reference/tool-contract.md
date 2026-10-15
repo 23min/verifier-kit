@@ -60,14 +60,14 @@ takes a spine validates it first and stops with the validation findings if it is
 | Code | Severity | From | Meaning |
 |---|---|---|---|
 | `spec-unreadable` | error | all | an input file (spine, reading, behavior file, policy) can't be read, isn't UTF-8 or isn't YAML |
-| `spec-shape` | error | all | a section of an input file has the wrong type |
+| `spec-shape` | error | all | a section of an input file has the wrong type, or a name or value isn't text |
 | `missing-key` | error | all | a required key of an input file is missing |
-| `unknown-key` | error | all | a key outside an input file's format |
+| `unknown-key` | error | all | a key outside an input file's format, or a key that isn't text |
 | `yaml-boolean-key` | error | all | a key YAML read as a boolean (`on`, `off`, `yes`, `no`) |
 | `yaml-boolean-value` | error | all | a value YAML read as a boolean where a name was meant |
 | `bad-value` | error | all | a value outside its closed set, such as a state kind, or a role the policy does not define |
 | `bad-outcome` | error | all | a rule without exactly one outcome |
-| `bad-condition` | error | all | a condition outside the condition language |
+| `bad-condition` | error | all | a condition outside the condition language, or an `in` that can't be evaluated |
 | `bad-step` | error | all | a step in a worked example or behavior file that isn't `event var=value ...` |
 | `unknown-state`, `unknown-event` | error | `check` | a rule or `initial` names something undeclared |
 | `undecided-cell` | error | `check` | no rule at all for a state and event |

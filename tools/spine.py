@@ -54,6 +54,7 @@ BEHAVIOR_KEYS = {"steps", "expect"}
 POLICY_KEYS = {"branches", "roles"}
 ROLE_KEYS = {"allow", "deny"}
 BOOL_KEY_HINT = "YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it"
+QUOTE_HINT = "YAML reads `on`, `off`, `yes` and `no` as true or false, so quote it"
 
 
 def read_yaml(path, out):
@@ -76,14 +77,27 @@ def read_yaml(path, out):
         return None
 
 
-def check_keys(mapping, allowed, where, what, out):
-    """unknown-key or yaml-boolean-key for each key of mapping outside allowed."""
+def check_keys(mapping, allowed, where, what, out, hint=QUOTE_HINT):
+    """yaml-boolean-key for a key YAML read as true or false, unknown-key for any other key that
+    isn't text or (when allowed is given) isn't in allowed."""
     for key in mapping:
-        if not isinstance(key, str):
-            out.add("yaml-boolean-key", where,
-                    f"{what} key read as {key!r}; YAML reads `on`, `off`, `yes` and `no` as true or false, so quote it")
-        elif key not in allowed:
+        if isinstance(key, bool):
+            out.add("yaml-boolean-key", where, f"{what} key read as {key!r}; {hint}")
+        elif not isinstance(key, str):
+            out.add("unknown-key", where, f"a {what} key is not text")
+        elif allowed is not None and key not in allowed:
             out.add("unknown-key", where, f'unknown {what} key "{key}"')
+
+
+def check_text(value, where, what, out):
+    """True when value is text; otherwise yaml-boolean-value or spec-shape, without echoing it."""
+    if isinstance(value, str):
+        return True
+    if isinstance(value, bool):
+        out.add("yaml-boolean-value", where, f"{what} was read as true or false; quote it")
+    else:
+        out.add("spec-shape", where, f"{what} must be text")
+    return False
 
 
 def check_steps(steps, where, out):
@@ -122,8 +136,8 @@ def load_behavior(path):
         out.add("missing-key", path, 'a behavior needs "steps"')
     else:
         check_steps(behavior["steps"], path, out)
-    if "expect" in behavior and not isinstance(behavior["expect"], str):
-        out.add("spec-shape", path, '"expect" must be the name of a state')
+    if "expect" in behavior:
+        check_text(behavior["expect"], path, '"expect"', out)
     return (None if out.errors else behavior), out
 
 
@@ -168,28 +182,28 @@ def validate(spec, path):
     if not isinstance(spec, dict):
         out.add("spec-shape", path, "the top level must be a mapping")
         return out
-    for key in spec:
-        if not isinstance(key, str):
-            out.add("yaml-boolean-key", path, f"top-level key read as {key!r}; {BOOL_KEY_HINT}")
-        elif key not in TOP_KEYS:
-            out.add("unknown-key", path, f'unknown top-level key "{key}"')
+    check_keys(spec, TOP_KEYS, path, "top-level", out, BOOL_KEY_HINT)
     for key in sorted(REQUIRED_KEYS - set(spec)):
         out.add("missing-key", path, f'required key "{key}" is missing')
     if out.errors:
         return out
+    for key in ("machine", "section"):
+        if key in spec:
+            check_text(spec[key], key, f'"{key}"', out)
 
     states, events, variables = spec["states"], spec["events"], spec.get("vars") or {}
     if not isinstance(states, dict) or not states:
         out.add("spec-shape", "states", "states must be a non-empty mapping")
         return out
+    check_keys(states, None, "states", "state", out)
     for name, meta in states.items():
+        if not isinstance(name, str):
+            continue
         meta = meta or {}
         if not isinstance(meta, dict):
             out.add("spec-shape", f"states/{name}", "state details must be a mapping")
             continue
-        for key in meta:
-            if key not in STATE_KEYS:
-                out.add("unknown-key", f"states/{name}", f'unknown state key "{key}"')
+        check_keys(meta, STATE_KEYS, f"states/{name}", "state", out)
         if "kind" in meta and (not isinstance(meta["kind"], str) or meta["kind"] not in STATE_KINDS):
             out.add("bad-value", f"states/{name}", f'kind must be one of {sorted(STATE_KINDS)}')
     if not isinstance(events, list) or not all(isinstance(e, str) for e in events):
@@ -198,14 +212,17 @@ def validate(spec, path):
     if not isinstance(variables, dict):
         out.add("spec-shape", "vars", "vars must map each variable to its list of values")
         return out
+    check_keys(variables, None, "vars", "variable", out)
     for name, values in variables.items():
+        if not isinstance(name, str):
+            continue
         if not isinstance(values, list) or not values:
             out.add("spec-shape", f"vars/{name}", "each variable needs a non-empty list of values")
         elif any(isinstance(v, bool) for v in values):
             out.add("yaml-boolean-value", f"vars/{name}", "a value was read as true/false; quote it")
-    if isinstance(spec["initial"], (list, dict)):
-        out.add("spec-shape", "initial", "initial must be the name of a state")
-    elif spec["initial"] not in states:
+        elif not all(isinstance(v, str) for v in values):
+            out.add("spec-shape", f"vars/{name}", "variable values must be text")
+    if check_text(spec["initial"], "initial", "initial", out) and spec["initial"] not in states:
         out.add("unknown-state", "initial", f'initial state "{spec["initial"]}" is not declared')
 
     if not isinstance(spec["rules"], list):
@@ -216,17 +233,13 @@ def validate(spec, path):
         if not isinstance(rule, dict):
             out.add("spec-shape", where, "each rule must be a mapping")
             continue
-        for key in rule:
-            if not isinstance(key, str):
-                out.add("yaml-boolean-key", where, f"key read as {key!r}; {BOOL_KEY_HINT}")
-            elif key not in RULE_KEYS:
-                out.add("unknown-key", where, f'unknown rule key "{key}"')
+        check_keys(rule, RULE_KEYS, where, "rule", out, BOOL_KEY_HINT)
         for key in ("from", "event"):
             if key not in rule:
                 out.add("missing-key", where, f'rule needs "{key}"')
         for key in ("from", "event", "to"):
-            if isinstance(rule.get(key), (list, dict)):
-                out.add("spec-shape", where, f'"{key}" must be a name')
+            if key in rule:
+                check_text(rule[key], where, f'"{key}"', out)
         given = [k for k in OUTCOMES if k in rule]
         if len(given) != 1:
             out.add("bad-outcome", where, f"a rule needs exactly one of {', '.join(OUTCOMES)}")
@@ -234,7 +247,7 @@ def validate(spec, path):
             out.add("bad-outcome", where, f"{given[0]} must be true")
         if "when" in rule:
             try:
-                compile_condition(rule["when"], variables)
+                compile_condition(rule["when"], {k: v for k, v in variables.items() if isinstance(k, str)})
             except ValueError as exc:
                 out.add("bad-condition", where, str(exc))
 
@@ -251,8 +264,8 @@ def validate(spec, path):
         for key in sorted(EXAMPLE_KEYS - set(ex)):
             out.add("missing-key", where, f'example needs "{key}"')
         for key in ("name", "expect"):
-            if key in ex and not isinstance(ex[key], str):
-                out.add("spec-shape", where, f'"{key}" must be text')
+            if key in ex:
+                check_text(ex[key], where, f'"{key}"', out)
         if "steps" in ex:
             check_steps(ex["steps"], where, out)
     return out
@@ -267,7 +280,7 @@ _COMPILED = {}
 
 def compile_condition(text, variables):
     if not isinstance(text, str):
-        raise ValueError(f"condition must be text, got {text!r}")
+        raise ValueError("condition must be text")
     key = (text, tuple(sorted(variables)))
     if key in _COMPILED:
         return _COMPILED[key]
@@ -289,8 +302,12 @@ def _check_condition(node, variables, text):
     elif isinstance(node, ast.Compare):
         if not all(isinstance(op, (ast.Eq, ast.NotEq, ast.In, ast.NotIn)) for op in node.ops):
             raise ValueError(f"only ==, !=, in and not in are allowed in {text!r}")
-        for part in [node.left, *node.comparators]:
+        parts = [node.left, *node.comparators]
+        for part in parts:
             _check_condition(part, variables, text)
+        for op, left, right in zip(node.ops, parts, parts[1:]):
+            if isinstance(op, (ast.In, ast.NotIn)) and not _can_contain(left, right):
+                raise ValueError(f"`in` needs a list on its right, or text or a variable on both sides, in {text!r}")
     elif isinstance(node, ast.Name):
         if node.id not in variables:
             raise ValueError(f'condition {text!r} uses undeclared variable "{node.id}"')
@@ -302,6 +319,16 @@ def _check_condition(node, variables, text):
                 raise ValueError(f"lists may hold only literals in {text!r}")
     else:
         raise ValueError(f"unsupported element {type(node).__name__} in {text!r}")
+
+
+def _is_text(node):
+    """A variable (its values are text) or a text literal."""
+    return isinstance(node, ast.Name) or (isinstance(node, ast.Constant) and isinstance(node.value, str))
+
+
+def _can_contain(left, right):
+    """Whether `left in right` can be evaluated: a list on the right, or text on both sides."""
+    return isinstance(right, (ast.List, ast.Tuple)) or (_is_text(left) and _is_text(right))
 
 
 _CMP = {ast.Eq: lambda a, b: a == b, ast.NotEq: lambda a, b: a != b,
