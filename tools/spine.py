@@ -100,15 +100,18 @@ def check_text(value, where, what, out):
     return False
 
 
-def check_steps(steps, where, out, variables):
-    """spec-shape unless steps is a list of text; bad-step for each step that can't be parsed or
-    doesn't give each of variables one of its values (variables None skips that)."""
+def check_steps(steps, where, out, events, variables):
+    """spec-shape unless steps is a list of text; bad-step for each step that can't be parsed,
+    names an event not in events, or doesn't give each of variables one of its values
+    (variables None skips that)."""
     if not isinstance(steps, list) or not all(isinstance(s, str) for s in steps):
         out.add("spec-shape", where, '"steps" must be a list of steps such as "restore role=editor"')
         return
     for i, text in enumerate(steps, 1):
         try:
-            _, env = parse_step(text)
+            event, env = parse_step(text)
+            if event not in events:
+                raise ValueError(f'"{event}" is not a declared event')
             if variables is not None:
                 check_env(env, variables)
         except ValueError as exc:
@@ -125,9 +128,9 @@ def load_spec(path):
     return (None if out.errors else spec), out
 
 
-def load_behavior(path, variables):
-    """Load and validate a behavior file for a spine with these variables. Returns (behavior,
-    findings); behavior is None when invalid."""
+def load_behavior(path, spec):
+    """Load and validate a behavior file for a valid spine. Returns (behavior, findings);
+    behavior is None when invalid."""
     out = Findings()
     behavior = read_yaml(path, out)
     if out.errors:
@@ -139,9 +142,10 @@ def load_behavior(path, variables):
     if "steps" not in behavior:
         out.add("missing-key", path, 'a behavior needs "steps"')
     else:
-        check_steps(behavior["steps"], path, out, variables)
-    if "expect" in behavior:
-        check_text(behavior["expect"], path, '"expect"', out)
+        check_steps(behavior["steps"], path, out, spec["events"], spec.get("vars") or {})
+    expect = behavior.get("expect")
+    if "expect" in behavior and check_text(expect, path, '"expect"', out) and expect not in spec["states"]:
+        out.add("bad-value", path, f'expect "{expect}" is not a declared state')
     return (None if out.errors else behavior), out
 
 
@@ -269,11 +273,14 @@ def validate(spec, path):
         check_keys(ex, EXAMPLE_KEYS, where, "example", out)
         for key in sorted(EXAMPLE_KEYS - set(ex)):
             out.add("missing-key", where, f'example needs "{key}"')
-        for key in ("name", "expect"):
-            if key in ex:
-                check_text(ex[key], where, f'"{key}"', out)
+        if "name" in ex:
+            check_text(ex["name"], where, '"name"', out)
+        expect = ex.get("expect")
+        if ("expect" in ex and check_text(expect, where, '"expect"', out)
+                and expect not in states and expect not in ("rejected", "undefined")):
+            out.add("bad-value", where, f'expect "{expect}" is not a declared state, rejected or undefined')
         if "steps" in ex:
-            check_steps(ex["steps"], where, out, known)
+            check_steps(ex["steps"], where, out, events, known)
     return out
 
 
@@ -603,7 +610,7 @@ def behaviors(spec, directory):
     for folder, must_allow in (("valid", True), ("invalid", False)):
         for path in sorted(Path(directory, folder).glob("*.y*ml")):
             counted += 1
-            behavior, problems = load_behavior(path, spec.get("vars") or {})
+            behavior, problems = load_behavior(path, spec)
             out.extend(problems)
             if behavior is None:
                 continue
@@ -626,7 +633,7 @@ def trace(spec, path):
     if problems:
         out.add("spine-unsound", "spec", f"{len(problems)} errors from spine check; run it for details")
         return out
-    behavior, problems = load_behavior(path, spec.get("vars") or {})
+    behavior, problems = load_behavior(path, spec)
     out.extend(problems)
     if behavior is None:
         return out

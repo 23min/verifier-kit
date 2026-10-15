@@ -90,16 +90,18 @@ that isn't text is an `unknown-key`, and any other value a `spec-shape`.
 
 ## Steps, examples and behaviors
 
-A step is `"<event> <var>=<value> ..."`, for example `"restore role=editor"`. It gives every
-declared variable exactly once, with one of that variable's values, and no other variable, so
-it names one whole case; anything else is a `bad-step`. `steps` is always a list of steps,
-possibly empty.
+A step is `"<event> <var>=<value> ..."`, for example `"restore role=editor"`. It names a
+declared event and gives every declared variable exactly once, with one of that variable's
+values, and no other variable, so it names one whole case; anything else is a `bad-step`.
+`steps` is always a list of steps, possibly empty. Every name in an example or behavior must be
+declared, so a misspelling is reported rather than refused, which in `invalid/` would pass.
 
 - **Examples** in the spine have `name`, `steps` and `expect`, all required and nothing else,
-  where `expect` is the end state, `rejected` (some step is refused) or `undefined` (some step
-  has no rule).
+  where `expect` is a declared state (the end state), `rejected` (some step is refused) or
+  `undefined` (some step has no rule); anything else is a `bad-value`.
 - **Behavior files** live in `spec/<machine>/behaviors/valid/` and `.../invalid/`, one YAML file
-  each: a mapping with `steps` and an optional `expect` (end state), and nothing else. Files in
+  each: a mapping with `steps` and an optional `expect`, and nothing else. `expect` is a
+  declared state, the end state, or else a `bad-value`. Files in
   `valid/` must be allowed and end as expected. Files in `invalid/` must not be: some step is
   refused or undecided, or the run ends somewhere other than `expect`.
 

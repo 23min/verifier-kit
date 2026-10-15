@@ -1,0 +1,2 @@
+steps: ["open role=guest"]
+expect: rejected

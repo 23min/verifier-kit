@@ -393,7 +393,7 @@ func behaviors(s *Spec, directory string) Findings {
 	}{{"valid", true}, {"invalid", false}} {
 		for _, path := range glob(pyJoin(directory, folder.name), "*.y*ml") {
 			counted++
-			b, problems := loadBehavior(path, s.Vars)
+			b, problems := loadBehavior(path, s)
 			out = append(out, problems...)
 			if b == nil {
 				continue
@@ -421,7 +421,7 @@ func trace(s *Spec, path string) Findings {
 		out.Add("spine-unsound", "spec", fmt.Sprintf("%d errors from spine check; run it for details", n))
 		return out
 	}
-	b, problems := loadBehavior(path, s.Vars)
+	b, problems := loadBehavior(path, s)
 	out = append(out, problems...)
 	if b == nil {
 		return out
