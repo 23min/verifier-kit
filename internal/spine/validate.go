@@ -94,14 +94,18 @@ type Var struct {
 }
 
 // checkSteps adds spec-shape unless steps is a list of text, and bad-step for each step that
-// can't be parsed or doesn't give each of vars one of its values (vars nil skips that).
-func checkSteps(steps *Value, where string, out *Findings, vars []Var) {
+// can't be parsed, names an event not in events, or doesn't give each of vars one of its
+// values (vars nil skips that).
+func checkSteps(steps *Value, where string, out *Findings, events []string, vars []Var) {
 	if !isList(steps) || !allText(steps) {
 		out.Add("spec-shape", where, `"steps" must be a list of steps such as "restore role=editor"`)
 		return
 	}
 	for i, s := range steps.Items {
-		_, env, err := parseStep(s.Str)
+		event, env, err := parseStep(s.Str)
+		if err == nil && !contains(events, event) {
+			err = fmt.Errorf("\"%s\" is not a declared event", event)
+		}
 		if err == nil && vars != nil {
 			err = checkEnv(env, vars)
 		}
@@ -208,9 +212,9 @@ type Behavior struct {
 	Expect *string
 }
 
-// loadBehavior loads and validates a behavior file for a spine with these variables. The
-// behavior is nil when there are errors.
-func loadBehavior(path string, vars []Var) (*Behavior, Findings) {
+// loadBehavior loads and validates a behavior file for a valid spine. The behavior is nil when
+// there are errors.
+func loadBehavior(path string, s *Spec) (*Behavior, Findings) {
 	var out Findings
 	v, ok := readYAML(path, &out)
 	if !ok {
@@ -226,11 +230,11 @@ func loadBehavior(path string, vars []Var) (*Behavior, Findings) {
 	if !hasSteps {
 		out.Add("missing-key", where, `a behavior needs "steps"`)
 	} else {
-		checkSteps(steps, where, &out, vars)
+		checkSteps(steps, where, &out, s.Events, s.Vars)
 	}
 	expect, hasExpect := v.Map.Get("expect")
-	if hasExpect {
-		checkText(expect, where, `"expect"`, &out)
+	if hasExpect && checkText(expect, where, `"expect"`, &out) && !s.stateSet[expect.Str] {
+		out.Add("bad-value", where, fmt.Sprintf(`expect "%s" is not a declared state`, expect.Str))
 	}
 	if out.Errors() > 0 {
 		return nil, out
@@ -474,13 +478,15 @@ func validate(spec *Value, path string) Findings {
 				out.Add("missing-key", where, fmt.Sprintf(`example needs "%s"`, k))
 			}
 		}
-		for _, k := range []string{"name", "expect"} {
-			if v, ok := ex.Map.Get(k); ok {
-				checkText(v, where, `"`+k+`"`, &out)
-			}
+		if name, ok := ex.Map.Get("name"); ok {
+			checkText(name, where, `"name"`, &out)
+		}
+		if expect, ok := ex.Map.Get("expect"); ok && checkText(expect, where, `"expect"`, &out) &&
+			!states.Map.Has(expect.Str) && expect.Str != "rejected" && expect.Str != "undefined" {
+			out.Add("bad-value", where, fmt.Sprintf(`expect "%s" is not a declared state, rejected or undefined`, expect.Str))
 		}
 		if steps, ok := ex.Map.Get("steps"); ok {
-			checkSteps(steps, where, &out, known)
+			checkSteps(steps, where, &out, textValues(events), known)
 		}
 	}
 	return out

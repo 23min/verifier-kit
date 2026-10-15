@@ -56,8 +56,10 @@ While porting, the owner settled behavior the port would otherwise have copied b
   `off`, `yes` and `no`.
 - Every name and value the format defines is text ("Text only" in `spine-format.md`). An `in`
   that can't be evaluated is a `bad-condition`.
-- A step gives every declared variable exactly once, with one of its values, and no other
-  variable. Anything else is a `bad-step`.
+- A step names a declared event and gives every declared variable exactly once, with one of
+  its values, and no other variable; anything else is a `bad-step`. `expect` names a declared
+  state (a worked example may also say `rejected` or `undefined`), or it is a `bad-value`.
+  Before, a misspelling in a behavior under `invalid/` made it pass.
 - `hash` refuses `--format` and `--junit`.
 - `spec-unreadable` covers any file PyYAML fails on, and a check file `stale` can't read.
 - `guard` checks a role's patterns in a fixed order, and accepts files after `--branch`.

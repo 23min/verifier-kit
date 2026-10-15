@@ -1,0 +1,19 @@
+# Worked examples that name what the spine doesn't declare: an event, a state, a variable.
+machine: typos
+vars:
+  role: [owner, guest]
+states:
+  draft: {}
+  active: {}
+initial: draft
+events: [publish]
+rules:
+  - {from: draft, event: publish, to: active}
+  - {from: active, event: publish, stay: true}
+examples:
+  - {name: event typo, steps: ["publsh role=owner"], expect: undefined}
+  - {name: expect typo, steps: ["publish role=owner"], expect: activ}
+  - {name: both, steps: ["publsh rol=owner"], expect: Active}
+  - {name: fine, steps: ["publish role=guest", "publish role=owner"], expect: active}
+  - {name: rejected, steps: [], expect: rejected}
+  - {name: undefined, steps: [], expect: undefined}
