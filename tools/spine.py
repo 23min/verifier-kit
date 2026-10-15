@@ -71,8 +71,8 @@ def read_yaml(path, out):
         return None
     try:
         return yaml.safe_load(text)
-    except yaml.YAMLError as exc:
-        out.add("spec-unreadable", path, str(exc).splitlines()[0])
+    except Exception as exc:          # PyYAML also raises ValueError, KeyError and others
+        out.add("spec-unreadable", path, (str(exc).splitlines() or [type(exc).__name__])[0])
         return None
 
 
