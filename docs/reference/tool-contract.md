@@ -13,7 +13,8 @@ needs an issue and the owner's approval first (see `CLAUDE.md`).
 - **Same input, same output.** Results are sorted and carry no timestamps or random ids.
 - **Exit codes:** `0` no errors, `1` at least one finding at error severity, `2` usage error.
 - **Output:** text by default; `--format json` for machines; `--junit FILE` additionally
-  writes a JUnit XML report (one test case per error, or one passing case).
+  writes a JUnit XML report (one test case per error, or one passing case). `spine hash` is
+  the exception: it prints hashes to copy, not findings, and takes neither option.
 - **Dependencies:** the Python standard library plus PyYAML (`requirements.txt`).
 - **Nothing is skipped silently.** Whatever is not checked is reported with the reason; a
   missing piece that a check needs is an error finding, never a pass.
@@ -44,15 +45,15 @@ are part of the contract: new codes may be added, existing codes are never renam
 |---|---|---|
 | `check` | `SPEC` | Validates the file, then: every state, event and variable combination has exactly one rule; every state is reachable; terminal states have no exits; worked examples replay to their expected end |
 | `diff` | `A B [--depth N]` | Compares two spines case by case, then by behavior over every sequence up to N events (default 4), reporting the shortest witness for each difference |
-| `hash` | `SPEC` | Prints one content hash per state/event cell: `state/event@hash` |
+| `hash` | `SPEC` | Prints one content hash per state/event cell: `state/event@hash`. Text only: `--format` and `--junit` are usage errors |
 | `stale` | `SPEC CHECKS_DIR` | Finds `covers: state/event@hash` citations in files under `CHECKS_DIR` and reports stale, orphaned and uncovered cells |
 | `behaviors` | `SPEC DIR` | Replays every file in `DIR/valid/` (must be allowed) and `DIR/invalid/` (must be refused) |
 | `trace` | `SPEC FILE` | Replays one behavior file; for callers that run a validator once per fixture |
 | `conform` | `SPEC (--adapter FILE \| --adapter-cmd COMMAND) [--depth N]` | Runs every event sequence up to N steps (default 4) against the spine and against the code through the adapter, and reports where they differ. The adapter is a Python file, or a program that speaks the adapter protocol (below) |
 | `guard` | `POLICY --branch NAME [FILES...]` | Maps the branch to a role and reports changed files that role may not touch; reads files from stdin when none are given |
 
-All commands accept `--format text|json` and `--junit FILE`. Every command that takes a spine
-validates it first and stops with the validation findings if it is invalid.
+All commands except `hash` accept `--format text|json` and `--junit FILE`. Every command that
+takes a spine validates it first and stops with the validation findings if it is invalid.
 
 ### Finding codes
 

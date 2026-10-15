@@ -806,8 +806,10 @@ def main(argv=None):
     common.add_argument("--junit", metavar="FILE", help="also write a JUnit XML report")
     p = argparse.ArgumentParser(prog="spine", description=__doc__.splitlines()[0])
     sub = p.add_subparsers(dest="cmd", required=True)
-    for name in ("check", "hash"):
-        sub.add_parser(name, parents=[common]).add_argument("spec")
+    sub.add_parser("check", parents=[common]).add_argument("spec")
+    h = sub.add_parser("hash")      # prints hashes to copy, not findings: no --format or --junit
+    h.add_argument("spec")
+    h.set_defaults(format="text", junit=None)
     d = sub.add_parser("diff", parents=[common])
     d.add_argument("a")
     d.add_argument("b")
