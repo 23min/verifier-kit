@@ -56,6 +56,12 @@ RUN mkdir -p ~/.cache/uv ~/.cache/go-build ~/go/pkg/mod ~/.npm ~/.hex \
 RUN curl -fsSL https://claude.ai/install.sh | bash \
     && claude --version
 
+# ─── 2. Go ──────────────────────────────────────────────────────────────────────────────────
+# Latest Go.
+# A repo pins with `toolchain goX.Y.Z` in go.mod (Go downloads that toolchain itself).
+COPY --from=golang:latest /usr/local/go /usr/local/go
+ENV PATH=/usr/local/go/bin:/home/vscode/go/bin:${PATH}
+
 # ─── 3. Project section ─────────────────────────────────────────────────────────────────────
 USER root
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \

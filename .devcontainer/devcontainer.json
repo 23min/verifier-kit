@@ -29,7 +29,9 @@
     "source=/tmp/.verifier-kit-gh,target=/home/vscode/.config/gh,type=bind,consistency=cached",
     "source=/tmp/.verifier-kit-codex,target=/home/vscode/.codex,type=bind,consistency=cached",
     "source=/tmp/.verifier-kit-guidance,target=/home/vscode/.guidance,type=bind,consistency=cached",
-    "source=devkit-cache-uv,target=/home/vscode/.cache/uv,type=volume"
+    "source=devkit-cache-uv,target=/home/vscode/.cache/uv,type=volume",
+    "source=devkit-cache-go-mod,target=/home/vscode/go/pkg/mod,type=volume",
+    "source=devkit-cache-go-build,target=/home/vscode/.cache/go-build,type=volume"
   ],
 
   "features": {},
@@ -50,9 +52,13 @@
         "openai.chatgpt",
         "mhutchie.git-graph",
         "redhat.vscode-yaml",
-        "editorconfig.editorconfig"
+        "editorconfig.editorconfig",
+        "golang.go"
       ],
       "settings": {
+        "[go]": {
+          "editor.defaultFormatter": "golang.go"
+        },
         "editor.formatOnSave": true,
         "terminal.integrated.defaultProfile.linux": "zsh"
       }

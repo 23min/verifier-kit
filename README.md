@@ -33,7 +33,7 @@ demo/live-builder.sh        # optional: a real Claude Code builder session again
 ```
 
 Or open the repo in its devcontainer (`.devcontainer/`, "Dev Containers: Reopen in Container"),
-which has Python 3 with PyYAML, uv, gh and Claude Code. It needs Docker and VS Code with the Dev
+which has Python 3 with PyYAML, Go, uv, gh and Claude Code. It needs Docker and VS Code with the Dev
 Containers extension, on macOS or Linux (Windows is untested; open the repo from WSL). Before
 each start it mounts these folders from your home into the container, read-write, and creates
 any that are missing: `~/.claude`, `~/.claude-linux/plugins`, `~/.codex-linux`, `~/.config/gh`,
