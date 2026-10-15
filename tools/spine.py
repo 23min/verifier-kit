@@ -100,14 +100,17 @@ def check_text(value, where, what, out):
     return False
 
 
-def check_steps(steps, where, out):
-    """spec-shape unless steps is a list of text; bad-step for each step that can't be parsed."""
+def check_steps(steps, where, out, variables):
+    """spec-shape unless steps is a list of text; bad-step for each step that can't be parsed or
+    doesn't give each of variables one of its values (variables None skips that)."""
     if not isinstance(steps, list) or not all(isinstance(s, str) for s in steps):
         out.add("spec-shape", where, '"steps" must be a list of steps such as "restore role=editor"')
         return
     for i, text in enumerate(steps, 1):
         try:
-            parse_step(text)
+            _, env = parse_step(text)
+            if variables is not None:
+                check_env(env, variables)
         except ValueError as exc:
             out.add("bad-step", where, f'step {i} "{text}": {exc}')
 
@@ -122,8 +125,9 @@ def load_spec(path):
     return (None if out.errors else spec), out
 
 
-def load_behavior(path):
-    """Load and validate a behavior file. Returns (behavior, findings); behavior is None when invalid."""
+def load_behavior(path, variables):
+    """Load and validate a behavior file for a spine with these variables. Returns (behavior,
+    findings); behavior is None when invalid."""
     out = Findings()
     behavior = read_yaml(path, out)
     if out.errors:
@@ -135,7 +139,7 @@ def load_behavior(path):
     if "steps" not in behavior:
         out.add("missing-key", path, 'a behavior needs "steps"')
     else:
-        check_steps(behavior["steps"], path, out)
+        check_steps(behavior["steps"], path, out, variables)
     if "expect" in behavior:
         check_text(behavior["expect"], path, '"expect"', out)
     return (None if out.errors else behavior), out
@@ -212,6 +216,7 @@ def validate(spec, path):
     if not isinstance(variables, dict):
         out.add("spec-shape", "vars", "vars must map each variable to its list of values")
         return out
+    errors = len(out.errors)
     check_keys(variables, None, "vars", "variable", out)
     for name, values in variables.items():
         if not isinstance(name, str):
@@ -222,6 +227,7 @@ def validate(spec, path):
             out.add("yaml-boolean-value", f"vars/{name}", "a value was read as true/false; quote it")
         elif not all(isinstance(v, str) for v in values):
             out.add("spec-shape", f"vars/{name}", "variable values must be text")
+    known = variables if len(out.errors) == errors else None    # steps can't be checked against bad vars
     if check_text(spec["initial"], "initial", "initial", out) and spec["initial"] not in states:
         out.add("unknown-state", "initial", f'initial state "{spec["initial"]}" is not declared')
 
@@ -267,7 +273,7 @@ def validate(spec, path):
             if key in ex:
                 check_text(ex[key], where, f'"{key}"', out)
         if "steps" in ex:
-            check_steps(ex["steps"], where, out)
+            check_steps(ex["steps"], where, out, known)
     return out
 
 
@@ -406,10 +412,27 @@ def parse_step(text):
     event, *pairs = text.split() or [""]
     if not event:
         raise ValueError("a step needs an event")
+    env = {}
     for pair in pairs:
         if "=" not in pair:
             raise ValueError(f'"{pair}" is not variable=value')
-    return event, dict(p.split("=", 1) for p in pairs)
+        name, value = pair.split("=", 1)
+        if name in env:
+            raise ValueError(f'"{name}" is given twice')
+        env[name] = value
+    return event, env
+
+
+def check_env(env, variables):
+    """ValueError unless env gives every declared variable one of its values, and nothing else."""
+    for name, value in env.items():
+        if name not in variables:
+            raise ValueError(f'"{name}" is not a declared variable')
+        if value not in variables[name]:
+            raise ValueError(f'"{value}" is not a value of "{name}"')
+    for name in variables:
+        if name not in env:
+            raise ValueError(f'no value for "{name}"')
 
 
 def step(spec, state, event, env):
@@ -575,7 +598,7 @@ def behaviors(spec, directory):
     for folder, must_allow in (("valid", True), ("invalid", False)):
         for path in sorted(Path(directory, folder).glob("*.y*ml")):
             counted += 1
-            behavior, problems = load_behavior(path)
+            behavior, problems = load_behavior(path, spec.get("vars") or {})
             out.extend(problems)
             if behavior is None:
                 continue
@@ -598,7 +621,7 @@ def trace(spec, path):
     if problems:
         out.add("spine-unsound", "spec", f"{len(problems)} errors from spine check; run it for details")
         return out
-    behavior, problems = load_behavior(path)
+    behavior, problems = load_behavior(path, spec.get("vars") or {})
     out.extend(problems)
     if behavior is None:
         return out

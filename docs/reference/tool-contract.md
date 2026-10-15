@@ -68,7 +68,7 @@ takes a spine validates it first and stops with the validation findings if it is
 | `bad-value` | error | all | a value outside its closed set, such as a state kind, or a role the policy does not define |
 | `bad-outcome` | error | all | a rule without exactly one outcome |
 | `bad-condition` | error | all | a condition outside the condition language, or an `in` that can't be evaluated |
-| `bad-step` | error | all | a step in a worked example or behavior file that isn't `event var=value ...` |
+| `bad-step` | error | all | a step in a worked example or behavior file that isn't `event var=value ...`, or doesn't give each declared variable exactly once, with one of its values, and no other variable |
 | `unknown-state`, `unknown-event` | error | `check` | a rule or `initial` names something undeclared |
 | `undecided-cell` | error | `check` | no rule at all for a state and event |
 | `missing-case` | error | `check` | no rule matches some variable values |
