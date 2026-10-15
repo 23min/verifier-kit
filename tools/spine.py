@@ -154,7 +154,7 @@ def load_policy(path):
             out.add("spec-shape", path, f'role "{name}" must be a mapping with "allow" and "deny" lists')
             continue
         check_keys(rules or {}, ROLE_KEYS, path, f'role "{name}"', out)
-        for key in ROLE_KEYS & set(rules or {}):
+        for key in sorted(ROLE_KEYS & set(rules or {})):
             if not isinstance(rules[key], list) or not all(isinstance(p, str) for p in rules[key]):
                 out.add("spec-shape", path, f'"{key}" of role "{name}" must be a list of path patterns')
     for pattern, role in branches.items():
