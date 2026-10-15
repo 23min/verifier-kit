@@ -21,7 +21,9 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
   approved. New finding codes may be added; existing ones are never renamed or reused.
 - **Tools stay standalone:** files in, findings out. No network, no model calls (the planned
   `interpret` tool is the one exception), no knowledge of who calls them, no aiwf or other
-  workflow tool. Python standard library plus PyYAML unless an issue says otherwise.
+  workflow tool. Python standard library plus PyYAML unless an issue says otherwise; the Go
+  `spine` (`cmd/spine/`, `internal/spine/`) uses the Go standard library plus
+  `go.yaml.in/yaml/v4`.
 - **Docs move with code.** A change to a tool updates `docs/reference/` in the same commit;
   `docs/design.md` changes with the code it describes.
 - **Work is tracked in GitHub issues** with `gh`. One issue per piece of work, with acceptance
@@ -38,10 +40,12 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
 demo/faults.sh       # acceptance test: every seeded fault must be caught; exits 1 otherwise
 demo/faults.sh 4     # one scenario
 python3 tools/spine.py --help
+go build -o bin/spine ./cmd/spine   # the Go port of spine.py: check, hash, stale, behaviors, trace, guard
+go test ./...        # runs the Go spine and tools/spine.py on the same inputs; any difference fails
 ```
 
-Setup needs Python 3 with PyYAML, and the `git` program for the ref_sync example's checks.
-The devcontainer image has all three; don't create a `.venv` there (the repo is shared with the
-host). Elsewhere: `uv venv && uv pip install -r requirements.txt`; `./verify` and
-`demo/faults.sh` use `.venv` automatically when it exists.
+Setup needs Python 3 with PyYAML, and the `git` program for the ref_sync example's checks;
+the Go `spine` needs Go 1.27. The devcontainer image has all four; don't create a `.venv` there
+(the repo is shared with the host). Elsewhere: `uv venv && uv pip install -r requirements.txt`;
+`./verify` and `demo/faults.sh` use `.venv` automatically when it exists.
 `demo/live-builder.sh` starts a real Claude Code session and costs money; run it only when asked.

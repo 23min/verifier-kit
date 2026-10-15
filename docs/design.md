@@ -258,7 +258,6 @@ From here on, progress is tracked in GitHub issues, not in this table.
 - Agreement for decision tables: generated inputs and equality.
 - The dispute format.
 - The retirement rule for checks.
-- Python or a single Go binary for distribution at work.
 
 ## Relation to loom
 

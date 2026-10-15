@@ -1,0 +1,349 @@
+0
+-0
++0
+00
+007
+0_7
+08
+0o17
+0b101
+-0b101
+0b_
+0b
+0x1F
+0x_
+-0x1f
+1_000
+1__0
+_1
+1_
+1:20
+-1:20
+1:20:30
+1:60
+1:5
+190:20:30
+1.5
+-1.5
++1.5
+1.
+1._
+.5
+-.5
+1.0e+3
+1.0E-3
+1.0e3
+1e3
+6.8523015e+5
+685_230.15
+190:20:30.15
+1:20.5
+.inf
+-.Inf
++.INF
+.nan
+.NaN
+nan
+inf
+~
+null
+Null
+NULL
+nULL
+
+true
+TRUE
+tRue
+yes
+Yes
+y
+n
+on
+Off
+2026-10-14
+2026-1-4
+2026-02-29
+2024-02-29
+2026-02-30
+0000-01-01
+2026-13-01
+2026-10-14T10:00:00Z
+2026-10-14t10:00:00z
+2026-10-14 10:00:00
+2026-10-14   10:00:00.5
+2026-10-14T10:00:00.1234567
+2026-10-14T10:00:00.
+2026-10-14T10:00:00+02:00
+2026-10-14T10:00:00 -5
+2026-10-14T10:00:00+24:00
+2026-10-14T10:00:00+23:59
+2026-10-14T25:00:00
+2026-10-14T10:60:00
+2026-10-14T10:00:60
+2026-10-14T1:00:00
+=
+<<
+!
+&
+*
+12:
+1e999
+1.0e999
+0.0000000000000000000001
+123456789012345678901234567890
+!!binary aGVsbG8=
+!!binary '0x1F'
+!!binary +
+!!binary [{a: 1, b: 2}]
+!!binary ''
+!!binary aGVsbG8
+!!binary abc
+!!binary [a, b]
+!!binary -
+!!binary yes
+!!binary [{a: 1}, {b: 2}]
+!!binary 2026-10-14
+!!binary 1:30
+!!binary {a: b}
+!!binary 12
+!!binary  12 
+!!bool aGVsbG8=
+!!bool '0x1F'
+!!bool +
+!!bool [{a: 1, b: 2}]
+!!bool ''
+!!bool aGVsbG8
+!!bool abc
+!!bool [a, b]
+!!bool -
+!!bool yes
+!!bool [{a: 1}, {b: 2}]
+!!bool 2026-10-14
+!!bool 1:30
+!!bool {a: b}
+!!bool 12
+!!bool  12 
+!!float aGVsbG8=
+!!float '0x1F'
+!!float +
+!!float [{a: 1, b: 2}]
+!!float ''
+!!float aGVsbG8
+!!float abc
+!!float [a, b]
+!!float -
+!!float yes
+!!float [{a: 1}, {b: 2}]
+!!float 2026-10-14
+!!float 1:30
+!!float {a: b}
+!!float 12
+!!float  12 
+!!int aGVsbG8=
+!!int '0x1F'
+!!int +
+!!int [{a: 1, b: 2}]
+!!int ''
+!!int aGVsbG8
+!!int abc
+!!int [a, b]
+!!int -
+!!int yes
+!!int [{a: 1}, {b: 2}]
+!!int 2026-10-14
+!!int 1:30
+!!int {a: b}
+!!int 12
+!!int  12 
+!!map aGVsbG8=
+!!map '0x1F'
+!!map +
+!!map [{a: 1, b: 2}]
+!!map ''
+!!map aGVsbG8
+!!map abc
+!!map [a, b]
+!!map -
+!!map yes
+!!map [{a: 1}, {b: 2}]
+!!map 2026-10-14
+!!map 1:30
+!!map {a: b}
+!!map 12
+!!map  12 
+!!merge aGVsbG8=
+!!merge '0x1F'
+!!merge +
+!!merge [{a: 1, b: 2}]
+!!merge ''
+!!merge aGVsbG8
+!!merge abc
+!!merge [a, b]
+!!merge -
+!!merge yes
+!!merge [{a: 1}, {b: 2}]
+!!merge 2026-10-14
+!!merge 1:30
+!!merge {a: b}
+!!merge 12
+!!merge  12 
+!!null aGVsbG8=
+!!null '0x1F'
+!!null +
+!!null [{a: 1, b: 2}]
+!!null ''
+!!null aGVsbG8
+!!null abc
+!!null [a, b]
+!!null -
+!!null yes
+!!null [{a: 1}, {b: 2}]
+!!null 2026-10-14
+!!null 1:30
+!!null {a: b}
+!!null 12
+!!null  12 
+!!omap aGVsbG8=
+!!omap '0x1F'
+!!omap +
+!!omap [{a: 1, b: 2}]
+!!omap ''
+!!omap aGVsbG8
+!!omap abc
+!!omap [a, b]
+!!omap -
+!!omap yes
+!!omap [{a: 1}, {b: 2}]
+!!omap 2026-10-14
+!!omap 1:30
+!!omap {a: b}
+!!omap 12
+!!omap  12 
+!!pairs aGVsbG8=
+!!pairs '0x1F'
+!!pairs +
+!!pairs [{a: 1, b: 2}]
+!!pairs ''
+!!pairs aGVsbG8
+!!pairs abc
+!!pairs [a, b]
+!!pairs -
+!!pairs yes
+!!pairs [{a: 1}, {b: 2}]
+!!pairs 2026-10-14
+!!pairs 1:30
+!!pairs {a: b}
+!!pairs 12
+!!pairs  12 
+!!python/tuple aGVsbG8=
+!!python/tuple '0x1F'
+!!python/tuple +
+!!python/tuple [{a: 1, b: 2}]
+!!python/tuple ''
+!!python/tuple aGVsbG8
+!!python/tuple abc
+!!python/tuple [a, b]
+!!python/tuple -
+!!python/tuple yes
+!!python/tuple [{a: 1}, {b: 2}]
+!!python/tuple 2026-10-14
+!!python/tuple 1:30
+!!python/tuple {a: b}
+!!python/tuple 12
+!!python/tuple  12 
+!!seq aGVsbG8=
+!!seq '0x1F'
+!!seq +
+!!seq [{a: 1, b: 2}]
+!!seq ''
+!!seq aGVsbG8
+!!seq abc
+!!seq [a, b]
+!!seq -
+!!seq yes
+!!seq [{a: 1}, {b: 2}]
+!!seq 2026-10-14
+!!seq 1:30
+!!seq {a: b}
+!!seq 12
+!!seq  12 
+!!set aGVsbG8=
+!!set '0x1F'
+!!set +
+!!set [{a: 1, b: 2}]
+!!set ''
+!!set aGVsbG8
+!!set abc
+!!set [a, b]
+!!set -
+!!set yes
+!!set [{a: 1}, {b: 2}]
+!!set 2026-10-14
+!!set 1:30
+!!set {a: b}
+!!set 12
+!!set  12 
+!!str aGVsbG8=
+!!str '0x1F'
+!!str +
+!!str [{a: 1, b: 2}]
+!!str ''
+!!str aGVsbG8
+!!str abc
+!!str [a, b]
+!!str -
+!!str yes
+!!str [{a: 1}, {b: 2}]
+!!str 2026-10-14
+!!str 1:30
+!!str {a: b}
+!!str 12
+!!str  12 
+!!timestamp aGVsbG8=
+!!timestamp '0x1F'
+!!timestamp +
+!!timestamp [{a: 1, b: 2}]
+!!timestamp ''
+!!timestamp aGVsbG8
+!!timestamp abc
+!!timestamp [a, b]
+!!timestamp -
+!!timestamp yes
+!!timestamp [{a: 1}, {b: 2}]
+!!timestamp 2026-10-14
+!!timestamp 1:30
+!!timestamp {a: b}
+!!timestamp 12
+!!timestamp  12 
+!!value aGVsbG8=
+!!value '0x1F'
+!!value +
+!!value [{a: 1, b: 2}]
+!!value ''
+!!value aGVsbG8
+!!value abc
+!!value [a, b]
+!!value -
+!!value yes
+!!value [{a: 1}, {b: 2}]
+!!value 2026-10-14
+!!value 1:30
+!!value {a: b}
+!!value 12
+!!value  12 
+"café"
+'it''s'
+"a\tb"
+"\u00e9"
+"\x7f"
+"🙂"
+"\U0001F642"
+"line\nbreak"
+"back\\slash"
+"quote\"d"
+'single'
+"日本"
+naïve
+"  padded  "
+"a: b"
+"#x"

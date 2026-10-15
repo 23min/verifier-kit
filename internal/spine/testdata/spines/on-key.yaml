@@ -1,0 +1,8 @@
+# The YAML slip the README names: `on:` is read as true, so the rule has a key true and no event.
+machine: m
+states: {draft: {}, active: {}}
+initial: draft
+events: [publish]
+rules:
+  - {from: draft, on: publish, to: active}
+  - {from: active, event: publish, to: no}

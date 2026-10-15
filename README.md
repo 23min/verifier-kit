@@ -32,6 +32,17 @@ demo/faults.sh              # acceptance test: seeds one fault at a time and che
 demo/live-builder.sh        # optional: a real Claude Code builder session against the oracle
 ```
 
+`spine` is being ported to Go, so that checking a spine needs neither Python nor PyYAML
+([`docs/adr/0004-go-spine.md`](docs/adr/0004-go-spine.md)). The Go `spine` has `check`, `hash`,
+`stale`, `behaviors`, `trace` and `guard` so far; `./verify` still runs `tools/spine.py`. With
+Go 1.27:
+
+```sh
+go build -o bin/spine ./cmd/spine                    # bin/ is ignored by git
+bin/spine check examples/notes/spec/notes/spine.yaml  # same commands, options and output as tools/spine.py
+go test ./...                                        # runs both on the same inputs; any difference fails
+```
+
 Or open the repo in its devcontainer (`.devcontainer/`, "Dev Containers: Reopen in Container"),
 which has Python 3 with PyYAML, Go, uv, gh and Claude Code. It needs Docker and VS Code with the Dev
 Containers extension, on macOS or Linux (Windows is untested; open the repo from WSL). Before
@@ -50,6 +61,7 @@ local Python.
 ```
 verify                           the single entry point
 tools/spine.py, run_checks.py    the tools (no knowledge of any CI or agent)
+cmd/spine/, internal/spine/      the Go port of spine.py, and its test against spine.py
 tools/adapter_shim.py            serves a Python adapter over the adapter protocol
 policy.yaml                      which branch role may change which paths
 examples/<name>/                 one worked example each, laid out like a project (below)

@@ -1,0 +1,2 @@
+steps: ["open role=nobody", "open", "open role=owner role=owner", "open role=owner colour=red"]
+expect: [open]

@@ -1,0 +1,95 @@
+# 0004. `spine` in Go, checked against the Python one
+
+- Status: accepted
+- Date: 2026-10-15
+- Issue: #27
+
+## Context
+
+`docs/design.md` listed "Python or a single Go binary" as an open decision. Every caller needed
+Python with PyYAML to run `spine`, even to check a project not written in Python. The owner
+settled it on 2026-10-15 in #27.
+
+## Decision
+
+1. **`spine` moves to Go:** `cmd/spine/` and `internal/spine/`, one module at the repo root
+   (`github.com/23min/verifier-kit`), built with `go build -o bin/spine ./cmd/spine` (`bin/` is
+   ignored by git).
+2. **The examples stay in Python,** and so do `tools/run_checks.py` and
+   `tools/adapter_shim.py`, as helpers for projects written in Python. The examples are code
+   under test, a project that uses the toolkit, and the toolkit's own tests. What a project in
+   another language still lacks is in `./verify`, which gets its own issue.
+3. **`tools/spine.py` is the reference until the two agree.** `go test ./...` runs both on the
+   same inputs and fails on any difference:
+   - the repo's spines, readings, behaviors, checks and policy;
+   - the faults `demo/faults.sh` seeds;
+   - small inputs that between them give every finding code the contract lists for the ported
+     commands;
+   - every seed file with an odd value or key put in each place;
+   - YAML spellings where names go;
+   - about 3,100 conditions;
+   - argparse's corners.
+
+   Exit codes must match. JSON findings and JUnit reports are compared after parsing, text and
+   `hash` output byte for byte. Where Python's own libraries write the message, a PyYAML error
+   inside `spec-unreadable` or an argparse usage error, everything but the message is compared.
+4. **Three steps:** `check`, `hash`, `stale`, `behaviors`, `trace` and `guard`; then `diff`;
+   then `conform`. Until then the Go `spine` refuses `diff` and `conform` as usage errors
+   (exit 2). `./verify`, `demo/faults.sh` and the mutation scripts keep running
+   `tools/spine.py` until it retires, in its own issue.
+5. **YAML:** `go.yaml.in/yaml/v4`, pinned at v4.0.0-rc.6 until 4.0.0 is out, for its node tree
+   only. `internal/spine` builds values from the tree with PyYAML's rules: YAML 1.1 booleans,
+   `012`, `1:20`, dates, merge keys and the last of duplicate keys. It adds the checks v4
+   doesn't make: duplicate anchors, UTF-8, and simple keys over 1,024 characters. On 205 test
+   inputs, v4's parser agreed with PyYAML on 200 and goccy/go-yaml v1.19.2 on 194; both matched
+   every real file.
+6. **Conditions:** a Go tokenizer and parser for the Python expression grammar. It gives
+   `bad-condition` for the same texts as `ast.parse`, and evaluates with Python's semantics.
+7. **The command line follows Python 3.13's argparse,** the version CI runs. Help is
+   argparse's text at 80 columns.
+8. **`--adapter FILE` (with `conform`):** the Go `spine` will run the file through
+   `tools/adapter_shim.py`, with `$PYTHON` or `python3`.
+
+While porting, the owner settled behavior the port would otherwise have copied by accident:
+
+- PyYAML doesn't read `y` as a boolean. The hint and the `yaml-boolean-key` row name `on`,
+  `off`, `yes` and `no`.
+- Every name and value the format defines is text ("Text only" in `spine-format.md`). An `in`
+  that can't be evaluated is a `bad-condition`.
+- A step gives every declared variable exactly once, with one of its values, and no other
+  variable. Anything else is a `bad-step`.
+- `hash` refuses `--format` and `--junit`.
+- `spec-unreadable` covers any file PyYAML fails on, and a check file `stale` can't read.
+- `guard` checks a role's patterns in a fixed order, and accepts files after `--branch`.
+
+## Consequences
+
+- Once `./verify` runs `bin/spine`, the spine steps need no Python. Content checks, adapters
+  and mutation still run as Python until `./verify` can run them as commands, which is planned
+  after this port.
+  Until `spine.py` retires, two implementations are kept in step: a change to either fails
+  `go test ./...` until the other follows.
+- Known differences, none in a realistic spine:
+  - Characters Python's Unicode tables don't have yet, 15.1 in Python 3.13: Go's newer tables
+    call them letters and printable, in `stale`'s `covers:` names and in messages.
+  - `\N{name}` escapes in conditions: Go has no table of character names, so it accepts any
+    name.
+  - Identifiers that NFKC-normalize to a variable, such as a fullwidth `ｒole`.
+  - YAML's non-specific tag `!` on a plain scalar.
+  - Help wraps at 80 columns whatever the terminal's width.
+  - Where Python crashes, the Go `spine` reports: a JUnit report that can't be written exits
+    1 with a message instead of a traceback.
+- Command lines that Python 3.12 and 3.13 parse differently follow 3.13, such as files
+  starting with `-` after `--branch`.
+- The differential test takes about 20 s on 16 cores. It needs Python with PyYAML, and fails
+  rather than skips without it.
+
+## Alternatives considered
+
+- **Stay in Python.** No second implementation to keep in step, but every project needs a
+  Python with PyYAML to be checked.
+- **Decoding with goccy/go-yaml, or with v4 into Go values.** Common Go YAML libraries decode
+  as YAML 1.2, so `on`, `012` and dates would need undoing afterwards. Building values from
+  the node tree keeps PyYAML's rules in one place.
+- **Comparing findings by code and place only.** Easier to keep passing, but messages carry
+  the witnesses, and a wrong one would go unnoticed.
