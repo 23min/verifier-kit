@@ -9,8 +9,9 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
 
 ## Rules
 
-- **Before you finish any change,** `./verify --full` and `demo/faults.sh` both pass. Show their
-  last lines. Don't call something done because it looks right; show the command and its output.
+- **Before you finish any change,** `./verify --full`, `demo/faults.sh`, `go vet ./...` and
+  `go test ./...` all pass, as they must in CI. Show their last lines. Don't call something done
+  because it looks right; show the command and its output.
 - **The notes example is the acceptance fixture.** Don't edit `examples/notes/` (its spec,
   checks, conformance adapter, `src/notes_app.py`, mutation and demo) or `demo/` to make a
   failure go away. If a tool change needs the fixture to change, stop and say why.
