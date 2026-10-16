@@ -68,7 +68,7 @@ examples/<name>/                 one worked example each, laid out like a projec
 demo/                            the toolkit's demos on the notes example: faults.sh, live-builder.sh
 integrations/                    CI, agent and git hook files, to copy when you want them
 docs/                            design (normative), architecture, decisions (adr/), reference
-.github/workflows/verify.yml     this repo's own CI: ./verify --full and demo/faults.sh
+.github/workflows/verify.yml     this repo's own CI: go vet, go test, ./verify --full, demo/faults.sh
 ```
 
 Inside an example, for instance `examples/notes/`:
