@@ -1,0 +1,35 @@
+# Reading A of the job chapter, by claude-sonnet-5-5, 2026-10-17. Made from (git hash-object):
+# chapter.md eed0f917ed74e0c35e7636580239a201a2444f1c, readings/prompt.md bb472a493d5e38b726e113b3ee80828bf731cd06,
+# docs/reference/spine-format.md 56d266472b44feca5460662d48da0760483081a0. The reader was given the filled-in
+# prompt as one file to read, because the tool layer rewrites escapes typed into a prompt. The reply below is
+# unedited, apart from the Markdown code fence around it.
+machine: job
+vars:
+  attempts: [last, some_left]
+states:
+  queued:    {kind: design}
+  running:   {kind: design}
+  retrying:  {kind: policy}
+  succeeded: {kind: fact, terminal: true}
+  discarded: {kind: fact, terminal: true}
+initial: queued
+events: [start, succeed, fail, retry_due, cancel]
+rules:
+  - {from: queued, event: start, to: running}
+  - {from: queued, event: succeed, reject: true}
+  - {from: queued, event: fail, reject: true}
+  - {from: queued, event: retry_due, reject: true}
+  - {from: queued, event: cancel, to: discarded}
+
+  - {from: running, event: start, reject: true}
+  - {from: running, event: succeed, to: succeeded}
+  - {from: running, event: fail, when: "attempts == 'last'", to: discarded}
+  - {from: running, event: fail, when: "attempts == 'some_left'", to: retrying}
+  - {from: running, event: retry_due, reject: true}
+  - {from: running, event: cancel, to: discarded}
+
+  - {from: retrying, event: start, reject: true}
+  - {from: retrying, event: succeed, reject: true}
+  - {from: retrying, event: fail, reject: true}
+  - {from: retrying, event: retry_due, to: queued}
+  - {from: retrying, event: cancel, to: discarded}
