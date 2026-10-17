@@ -50,3 +50,18 @@ the Go `spine` needs Go 1.27. The devcontainer image has all four; don't create 
 (the repo is shared with the host). Elsewhere: `uv venv && uv pip install -r requirements.txt`;
 `./verify` and `demo/faults.sh` use `.venv` automatically when it exists.
 `demo/live-builder.sh` starts a real Claude Code session and costs money; run it only when asked.
+
+## Handoffs
+
+When asked for a handoff, for example before `/compact` or a container rebuild:
+
+- Write it in the chat, ready to paste into `/compact`. Write it to a file only when asked.
+- Keep it to about 25 lines, holding only what isn't recorded elsewhere. Link to issues, comments
+  and ADRs instead of repeating them; CLAUDE.md and the global rules load by themselves.
+- Cover:
+  - the state: `main`'s commit, branches, open pull requests, and untracked files never to
+    commit;
+  - each open work item: what's done, what's unverified, and what waits on the owner;
+  - the next steps, in order;
+  - traps met in the session that the next one would hit again;
+  - what a container rebuild loses.
