@@ -6,7 +6,7 @@
 #   demo/faults.sh 3        run scenario 3 only
 #
 # Exit 0 when every scenario behaves as expected, 1 otherwise. CI runs this on every push.
-# Needs python3 with PyYAML (or a .venv) and git.
+# Needs python3 with PyYAML (or a .venv), git, and elixir for scenarios 11-13.
 set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SCRATCH="$(mktemp -d)"
@@ -153,6 +153,30 @@ if scenario 10 "The service as first written, through the adapter protocol" \
     examples/notes/spec/notes/spine.yaml \
     --adapter-cmd "$(printf %q "$PY") tools/adapter_shim.py examples/notes/conformance/adapter_notes.py"
   expect 1 "diverges           draft/trash role=owner" "diverges           trashed/edit role=owner"
+fi
+
+# Scenarios 11-13 seed faults in the elixir_job example, whose pieces are .cmd commands.
+JOB="examples/elixir_job/src/job.ex"
+
+if scenario 11 "Elixir: the job retries after its last attempt fails" \
+   "conform, through adapter_job.cmd, finds the divergence"; then
+  sed -i.bak 's/def transition(:running, :fail, :last), do: {:ok, :discarded}/def transition(:running, :fail, :last), do: {:ok, :retrying}/' "$W/$JOB"
+  show ./verify examples/elixir_job
+  expect 1 "diverges           running/fail attempts=last"
+fi
+
+if scenario 12 "Elixir: the job counts one attempt too many" \
+   "the lifecycle still conforms; a content check through checks/run.cmd fails"; then
+  sed -i.bak 's/if current == job.max_attempts/if current > job.max_attempts/' "$W/$JOB"
+  show ./verify examples/elixir_job
+  expect 1 "ok    job: code conforms to spine" "FAIL  content checks" "test J03: maximum 3"
+fi
+
+if scenario 13 "Elixir: checking the checker, the content checks are deleted" \
+   "a counting mutant survives, since conform alone cannot see it"; then
+  rm "$W/examples/elixir_job/checks/job/job_test.exs"
+  show ./verify examples/elixir_job --full
+  expect 1 "no checks ran from checks/job/" "mutant-survived    one attempt too many"
 fi
 
 echo
