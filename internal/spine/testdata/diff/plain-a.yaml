@@ -1,12 +1,12 @@
 # No variables: an empty list counts as none, as in tools/spine.py.
 machine: lamp
 vars: []
-states: {off: {}, on: {}, broken: {}}
-initial: off
+states: {dark: {}, lit: {}, broken: {}}
+initial: dark
 events: [press, drop]
 rules:
-  - {from: off, event: press, to: on}
-  - {from: on, event: press, to: off}
-  - {from: off, event: drop, to: broken}
-  - {from: on, event: drop, to: broken}
+  - {from: dark, event: press, to: lit}
+  - {from: lit, event: press, to: dark}
+  - {from: dark, event: drop, to: broken}
+  - {from: lit, event: drop, to: broken}
   - {from: broken, event: press, reject: true}
