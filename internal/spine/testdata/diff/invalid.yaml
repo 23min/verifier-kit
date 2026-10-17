@@ -1,0 +1,4 @@
+machine: m
+states: {a: {}}
+events: [go]
+rules: []

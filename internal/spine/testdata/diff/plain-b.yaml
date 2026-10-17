@@ -1,0 +1,11 @@
+# plain-a.yaml read with no vars key, where a second press breaks the lamp and dropping it off
+# is undecided: witnesses at one and two events, and one reached again by a longer sequence.
+machine: lamp
+states: {off: {}, on: {}, broken: {}}
+initial: off
+events: [press, drop]
+rules:
+  - {from: off, event: press, to: on}
+  - {from: on, event: press, to: broken}
+  - {from: on, event: drop, to: broken}
+  - {from: broken, event: press, reject: true}

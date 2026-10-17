@@ -1,0 +1,12 @@
+# States named rejected and undefined: a sequence that ends in one is not extended, whether
+# it is the state or the verdict.
+machine: words
+states: {start: {}, rejected: {}, undefined: {}, later: {}}
+initial: start
+events: [go, wait]
+rules:
+  - {from: start, event: go, to: rejected}
+  - {from: start, event: wait, to: undefined}
+  - {from: rejected, event: go, to: later}
+  - {from: undefined, event: go, to: later}
+  - {from: later, event: go, stay: true}
