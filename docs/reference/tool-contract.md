@@ -52,7 +52,7 @@ are part of the contract: new codes may be added, existing codes are never renam
 | `stale` | `SPEC CHECKS_DIR` | Finds `covers: state/event@hash` citations in files under `CHECKS_DIR` and reports stale, orphaned and uncovered cells |
 | `behaviors` | `SPEC DIR` | Replays every file in `DIR/valid/` (must be allowed) and `DIR/invalid/` (must be refused) |
 | `trace` | `SPEC FILE` | Replays one behavior file; for callers that run a validator once per fixture |
-| `conform` | `SPEC (--adapter FILE \| --adapter-cmd COMMAND) [--depth N]` | Runs every event sequence up to N steps (default 4) against the spine and against the code through the adapter, and reports where they differ. The adapter is a Python file, or a program that speaks the adapter protocol (below) |
+| `conform` | `SPEC (--adapter FILE \| --adapter-cmd COMMAND) [--depth N]` | Runs every event sequence up to N steps (default 4) against the spine and against the code through the adapter, and reports where they differ. The adapter is a Python file, which `conform` serves through `tools/adapter_shim.py`, or a program that speaks the adapter protocol (below) |
 | `guard` | `POLICY --branch NAME [FILES...]` | Maps the branch to a role and reports changed files that role may not touch; reads files from stdin when none are given |
 
 `bin/spine`, built from `cmd/spine/`, is the Go port of `tools/spine.py` and follows the same
@@ -117,6 +117,11 @@ A Python file with three functions, owned by the oracle side:
 An exception from `new()` or `observe()`, or while importing the file, is `adapter-failed`, not a
 divergence: without a fresh instance or a reading of its state there is nothing to compare.
 
+`conform --adapter FILE` runs the file through `tools/adapter_shim.py` (below), in a Python
+process of its own. The adapter's printing goes to stderr, and what `apply()` and `observe()`
+return reaches `conform` as JSON: a tuple arrives as a list, and a value JSON can't encode, such
+as a set, makes the shim fail (`adapter-failed`).
+
 The adapter translates and never decides whether an action is allowed.
 
 ### The adapter protocol
@@ -149,8 +154,9 @@ program that never replies makes `conform` wait.
 
 `tools/adapter_shim.py ADAPTER_FILE` serves a Python adapter over this protocol unchanged, for
 example `--adapter-cmd "python3 tools/adapter_shim.py conformance/adapter_notes.py"`. It sends
-the adapter's own printing to stderr, and exits 1 with the reason on stderr when the adapter
-can't be imported.
+the adapter's own printing to stderr. When the adapter can't be imported or doesn't define
+`new()`, `apply()` and `observe()`, it exits 1 with one line on stderr,
+`adapter_shim: ADAPTER_FILE <reason>`; `conform --adapter` reports that reason.
 
 ## The policy file
 

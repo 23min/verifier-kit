@@ -1,6 +1,6 @@
 # 0003. An adapter protocol: JSON lines over stdin and stdout
 
-- Status: accepted
+- Status: accepted; decision 7 superseded by `0004-go-spine.md`
 - Date: 2026-10-14
 - Issue: #24
 
@@ -32,7 +32,8 @@ same adapters.
    a reply that is not JSON or has the wrong shape. An `{"error": ...}` reply to `apply` is a
    divergence, as an exception from `apply()` is.
 7. **The in-process adapter stays.** The command path is an object with the same `new`, `apply`
-   and `observe`, so `conform` replays sequences one way.
+   and `observe`, so `conform` replays sequences one way. (Superseded on 2026-10-17: every
+   Python adapter now runs through the shim; see `0004-go-spine.md`.)
 8. **Only `conform` gains it.** `./verify` keeps finding `conformance/adapter_<machine>.py`;
    discovering a command waits for an adapter that is not Python.
 9. **A shim,** `tools/adapter_shim.py`, standard library only, serves any Python adapter over
@@ -47,8 +48,9 @@ same adapters.
   Python echo over a pipe takes 0.15 ms). Notes makes 13,412 of them: 2.3 s through the shim
   against 0.2 s in process; ref_sync 0.6 s against 0.2 s.
 - A program that never replies makes `conform` wait until someone or CI's job timeout stops it.
-- When the shim cannot import the adapter it exits 1 with the reason on stderr, so the finding
-  says only that the program exited before replying; the reason is on stderr.
+- When the shim cannot import the adapter it exits 1 with the reason on stderr, so with
+  `--adapter-cmd` the finding says only that the program exited before replying; the reason is
+  on stderr. (`--adapter` now reads the reason; see `0004-go-spine.md`.)
 - A project whose adapter is not Python can run `conform` but not all of `./verify` yet.
 
 ## Alternatives considered

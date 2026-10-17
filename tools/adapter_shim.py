@@ -5,13 +5,18 @@
 
 Reads one JSON request per line on stdin and writes one JSON reply per line on stdout, flushed
 (docs/reference/tool-contract.md, "The adapter protocol"). The adapter's own printing goes to
-stderr, so it cannot break the protocol. Exits 1, with the reason on stderr, when the adapter
-cannot be imported, and 0 at the end of input. No dependencies.
+stderr, so it cannot break the protocol. Exits 0 at the end of input, and 1 when the adapter
+cannot be imported or does not define new(), apply() and observe(), with the reason on stderr
+as one line: "adapter_shim: ADAPTER_FILE <reason>". No dependencies.
 """
 import importlib.util
 import json
 import sys
 from pathlib import Path
+
+
+class LoadError(Exception):
+    """The adapter file cannot be imported or lacks a function; the message says which."""
 
 
 def describe(exc):
@@ -22,9 +27,15 @@ def load(path):
     sys.path.insert(0, str(Path(path).resolve().parent))
     module_spec = importlib.util.spec_from_file_location("shim_adapter", path)
     if module_spec is None:
-        raise ImportError("not a Python file")
+        raise LoadError("cannot be imported: not a Python file")
     module = importlib.util.module_from_spec(module_spec)
-    module_spec.loader.exec_module(module)
+    try:
+        module_spec.loader.exec_module(module)
+    except Exception as exc:
+        raise LoadError(f"cannot be imported: {describe(exc)}") from exc
+    missing = [f"{name}()" for name in ("new", "apply", "observe") if not callable(getattr(module, name, None))]
+    if missing:
+        raise LoadError(f"does not define {', '.join(missing)}")
     return module
 
 
@@ -50,8 +61,8 @@ def main(argv):
     out, sys.stdout = sys.stdout, sys.stderr
     try:
         adapter = load(argv[0])
-    except Exception as exc:
-        print(f"adapter_shim: {argv[0]} cannot be imported: {describe(exc)}", file=sys.stderr)
+    except LoadError as exc:
+        print(f"adapter_shim: {argv[0]} {exc}", file=sys.stderr)
         return 1
     handle = None
     for line in iter(sys.stdin.readline, ""):

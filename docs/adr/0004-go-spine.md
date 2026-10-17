@@ -47,8 +47,14 @@ settled it on 2026-10-15 in #27.
    `bad-condition` for the same texts as `ast.parse`, and evaluates with Python's semantics.
 7. **The command line follows Python 3.13's argparse,** the version CI runs. Help is
    argparse's text at 80 columns.
-8. **`--adapter FILE` (with `conform`):** the Go `spine` will run the file through
-   `tools/adapter_shim.py`, with `$PYTHON` or `python3`.
+8. **`--adapter FILE` (with `conform`):** both run the file through `tools/adapter_shim.py`,
+   the Go `spine` with `$PYTHON` or `python3`, `tools/spine.py` with its own Python. Run in
+   process, as before, it differed from the shim: a missing function, a value JSON can't encode
+   (a set), a tuple (which JSON makes a list) and an adapter's printing (which went into spine's
+   own output, breaking `--format json`). The owner chose on 2026-10-17 to run both through the
+   shim, which now checks for the three functions, rather than record those as differences.
+   This supersedes ADR 0003's decision 7. It costs time: `./verify --full` took 25 s instead of
+   10 s, and `demo/faults.sh` 97 s instead of 47 s, measured before the Go `spine` ran either.
 
 While porting, the owner settled behavior the port would otherwise have copied by accident:
 
