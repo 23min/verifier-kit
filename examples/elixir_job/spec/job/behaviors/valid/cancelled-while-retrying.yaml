@@ -1,0 +1,6 @@
+# J07: cancelled during the backoff.
+steps:
+  - "start attempts=some_left"
+  - "fail attempts=some_left"
+  - "cancel attempts=some_left"
+expect: discarded

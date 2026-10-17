@@ -1,0 +1,5 @@
+# J04: a job whose last attempt fails is discarded, never retrying.
+steps:
+  - "start attempts=last"
+  - "fail attempts=last"
+expect: retrying

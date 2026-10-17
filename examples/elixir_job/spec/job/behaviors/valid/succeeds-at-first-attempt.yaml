@@ -1,0 +1,5 @@
+# J01: maximum 3; the first attempt succeeds.
+steps:
+  - "start attempts=some_left"
+  - "succeed attempts=some_left"
+expect: succeeded

@@ -1,0 +1,5 @@
+# J06: cancelled during an attempt.
+steps:
+  - "start attempts=some_left"
+  - "cancel attempts=some_left"
+expect: discarded
