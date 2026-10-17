@@ -45,8 +45,9 @@ go build -o bin/spine ./cmd/spine   # the Go port of spine.py
 go test ./...        # runs the Go spine and tools/spine.py on the same inputs; any difference fails
 ```
 
-Setup needs Python 3 with PyYAML, and the `git` program for the ref_sync example's checks;
-the Go `spine` needs Go 1.27. The devcontainer image has all four; don't create a `.venv` there
+Setup needs Python 3 with PyYAML, the `git` program for the ref_sync example's checks, and
+Elixir 1.18 or later for the elixir_job example's; the Go `spine` needs Go 1.27. The
+devcontainer image has all five; don't create a `.venv` there
 (the repo is shared with the host). Elsewhere: `uv venv && uv pip install -r requirements.txt`;
 `./verify` and `demo/faults.sh` use `.venv` automatically when it exists.
 `demo/live-builder.sh` starts a real Claude Code session and costs money; run it only when asked.
