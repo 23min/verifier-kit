@@ -57,9 +57,24 @@ BOOL_KEY_HINT = "YAML reads keys such as `on`, `off`, `yes` and `no` as true or 
 QUOTE_HINT = "YAML reads `on`, `off`, `yes` and `no` as true or false, so quote it"
 
 
+class SurrogateEscape(Exception):
+    """A double-quoted string escaped a surrogate; the message is where the string starts."""
+
+
+class Loader(yaml.SafeLoader):
+    """safe_load's loader, stopping at a string that escapes a surrogate (U+D800 to U+DFFF), such as
+    "\\ud800": it isn't a character, no UTF-8 text holds it, and printing it would crash spine."""
+
+    def scan_flow_scalar(self, style):
+        token = super().scan_flow_scalar(style)
+        if any(0xD800 <= ord(c) <= 0xDFFF for c in token.value):
+            raise SurrogateEscape(f"line {token.start_mark.line + 1}, column {token.start_mark.column + 1}")
+        return token
+
+
 def read_yaml(path, out):
-    """The file's YAML. A file that can't be read, isn't UTF-8 or isn't YAML adds a
-    spec-unreadable finding to out and gives None, as an empty file does."""
+    """The file's YAML. A file that can't be read, isn't UTF-8 or isn't YAML, or that escapes a
+    surrogate, adds a spec-unreadable finding to out and gives None, as an empty file does."""
     try:
         data = Path(path).read_bytes()
     except OSError as exc:
@@ -71,7 +86,11 @@ def read_yaml(path, out):
         out.add("spec-unreadable", path, f"not UTF-8: byte 0x{data[exc.start]:02x} at offset {exc.start}")
         return None
     try:
-        return yaml.safe_load(text)
+        return yaml.load(text, Loader=Loader)
+    except SurrogateEscape as exc:
+        out.add("spec-unreadable", path, f"not UTF-8: the string at {exc} escapes a surrogate (U+D800 to U+DFFF), "
+                "which isn't a character; write the character itself")
+        return None
     except Exception as exc:          # PyYAML also raises ValueError, KeyError and others
         out.add("spec-unreadable", path, (str(exc).splitlines() or [type(exc).__name__])[0])
         return None

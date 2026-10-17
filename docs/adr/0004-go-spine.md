@@ -62,6 +62,8 @@ While porting, the owner settled behavior the port would otherwise have copied b
   Before, a misspelling in a behavior under `invalid/` made it pass.
 - `hash` refuses `--format` and `--junit`.
 - `spec-unreadable` covers any file PyYAML fails on, and a check file `stale` can't read.
+- A file that escapes a surrogate, such as `"\ud800"`, is `spec-unreadable`. PyYAML read it, and
+  printing the name crashed `tools/spine.py`; go-yaml refuses it.
 - `guard` checks a role's patterns in a fixed order, and accepts files after `--branch`.
 
 ## Consequences
