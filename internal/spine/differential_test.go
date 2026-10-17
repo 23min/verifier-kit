@@ -21,6 +21,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 	"sync"
 	"testing"
@@ -259,7 +260,34 @@ type junitFailure struct {
 	Text    string `xml:",chardata"`
 }
 
+// charRef is a character reference; encoding/xml accepts one to a character XML can't hold,
+// which strict parsers such as Python's refuse.
+var charRef = regexp.MustCompile(`&#(x[0-9a-fA-F]+|[0-9]+);`)
+
+// badCharRef is the first reference in data to a character XML can't hold, or "".
+func badCharRef(data []byte) string {
+	for _, m := range charRef.FindAllSubmatch(data, -1) {
+		digits, base := string(m[1]), 10
+		if digits[0] == 'x' {
+			digits, base = digits[1:], 16
+		}
+		v, err := strconv.ParseUint(digits, base, 32)
+		r := rune(v)
+		if err != nil || !(r == 0x9 || r == 0xa || r == 0xd || r >= 0x20 && r <= 0xd7ff ||
+			r >= 0xe000 && r <= 0xfffd || r >= 0x10000 && r <= 0x10ffff) {
+			return string(m[0])
+		}
+	}
+	return ""
+}
+
 func compareJUnit(py, gr []byte, masked []Finding) string {
+	if ref := badCharRef(py); ref != "" {
+		return "python's report refers to a character XML can't hold: " + ref
+	}
+	if ref := badCharRef(gr); ref != "" {
+		return "go's report refers to a character XML can't hold: " + ref
+	}
 	var p, g junitSuite
 	if err := xml.Unmarshal(py, &p); err != nil {
 		return "python's report doesn't parse: " + err.Error()

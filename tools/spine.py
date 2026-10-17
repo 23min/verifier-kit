@@ -868,15 +868,33 @@ def emit_text(findings):
     print(f"-- {len(findings.errors)} errors, {len(findings)} findings")
 
 
+def xml_char(c):
+    """True for a character XML 1.0 can hold."""
+    o = ord(c)
+    return o in (0x9, 0xA, 0xD) or 0x20 <= o <= 0xD7FF or 0xE000 <= o <= 0xFFFD or o >= 0x10000
+
+
+def xml_safe(text):
+    """text with each character XML can't hold written as an escape, so the report always parses:
+    \\x1b for a control character, \\ufffe for U+FFFE, and \\xff for a byte that isn't UTF-8,
+    which surrogateescape read as U+DCFF."""
+    def escape(c):
+        o = ord(c)
+        if 0xDC80 <= o <= 0xDCFF:
+            return f"\\x{o - 0xDC00:02x}"
+        return f"\\x{o:02x}" if o < 0x100 else f"\\u{o:04x}"
+    return "".join(c if xml_char(c) else escape(c) for c in text)
+
+
 def write_junit(path, suite, findings):
     errors = findings.errors
     root = ET.Element("testsuite", name=suite, tests=str(max(1, len(errors))), failures=str(len(errors)))
     if not errors:
         ET.SubElement(root, "testcase", classname=suite, name="no errors")
     for f in errors:
-        case = ET.SubElement(root, "testcase", classname=suite, name=f'{f["code"]} {f["where"]}')
-        failure = ET.SubElement(case, "failure", message=f["message"])
-        failure.text = f["message"]
+        case = ET.SubElement(root, "testcase", classname=suite, name=xml_safe(f'{f["code"]} {f["where"]}'))
+        failure = ET.SubElement(case, "failure", message=xml_safe(f["message"]))
+        failure.text = xml_safe(f["message"])
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     ET.ElementTree(root).write(path, encoding="utf-8", xml_declaration=True)
 

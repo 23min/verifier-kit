@@ -65,6 +65,8 @@ While porting, the owner settled behavior the port would otherwise have copied b
 - A file that escapes a surrogate, such as `"\ud800"`, is `spec-unreadable`. PyYAML read it, and
   printing the name crashed `tools/spine.py`; go-yaml refuses it.
 - `guard` checks a role's patterns in a fixed order, and accepts files after `--branch`.
+- The JUnit report writes each character XML can't hold as an escape such as `\x1b`, and a
+  byte of a file name that isn't UTF-8 as `\xff`. Before, such a report didn't parse.
 
 ## Consequences
 

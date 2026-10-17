@@ -13,8 +13,10 @@ needs an issue and the owner's approval first (see `CLAUDE.md`).
 - **Same input, same output.** Results are sorted and carry no timestamps or random ids.
 - **Exit codes:** `0` no errors, `1` at least one finding at error severity, `2` usage error.
 - **Output:** text by default; `--format json` for machines; `--junit FILE` additionally
-  writes a JUnit XML report (one test case per error, or one passing case). `spine hash` is
-  the exception: it prints hashes to copy, not findings, and takes neither option.
+  writes a JUnit XML report (one test case per error, or one passing case). The report writes
+  each character XML can't hold as an escape, such as `\x1b`, and a byte of a file name that isn't
+  UTF-8 as `\xff`, so it always parses. `spine hash` is the exception: it prints hashes to copy,
+  not findings, and takes neither option.
 - **Dependencies:** the Python standard library plus PyYAML (`requirements.txt`). The Go
   `spine` uses the Go standard library plus `go.yaml.in/yaml/v4` (`go.mod`).
 - **Nothing is skipped silently.** Whatever is not checked is reported with the reason; a
