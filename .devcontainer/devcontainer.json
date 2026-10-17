@@ -31,7 +31,8 @@
     "source=/tmp/.verifier-kit-guidance,target=/home/vscode/.guidance,type=bind,consistency=cached",
     "source=devkit-cache-uv,target=/home/vscode/.cache/uv,type=volume",
     "source=devkit-cache-go-mod,target=/home/vscode/go/pkg/mod,type=volume",
-    "source=devkit-cache-go-build,target=/home/vscode/.cache/go-build,type=volume"
+    "source=devkit-cache-go-build,target=/home/vscode/.cache/go-build,type=volume",
+    "source=devkit-cache-hex,target=/home/vscode/.hex,type=volume"
   ],
 
   "features": {},
@@ -53,9 +54,13 @@
         "mhutchie.git-graph",
         "redhat.vscode-yaml",
         "editorconfig.editorconfig",
-        "golang.go"
+        "golang.go",
+        "jakebecker.elixir-ls"
       ],
       "settings": {
+        "[elixir]": {
+          "editor.defaultFormatter": "jakebecker.elixir-ls"
+        },
         "[go]": {
           "editor.defaultFormatter": "golang.go"
         },
