@@ -40,9 +40,9 @@ settled it on 2026-10-15 in #27.
 5. **YAML:** `go.yaml.in/yaml/v4`, pinned at v4.0.0-rc.6 until 4.0.0 is out, for its node tree
    only. `internal/spine` builds values from the tree with PyYAML's rules: YAML 1.1 booleans,
    `012`, `1:20`, dates, merge keys and the last of duplicate keys. It adds the checks v4
-   doesn't make: duplicate anchors, UTF-8, and simple keys over 1,024 characters. On 205 test
-   inputs, v4's parser agreed with PyYAML on 200 and goccy/go-yaml v1.19.2 on 194; both matched
-   every real file.
+   doesn't make: duplicate anchors, UTF-8, and simple keys over 1,024 characters. It reads the
+   escape `\/` as `/`, as PyYAML does; v4 refuses it. On 205 test inputs, v4's parser agreed
+   with PyYAML on 200 and goccy/go-yaml v1.19.2 on 194; both matched every real file.
 6. **Conditions:** a Go tokenizer and parser for the Python expression grammar. It gives
    `bad-condition` for the same texts as `ast.parse`, and evaluates with Python's semantics.
 7. **The command line follows Python 3.13's argparse,** the version CI runs. Help is
