@@ -212,11 +212,11 @@ with `no-adapter` until the adapter exists.
   general one.
 - **The spine sees states and permissions, not content.** Text, totals and formats need
   ordinary checks; the mutation step exists to show where that gap is.
-- **`./verify` runs Python adapters only, in process.** `spine conform --adapter-cmd` runs an
-  adapter in any language as a program speaking JSON lines over stdin and stdout, and
-  `tools/adapter_shim.py` serves a Python adapter that way; `./verify` does not look for one
-  yet. Each request is a round trip between processes, about 0.2 ms here, so notes' 1,426
-  sequences take about 2.3 s through the shim against 0.2 s in process.
+- **`./verify` runs Python adapters only.** `spine conform` serves a Python adapter through
+  `tools/adapter_shim.py`, as a program speaking JSON lines over stdin and stdout, and
+  `spine conform --adapter-cmd` runs an adapter in any language that way; `./verify` does not
+  look for one yet. Each request is a round trip between processes, about 0.2 ms here, so
+  notes' 1,426 sequences take about 2 s.
 - **The adapter is part of the oracle.** It must only translate, never decide; a person
   reviews it like the spine.
 - **One machine, one variable.** Real features have several interacting machines and more

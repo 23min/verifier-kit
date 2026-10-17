@@ -18,13 +18,13 @@ import argparse
 import ast
 import fnmatch
 import hashlib
-import importlib.util
 import itertools
 import json
 import re
 import shlex
 import subprocess
 import sys
+import threading
 import xml.etree.ElementTree as ET
 from collections import deque
 from pathlib import Path
@@ -685,39 +685,52 @@ def steps_text(steps):
     return " -> ".join(f"{e}({envstr(v)})" for e, v in steps)
 
 
-def load_adapter(path):
-    sys.path.insert(0, str(Path(path).resolve().parent))
-    module_spec = importlib.util.spec_from_file_location("spine_adapter", path)
-    if module_spec is None:
-        raise AdapterFailed("cannot be imported: not a Python file")
-    module = importlib.util.module_from_spec(module_spec)
-    try:
-        module_spec.loader.exec_module(module)
-    except Exception as exc:
-        raise AdapterFailed(f"cannot be imported: {describe(exc)}") from exc
-    missing = [f"{name}()" for name in ("new", "apply", "observe") if not callable(getattr(module, name, None))]
-    if missing:
-        raise AdapterFailed(f"does not define {', '.join(missing)}")
-    return module
+SHIM = Path(__file__).with_name("adapter_shim.py")
 
 
 class CommandAdapter:
     """An adapter run as a program and spoken to in JSON lines (tool-contract.md, "The adapter
-    protocol"). It has the same new(), apply() and observe() as a Python adapter, so replay()
-    drives both alike. A reply that breaks the protocol raises AdapterFailed.
+    protocol"), with the same new(), apply() and observe() as a Python adapter. A reply that
+    breaks the protocol raises AdapterFailed.
+
+    Given file, the program is tools/adapter_shim.py serving that Python adapter file. Its
+    stderr is passed through and its last line kept: when the shim exits 1 before replying, that
+    line says why the file did not load.
     """
     REPLIES = {"new": ("ok", '{"ok": true}'), "apply": ("result", '{"result": ...}'),
                "observe": ("state", '{"state": ...}')}
 
-    def __init__(self, command):
+    def __init__(self, command=None, file=None):
+        self.file, self.last_stderr = file, b""
         try:
-            argv = shlex.split(command)
+            argv = [sys.executable, str(SHIM), file] if file is not None else shlex.split(command)
             if not argv:
                 raise ValueError("the command is empty")
             self.proc = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                         stderr=subprocess.PIPE if file is not None else None,
                                          encoding="utf-8", errors="replace")
         except (OSError, ValueError) as exc:
             raise AdapterFailed(f"cannot be started: {describe(exc)}") from exc
+        if file is not None:
+            self.stderr_copier = threading.Thread(target=self.copy_stderr, daemon=True)
+            self.stderr_copier.start()
+
+    def copy_stderr(self):
+        for line in self.proc.stderr.buffer:
+            sys.stderr.buffer.write(line)
+            sys.stderr.buffer.flush()
+            self.last_stderr = line
+
+    def exited(self, op):
+        """The failure when the program exits before replying to op."""
+        status = self.proc.wait()
+        if self.file is not None:
+            self.stderr_copier.join()
+            prefix = f"adapter_shim: {self.file} "
+            last = self.last_stderr.decode("utf-8", "replace").rstrip("\n")
+            if status == 1 and last.startswith(prefix):
+                return AdapterFailed(last[len(prefix):])
+        return AdapterFailed(f"exited with status {status} before replying to {op}")
 
     def new(self):
         self.ask({"op": "new"})
@@ -737,7 +750,7 @@ class CommandAdapter:
         except OSError:                          # a broken pipe: it has exited
             line = ""
         if not line:
-            raise AdapterFailed(f"exited with status {self.proc.wait()} before replying to {op}")
+            raise self.exited(op)
         try:
             reply = json.loads(line)
         except ValueError:
@@ -757,6 +770,8 @@ class CommandAdapter:
         except OSError:
             pass
         self.proc.wait()
+        if self.file is not None:
+            self.stderr_copier.join()
 
 
 def call_adapter(adapter, name, steps, *args):
@@ -806,11 +821,12 @@ def replay(spec, adapter, seq, exercised):
 
 
 def conform(spec, adapter_path, depth, command=None):
-    """Compare code with the spine through a Python adapter file or, given command, an adapter program."""
+    """Compare code with the spine through a Python adapter file, served by tools/adapter_shim.py,
+    or, given command, an adapter program."""
     out = Findings()
     where = adapter_path if command is None else command
     try:
-        adapter = load_adapter(adapter_path) if command is None else CommandAdapter(command)
+        adapter = CommandAdapter(file=adapter_path) if command is None else CommandAdapter(command)
     except AdapterFailed as exc:
         out.add("adapter-failed", where, str(exc))
         return out
@@ -820,8 +836,7 @@ def conform(spec, adapter_path, depth, command=None):
     except AdapterFailed as exc:              # keep what was found; past this, nothing compares
         out.add("adapter-failed", where, str(exc))
         failed = True
-    if command is not None:
-        adapter.close(kill=failed)
+    adapter.close(kill=failed)
     return out
 
 

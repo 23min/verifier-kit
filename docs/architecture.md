@@ -40,7 +40,7 @@ flowchart LR
   person --> verify
   verify --> spine
   verify --> rc
-  spine -.->|"conform --adapter-cmd, when a caller asks"| shim
+  spine -->|"conform, for a Python adapter"| shim
   verify -->|"--full only"| mut
   mut -->|"runs as subprocesses"| spine
   mut --> rc

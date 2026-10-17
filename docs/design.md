@@ -151,9 +151,10 @@ transitions, sequence rules and the spine judge the same trace.
 ### The adapter
 
 `new()`, `apply()`, `observe()`; translates, never decides; owned by the oracle side; observes
-real side effects. A Python file runs in process; an adapter in any other language runs as a
-program speaking the same three operations as JSON lines over stdin and stdout
-(`docs/adr/0003-adapter-protocol.md`). Details in `docs/reference/tool-contract.md`.
+real side effects. An adapter runs as a program speaking the same three operations as JSON
+lines over stdin and stdout (`docs/adr/0003-adapter-protocol.md`); a Python file is served that
+way by `tools/adapter_shim.py` (`docs/adr/0004-go-spine.md`), and an adapter in any other
+language is its own program. Details in `docs/reference/tool-contract.md`.
 
 ### Checking the checker
 
