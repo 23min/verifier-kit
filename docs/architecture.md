@@ -169,12 +169,44 @@ The explorer is generic: `explore.py` knows nothing of Git, and `world.py` holds
 faults and the invariants. `git` is a dependency of this example only; without it the Git
 checks fail.
 
+## The elixir_job example
+
+In `examples/elixir_job/`; the paths below are relative to it. It is in Elixir, so its adapter,
+content checks and mutation are `.cmd` files, each holding one command line that `./verify`
+runs from this folder. Every command loads `src/**/*.ex` with `elixir -pr`; there is no Mix
+project. The spine is one job's lifecycle, which `spine conform` checks through the job's pure
+`Job.Lifecycle.transition/3`, taking `attempts` as given; the content checks drive `Job`
+itself, which counts its own attempts.
+
+```mermaid
+flowchart LR
+  chapter["spec/job/chapter.md<br/>rules, J1-J2, J01-J07"]
+  readings["spec/job/readings/*.yaml<br/>two readings"]
+  spineY["spec/job/spine.yaml<br/>one job's lifecycle"]
+  behav["spec/job/behaviors/<br/>valid/ and invalid/"]
+  adapter["conformance/adapter_job.exs<br/>adapter protocol, via adapter_job.cmd"]
+  job["src/job.ex<br/>Job.Lifecycle, Job"]
+  checks["checks/job/job_test.exs<br/>ExUnit, via checks/run.cmd"]
+  mutate["mutation/mutate_job.exs<br/>via mutate_job.cmd"]
+  chapter -->|"read by two interpreters"| readings
+  readings -->|"spine diff; a person ratifies"| spineY
+  behav -->|"spine behaviors replays them"| spineY
+  spineY -->|"spine conform: every sequence up to 4 events"| adapter
+  adapter -->|"calls Job.Lifecycle.transition/3"| job
+  checks -->|"J01-J07, J1 and J2 in every reachable job"| job
+  mutate -->|"an edited copy, then conform and the checks"| job
+```
+
 ## Checking the checker
 
 `./verify --full` runs each example's mutation script. `examples/notes/mutation/mutate_notes.py`
 breaks the service on purpose and expects the oracle to notice. It runs from the example's
 folder and finds `tools/` above it. `examples/ref_sync/mutation/mutate_ref_sync.py` works the
 same way with six edits to `src/ref_sync_client.py`, and names every check that failed.
+`examples/elixir_job/mutation/mutate_job.exs` makes five edits to `src/job.ex`, each in a copy
+of the example, and runs `conform` through `VERIFY_SPINE` and the command in `checks/run.cmd`
+there. It first runs both on the job as it is and stops unless they pass, because a broken
+command would count every mutant as caught.
 
 ```mermaid
 sequenceDiagram
@@ -195,8 +227,9 @@ sequenceDiagram
 
 `demo/faults.sh` is the toolkit's own acceptance test. Each scenario makes a fresh copy of the
 repo (without `.git`) in a temp folder, seeds one fault, runs a command there, and checks the
-exit code and the lines it must print. The faults are all in the notes example, but `./verify`
-in the copy checks every example, so ref_sync's checks run in each scenario too.
+exit code and the lines it must print. Scenarios 0 to 10 seed faults in the notes example, and
+`./verify` in the copy checks every example, so ref_sync's and elixir_job's checks run in each of
+them too. Scenarios 11 to 13 seed faults in elixir_job and check it alone.
 
 ```mermaid
 flowchart LR
@@ -221,6 +254,9 @@ flowchart LR
 | 8 | the notes adapter, content checks and mutation removed | `./verify --full` | `no-adapter`, `no-checks`, `no-mutation` |
 | 9 | the notes service imports a module that doesn't exist | `./verify examples/notes` | `adapter-failed`, `check-unloadable` |
 | 10 | the service as first written | `spine conform --adapter-cmd` through the shim | the same `diverges` lines as scenario 1 |
+| 11 | the job retries after its last attempt fails | `./verify examples/elixir_job` | `diverges running/fail attempts=last` |
+| 12 | the job counts one attempt too many | `./verify examples/elixir_job` | conformance `ok`, content checks `FAIL` with J03 |
+| 13 | elixir_job's content checks deleted | `./verify examples/elixir_job --full` | `no checks ran`, and `mutant-survived` for a counting mutant |
 
 This repo's CI (`.github/workflows/verify.yml`) runs `go vet` and `go test`, then
 `./verify --full`, then `demo/faults.sh`, on every pull request and push to `main`. It does
@@ -235,12 +271,12 @@ repo's spines, readings, behaviors, checks, adapters and policy and the faults s
 
 | Part | Scope today | How it finds its inputs |
 |---|---|---|
-| `spine check`, `behaviors`, `stale`, `conform` | per machine | `{root}/spec/{m}/`, `{root}/checks/{m}/`, `{root}/conformance/adapter_{m}.py` |
-| content checks | per root: one run over all of `{root}/checks/` | every `test_*.py` under `{root}/checks/` |
-| mutation | per root: every `{root}/mutation/mutate_*.py` under `--full` | file name pattern; each script runs all of its root's `checks/` |
-| `src/` | per root, on `PYTHONPATH` | module name (`notes_app`, `ref_sync_client`) |
+| `spine check`, `behaviors`, `stale`, `conform` | per machine | `{root}/spec/{m}/`, `{root}/checks/{m}/`, `{root}/conformance/adapter_{m}.py` or `.cmd` |
+| content checks | per root: one run over all of `{root}/checks/` | every `test_*.py` under `{root}/checks/`, or `{root}/checks/run.cmd` |
+| mutation | per root: every `{root}/mutation/mutate_*.py` and `mutate_*.cmd` under `--full` | file name pattern; each script runs all of its root's `checks/` |
+| `src/` | per root: on `PYTHONPATH` for Python, loaded by the commands otherwise | module name (`notes_app`, `ref_sync_client`); elixir_job's commands load `src/**/*.ex` |
 | path guard | repo-wide | `policy.yaml` patterns over `examples/*/` and the toolkit's folders |
 | deny rules, CODEOWNERS (`integrations/`) | a project's root | folder patterns for a project with `spec/` at its root |
-| `demo/faults.sh` | seeds faults in notes only; its `./verify` runs every example | hard-coded `examples/notes/` paths |
+| `demo/faults.sh` | seeds faults in notes (0-10) and elixir_job (11-13) | hard-coded `examples/notes/` and `examples/elixir_job/` paths |
 | `demo/live-builder.sh` | notes only | hard-coded `examples/notes/` paths |
 | choosing what to run | one root per call | `./verify ROOT`; without it, the discovery rule above |
