@@ -28,6 +28,12 @@ jobs:
         with:
           go-version-file: go.mod
 
+      # The elixir_job example's adapter, checks and mutation run with elixir (1.18+ for JSON).
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: "29"
+          elixir-version: "1.20"
+
       - run: go vet ./...
 
       - name: Go spine against tools/spine.py
