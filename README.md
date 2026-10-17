@@ -14,7 +14,10 @@ It is a prototype for learning the process on something small. Each worked examp
 and roles; it doubles as the toolkit's acceptance test. The second,
 [`examples/ref_sync/`](examples/ref_sync/README.md), is a protocol: two clients publishing
 workflow events to one Git ref, checked through every interleaving of their steps, lost
-replies and crashes up to a bound, and against real Git.
+replies and crashes up to a bound, and against real Git. The third,
+[`examples/elixir_job/`](examples/elixir_job/README.md), is a background job with retries,
+written in Elixir: its adapter, content checks and mutation are commands, so it shows the
+toolkit checking a project in another language.
 
 The design is in [`docs/design.md`](docs/design.md); the exact tool contract and spine format
 are in [`docs/reference/`](docs/reference/). Rules for agents working here are in
@@ -28,6 +31,7 @@ pip install -r requirements.txt   # PyYAML, the only Python dependency; or: uv v
 ./verify --full             # also breaks the code on purpose to check the checks
 ./verify examples/notes     # one example only
 ./verify examples/ref_sync  # the protocol example; it also needs the git program
+./verify examples/elixir_job  # the Elixir example; it also needs Elixir 1.18 or later
 demo/faults.sh              # acceptance test: seeds one fault at a time and checks the right part catches it
 demo/live-builder.sh        # optional: a real Claude Code builder session against the oracle
 ```
