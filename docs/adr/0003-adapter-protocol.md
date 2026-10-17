@@ -1,6 +1,7 @@
 # 0003. An adapter protocol: JSON lines over stdin and stdout
 
-- Status: accepted; decision 7 superseded by `0004-go-spine.md`
+- Status: accepted; decision 7 superseded by `0004-go-spine.md`, decision 8 by
+  `0005-verify-commands.md`
 - Date: 2026-10-14
 - Issue: #24
 
@@ -35,7 +36,8 @@ same adapters.
    and `observe`, so `conform` replays sequences one way. (Superseded on 2026-10-17: every
    Python adapter now runs through the shim; see `0004-go-spine.md`.)
 8. **Only `conform` gains it.** `./verify` keeps finding `conformance/adapter_<machine>.py`;
-   discovering a command waits for an adapter that is not Python.
+   discovering a command waits for an adapter that is not Python. (Superseded on 2026-10-17: `./verify` also runs
+   `conformance/adapter_<machine>.cmd`; see `0005-verify-commands.md`.)
 9. **A shim,** `tools/adapter_shim.py`, standard library only, serves any Python adapter over
    the protocol unchanged, and sends the adapter's printing to stderr.
 

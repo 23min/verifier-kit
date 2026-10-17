@@ -86,7 +86,9 @@ README.md                        what the example shows and how to run it
 ```
 
 A project that uses the toolkit has the same folders at its own root, next to `verify` and
-`tools/`.
+`tools/`. In a project not written in Python, the adapter, the content checks and each mutation
+script are `.cmd` files instead, each holding one command line that `./verify` runs from the
+root: `conformance/adapter_notes.cmd`, `checks/run.cmd`, `mutation/mutate_notes.cmd`.
 
 ## The three loops
 
@@ -109,14 +111,14 @@ A project that uses the toolkit has the same folders at its own root, next to `v
 | spine is sound | `spine check` | unknown keys, YAML slips (`on:` read as `true`), cases no rule covers, overlapping rules, unreachable states, failing worked examples | a spine that is complete but wrong |
 | behaviors match spine | `spine behaviors` | the spine drifting from the example runs you agreed on | |
 | checks cite current spine | `spine stale` | content checks that cite a spine cell which has since changed | checks that never cite anything (listed as info) |
-| code conforms to spine | `spine conform` | any state/event/role case where the code allows, refuses or ends up somewhere other than the spine says, with the shortest sequence that shows it | anything beyond 4 steps; data the adapter does not observe |
-| content checks | `run_checks.py` | wrong text, values, formats | whatever no check asserts |
-| mutants killed (`--full`) | `mutation/mutate_*.py` | an oracle too weak to notice a planted bug | bugs unlike the planted ones |
+| code conforms to spine | `spine conform`, with `adapter_<machine>.py` or the command in `adapter_<machine>.cmd` | any state/event/role case where the code allows, refuses or ends up somewhere other than the spine says, with the shortest sequence that shows it | anything beyond 4 steps; data the adapter does not observe |
+| content checks | `run_checks.py`, or the command in `checks/run.cmd` | wrong text, values, formats | whatever no check asserts |
+| mutants killed (`--full`) | `mutation/mutate_*.py`, or the command in each `mutate_*.cmd` | an oracle too weak to notice a planted bug | bugs unlike the planted ones |
 
 Nothing is skipped silently. A step that does not run prints `skip` with the reason (no
 `VERIFY_BASE`, no behaviors folder, no `--full`, or a spine that is not sound), and a missing
 piece is an error: no spine at all, no adapter, no content checks, or no mutation script under
-`--full`. Output is one line per step, with error lines only for failing steps. `VERIFY_REPORTS=dir` writes JUnit XML
+`--full`. So is a piece given both as Python and as a `.cmd` file. Output is one line per step, with error lines only for failing steps. `VERIFY_REPORTS=dir` writes JUnit XML
 for the spine steps; `spine ... --format json` gives machine-readable findings. Exit codes:
 0 pass, 1 findings, 2 misuse.
 
@@ -200,7 +202,9 @@ Within an example (or a project), everything is keyed by folder name, so for a m
 `invoice`: `spec/invoice/spine.yaml`, optional `spec/invoice/behaviors/{valid,invalid}/`,
 `checks/invoice/`, `conformance/adapter_invoice.py` (three functions: `new()`, `apply()`,
 `observe()`), and optionally `mutation/mutate_invoice.py`. `./verify` picks them up, and fails
-with `no-adapter` until the adapter exists.
+with `no-adapter` until the adapter exists. For code in another language, the adapter is a
+program speaking the adapter protocol (`docs/reference/tool-contract.md`), named in
+`conformance/adapter_invoice.cmd`, and the content checks and mutation are commands too.
 
 ## Limits
 
@@ -211,11 +215,10 @@ with `no-adapter` until the adapter exists.
   general one.
 - **The spine sees states and permissions, not content.** Text, totals and formats need
   ordinary checks; the mutation step exists to show where that gap is.
-- **`./verify` runs Python adapters only.** `spine conform` serves a Python adapter through
-  `tools/adapter_shim.py`, as a program speaking JSON lines over stdin and stdout, and
-  `spine conform --adapter-cmd` runs an adapter in any language that way; `./verify` does not
-  look for one yet. Each request is a round trip between processes, about 0.2 ms here, so
-  notes' 1,426 sequences take about 2 s.
+- **Every adapter is a program.** `spine conform` serves a Python adapter through
+  `tools/adapter_shim.py`, as a program speaking JSON lines over stdin and stdout, and runs an
+  adapter in any other language the same way, named in `adapter_<machine>.cmd`. Each request is
+  a round trip between processes, about 0.2 ms here, so notes' 1,426 sequences take about 2 s.
 - **The adapter is part of the oracle.** It must only translate, never decide; a person
   reviews it like the spine.
 - **One machine, one variable.** Real features have several interacting machines and more
