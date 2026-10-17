@@ -1,0 +1,10 @@
+# verdicts-a.yaml where go is refused and wait undecided: the same words, as verdicts.
+machine: words
+states: {start: {}, rejected: {}, undefined: {}, later: {}}
+initial: start
+events: [go, wait]
+rules:
+  - {from: start, event: go, reject: true}
+  - {from: rejected, event: go, to: start}
+  - {from: undefined, event: go, to: start}
+  - {from: later, event: go, stay: true}

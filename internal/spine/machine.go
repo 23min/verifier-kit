@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"slices"
 	"sort"
 	"strings"
 )
@@ -302,6 +303,146 @@ func check(s *Spec) Findings {
 		}
 	}
 	return out
+}
+
+// ---------- diff ----------
+
+func diff(a, b *Spec, depth int) Findings {
+	var out Findings
+	for _, part := range []struct {
+		name string
+		a, b []string
+	}{{"states", a.States, b.States}, {"events", a.Events, b.Events}} {
+		for _, x := range sortedMinus(part.a, part.b) {
+			out.Add("only-in-a", part.name, fmt.Sprintf(`A has %s "%s", B does not`, strings.TrimSuffix(part.name, "s"), x))
+		}
+		for _, x := range sortedMinus(part.b, part.a) {
+			out.Add("only-in-b", part.name, fmt.Sprintf(`B has %s "%s", A does not`, strings.TrimSuffix(part.name, "s"), x))
+		}
+	}
+	if a.Initial != b.Initial {
+		out.Add("initial-differs", "initial", fmt.Sprintf(`A starts in "%s", B starts in "%s"`, a.Initial, b.Initial))
+	}
+	if !sameVars(a.Vars, b.Vars) {
+		out.Add("vars-differ", "vars", "A and B declare different variables; case comparison skipped")
+		return out
+	}
+	var states, events []string
+	for _, s := range sortedMinus(a.States, nil) {
+		if b.stateSet[s] {
+			states = append(states, s)
+		}
+	}
+	for _, e := range a.Events {
+		if contains(b.Events, e) {
+			events = append(events, e)
+		}
+	}
+
+	envs := a.assignments()
+	for _, s := range states {
+		for _, e := range events {
+			for _, env := range envs {
+				oa, ob := a.decide(s, e, env), b.decide(s, e, env)
+				if !slices.Equal(oa, ob) {
+					out.Add("case-disagrees", s+"/"+e, fmt.Sprintf("%s: A says %s, B says %s", env, show(oa), show(ob)))
+				}
+			}
+		}
+	}
+	if a.Initial != b.Initial {
+		return out // every sequence starts apart: the start is the shortest witness
+	}
+
+	// Every sequence of up to depth steps, shortest first and in the order of steps within a
+	// length, as tools/spine.py's queue takes them; a sequence on which A and B end apart is a
+	// witness, and is not extended. Each sequence carries where A and B end, and where they
+	// ended one step earlier.
+	type stepCase struct {
+		event string
+		env   Env
+	}
+	var steps []stepCase
+	for _, e := range events {
+		for _, env := range envs {
+			steps = append(steps, stepCase{e, env})
+		}
+	}
+	type sequence struct {
+		steps          []int
+		ra, rb, pa, pb string
+	}
+	end := func(s *Spec, from string, st stepCase) string {
+		state, verdict := s.step(from, st.event, st.env)
+		if verdict != "" {
+			return verdict
+		}
+		return state
+	}
+	reported := map[string]bool{}
+	level := []sequence{{ra: a.Initial, rb: b.Initial}}
+	for len(level) > 0 {
+		var next []sequence
+		for _, seq := range level {
+			if seq.ra != seq.rb {
+				last := steps[seq.steps[len(seq.steps)-1]]
+				values := make([]string, len(last.env.Names))
+				for i, n := range last.env.Names {
+					values[i] = last.env.Values[n]
+				}
+				key := fmt.Sprintf("%q %q %q %q", seq.pa, seq.pb, last.event, values)
+				if !reported[key] {
+					reported[key] = true
+					trace := make([]string, len(seq.steps))
+					for i, n := range seq.steps {
+						trace[i] = steps[n].event + "(" + steps[n].env.String() + ")"
+					}
+					out.Add("behavior-differs", strings.Join(trace, " -> "), fmt.Sprintf("A ends %s, B ends %s", seq.ra, seq.rb))
+				}
+				continue
+			}
+			if len(seq.steps) < depth && seq.ra != "rejected" && seq.ra != "undefined" {
+				for n, st := range steps {
+					next = append(next, sequence{append(slices.Clip(seq.steps), n), end(a, seq.ra, st), end(b, seq.rb, st), seq.ra, seq.rb})
+				}
+			}
+		}
+		level = next
+	}
+	return out
+}
+
+// sortedMinus is sorted(set(xs) - set(ys)).
+func sortedMinus(xs, ys []string) []string {
+	seen := map[string]bool{}
+	var out []string
+	for _, x := range xs {
+		if !seen[x] && !contains(ys, x) {
+			seen[x] = true
+			out = append(out, x)
+		}
+	}
+	sort.Strings(out)
+	return out
+}
+
+// sameVars is the dict comparison of two readings' vars: the same names, each with the same
+// values in the same order.
+func sameVars(a, b []Var) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	values := map[string][]string{}
+	for _, v := range b {
+		values[v.Name] = v.Values
+	}
+	for _, v := range a {
+		w, ok := values[v.Name]
+		if !ok || !slices.Equal(v.Values, w) {
+			return false
+		}
+	}
+	return true
 }
 
 // ---------- hash / stale ----------

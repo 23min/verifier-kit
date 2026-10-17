@@ -34,9 +34,9 @@ settled it on 2026-10-15 in #27.
    `hash` output byte for byte. Where Python's own libraries write the message, a PyYAML error
    inside `spec-unreadable` or an argparse usage error, everything but the message is compared.
 4. **Three steps:** `check`, `hash`, `stale`, `behaviors`, `trace` and `guard`; then `diff`;
-   then `conform`. Until then the Go `spine` refuses `diff` and `conform` as usage errors
-   (exit 2). `./verify`, `demo/faults.sh` and the mutation scripts keep running
-   `tools/spine.py` until it retires, in its own issue.
+   then `conform`. Until each is ported the Go `spine` refuses it as a usage error (exit 2).
+   `diff` is ported; `conform` is next. `./verify`, `demo/faults.sh` and the mutation scripts
+   keep running `tools/spine.py` until it retires, in its own issue.
 5. **YAML:** `go.yaml.in/yaml/v4`, pinned at v4.0.0-rc.6 until 4.0.0 is out, for its node tree
    only. `internal/spine` builds values from the tree with PyYAML's rules: YAML 1.1 booleans,
    `012`, `1:20`, dates, merge keys and the last of duplicate keys. It adds the checks v4
@@ -77,7 +77,8 @@ While porting, the owner settled behavior the port would otherwise have copied b
   `go test ./...` until the other follows.
 - Known differences, none in a realistic spine:
   - Characters Python's Unicode tables don't have yet, 15.1 in Python 3.13: Go's newer tables
-    call them letters and printable, in `stale`'s `covers:` names and in messages.
+    call them letters, digits and printable, in `stale`'s `covers:` names, in messages and
+    in `diff --depth`.
   - `\N{name}` escapes in conditions: Go has no table of character names, so it accepts any
     name.
   - Identifiers that NFKC-normalize to a variable, such as a fullwidth `ｒole`.

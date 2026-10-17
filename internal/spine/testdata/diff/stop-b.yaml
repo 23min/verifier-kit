@@ -1,0 +1,8 @@
+# stop-a.yaml refusing go at once.
+machine: stop
+states: {s: {}, t: {}}
+initial: s
+events: [go]
+rules:
+  - {from: s, event: go, reject: true}
+  - {from: t, event: go, reject: true}

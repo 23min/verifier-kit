@@ -17,6 +17,7 @@ type argAction struct {
 	nargs    string   // "1" (one), "*", "0" (the help flag) or "parser"
 	choices  []string
 	required bool
+	isInt    bool // type=int: the value is int() of the argument
 }
 
 // argParser is one argparse parser: the top one, or one per command.
@@ -252,11 +253,19 @@ func (p *argParser) parseKnownArgs(args []string, ns map[string]any) ([]string, 
 			if a.choices != nil && !contains(a.choices, values[0]) {
 				return p.fail("argument %s: invalid choice: %s (choose from %s)", actionName(a), pyRepr(values[0]), strings.Join(a.choices, ", "))
 			}
+			if a.isInt {
+				n, ok := intArgument(values[0])
+				if !ok {
+					return p.fail("argument %s: invalid int value: %s", actionName(a), pyRepr(values[0]))
+				}
+				ns[a.dest] = n
+				break
+			}
 			ns[a.dest] = values[0]
 		case "*":
 			ns[a.dest] = append([]string{}, values...)
 		case "parser":
-			if values[0] == "diff" || values[0] == "conform" {
+			if values[0] == "conform" {
 				return p.fail("%s is not ported to Go yet; run tools/spine.py %s", values[0], values[0])
 			}
 			sub, ok := p.commands[values[0]]
@@ -432,15 +441,15 @@ func (p *argParser) parseKnownArgs(args []string, ns map[string]any) ([]string, 
 	return extras, nil
 }
 
-// buildParser is main()'s parser in tools/spine.py. diff and conform are not ported yet: they
-// parse to an error.
+// buildParser is main()'s parser in tools/spine.py. conform is not ported yet: it parses to an
+// error.
 func buildParser() *argParser {
 	top := newParser("spine", helpTop)
 	top.add(&argAction{dest: "cmd", nargs: "parser", required: true})
 	top.commands = map[string]*argParser{}
 	for _, c := range []struct{ name, help string }{
-		{"check", helpCheck}, {"hash", helpHash}, {"stale", helpStale}, {"behaviors", helpBehaviors},
-		{"trace", helpTrace}, {"guard", helpGuard},
+		{"check", helpCheck}, {"hash", helpHash}, {"diff", helpDiff}, {"stale", helpStale},
+		{"behaviors", helpBehaviors}, {"trace", helpTrace}, {"guard", helpGuard},
 	} {
 		p := newParser("spine "+c.name, c.help)
 		switch c.name {
@@ -450,6 +459,12 @@ func buildParser() *argParser {
 		case "check":
 			p.common()
 			p.positional("spec", "1")
+		case "diff":
+			p.common()
+			p.positional("a", "1")
+			p.positional("b", "1")
+			p.add(&argAction{dest: "depth", options: []string{"--depth"}, nargs: "1", isInt: true})
+			p.defaults["depth"] = 4
 		case "stale":
 			p.common()
 			p.positional("spec", "1")
@@ -510,6 +525,14 @@ func Main(argv []string, stdin io.Reader, stdout, stderr io.Writer) int {
 				files = stdinLines(stdin)
 			}
 			findings = append(findings, guard(policy, str("branch"), files)...)
+		}
+	} else if cmd == "diff" {
+		a, problems := loadSpec(str("a"))
+		findings = append(findings, problems...)
+		b, problems := loadSpec(str("b"))
+		findings = append(findings, problems...)
+		if findings.Errors() == 0 {
+			findings = append(findings, diff(a, b, ns["depth"].(int))...)
 		}
 	} else {
 		spec, problems := loadSpec(str("spec"))
@@ -609,6 +632,19 @@ positional arguments:
 
 options:
   -h, --help  show this help message and exit
+`
+	helpDiff = `usage: spine diff [-h] [--format {text,json}] [--junit FILE] [--depth DEPTH]
+                  a b
+
+positional arguments:
+  a
+  b
+
+options:
+  -h, --help            show this help message and exit
+  --format {text,json}
+  --junit FILE          also write a JUnit XML report
+  --depth DEPTH
 `
 	helpStale = `usage: spine stale [-h] [--format {text,json}] [--junit FILE] spec checks
 

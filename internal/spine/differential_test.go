@@ -111,7 +111,7 @@ type diffCase struct {
 	mode  mode
 }
 
-var formatCommands = map[string]bool{"check": true, "stale": true, "behaviors": true, "trace": true, "guard": true}
+var formatCommands = map[string]bool{"check": true, "diff": true, "stale": true, "behaviors": true, "trace": true, "guard": true}
 
 // codesSeen collects the finding codes Python gave, across all cases.
 var codesSeen = struct {
@@ -698,7 +698,8 @@ func filesystemCases(t *testing.T, td, dir string) []diffCase {
 }
 
 // exampleCases runs every command on both examples as they are: spines, readings, behaviors,
-// checks and the policy.
+// checks and the policy, and diff on every ordered pair of an example's spine and readings
+// (demo/faults.sh's scenario 5 among them) and on the two spines.
 func exampleCases(t *testing.T) []diffCase {
 	var out []diffCase
 	add := func(m mode, args ...string) {
@@ -714,10 +715,17 @@ func exampleCases(t *testing.T) []diffCase {
 		root := filepath.Dir(filepath.Dir(rel))
 		spine := filepath.Join(rel, "spine.yaml")
 		readings, _ := filepath.Glob(filepath.Join(dir, "readings", "*.yaml"))
+		var all []string
 		for _, s := range append([]string{filepath.Join(dir, "spine.yaml")}, readings...) {
 			r, _ := filepath.Rel(repoRoot, s)
+			all = append(all, r)
 			add(full, "check", r)
 			add(asGiven, "hash", r)
+		}
+		for _, a := range all {
+			for _, b := range all {
+				add(full, "diff", a, b)
+			}
 		}
 		add(full, "behaviors", spine, filepath.Join(rel, "behaviors"))
 		add(full, "stale", spine, filepath.Join(root, "checks", machine))
@@ -728,6 +736,7 @@ func exampleCases(t *testing.T) []diffCase {
 		}
 		add(full, "guard", "policy.yaml", "--branch", "build/x", filepath.Join(root, "src", "a.py"), spine)
 	}
+	add(full, "diff", "examples/notes/spec/notes/spine.yaml", "examples/ref_sync/spec/ref_sync/spine.yaml")
 	return out
 }
 
@@ -781,7 +790,7 @@ func contractCodes(t *testing.T) map[string]bool {
 		t.Fatal("tool-contract.md has no finding codes table")
 	}
 	table, _, _ = strings.Cut(table, "\n## ")
-	ported := map[string]bool{"all": true, "check": true, "hash": true, "stale": true, "behaviors": true, "trace": true, "guard": true}
+	ported := map[string]bool{"all": true, "check": true, "hash": true, "diff": true, "stale": true, "behaviors": true, "trace": true, "guard": true}
 	code := regexp.MustCompile("`([a-z-]+)`")
 	codes := map[string]bool{}
 	for _, line := range strings.Split(table, "\n") {

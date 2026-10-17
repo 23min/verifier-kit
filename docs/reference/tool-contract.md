@@ -56,8 +56,8 @@ are part of the contract: new codes may be added, existing codes are never renam
 | `guard` | `POLICY --branch NAME [FILES...]` | Maps the branch to a role and reports changed files that role may not touch; reads files from stdin when none are given |
 
 `bin/spine`, built from `cmd/spine/`, is the Go port of `tools/spine.py` and follows the same
-contract. It has every command above except `diff` and `conform`, which it refuses as usage
-errors (exit 2) until they are ported. `go test ./...` runs both on the same inputs.
+contract. It has every command above except `conform`, which it refuses as a usage error
+(exit 2) until it is ported. `go test ./...` runs both on the same inputs.
 
 All commands except `hash` accept `--format text|json` and `--junit FILE`. Every command that
 takes a spine validates it first and stops with the validation findings if it is invalid.

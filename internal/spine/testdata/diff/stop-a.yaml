@@ -1,0 +1,8 @@
+# Every sequence ends by the second event, so any depth, however large, finishes.
+machine: stop
+states: {s: {}, t: {}}
+initial: s
+events: [go]
+rules:
+  - {from: s, event: go, to: t}
+  - {from: t, event: go, reject: true}
