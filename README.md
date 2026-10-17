@@ -33,9 +33,8 @@ demo/live-builder.sh        # optional: a real Claude Code builder session again
 ```
 
 `spine` is being ported to Go, so that checking a spine needs neither Python nor PyYAML
-([`docs/adr/0004-go-spine.md`](docs/adr/0004-go-spine.md)). The Go `spine` has `check`, `hash`,
-`diff`, `stale`, `behaviors`, `trace` and `guard` so far; `./verify` still runs `tools/spine.py`.
-With Go 1.27:
+([`docs/adr/0004-go-spine.md`](docs/adr/0004-go-spine.md)). The Go `spine` has every command;
+`./verify` still runs `tools/spine.py`. With Go 1.27:
 
 ```sh
 go build -o bin/spine ./cmd/spine                    # bin/ is ignored by git

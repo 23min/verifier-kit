@@ -56,8 +56,7 @@ are part of the contract: new codes may be added, existing codes are never renam
 | `guard` | `POLICY --branch NAME [FILES...]` | Maps the branch to a role and reports changed files that role may not touch; reads files from stdin when none are given |
 
 `bin/spine`, built from `cmd/spine/`, is the Go port of `tools/spine.py` and follows the same
-contract. It has every command above except `conform`, which it refuses as a usage error
-(exit 2) until it is ported. `go test ./...` runs both on the same inputs.
+contract. It has every command above. `go test ./...` runs both on the same inputs.
 
 All commands except `hash` accept `--format text|json` and `--junit FILE`. Every command that
 takes a spine validates it first and stops with the validation findings if it is invalid.
@@ -118,7 +117,8 @@ An exception from `new()` or `observe()`, or while importing the file, is `adapt
 divergence: without a fresh instance or a reading of its state there is nothing to compare.
 
 `conform --adapter FILE` runs the file through `tools/adapter_shim.py` (below), in a Python
-process of its own. The adapter's printing goes to stderr, and what `apply()` and `observe()`
+process of its own: `tools/spine.py`'s own Python, or for the Go `spine` `$PYTHON`, else
+`python3`. The adapter's printing goes to stderr, and what `apply()` and `observe()`
 return reaches `conform` as JSON: a tuple arrives as a list, and a value JSON can't encode, such
 as a set, makes the shim fail (`adapter-failed`).
 

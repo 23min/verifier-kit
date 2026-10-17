@@ -221,8 +221,8 @@ not set `VERIFY_BASE`, so the path guard runs here only inside scenario 4.
 
 `go test` holds the differential test (`internal/spine/differential_test.go`). The Go `spine`
 (`cmd/spine/`, `internal/spine/`) and `tools/spine.py` run on the same inputs, among them the
-repo's spines, readings, behaviors, checks and policy and the faults scenarios 2 to 4 seed, and
-must give the same exit codes and output. Nothing else calls the Go `spine` yet.
+repo's spines, readings, behaviors, checks, adapters and policy and the faults scenarios 1 to 4,
+9 and 10 seed, and must give the same exit codes and output. Nothing else calls the Go `spine` yet.
 
 ## Per machine, per root and repo-wide
 

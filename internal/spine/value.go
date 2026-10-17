@@ -228,8 +228,9 @@ func pyStrip(s string) string {
 // intArgument is int(s), which argparse calls for type=int: base 10, digits from any script,
 // single underscores between digits, and whitespace at either end, which is ASCII's six and any
 // other character str.isspace() takes. More than 4,300 digits, leading zeros among them, is an
-// error in Python too. A value past an int is clamped: no depth can tell the difference.
-func intArgument(s string) (int, bool) {
+// error in Python too. A value past an int is clamped: no depth can tell the difference. text is
+// the value as Python prints it.
+func intArgument(s string) (n int, text string, ok bool) {
 	var b strings.Builder
 	for _, r := range s {
 		switch {
@@ -240,7 +241,7 @@ func intArgument(s string) (int, bool) {
 		default:
 			d := pyDecimal(r)
 			if d < 0 {
-				return 0, false
+				return 0, "", false
 			}
 			b.WriteByte(byte('0' + d))
 		}
@@ -253,19 +254,19 @@ func intArgument(s string) (int, bool) {
 	digits := strings.ReplaceAll(t, "_", "")
 	if digits == "" || len(digits) > 4300 || strings.Trim(digits, "0123456789") != "" ||
 		t[0] == '_' || t[len(t)-1] == '_' || strings.Contains(t, "__") {
-		return 0, false
+		return 0, "", false
 	}
-	n, _ := new(big.Int).SetString(digits, 10)
+	v, _ := new(big.Int).SetString(digits, 10)
 	if neg {
-		n.Neg(n)
+		v.Neg(v)
 	}
 	switch {
-	case n.Cmp(big.NewInt(math.MaxInt)) > 0:
-		return math.MaxInt, true
-	case n.Cmp(big.NewInt(math.MinInt)) < 0:
-		return math.MinInt, true
+	case v.Cmp(big.NewInt(math.MaxInt)) > 0:
+		return math.MaxInt, v.String(), true
+	case v.Cmp(big.NewInt(math.MinInt)) < 0:
+		return math.MinInt, v.String(), true
 	}
-	return int(n.Int64()), true
+	return int(v.Int64()), v.String(), true
 }
 
 // pyDecimal is the value of a decimal digit (Unicode category Nd), or -1. Unicode encodes each
