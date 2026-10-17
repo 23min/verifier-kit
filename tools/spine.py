@@ -543,6 +543,8 @@ def diff(a, b, depth):
             out.add("only-in-a", part, f'A has {part[:-1]} "{x}", B does not')
         for x in sorted(set(b[part]) - set(a[part])):
             out.add("only-in-b", part, f'B has {part[:-1]} "{x}", A does not')
+    if a["initial"] != b["initial"]:
+        out.add("initial-differs", "initial", f'A starts in "{a["initial"]}", B starts in "{b["initial"]}"')
     if (a.get("vars") or {}) != (b.get("vars") or {}):
         out.add("vars-differ", "vars", "A and B declare different variables; case comparison skipped")
         return out
@@ -555,8 +557,10 @@ def diff(a, b, depth):
                 oa, ob = decide(a, s, e, env), decide(b, s, e, env)
                 if oa != ob:
                     out.add("case-disagrees", f"{s}/{e}", f"{envstr(env)}: A says {show(oa)}, B says {show(ob)}")
+    if a["initial"] != b["initial"]:
+        return out                  # every sequence starts apart: the start is the shortest witness
 
-    steps = [(e, env) for e in events for env in assignments(a)]
+    steps =[(e, env) for e in events for env in assignments(a)]
     reported, queue = set(), deque([()])
     while queue:
         seq = queue.popleft()
