@@ -75,21 +75,22 @@ func loadYAML(data []byte) (*Value, error) {
 			return nil, fmt.Errorf("unacceptable character #x%04x: special characters are not allowed", r)
 		}
 	}
-	loader, err := yaml.NewLoader(bytes.NewReader(pyYAMLDirectives(data)))
-	if err != nil {
-		return nil, err
-	}
+	src, widened := pyYAMLDirectives(data), []int(nil)
 	var docs []*yaml.Node
 	for {
-		n := new(yaml.Node)
-		err := loader.Load(n)
-		if errors.Is(err, io.EOF) {
-			break
+		var err error
+		docs, err = loadNodes(src)
+		var le *yaml.LoadError
+		if errors.As(err, &le) && le.Message == "found unknown escape character" {
+			if fixed, at, ok := unescapeSlashes(src, le.Mark.Index); ok {
+				src, widened = fixed, append(widened, at...)
+				continue
+			}
 		}
 		if err != nil {
 			return nil, err
 		}
-		docs = append(docs, n)
+		break
 	}
 	if len(docs) == 0 {
 		return &Value{Kind: KNull}, nil
@@ -101,11 +102,85 @@ func loadYAML(data []byte) (*Value, error) {
 		return nil, err
 	}
 	// Columns start after a leading BOM, as v4's and PyYAML's do.
-	if err := checkSimpleKeys(docs[0], bytes.TrimPrefix(data, []byte("\xef\xbb\xbf"))); err != nil {
+	text := bytes.TrimPrefix(src, []byte("\xef\xbb\xbf"))
+	for i := range widened {
+		widened[i] -= len(src) - len(text)
+	}
+	if err := checkSimpleKeys(docs[0], strings.Split(string(text), "\n"), widenedAt(text, widened)); err != nil {
 		return nil, err
 	}
 	c := &constructor{built: map[*yaml.Node]*Value{}, flat: map[*yaml.Node][]pair{}, flattening: map[*yaml.Node]bool{}}
 	return c.value(docs[0])
+}
+
+// loadNodes is every document's node tree in src.
+func loadNodes(src []byte) ([]*yaml.Node, error) {
+	loader, err := yaml.NewLoader(bytes.NewReader(src))
+	if err != nil {
+		return nil, err
+	}
+	var docs []*yaml.Node
+	for {
+		n := new(yaml.Node)
+		err := loader.Load(n)
+		if errors.Is(err, io.EOF) {
+			return docs, nil
+		}
+		if err != nil {
+			return nil, err
+		}
+		docs = append(docs, n)
+	}
+}
+
+// unescapeSlashes: PyYAML reads `\/` in a double-quoted scalar as "/", as YAML 1.2 does, and v4
+// refuses it. Given where v4 stopped (a count of characters, not counting a leading BOM), it
+// rewrites that `\/` and every later one in the same scalar to `\x2f`, which v4 reads as "/",
+// and gives the byte offsets of the rewrites; false unless v4 stopped at a `\/`.
+func unescapeSlashes(src []byte, index int) ([]byte, []int, bool) {
+	if bytes.HasPrefix(src, []byte("\xef\xbb\xbf")) {
+		index++
+	}
+	off := 0
+	for ; index > 0 && off < len(src); index-- {
+		_, size := utf8.DecodeRune(src[off:])
+		off += size
+	}
+	if !bytes.HasPrefix(src[off:], []byte(`\/`)) {
+		return nil, nil, false
+	}
+	var out []byte
+	var at []int
+	out = append(out, src[:off]...)
+	i := off
+	for ; i < len(src) && src[i] != '"'; i++ {
+		if src[i] == '\\' && i+1 < len(src) {
+			if src[i+1] == '/' {
+				at = append(at, len(out))
+				out = append(out, `\x2f`...)
+			} else {
+				out = append(out, src[i:i+2]...)
+			}
+			i++
+			continue
+		}
+		out = append(out, src[i])
+	}
+	return append(out, src[i:]...), at, true
+}
+
+// widenedAt maps each rewritten `\/` to its line (from 1) and the column (from 0, in
+// characters) where its `\x2f` starts, so a key's length can still be counted as PyYAML counts
+// it, in the characters of the file.
+func widenedAt(src []byte, offsets []int) map[int][]int {
+	at := map[int][]int{}
+	for _, off := range offsets {
+		before := src[:off]
+		line := bytes.Count(before, []byte("\n")) + 1
+		start := bytes.LastIndexByte(before, '\n') + 1
+		at[line] = append(at[line], utf8.RuneCount(before[start:]))
+	}
+	return at
 }
 
 var reYAMLDirective = regexp.MustCompile(`^%YAML[ \t]+0*1\.[0-9]+`)
@@ -151,13 +226,13 @@ func checkAnchors(n *yaml.Node, seen map[string]bool) error {
 }
 
 // checkSimpleKeys: PyYAML forgets a possible implicit key once the ':' is more than 1024
-// characters from where the key began, and then refuses the ':'.
-func checkSimpleKeys(n *yaml.Node, data []byte) error {
+// characters from where the key began, and then refuses the ':'. widened is where loadYAML
+// rewrote `\/` as `\x2f`, two characters longer.
+func checkSimpleKeys(n *yaml.Node, lines []string, widened map[int][]int) error {
 	if n.Kind == yaml.AliasNode {
 		return nil
 	}
 	if n.Kind == yaml.MappingNode {
-		lines := strings.Split(string(data), "\n")
 		for i := 0; i+1 < len(n.Content); i += 2 {
 			k := n.Content[i]
 			if k.Kind != yaml.ScalarNode || k.Line < 1 || k.Line > len(lines) {
@@ -172,13 +247,19 @@ func checkSimpleKeys(n *yaml.Node, data []byte) error {
 			for end < len(line) && (line[end] == ' ' || line[end] == '\t') {
 				end++
 			}
-			if end < len(line) && line[end] == ':' && end-start > 1024 {
+			length := end - start
+			for _, c := range widened[k.Line] {
+				if c >= start && c < end {
+					length -= 2
+				}
+			}
+			if end < len(line) && line[end] == ':' && length > 1024 {
 				return errors.New("mapping values are not allowed here")
 			}
 		}
 	}
 	for _, c := range n.Content {
-		if err := checkSimpleKeys(c, data); err != nil {
+		if err := checkSimpleKeys(c, lines, widened); err != nil {
 			return err
 		}
 	}
