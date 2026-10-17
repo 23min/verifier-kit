@@ -1,0 +1,37 @@
+# The lifecycle of one job (chapter.md, section 2). Built on 2026-10-17 from readings/ and the
+# owner's answers in #35: reading A, which agrees with reading B on every cell and every kind,
+# except that discarded is policy, not fact. Ratified by the reviewed merge of this file.
+machine: job
+section: running-one-job
+vars:
+  attempts: [last, some_left]
+states:
+  queued:    {kind: design}
+  running:   {kind: design}
+  retrying:  {kind: policy}
+  succeeded: {kind: fact, terminal: true}
+  discarded: {kind: policy, terminal: true}
+initial: queued
+events: [start, succeed, fail, retry_due, cancel]
+rules:
+  # queued: the job waits for a worker to start its next attempt.
+  - {from: queued, event: start, to: running}
+  - {from: queued, event: succeed, reject: true}
+  - {from: queued, event: fail, reject: true}
+  - {from: queued, event: retry_due, reject: true}
+  - {from: queued, event: cancel, to: discarded}
+
+  # running: a worker runs an attempt; a failure is retried unless it was the last attempt.
+  - {from: running, event: start, reject: true}
+  - {from: running, event: succeed, to: succeeded}
+  - {from: running, event: fail, when: "attempts == 'some_left'", to: retrying}
+  - {from: running, event: fail, when: "attempts == 'last'", to: discarded}
+  - {from: running, event: retry_due, reject: true}
+  - {from: running, event: cancel, to: discarded}
+
+  # retrying: the job waits out its backoff, then is queued again.
+  - {from: retrying, event: start, reject: true}
+  - {from: retrying, event: succeed, reject: true}
+  - {from: retrying, event: fail, reject: true}
+  - {from: retrying, event: retry_due, to: queued}
+  - {from: retrying, event: cancel, to: discarded}
