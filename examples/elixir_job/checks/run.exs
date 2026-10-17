@@ -1,5 +1,6 @@
 # Runs the content checks in checks/job/ with ExUnit. Exits 0 only when at least one check ran
-# and every check passed; a run that finds no checks fails.
+# and every check passed, 1 when a check failed, and 2 when no check ran, so that the mutation
+# script, which counts exit 1 as a caught mutant, is not fooled by an empty folder.
 ExUnit.start(autorun: false)
 
 __DIR__
@@ -13,7 +14,7 @@ __DIR__
 cond do
   total - excluded - skipped == 0 ->
     IO.puts(:stderr, "no checks ran from checks/job/")
-    System.halt(1)
+    System.halt(2)
 
   failures > 0 ->
     System.halt(1)
