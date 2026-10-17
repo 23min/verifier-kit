@@ -62,6 +62,24 @@ RUN curl -fsSL https://claude.ai/install.sh | bash \
 COPY --from=golang:latest /usr/local/go /usr/local/go
 ENV PATH=/usr/local/go/bin:/home/vscode/go/bin:${PATH}
 
+# ─── 2. Elixir / Erlang ─────────────────────────────────────────────────────────────────────
+# elixir-lang.org's official install.sh (Ubuntu builds from builds.hex.pm), latest OTP + Elixir.
+# Fixed links keep PATH stable across versions; .tool-versions pins are applied at create.
+USER root
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get update \
+    && apt-get install -y --no-install-recommends inotify-tools
+USER vscode
+RUN curl -fsSLo /tmp/elixir-install.sh https://elixir-lang.org/install.sh \
+    && sh /tmp/elixir-install.sh elixir@latest otp@latest \
+    && rm /tmp/elixir-install.sh \
+    && ln -sfn "$(ls -d ~/.elixir-install/installs/otp/* | sort -V | tail -1)" ~/.elixir-install/otp \
+    && ln -sfn "$(ls -d ~/.elixir-install/installs/elixir/* | sort -V | tail -1)" ~/.elixir-install/elixir
+ENV PATH=/home/vscode/.elixir-install/elixir/bin:/home/vscode/.elixir-install/otp/bin:${PATH}
+RUN mix local.hex --force \
+    && mix local.rebar --force
+
 # ─── 3. Project section ─────────────────────────────────────────────────────────────────────
 USER root
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \

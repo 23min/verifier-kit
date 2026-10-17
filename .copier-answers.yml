@@ -10,6 +10,7 @@ dood: false
 extra_extensions: []
 languages:
 - go
+- elixir
 ports: {}
 project_slug: verifier-kit
 readonly_data: []
