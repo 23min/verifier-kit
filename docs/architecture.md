@@ -72,20 +72,27 @@ flowchart TD
       check["spine check"] -- sound --> beh["spine behaviors<br/>spec/{m}/behaviors/"]
       check -- not sound --> skipm["skip the machine's other steps"]
       beh --> stale["spine stale<br/>checks/{m}/"]
-      stale --> conf["spine conform<br/>conformance/adapter_{m}.py<br/>PYTHONPATH={root}/src:{root}/conformance"]
+      stale --> conf["spine conform with conformance/adapter_{m}.py,<br/>PYTHONPATH={root}/src:{root}/conformance;<br/>or with the line in adapter_{m}.cmd, from {root}"]
     end
-    loop --> content["content checks: run_checks.py {root}/checks --require-checks<br/>PYTHONPATH={root}/src"]
+    loop --> content["content checks: run_checks.py {root}/checks --require-checks,<br/>PYTHONPATH={root}/src; or {root}/checks/run.cmd, from {root}"]
     content --> f{"--full?"}
-    f -- yes --> mut["every {root}/mutation/mutate_*.py"]
+    f -- yes --> mut["every {root}/mutation/mutate_*.py,<br/>and every mutate_*.cmd, from {root}"]
     f -- no --> skipmut["skip mutation"]
   end
   rootloop --> sum["one summary line; exit 0 or 1"]
 ```
 
+Each adapter, the content checks and each mutation script is given as Python or as a `.cmd`
+file holding one command line, for code in any language. A command runs from its root, without
+a shell, with `VERIFY_SPINE` set to the command line that runs `spine`; checks and mutation
+pass when it exits 0.
+
 A step that cannot run because a piece is missing is an error, not a skip, reported per root:
 no spine at all (`no-machines`), no adapter for a machine (`no-adapter`), no `test_*` function
-anywhere under the root's `checks/` (`no-checks`), or no mutation script under `--full`
-(`no-mutation`). A root other than the repo itself starts with a `== <root>` line.
+anywhere under the root's `checks/` and no `checks/run.cmd` (`no-checks`), or no mutation
+script under `--full` (`no-mutation`). So is a piece given both ways (`ambiguous-piece`), and a
+`.cmd` file that holds no single command line (`bad-command`). A root other than the repo
+itself starts with a `== <root>` line.
 
 ## The notes example
 
