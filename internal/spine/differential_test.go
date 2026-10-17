@@ -70,7 +70,7 @@ type result struct {
 	junit  string
 }
 
-func execute(python bool, dir string, args []string, stdin string) (result, error) {
+func execute(python bool, dir string, args []string, stdin string, env []string) (result, error) {
 	var cmd *exec.Cmd
 	if python {
 		cmd = exec.Command(pythonPath, append([]string{spinePy}, args...)...)
@@ -78,7 +78,8 @@ func execute(python bool, dir string, args []string, stdin string) (result, erro
 		cmd = exec.Command(goSpine, args...)
 	}
 	cmd.Dir = dir
-	cmd.Env = append(os.Environ(), "COLUMNS=80")
+	// PYTHON is the Python the Go spine serves a Python adapter with: the one tools/spine.py runs on
+	cmd.Env = append(append(os.Environ(), "COLUMNS=80", "PYTHON="+pythonPath), env...)
 	cmd.Stdin = strings.NewReader(stdin)
 	var out, errOut bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &out, &errOut
@@ -108,10 +109,11 @@ type diffCase struct {
 	dir   string
 	args  []string
 	stdin string
+	env   []string // NAME=value, added to the environment
 	mode  mode
 }
 
-var formatCommands = map[string]bool{"check": true, "diff": true, "stale": true, "behaviors": true, "trace": true, "guard": true}
+var formatCommands = map[string]bool{"check": true, "diff": true, "stale": true, "behaviors": true, "trace": true, "conform": true, "guard": true}
 
 // codesSeen collects the finding codes Python gave, across all cases.
 var codesSeen = struct {
@@ -143,11 +145,11 @@ func (c diffCase) run(t *testing.T) {
 
 func (c diffCase) both(t *testing.T, args []string) (py, gr result, ok bool) {
 	var err error
-	if py, err = execute(true, c.dir, args, c.stdin); err != nil {
+	if py, err = execute(true, c.dir, args, c.stdin, c.env); err != nil {
 		t.Errorf("%s: python: %v", c.name, err)
 		return py, gr, false
 	}
-	if gr, err = execute(false, c.dir, args, c.stdin); err != nil {
+	if gr, err = execute(false, c.dir, args, c.stdin, c.env); err != nil {
 		t.Errorf("%s: go: %v", c.name, err)
 		return py, gr, false
 	}
@@ -167,12 +169,12 @@ func (c diffCase) runJSON(t *testing.T) ([]Finding, []Finding) {
 	args := func(junit string) []string {
 		return append([]string{c.args[0], "--format", "json", "--junit", junit}, c.args[1:]...)
 	}
-	py, err := execute(true, c.dir, args(pyReport), c.stdin)
+	py, err := execute(true, c.dir, args(pyReport), c.stdin, c.env)
 	if err != nil {
 		t.Errorf("%s: python: %v", c.name, err)
 		return nil, nil
 	}
-	gr, err := execute(false, c.dir, args(goReport), c.stdin)
+	gr, err := execute(false, c.dir, args(goReport), c.stdin, c.env)
 	if err != nil {
 		t.Errorf("%s: go: %v", c.name, err)
 		return nil, nil
@@ -406,11 +408,15 @@ func argLines(t *testing.T, path string) []diffCase {
 		var c diffCase
 		if strings.HasPrefix(line, "{") {
 			var obj struct {
-				Args  []string `json:"args"`
-				Stdin string   `json:"stdin"`
+				Args  []string          `json:"args"`
+				Stdin string            `json:"stdin"`
+				Env   map[string]string `json:"env"`
 			}
 			err = json.Unmarshal([]byte(line), &obj)
 			c.args, c.stdin = obj.Args, obj.Stdin
+			for k, v := range obj.Env {
+				c.env = append(c.env, k+"="+v)
+			}
 		} else {
 			err = json.Unmarshal([]byte(line), &c.args)
 		}
@@ -735,14 +741,24 @@ func exampleCases(t *testing.T) []diffCase {
 			add(full, "trace", spine, r)
 		}
 		add(full, "guard", "policy.yaml", "--branch", "build/x", filepath.Join(root, "src", "a.py"), spine)
+		// conform as ./verify runs it, with the example's src/ and conformance/ importable
+		adapter := filepath.Join(root, "conformance", "adapter_"+machine+".py")
+		env := []string{"PYTHONPATH=" + filepath.Join(root, "src") + ":" + filepath.Join(root, "conformance")}
+		out = append(out, diffCase{name: "example conform " + machine, dir: repoRoot, env: env, mode: full,
+			args: []string{"conform", spine, "--adapter", adapter}})
+		if machine == "notes" {
+			out = append(out, diffCase{name: "example conform notes, adapter-cmd", dir: repoRoot, env: env, mode: full,
+				args: []string{"conform", spine, "--adapter-cmd", shellQuote(pythonPath) + " tools/adapter_shim.py " + adapter, "--depth", "3"}})
+		}
 	}
 	add(full, "diff", "examples/notes/spec/notes/spine.yaml", "examples/ref_sync/spec/ref_sync/spine.yaml")
 	return out
 }
 
 // faultCases seeds the faults demo/faults.sh seeds that the ported commands see, the same way,
-// into copies of the notes spine: scenario 2 loosens restore, 3 writes `on:` for `event:`, and
-// 4 is a builder's branch that also edits the spine.
+// into copies of the notes spine and service: scenario 1 is the service as first written, 2
+// loosens restore, 3 writes `on:` for `event:`, 4 is a builder's branch that also edits the
+// spine, 9 imports a module that doesn't exist, and 10 is 1 through --adapter-cmd.
 func faultCases(t *testing.T, dir string) []diffCase {
 	notes := filepath.Join(repoRoot, "examples", "notes")
 	data, err := os.ReadFile(filepath.Join(notes, "spec", "notes", "spine.yaml"))
@@ -776,7 +792,39 @@ func faultCases(t *testing.T, dir string) []diffCase {
 	add("fault 4 check", "check", "4/spine.yaml")
 	add("fault 4 guard", "guard", filepath.Join(repoRoot, "policy.yaml"), "--branch", "build/purge-confirmation",
 		"examples/notes/src/notes_app.py", "examples/notes/spec/notes/spine.yaml")
+
+	// conform: 1 and 10 run the service as first written, 2 the loosened spine, 9 a service
+	// that imports a module that doesn't exist; each with its own copy of src/
+	service, err := os.ReadFile(filepath.Join(notes, "src", "notes_app.py"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	asWritten, err := os.ReadFile(filepath.Join(notes, "demo", "notes_app_as_written.py"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	writeFile(t, filepath.Join(dir, "1", "src", "notes_app.py"), string(asWritten))
+	writeFile(t, filepath.Join(dir, "2", "src", "notes_app.py"), string(service))
+	writeFile(t, filepath.Join(dir, "9", "src", "notes_app.py"), string(service)+"import no_such_module\n")
+	spineFile, adapter := filepath.Join(notes, "spec", "notes", "spine.yaml"), filepath.Join(notes, "conformance", "adapter_notes.py")
+	conform := func(name, src string, args ...string) {
+		env := []string{"PYTHONPATH=" + filepath.Join(dir, src, "src") + ":" + filepath.Join(notes, "conformance")}
+		out = append(out, diffCase{name: name, dir: dir, args: append([]string{"conform"}, args...), env: env, mode: full})
+	}
+	conform("fault 1 conform", "1", spineFile, "--adapter", adapter)
+	conform("fault 2 conform", "2", "2/spine.yaml", "--adapter", adapter)
+	conform("fault 9 conform", "9", spineFile, "--adapter", adapter)
+	conform("fault 10 conform", "1", spineFile, "--adapter-cmd",
+		shellQuote(pythonPath)+" "+shellQuote(filepath.Join(repoRoot, "tools", "adapter_shim.py"))+" "+shellQuote(adapter))
 	return out
+}
+
+// shellQuote is shlex.quote(s): s as one word of a command line.
+func shellQuote(s string) string {
+	if s != "" && strings.Trim(s, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_@%+=:,./-") == "" {
+		return s
+	}
+	return "'" + strings.ReplaceAll(s, "'", `'"'"'`) + "'"
 }
 
 // contractCodes is every finding code the tool contract lists for the commands the port has.
@@ -790,7 +838,7 @@ func contractCodes(t *testing.T) map[string]bool {
 		t.Fatal("tool-contract.md has no finding codes table")
 	}
 	table, _, _ = strings.Cut(table, "\n## ")
-	ported := map[string]bool{"all": true, "check": true, "hash": true, "diff": true, "stale": true, "behaviors": true, "trace": true, "guard": true}
+	ported := map[string]bool{"all": true, "check": true, "hash": true, "diff": true, "stale": true, "behaviors": true, "trace": true, "conform": true, "guard": true}
 	code := regexp.MustCompile("`([a-z-]+)`")
 	codes := map[string]bool{}
 	for _, line := range strings.Split(table, "\n") {

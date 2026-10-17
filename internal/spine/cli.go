@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"regexp"
+	"slices"
 	"strings"
 )
 
@@ -29,6 +30,13 @@ type argParser struct {
 	byOption map[string]*argAction
 	defaults map[string]any
 	commands map[string]*argParser
+	groups   []argGroup // mutually exclusive groups
+}
+
+// argGroup is a mutually exclusive group: at most one of its actions, and with required, one.
+type argGroup struct {
+	actions  []*argAction
+	required bool
 }
 
 func newParser(prog, help string) *argParser {
@@ -254,20 +262,27 @@ func (p *argParser) parseKnownArgs(args []string, ns map[string]any) ([]string, 
 				return p.fail("argument %s: invalid choice: %s (choose from %s)", actionName(a), pyRepr(values[0]), strings.Join(a.choices, ", "))
 			}
 			if a.isInt {
-				n, ok := intArgument(values[0])
+				n, text, ok := intArgument(values[0])
 				if !ok {
 					return p.fail("argument %s: invalid int value: %s", actionName(a), pyRepr(values[0]))
 				}
-				ns[a.dest] = n
-				break
+				ns[a.dest], ns[a.dest+"_text"] = n, text
+			} else {
+				ns[a.dest] = values[0]
 			}
-			ns[a.dest] = values[0]
+			for _, g := range p.groups { // argparse's mutually exclusive groups
+				if !slices.Contains(g.actions, a) {
+					continue
+				}
+				for _, other := range g.actions {
+					if other != a && seen[other] {
+						return p.fail("argument %s: not allowed with argument %s", actionName(a), actionName(other))
+					}
+				}
+			}
 		case "*":
 			ns[a.dest] = append([]string{}, values...)
 		case "parser":
-			if values[0] == "conform" {
-				return p.fail("%s is not ported to Go yet; run tools/spine.py %s", values[0], values[0])
-			}
 			sub, ok := p.commands[values[0]]
 			if !ok {
 				names := []string{"check", "hash", "diff", "stale", "behaviors", "trace", "conform", "guard"}
@@ -434,6 +449,16 @@ func (p *argParser) parseKnownArgs(args []string, ns map[string]any) ([]string, 
 	if len(missing) > 0 {
 		return nil, p.fail("the following arguments are required: %s", strings.Join(missing, ", "))
 	}
+	for _, g := range p.groups {
+		if !g.required || slices.ContainsFunc(g.actions, func(a *argAction) bool { return seen[a] }) {
+			continue
+		}
+		names := make([]string, len(g.actions))
+		for i, a := range g.actions {
+			names[i] = actionName(a)
+		}
+		return nil, p.fail("one of the arguments %s is required", strings.Join(names, " "))
+	}
 	if rest, ok := ns["_unrecognized"].([]string); ok {
 		delete(ns, "_unrecognized")
 		extras = append(extras, rest...)
@@ -441,15 +466,14 @@ func (p *argParser) parseKnownArgs(args []string, ns map[string]any) ([]string, 
 	return extras, nil
 }
 
-// buildParser is main()'s parser in tools/spine.py. conform is not ported yet: it parses to an
-// error.
+// buildParser is main()'s parser in tools/spine.py.
 func buildParser() *argParser {
 	top := newParser("spine", helpTop)
 	top.add(&argAction{dest: "cmd", nargs: "parser", required: true})
 	top.commands = map[string]*argParser{}
 	for _, c := range []struct{ name, help string }{
 		{"check", helpCheck}, {"hash", helpHash}, {"diff", helpDiff}, {"stale", helpStale},
-		{"behaviors", helpBehaviors}, {"trace", helpTrace}, {"guard", helpGuard},
+		{"behaviors", helpBehaviors}, {"trace", helpTrace}, {"conform", helpConform}, {"guard", helpGuard},
 	} {
 		p := newParser("spine "+c.name, c.help)
 		switch c.name {
@@ -477,6 +501,16 @@ func buildParser() *argParser {
 			p.common()
 			p.positional("spec", "1")
 			p.positional("behavior", "1")
+		case "conform":
+			p.common()
+			p.positional("spec", "1")
+			adapter := &argAction{dest: "adapter", options: []string{"--adapter"}, nargs: "1"}
+			command := &argAction{dest: "adapter_cmd", options: []string{"--adapter-cmd"}, nargs: "1"}
+			p.add(adapter)
+			p.add(command)
+			p.groups = append(p.groups, argGroup{[]*argAction{adapter, command}, true})
+			p.add(&argAction{dest: "depth", options: []string{"--depth"}, nargs: "1", isInt: true})
+			p.defaults["depth"], p.defaults["depth_text"] = 4, "4"
 		case "guard":
 			p.common()
 			p.positional("policy", "1")
@@ -557,6 +591,10 @@ func Main(argv []string, stdin io.Reader, stdout, stderr io.Writer) int {
 				findings = append(findings, behaviors(spec, str("directory"))...)
 			case "trace":
 				findings = append(findings, trace(spec, str("behavior"))...)
+			case "conform":
+				_, useCommand := ns["adapter_cmd"].(string)
+				findings = append(findings, conform(spec, str("adapter"), useCommand, str("adapter_cmd"),
+					ns["depth"].(int), str("depth_text"))...)
 			}
 		}
 	}
@@ -644,6 +682,24 @@ options:
   -h, --help            show this help message and exit
   --format {text,json}
   --junit FILE          also write a JUnit XML report
+  --depth DEPTH
+`
+	helpConform = `usage: spine conform [-h] [--format {text,json}] [--junit FILE]
+                     (--adapter ADAPTER | --adapter-cmd COMMAND)
+                     [--depth DEPTH]
+                     spec
+
+positional arguments:
+  spec
+
+options:
+  -h, --help            show this help message and exit
+  --format {text,json}
+  --junit FILE          also write a JUnit XML report
+  --adapter ADAPTER     Python file defining new(), apply(), observe()
+  --adapter-cmd COMMAND
+                        a program speaking the adapter protocol; split like a
+                        shell would, run without one
   --depth DEPTH
 `
 	helpStale = `usage: spine stale [-h] [--format {text,json}] [--junit FILE] spec checks

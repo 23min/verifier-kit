@@ -21,8 +21,10 @@ settled it on 2026-10-15 in #27.
    another language still lacks is in `./verify`, which gets its own issue.
 3. **`tools/spine.py` is the reference until the two agree.** `go test ./...` runs both on the
    same inputs and fails on any difference:
-   - the repo's spines, readings, behaviors, checks and policy;
+   - the repo's spines, readings, behaviors, checks, adapters and policy;
    - the faults `demo/faults.sh` seeds;
+   - handmade adapters: Python files, and a program that bends each part of the adapter
+     protocol;
    - small inputs that between them give every finding code the contract lists for the ported
      commands;
    - every seed file with an odd value or key put in each place;
@@ -34,9 +36,9 @@ settled it on 2026-10-15 in #27.
    `hash` output byte for byte. Where Python's own libraries write the message, a PyYAML error
    inside `spec-unreadable` or an argparse usage error, everything but the message is compared.
 4. **Three steps:** `check`, `hash`, `stale`, `behaviors`, `trace` and `guard`; then `diff`;
-   then `conform`. Until each is ported the Go `spine` refuses it as a usage error (exit 2).
-   `diff` is ported; `conform` is next. `./verify`, `demo/faults.sh` and the mutation scripts
-   keep running `tools/spine.py` until it retires, in its own issue.
+   then `conform`; until each was ported the Go `spine` refused it as a usage error (exit 2).
+   All three are done. `./verify`, `demo/faults.sh` and the mutation scripts keep running
+   `tools/spine.py` until it retires, in its own issue.
 5. **YAML:** `go.yaml.in/yaml/v4`, pinned at v4.0.0-rc.6 until 4.0.0 is out, for its node tree
    only. `internal/spine` builds values from the tree with PyYAML's rules: YAML 1.1 booleans,
    `012`, `1:20`, dates, merge keys and the last of duplicate keys. It adds the checks v4
@@ -91,7 +93,13 @@ While porting, the owner settled behavior the port would otherwise have copied b
   - YAML's non-specific tag `!` on a plain scalar.
   - Help wraps at 80 columns whatever the terminal's width.
   - Where Python crashes, the Go `spine` reports: a JUnit report that can't be written exits
-    1 with a message instead of a traceback.
+    1 with a message instead of a traceback, and an adapter's reply nested about 10,000 deep,
+    past Python's recursion limit, is read.
+  - An adapter's reply that escapes a lone surrogate, such as `"\ud800"`: the Go `spine`
+    reads it as U+FFFD; `tools/spine.py` keeps the surrogate, and its text output crashes.
+  - The shim's own folder is on the adapter's import path: `tools/` for `tools/spine.py`, a
+    temporary folder for the Go `spine`, which carries the shim inside it. An adapter that
+    imports `spine` or `run_checks` from `tools/` loads only under `tools/spine.py`.
 - Command lines that Python 3.12 and 3.13 parse differently follow 3.13, such as files
   starting with `-` after `--branch`.
 - The differential test takes about 20 s on 16 cores. It needs Python with PyYAML, and fails
