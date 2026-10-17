@@ -100,7 +100,8 @@ func loadYAML(data []byte) (*Value, error) {
 	if err := checkAnchors(docs[0], map[string]bool{}); err != nil {
 		return nil, err
 	}
-	if err := checkSimpleKeys(docs[0], data); err != nil {
+	// Columns start after a leading BOM, as v4's and PyYAML's do.
+	if err := checkSimpleKeys(docs[0], bytes.TrimPrefix(data, []byte("\xef\xbb\xbf"))); err != nil {
 		return nil, err
 	}
 	c := &constructor{built: map[*yaml.Node]*Value{}, flat: map[*yaml.Node][]pair{}, flattening: map[*yaml.Node]bool{}}
