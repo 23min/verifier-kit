@@ -88,6 +88,10 @@ else: `"yes"`, `"no"`, `"on"`, `"off"`, `"012"`, `"1.5"`, `"2026-10-14"`, `"null
 as true or false is a `yaml-boolean-key` and such a value a `yaml-boolean-value`; any other key
 that isn't text is an `unknown-key`, and any other value a `spec-shape`.
 
+A file is UTF-8 text. An escape for a surrogate, U+D800 to U+DFFF, such as `"\ud800"` or the
+JSON-style pair `"\ud83d\ude00"`, isn't a character: the file is `spec-unreadable`. Write the
+character itself, or `\U` and its eight hex digits.
+
 ## Steps, examples and behaviors
 
 A step is `"<event> <var>=<value> ..."`, for example `"restore role=editor"`. It names a

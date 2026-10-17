@@ -87,6 +87,13 @@ func loadYAML(data []byte) (*Value, error) {
 				continue
 			}
 		}
+		if errors.As(err, &le) && le.Message == "found invalid Unicode character escape code" &&
+			escapesSurrogate(src, le.Mark.Index) {
+			_, at := widenedAt(src, widened)
+			return nil, fmt.Errorf("not UTF-8: the string at line %d, column %d escapes a surrogate (U+D800 to U+DFFF), "+
+				"which isn't a character; write the character itself", le.ContextMark.Line,
+				fileColumn(at, le.ContextMark.Line, le.ContextMark.Column))
+		}
 		if err != nil {
 			return nil, err
 		}
@@ -101,12 +108,8 @@ func loadYAML(data []byte) (*Value, error) {
 	if err := checkAnchors(docs[0], map[string]bool{}); err != nil {
 		return nil, err
 	}
-	// Columns start after a leading BOM, as v4's and PyYAML's do.
-	text := bytes.TrimPrefix(src, []byte("\xef\xbb\xbf"))
-	for i := range widened {
-		widened[i] -= len(src) - len(text)
-	}
-	if err := checkSimpleKeys(docs[0], strings.Split(string(text), "\n"), widenedAt(text, widened)); err != nil {
+	text, at := widenedAt(src, widened)
+	if err := checkSimpleKeys(docs[0], strings.Split(string(text), "\n"), at); err != nil {
 		return nil, err
 	}
 	c := &constructor{built: map[*yaml.Node]*Value{}, flat: map[*yaml.Node][]pair{}, flattening: map[*yaml.Node]bool{}}
@@ -169,18 +172,48 @@ func unescapeSlashes(src []byte, index int) ([]byte, []int, bool) {
 	return append(out, src[i:]...), at, true
 }
 
-// widenedAt maps each rewritten `\/` to its line (from 1) and the column (from 0, in
-// characters) where its `\x2f` starts, so a key's length can still be counted as PyYAML counts
-// it, in the characters of the file.
-func widenedAt(src []byte, offsets []int) map[int][]int {
+// widenedAt is src after a leading BOM, where v4 and PyYAML start counting columns, and where
+// each `\/` at the given offsets into src now reads `\x2f`, two characters longer: by line (from
+// 1), the columns (from 0, in characters) where each `\x2f` starts. Positions can then still be
+// given, and keys measured, in the characters of the file.
+func widenedAt(src []byte, offsets []int) ([]byte, map[int][]int) {
+	text := bytes.TrimPrefix(src, []byte("\xef\xbb\xbf"))
 	at := map[int][]int{}
 	for _, off := range offsets {
-		before := src[:off]
+		before := text[:off-(len(src)-len(text))]
 		line := bytes.Count(before, []byte("\n")) + 1
 		start := bytes.LastIndexByte(before, '\n') + 1
 		at[line] = append(at[line], utf8.RuneCount(before[start:]))
 	}
-	return at
+	return text, at
+}
+
+// fileColumn is a v4 column (from 1) as the file has it, before any `\/` earlier on the line
+// was rewritten.
+func fileColumn(at map[int][]int, line, column int) int {
+	n := 0
+	for _, c := range at[line] {
+		if c < column-1 {
+			n++
+		}
+	}
+	return column - 2*n
+}
+
+// escapesSurrogate reports whether the escape v4 stopped at (index counts characters after a
+// leading BOM, and points at its first hex digit) gives a surrogate, U+D800 to U+DFFF, rather
+// than a code point past U+10FFFF.
+func escapesSurrogate(src []byte, index int) bool {
+	r := []rune(string(bytes.TrimPrefix(src, []byte("\xef\xbb\xbf"))))
+	if index < 1 || index > len(r) {
+		return false
+	}
+	digits := map[rune]int{'u': 4, 'U': 8}[r[index-1]]
+	if digits == 0 || index+digits > len(r) {
+		return false
+	}
+	v, err := strconv.ParseUint(string(r[index:index+digits]), 16, 32)
+	return err == nil && v >= 0xd800 && v <= 0xdfff
 }
 
 var reYAMLDirective = regexp.MustCompile(`^%YAML[ \t]+0*1\.[0-9]+`)
