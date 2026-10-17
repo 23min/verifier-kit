@@ -1,0 +1,5 @@
+# J06: nothing a cancelled attempt reports changes the job.
+steps:
+  - "start attempts=some_left"
+  - "cancel attempts=some_left"
+  - "succeed attempts=some_left"

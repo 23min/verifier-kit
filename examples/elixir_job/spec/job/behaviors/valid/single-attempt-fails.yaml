@@ -1,0 +1,5 @@
+# J04: maximum 1; the attempt fails.
+steps:
+  - "start attempts=last"
+  - "fail attempts=last"
+expect: discarded

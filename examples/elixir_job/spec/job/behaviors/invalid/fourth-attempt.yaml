@@ -1,0 +1,11 @@
+# J03: after its last attempt fails, a job is never attempted again.
+steps:
+  - "start attempts=some_left"
+  - "fail attempts=some_left"
+  - "retry_due attempts=some_left"
+  - "start attempts=some_left"
+  - "fail attempts=some_left"
+  - "retry_due attempts=last"
+  - "start attempts=last"
+  - "fail attempts=last"
+  - "start attempts=last"

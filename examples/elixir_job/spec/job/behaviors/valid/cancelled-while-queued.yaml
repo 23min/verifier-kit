@@ -1,0 +1,4 @@
+# J05: cancelled before any attempt.
+steps:
+  - "cancel attempts=some_left"
+expect: discarded

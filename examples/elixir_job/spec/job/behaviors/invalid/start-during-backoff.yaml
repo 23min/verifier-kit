@@ -1,0 +1,5 @@
+# Rule 2: only a queued job is started, so a retrying job waits out its backoff.
+steps:
+  - "start attempts=some_left"
+  - "fail attempts=some_left"
+  - "start attempts=some_left"

@@ -1,0 +1,11 @@
+# J03: maximum 3; all three attempts fail.
+steps:
+  - "start attempts=some_left"
+  - "fail attempts=some_left"
+  - "retry_due attempts=some_left"
+  - "start attempts=some_left"
+  - "fail attempts=some_left"
+  - "retry_due attempts=last"
+  - "start attempts=last"
+  - "fail attempts=last"
+expect: discarded
