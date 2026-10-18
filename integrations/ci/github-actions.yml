@@ -31,6 +31,11 @@ jobs:
 
       - run: pip install pyyaml
 
+      - uses: actions/setup-go@v7       # ./verify builds spine from tools/
+        with:
+          go-version-file: tools/go.mod
+          cache-dependency-path: tools/go.sum
+
       - name: verify
         shell: bash                 # bash with -e and pipefail, so tee keeps the exit code
         env:
