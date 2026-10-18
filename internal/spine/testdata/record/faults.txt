@@ -1,0 +1,364 @@
+=== in $TMP/faults: spine behaviors --format json --junit REPORT 2/spine.yaml $ROOT/examples/notes/spec/notes/behaviors
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "behaviors",
+|   "findings": [
+|     {
+|       "code": "behavior-allowed",
+|       "severity": "error",
+|       "where": "$ROOT/examples/notes/spec/notes/behaviors/invalid/editor-restores.yaml",
+|       "message": "marked invalid, but the spine allows it (allowed, ends in active)"
+|     },
+|     {
+|       "code": "behaviors",
+|       "severity": "info",
+|       "where": "$ROOT/examples/notes/spec/notes/behaviors",
+|       "message": "5 behavior files checked"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine behaviors" tests="1" failures="1"><testcase classname="spine behaviors" name="behavior-allowed $ROOT/examples/notes/spec/notes/behaviors/invalid/editor-restores.yaml"><failure message="marked invalid, but the spine allows it (allowed, ends in active)">marked invalid, but the spine allows it (allowed, ends in active)</failure></testcase></testsuite>
+=== in $TMP/faults: spine behaviors --format json --junit REPORT 3/spine.yaml $ROOT/examples/notes/spec/notes/behaviors
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "behaviors",
+|   "findings": [
+|     {
+|       "code": "yaml-boolean-key",
+|       "severity": "error",
+|       "where": "rules[1]",
+|       "message": "rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "rules[1]",
+|       "message": "rule needs \"event\""
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine behaviors" tests="2" failures="2"><testcase classname="spine behaviors" name="yaml-boolean-key rules[1]"><failure message="rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it">rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it</failure></testcase><testcase classname="spine behaviors" name="missing-key rules[1]"><failure message="rule needs &quot;event&quot;">rule needs "event"</failure></testcase></testsuite>
+=== in $TMP/faults: spine behaviors 2/spine.yaml $ROOT/examples/notes/spec/notes/behaviors
+exit 1
+--- stdout
+| error   behavior-allowed   $ROOT/examples/notes/spec/notes/behaviors/invalid/editor-restores.yaml: marked invalid, but the spine allows it (allowed, ends in active)
+| info    behaviors          $ROOT/examples/notes/spec/notes/behaviors: 5 behavior files checked
+| -- 1 errors, 2 findings
+|
+=== in $TMP/faults: spine behaviors 3/spine.yaml $ROOT/examples/notes/spec/notes/behaviors
+exit 1
+--- stdout
+| error   yaml-boolean-key   rules[1]: rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it
+| error   missing-key        rules[1]: rule needs "event"
+| -- 2 errors, 2 findings
+|
+=== in $TMP/faults: spine check --format json --junit REPORT 2/spine.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+=== in $TMP/faults: spine check --format json --junit REPORT 3/spine.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": [
+|     {
+|       "code": "yaml-boolean-key",
+|       "severity": "error",
+|       "where": "rules[1]",
+|       "message": "rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "rules[1]",
+|       "message": "rule needs \"event\""
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine check" tests="2" failures="2"><testcase classname="spine check" name="yaml-boolean-key rules[1]"><failure message="rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it">rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it</failure></testcase><testcase classname="spine check" name="missing-key rules[1]"><failure message="rule needs &quot;event&quot;">rule needs "event"</failure></testcase></testsuite>
+=== in $TMP/faults: spine check --format json --junit REPORT 4/spine.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+=== in $TMP/faults: spine check 2/spine.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in $TMP/faults: spine check 3/spine.yaml
+exit 1
+--- stdout
+| error   yaml-boolean-key   rules[1]: rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it
+| error   missing-key        rules[1]: rule needs "event"
+| -- 2 errors, 2 findings
+|
+=== in $TMP/faults: spine check 4/spine.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in $TMP/faults: spine conform $ROOT/examples/notes/spec/notes/spine.yaml --adapter $ROOT/examples/notes/conformance/adapter_notes.py with PYTHONPATH=$TMP/faults/1/src:$ROOT/examples/notes/conformance
+exit 1
+--- stdout
+| error   diverges           draft/trash role=owner: after trash(role=owner): spine expects rejected in draft, code gave ok in trashed
+| error   diverges           trashed/edit role=owner: after publish(role=owner) -> trash(role=owner) -> edit(role=owner): spine expects rejected in trashed, code gave ok in trashed
+| error   diverges           trashed/edit role=editor: after publish(role=owner) -> trash(role=owner) -> edit(role=editor): spine expects rejected in trashed, code gave ok in trashed
+| info    coverage           1426 sequences up to 4 steps: 45 of 45 state/event/variable cases exercised
+| -- 3 errors, 4 findings
+|
+=== in $TMP/faults: spine conform $ROOT/examples/notes/spec/notes/spine.yaml --adapter $ROOT/examples/notes/conformance/adapter_notes.py with PYTHONPATH=$TMP/faults/9/src:$ROOT/examples/notes/conformance
+exit 1
+--- stdout
+| error   adapter-failed     $ROOT/examples/notes/conformance/adapter_notes.py: new() raised ModuleNotFoundError: No module named 'no_such_module'
+| -- 1 errors, 1 findings
+|
+=== in $TMP/faults: spine conform $ROOT/examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/1/src:$ROOT/examples/notes/conformance
+exit 1
+--- stdout
+| error   diverges           draft/trash role=owner: after trash(role=owner): spine expects rejected in draft, code gave ok in trashed
+| error   diverges           trashed/edit role=owner: after publish(role=owner) -> trash(role=owner) -> edit(role=owner): spine expects rejected in trashed, code gave ok in trashed
+| error   diverges           trashed/edit role=editor: after publish(role=owner) -> trash(role=owner) -> edit(role=editor): spine expects rejected in trashed, code gave ok in trashed
+| info    coverage           1426 sequences up to 4 steps: 45 of 45 state/event/variable cases exercised
+| -- 3 errors, 4 findings
+|
+=== in $TMP/faults: spine conform --format json --junit REPORT $ROOT/examples/notes/spec/notes/spine.yaml --adapter $ROOT/examples/notes/conformance/adapter_notes.py with PYTHONPATH=$TMP/faults/1/src:$ROOT/examples/notes/conformance
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "draft/trash role=owner",
+|       "message": "after trash(role=owner): spine expects rejected in draft, code gave ok in trashed"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "trashed/edit role=owner",
+|       "message": "after publish(role=owner) -> trash(role=owner) -> edit(role=owner): spine expects rejected in trashed, code gave ok in trashed"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "trashed/edit role=editor",
+|       "message": "after publish(role=owner) -> trash(role=owner) -> edit(role=editor): spine expects rejected in trashed, code gave ok in trashed"
+|     },
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "1426 sequences up to 4 steps",
+|       "message": "45 of 45 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="3" failures="3"><testcase classname="spine conform" name="diverges draft/trash role=owner"><failure message="after trash(role=owner): spine expects rejected in draft, code gave ok in trashed">after trash(role=owner): spine expects rejected in draft, code gave ok in trashed</failure></testcase><testcase classname="spine conform" name="diverges trashed/edit role=owner"><failure message="after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=owner): spine expects rejected in trashed, code gave ok in trashed">after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=owner): spine expects rejected in trashed, code gave ok in trashed</failure></testcase><testcase classname="spine conform" name="diverges trashed/edit role=editor"><failure message="after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=editor): spine expects rejected in trashed, code gave ok in trashed">after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=editor): spine expects rejected in trashed, code gave ok in trashed</failure></testcase></testsuite>
+=== in $TMP/faults: spine conform --format json --junit REPORT $ROOT/examples/notes/spec/notes/spine.yaml --adapter $ROOT/examples/notes/conformance/adapter_notes.py with PYTHONPATH=$TMP/faults/9/src:$ROOT/examples/notes/conformance
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "$ROOT/examples/notes/conformance/adapter_notes.py",
+|       "message": "new() raised ModuleNotFoundError: No module named 'no_such_module'"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed $ROOT/examples/notes/conformance/adapter_notes.py"><failure message="new() raised ModuleNotFoundError: No module named 'no_such_module'">new() raised ModuleNotFoundError: No module named 'no_such_module'</failure></testcase></testsuite>
+=== in $TMP/faults: spine conform --format json --junit REPORT $ROOT/examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/1/src:$ROOT/examples/notes/conformance
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "draft/trash role=owner",
+|       "message": "after trash(role=owner): spine expects rejected in draft, code gave ok in trashed"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "trashed/edit role=owner",
+|       "message": "after publish(role=owner) -> trash(role=owner) -> edit(role=owner): spine expects rejected in trashed, code gave ok in trashed"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "trashed/edit role=editor",
+|       "message": "after publish(role=owner) -> trash(role=owner) -> edit(role=editor): spine expects rejected in trashed, code gave ok in trashed"
+|     },
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "1426 sequences up to 4 steps",
+|       "message": "45 of 45 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="3" failures="3"><testcase classname="spine conform" name="diverges draft/trash role=owner"><failure message="after trash(role=owner): spine expects rejected in draft, code gave ok in trashed">after trash(role=owner): spine expects rejected in draft, code gave ok in trashed</failure></testcase><testcase classname="spine conform" name="diverges trashed/edit role=owner"><failure message="after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=owner): spine expects rejected in trashed, code gave ok in trashed">after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=owner): spine expects rejected in trashed, code gave ok in trashed</failure></testcase><testcase classname="spine conform" name="diverges trashed/edit role=editor"><failure message="after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=editor): spine expects rejected in trashed, code gave ok in trashed">after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=editor): spine expects rejected in trashed, code gave ok in trashed</failure></testcase></testsuite>
+=== in $TMP/faults: spine conform --format json --junit REPORT 2/spine.yaml --adapter $ROOT/examples/notes/conformance/adapter_notes.py with PYTHONPATH=$TMP/faults/2/src:$ROOT/examples/notes/conformance
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "trashed/restore role=editor",
+|       "message": "after publish(role=owner) -> trash(role=owner) -> restore(role=editor): spine expects ok in active, code gave rejected in trashed"
+|     },
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "1426 sequences up to 4 steps",
+|       "message": "45 of 45 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges trashed/restore role=editor"><failure message="after publish(role=owner) -&gt; trash(role=owner) -&gt; restore(role=editor): spine expects ok in active, code gave rejected in trashed">after publish(role=owner) -&gt; trash(role=owner) -&gt; restore(role=editor): spine expects ok in active, code gave rejected in trashed</failure></testcase></testsuite>
+=== in $TMP/faults: spine conform 2/spine.yaml --adapter $ROOT/examples/notes/conformance/adapter_notes.py with PYTHONPATH=$TMP/faults/2/src:$ROOT/examples/notes/conformance
+exit 1
+--- stdout
+| error   diverges           trashed/restore role=editor: after publish(role=owner) -> trash(role=owner) -> restore(role=editor): spine expects ok in active, code gave rejected in trashed
+| info    coverage           1426 sequences up to 4 steps: 45 of 45 state/event/variable cases exercised
+| -- 1 errors, 2 findings
+|
+=== in $TMP/faults: spine guard $ROOT/policy.yaml --branch build/purge-confirmation examples/notes/src/notes_app.py examples/notes/spec/notes/spine.yaml
+exit 1
+--- stdout
+| error   path-denied        examples/notes/spec/notes/spine.yaml: the builder role may not change this path
+| info    role               build/purge-confirmation: checked 2 changed files as role builder
+| -- 1 errors, 2 findings
+|
+=== in $TMP/faults: spine guard --format json --junit REPORT $ROOT/policy.yaml --branch build/purge-confirmation examples/notes/src/notes_app.py examples/notes/spec/notes/spine.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "guard",
+|   "findings": [
+|     {
+|       "code": "path-denied",
+|       "severity": "error",
+|       "where": "examples/notes/spec/notes/spine.yaml",
+|       "message": "the builder role may not change this path"
+|     },
+|     {
+|       "code": "role",
+|       "severity": "info",
+|       "where": "build/purge-confirmation",
+|       "message": "checked 2 changed files as role builder"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="path-denied examples/notes/spec/notes/spine.yaml"><failure message="the builder role may not change this path">the builder role may not change this path</failure></testcase></testsuite>
+=== in $TMP/faults: spine stale --format json --junit REPORT 2/spine.yaml $ROOT/examples/notes/checks/notes
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "stale",
+|   "findings": [
+|     {
+|       "code": "stale-check",
+|       "severity": "error",
+|       "where": "$ROOT/examples/notes/checks/notes/test_content.py",
+|       "message": "covers trashed/restore@95f9c8204e9f, but that cell now hashes to c63b97c8691c: re-ratify, then update the check"
+|     },
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "active/trash",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     },
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "draft/publish",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     },
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "trashed/purge",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     },
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "trashed/restore",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine stale" tests="1" failures="1"><testcase classname="spine stale" name="stale-check $ROOT/examples/notes/checks/notes/test_content.py"><failure message="covers trashed/restore@95f9c8204e9f, but that cell now hashes to c63b97c8691c: re-ratify, then update the check">covers trashed/restore@95f9c8204e9f, but that cell now hashes to c63b97c8691c: re-ratify, then update the check</failure></testcase></testsuite>
+=== in $TMP/faults: spine stale 2/spine.yaml $ROOT/examples/notes/checks/notes
+exit 1
+--- stdout
+| error   stale-check        $ROOT/examples/notes/checks/notes/test_content.py: covers trashed/restore@95f9c8204e9f, but that cell now hashes to c63b97c8691c: re-ratify, then update the check
+| info    uncovered          active/trash: no check cites this transition; conformance still exercises it
+| info    uncovered          draft/publish: no check cites this transition; conformance still exercises it
+| info    uncovered          trashed/purge: no check cites this transition; conformance still exercises it
+| info    uncovered          trashed/restore: no check cites this transition; conformance still exercises it
+| -- 1 errors, 5 findings
+|

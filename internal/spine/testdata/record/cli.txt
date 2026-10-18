@@ -1,0 +1,1320 @@
+=== in internal/spine/testdata: spine
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine --format json check seeds/spine.yaml
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine --he
+exit 0
+--- stdout
+| usage: spine [-h] {check,hash,diff,stale,behaviors,trace,conform,guard} ...
+|
+| spine: mechanical checks for state-machine specs, and conformance of code to
+| them.
+|
+| positional arguments:
+|   {check,hash,diff,stale,behaviors,trace,conform,guard}
+|
+| options:
+|   -h, --help            show this help message and exit
+|
+=== in internal/spine/testdata: spine --help
+exit 0
+--- stdout
+| usage: spine [-h] {check,hash,diff,stale,behaviors,trace,conform,guard} ...
+|
+| spine: mechanical checks for state-machine specs, and conformance of code to
+| them.
+|
+| positional arguments:
+|   {check,hash,diff,stale,behaviors,trace,conform,guard}
+|
+| options:
+|   -h, --help            show this help message and exit
+|
+=== in internal/spine/testdata: spine -h
+exit 0
+--- stdout
+| usage: spine [-h] {check,hash,diff,stale,behaviors,trace,conform,guard} ...
+|
+| spine: mechanical checks for state-machine specs, and conformance of code to
+| them.
+|
+| positional arguments:
+|   {check,hash,diff,stale,behaviors,trace,conform,guard}
+|
+| options:
+|   -h, --help            show this help message and exit
+|
+=== in internal/spine/testdata: spine -h check
+exit 0
+--- stdout
+| usage: spine [-h] {check,hash,diff,stale,behaviors,trace,conform,guard} ...
+|
+| spine: mechanical checks for state-machine specs, and conformance of code to
+| them.
+|
+| positional arguments:
+|   {check,hash,diff,stale,behaviors,trace,conform,guard}
+|
+| options:
+|   -h, --help            show this help message and exit
+|
+=== in internal/spine/testdata: spine behaviors --format json seeds/spine.yaml behaviors/door
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "behaviors",
+|   "findings": [
+|     {
+|       "code": "behavior-refused",
+|       "severity": "error",
+|       "where": "behaviors/door/valid/refused.yaml",
+|       "message": "marked valid, but the spine refuses it: step 1 \"open role=guest\" is rejected in state closed"
+|     },
+|     {
+|       "code": "behavior-refused",
+|       "severity": "error",
+|       "where": "behaviors/door/valid/wrong-end.yml",
+|       "message": "marked valid, but the spine refuses it: ends in open, expected gone"
+|     },
+|     {
+|       "code": "behavior-allowed",
+|       "severity": "error",
+|       "where": "behaviors/door/invalid/allowed.yaml",
+|       "message": "marked invalid, but the spine allows it (allowed, ends in gone)"
+|     },
+|     {
+|       "code": "bad-step",
+|       "severity": "error",
+|       "where": "behaviors/door/invalid/bad-step.yaml",
+|       "message": "step 1 \"open role=nobody\": \"nobody\" is not a value of \"role\""
+|     },
+|     {
+|       "code": "bad-step",
+|       "severity": "error",
+|       "where": "behaviors/door/invalid/bad-step.yaml",
+|       "message": "step 2 \"open\": no value for \"role\""
+|     },
+|     {
+|       "code": "bad-step",
+|       "severity": "error",
+|       "where": "behaviors/door/invalid/bad-step.yaml",
+|       "message": "step 3 \"open role=owner role=owner\": \"role\" is given twice"
+|     },
+|     {
+|       "code": "bad-step",
+|       "severity": "error",
+|       "where": "behaviors/door/invalid/bad-step.yaml",
+|       "message": "step 4 \"open role=owner colour=red\": \"colour\" is not a declared variable"
+|     },
+|     {
+|       "code": "spec-shape",
+|       "severity": "error",
+|       "where": "behaviors/door/invalid/bad-step.yaml",
+|       "message": "\"expect\" must be text"
+|     },
+|     {
+|       "code": "bad-step",
+|       "severity": "error",
+|       "where": "behaviors/door/invalid/event-typo.yaml",
+|       "message": "step 1 \"opn role=owner\": \"opn\" is not a declared event"
+|     },
+|     {
+|       "code": "bad-value",
+|       "severity": "error",
+|       "where": "behaviors/door/invalid/expect-rejected.yaml",
+|       "message": "expect \"rejected\" is not a declared state"
+|     },
+|     {
+|       "code": "bad-value",
+|       "severity": "error",
+|       "where": "behaviors/door/invalid/expect-typo.yaml",
+|       "message": "expect \"opn\" is not a declared state"
+|     },
+|     {
+|       "code": "spec-shape",
+|       "severity": "error",
+|       "where": "behaviors/door/invalid/list.yaml",
+|       "message": "a behavior file must be a mapping with \"steps\" and an optional \"expect\""
+|     },
+|     {
+|       "code": "behaviors",
+|       "severity": "info",
+|       "where": "behaviors/door",
+|       "message": "6 behavior files checked"
+|     }
+|   ]
+| }
+|
+=== in internal/spine/testdata: spine bogus
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine check
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine check "-a b"
+exit 1
+--- stdout
+| error   spec-unreadable    -a b: cannot be read: No such file or directory
+| -- 1 errors, 1 findings
+|
+=== in internal/spine/testdata: spine check "a b"
+exit 1
+--- stdout
+| error   spec-unreadable    a b: cannot be read: No such file or directory
+| -- 1 errors, 1 findings
+|
+=== in internal/spine/testdata: spine check -- --
+exit 1
+--- stdout
+| error   spec-unreadable    --: cannot be read: No such file or directory
+| -- 1 errors, 1 findings
+|
+=== in internal/spine/testdata: spine check -- seeds/spine.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in internal/spine/testdata: spine check --bogus seeds/spine.yaml
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine check --bogus=1 seeds/spine.yaml
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine check --fo=json spines/unsound.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": [
+|     {
+|       "code": "unknown-state",
+|       "severity": "error",
+|       "where": "nowhere/go",
+|       "message": "rule starts in undeclared state \"nowhere\""
+|     },
+|     {
+|       "code": "unknown-state",
+|       "severity": "error",
+|       "where": "nowhere/go",
+|       "message": "rule goes to undeclared state \"elsewhere\""
+|     },
+|     {
+|       "code": "unknown-event",
+|       "severity": "error",
+|       "where": "s/fly",
+|       "message": "rule uses undeclared event \"fly\""
+|     },
+|     {
+|       "code": "overlap",
+|       "severity": "error",
+|       "where": "s/go",
+|       "message": "mode=a, role=owner matches conflicting rules: reject and -> t"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "s/go",
+|       "message": "no rule covers mode=a, role=guest"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "s/go",
+|       "message": "no rule covers mode=a, role=\u00e9di tor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "s/go",
+|       "message": "no rule covers mode=b, role=guest"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "s/go",
+|       "message": "no rule covers mode=b, role=\u00e9di tor"
+|     },
+|     {
+|       "code": "undecided-cell",
+|       "severity": "error",
+|       "where": "s/stop",
+|       "message": "nothing says what \"stop\" does in \"s\""
+|     },
+|     {
+|       "code": "overlap",
+|       "severity": "error",
+|       "where": "s/go",
+|       "message": "mode=a, role=owner matches conflicting rules: reject and -> t"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "s/go",
+|       "message": "no rule covers mode=a, role=guest"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "s/go",
+|       "message": "no rule covers mode=a, role=\u00e9di tor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "s/go",
+|       "message": "no rule covers mode=b, role=guest"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "s/go",
+|       "message": "no rule covers mode=b, role=\u00e9di tor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "t/go",
+|       "message": "no rule covers mode=b, role=owner"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "t/go",
+|       "message": "no rule covers mode=b, role=guest"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "t/go",
+|       "message": "no rule covers mode=b, role=\u00e9di tor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "t/go",
+|       "message": "no rule covers mode=b, role=owner"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "t/go",
+|       "message": "no rule covers mode=b, role=guest"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "t/go",
+|       "message": "no rule covers mode=b, role=\u00e9di tor"
+|     },
+|     {
+|       "code": "undecided-cell",
+|       "severity": "error",
+|       "where": "island/go",
+|       "message": "nothing says what \"go\" does in \"island\""
+|     },
+|     {
+|       "code": "undecided-cell",
+|       "severity": "error",
+|       "where": "island/stop",
+|       "message": "nothing says what \"stop\" does in \"island\""
+|     },
+|     {
+|       "code": "undecided-cell",
+|       "severity": "error",
+|       "where": "island/go",
+|       "message": "nothing says what \"go\" does in \"island\""
+|     },
+|     {
+|       "code": "terminal-has-exit",
+|       "severity": "error",
+|       "where": "end/go",
+|       "message": "\"end\" is terminal but \"go\" leaves it"
+|     },
+|     {
+|       "code": "terminal-has-exit",
+|       "severity": "error",
+|       "where": "end/go",
+|       "message": "\"end\" is terminal but \"go\" leaves it"
+|     },
+|     {
+|       "code": "unreachable",
+|       "severity": "error",
+|       "where": "island",
+|       "message": "no sequence of events reaches \"island\" from \"s\""
+|     },
+|     {
+|       "code": "example-fails",
+|       "severity": "error",
+|       "where": "wrong end",
+|       "message": "expected s, got t"
+|     },
+|     {
+|       "code": "example-fails",
+|       "severity": "error",
+|       "where": "refused",
+|       "message": "expected rejected, got t"
+|     }
+|   ]
+| }
+|
+=== in internal/spine/testdata: spine check --form json seeds/spine.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": []
+| }
+|
+=== in internal/spine/testdata: spine check --format json --format text spines/unsound.yaml
+exit 1
+--- stdout
+| error   unknown-state      nowhere/go: rule starts in undeclared state "nowhere"
+| error   unknown-state      nowhere/go: rule goes to undeclared state "elsewhere"
+| error   unknown-event      s/fly: rule uses undeclared event "fly"
+| error   overlap            s/go: mode=a, role=owner matches conflicting rules: reject and -> t
+| error   missing-case       s/go: no rule covers mode=a, role=guest
+| error   missing-case       s/go: no rule covers mode=a, role=édi tor
+| error   missing-case       s/go: no rule covers mode=b, role=guest
+| error   missing-case       s/go: no rule covers mode=b, role=édi tor
+| error   undecided-cell     s/stop: nothing says what "stop" does in "s"
+| error   overlap            s/go: mode=a, role=owner matches conflicting rules: reject and -> t
+| error   missing-case       s/go: no rule covers mode=a, role=guest
+| error   missing-case       s/go: no rule covers mode=a, role=édi tor
+| error   missing-case       s/go: no rule covers mode=b, role=guest
+| error   missing-case       s/go: no rule covers mode=b, role=édi tor
+| error   missing-case       t/go: no rule covers mode=b, role=owner
+| error   missing-case       t/go: no rule covers mode=b, role=guest
+| error   missing-case       t/go: no rule covers mode=b, role=édi tor
+| error   missing-case       t/go: no rule covers mode=b, role=owner
+| error   missing-case       t/go: no rule covers mode=b, role=guest
+| error   missing-case       t/go: no rule covers mode=b, role=édi tor
+| error   undecided-cell     island/go: nothing says what "go" does in "island"
+| error   undecided-cell     island/stop: nothing says what "stop" does in "island"
+| error   undecided-cell     island/go: nothing says what "go" does in "island"
+| error   terminal-has-exit  end/go: "end" is terminal but "go" leaves it
+| error   terminal-has-exit  end/go: "end" is terminal but "go" leaves it
+| error   unreachable        island: no sequence of events reaches "island" from "s"
+| error   example-fails      wrong end: expected s, got t
+| error   example-fails      refused: expected rejected, got t
+| -- 28 errors, 28 findings
+|
+=== in internal/spine/testdata: spine check --format json seeds/spine.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": []
+| }
+|
+=== in internal/spine/testdata: spine check --format seeds/spine.yaml
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine check --format yaml seeds/spine.yaml
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine check --format=
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine check --format=json seeds/spine.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": []
+| }
+|
+=== in internal/spine/testdata: spine check --help
+exit 0
+--- stdout
+| usage: spine check [-h] [--format {text,json}] [--junit FILE] spec
+|
+| positional arguments:
+|   spec
+|
+| options:
+|   -h, --help            show this help message and exit
+|   --format {text,json}
+|   --junit FILE          also write a JUnit XML report
+|
+=== in internal/spine/testdata: spine check --help=x
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine check --junit= seeds/spine.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in internal/spine/testdata: spine check -.5
+exit 1
+--- stdout
+| error   spec-unreadable    -.5: cannot be read: No such file or directory
+| -- 1 errors, 1 findings
+|
+=== in internal/spine/testdata: spine check -1
+exit 1
+--- stdout
+| error   spec-unreadable    -1: cannot be read: No such file or directory
+| -- 1 errors, 1 findings
+|
+=== in internal/spine/testdata: spine check -1.5
+exit 1
+--- stdout
+| error   spec-unreadable    -1.5: cannot be read: No such file or directory
+| -- 1 errors, 1 findings
+|
+=== in internal/spine/testdata: spine check -1e5
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine check -h seeds/spine.yaml
+exit 0
+--- stdout
+| usage: spine check [-h] [--format {text,json}] [--junit FILE] spec
+|
+| positional arguments:
+|   spec
+|
+| options:
+|   -h, --help            show this help message and exit
+|   --format {text,json}
+|   --junit FILE          also write a JUnit XML report
+|
+=== in internal/spine/testdata: spine check -x seeds/spine.yaml
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine check seeds/spine.yaml --
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in internal/spine/testdata: spine check seeds/spine.yaml --format json
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": []
+| }
+|
+=== in internal/spine/testdata: spine check seeds/spine.yaml --h
+exit 0
+--- stdout
+| usage: spine check [-h] [--format {text,json}] [--junit FILE] spec
+|
+| positional arguments:
+|   spec
+|
+| options:
+|   -h, --help            show this help message and exit
+|   --format {text,json}
+|   --junit FILE          also write a JUnit XML report
+|
+=== in internal/spine/testdata: spine check seeds/spine.yaml extra
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine check seeds/spine.yaml seeds/spine.yaml
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine conform
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine conform --adapter a
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine conform --adapter adapters/door.py seeds/spine.yaml --depth 1
+exit 0
+--- stdout
+| info    coverage           5 sequences up to 1 steps: 4 of 8 state/event/variable cases exercised
+| -- 0 errors, 1 findings
+|
+=== in internal/spine/testdata: spine conform --he
+exit 0
+--- stdout
+| usage: spine conform [-h] [--format {text,json}] [--junit FILE]
+|                      (--adapter ADAPTER | --adapter-cmd COMMAND)
+|                      [--depth DEPTH]
+|                      spec
+|
+| positional arguments:
+|   spec
+|
+| options:
+|   -h, --help            show this help message and exit
+|   --format {text,json}
+|   --junit FILE          also write a JUnit XML report
+|   --adapter ADAPTER     Python file defining new(), apply(), observe()
+|   --adapter-cmd COMMAND
+|                         a program speaking the adapter protocol; split like a
+|                         shell would, run without one
+|   --depth DEPTH
+|
+=== in internal/spine/testdata: spine conform --help
+exit 0
+--- stdout
+| usage: spine conform [-h] [--format {text,json}] [--junit FILE]
+|                      (--adapter ADAPTER | --adapter-cmd COMMAND)
+|                      [--depth DEPTH]
+|                      spec
+|
+| positional arguments:
+|   spec
+|
+| options:
+|   -h, --help            show this help message and exit
+|   --format {text,json}
+|   --junit FILE          also write a JUnit XML report
+|   --adapter ADAPTER     Python file defining new(), apply(), observe()
+|   --adapter-cmd COMMAND
+|                         a program speaking the adapter protocol; split like a
+|                         shell would, run without one
+|   --depth DEPTH
+|
+=== in internal/spine/testdata: spine conform -h
+exit 0
+--- stdout
+| usage: spine conform [-h] [--format {text,json}] [--junit FILE]
+|                      (--adapter ADAPTER | --adapter-cmd COMMAND)
+|                      [--depth DEPTH]
+|                      spec
+|
+| positional arguments:
+|   spec
+|
+| options:
+|   -h, --help            show this help message and exit
+|   --format {text,json}
+|   --junit FILE          also write a JUnit XML report
+|   --adapter ADAPTER     Python file defining new(), apply(), observe()
+|   --adapter-cmd COMMAND
+|                         a program speaking the adapter protocol; split like a
+|                         shell would, run without one
+|   --depth DEPTH
+|
+=== in internal/spine/testdata: spine conform seeds/spine.yaml
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine conform seeds/spine.yaml --ad x
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine conform seeds/spine.yaml --adapter
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine conform seeds/spine.yaml --adapter a --adapter-cmd b
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door.py --adapter adapters/door_start.py --depth 1
+exit 1
+--- stdout
+| error   diverges           start: spine starts in closed, code starts in open
+| info    coverage           1 sequences up to 1 steps: 0 of 8 state/event/variable cases exercised
+| -- 1 errors, 2 findings
+|
+=== in internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door.py --depth x
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door.py extra
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine conform seeds/spine.yaml --adapter-c true
+exit 1
+--- stdout
+| error   adapter-failed     true: exited with status 0 before replying to new
+| -- 1 errors, 1 findings
+|
+=== in internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd b --adapter a
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine conform seeds/spine.yaml --adapter=adapters/door.py --depth=1
+exit 0
+--- stdout
+| info    coverage           5 sequences up to 1 steps: 4 of 8 state/event/variable cases exercised
+| -- 0 errors, 1 findings
+|
+=== in internal/spine/testdata: spine conform seeds/spine.yaml --depth 1
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff -- seeds/spine.yaml diff/door-b.yaml
+exit 1
+--- stdout
+| error   only-in-b          states: B has state "ajar", A does not
+| error   only-in-b          events: B has event "knock", A does not
+| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
+| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
+| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
+| error   behavior-differs   open(role=guest): A ends rejected, B ends open
+| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
+| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
+| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
+| -- 10 errors, 10 findings
+|
+=== in internal/spine/testdata: spine diff --depth
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff --depth 2 seeds/spine.yaml diff/door-b.yaml
+exit 1
+--- stdout
+| error   only-in-b          states: B has state "ajar", A does not
+| error   only-in-b          events: B has event "knock", A does not
+| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
+| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
+| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
+| error   behavior-differs   open(role=guest): A ends rejected, B ends open
+| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
+| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
+| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
+| -- 10 errors, 10 findings
+|
+=== in internal/spine/testdata: spine diff --he
+exit 0
+--- stdout
+| usage: spine diff [-h] [--format {text,json}] [--junit FILE] [--depth DEPTH]
+|                   a b
+|
+| positional arguments:
+|   a
+|   b
+|
+| options:
+|   -h, --help            show this help message and exit
+|   --format {text,json}
+|   --junit FILE          also write a JUnit XML report
+|   --depth DEPTH
+|
+=== in internal/spine/testdata: spine diff --help
+exit 0
+--- stdout
+| usage: spine diff [-h] [--format {text,json}] [--junit FILE] [--depth DEPTH]
+|                   a b
+|
+| positional arguments:
+|   a
+|   b
+|
+| options:
+|   -h, --help            show this help message and exit
+|   --format {text,json}
+|   --junit FILE          also write a JUnit XML report
+|   --depth DEPTH
+|
+=== in internal/spine/testdata: spine diff -h
+exit 0
+--- stdout
+| usage: spine diff [-h] [--format {text,json}] [--junit FILE] [--depth DEPTH]
+|                   a b
+|
+| positional arguments:
+|   a
+|   b
+|
+| options:
+|   -h, --help            show this help message and exit
+|   --format {text,json}
+|   --junit FILE          also write a JUnit XML report
+|   --depth DEPTH
+|
+=== in internal/spine/testdata: spine diff diff/stop-a.yaml diff/stop-b.yaml --depth 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff diff/stop-a.yaml diff/stop-b.yaml --depth 99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml --depth 2 diff/door-b.yaml
+exit 1
+--- stdout
+| error   only-in-b          states: B has state "ajar", A does not
+| error   only-in-b          events: B has event "knock", A does not
+| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
+| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
+| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
+| error   behavior-differs   open(role=guest): A ends rejected, B ends open
+| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
+| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
+| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
+| -- 10 errors, 10 findings
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --d 2
+exit 1
+--- stdout
+| error   only-in-b          states: B has state "ajar", A does not
+| error   only-in-b          events: B has event "knock", A does not
+| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
+| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
+| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
+| error   behavior-differs   open(role=guest): A ends rejected, B ends open
+| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
+| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
+| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
+| -- 10 errors, 10 findings
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --dep 2
+exit 1
+--- stdout
+| error   only-in-b          states: B has state "ajar", A does not
+| error   only-in-b          events: B has event "knock", A does not
+| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
+| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
+| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
+| error   behavior-differs   open(role=guest): A ends rejected, B ends open
+| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
+| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
+| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
+| -- 10 errors, 10 findings
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth " 2 "
+exit 1
+--- stdout
+| error   only-in-b          states: B has state "ajar", A does not
+| error   only-in-b          events: B has event "knock", A does not
+| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
+| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
+| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
+| error   behavior-differs   open(role=guest): A ends rejected, B ends open
+| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
+| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
+| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
+| -- 10 errors, 10 findings
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth "- 2"
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth "2\x1c"
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth +2
+exit 1
+--- stdout
+| error   only-in-b          states: B has state "ajar", A does not
+| error   only-in-b          events: B has event "knock", A does not
+| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
+| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
+| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
+| error   behavior-differs   open(role=guest): A ends rejected, B ends open
+| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
+| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
+| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
+| -- 10 errors, 10 findings
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth --format json
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth -2
+exit 1
+--- stdout
+| error   only-in-b          states: B has state "ajar", A does not
+| error   only-in-b          events: B has event "knock", A does not
+| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
+| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
+| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
+| -- 6 errors, 6 findings
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth -٢
+exit 1
+--- stdout
+| error   only-in-b          states: B has state "ajar", A does not
+| error   only-in-b          events: B has event "knock", A does not
+| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
+| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
+| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
+| -- 6 errors, 6 findings
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 0_2
+exit 1
+--- stdout
+| error   only-in-b          states: B has state "ajar", A does not
+| error   only-in-b          events: B has event "knock", A does not
+| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
+| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
+| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
+| error   behavior-differs   open(role=guest): A ends rejected, B ends open
+| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
+| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
+| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
+| -- 10 errors, 10 findings
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 1e1
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 2 --depth x
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 2.0
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 2_
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 2
+exit 1
+--- stdout
+| error   only-in-b          states: B has state "ajar", A does not
+| error   only-in-b          events: B has event "knock", A does not
+| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
+| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
+| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
+| error   behavior-differs   open(role=guest): A ends rejected, B ends open
+| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
+| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
+| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
+| -- 10 errors, 10 findings
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth x
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth x --depth 2
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth ٢
+exit 1
+--- stdout
+| error   only-in-b          states: B has state "ajar", A does not
+| error   only-in-b          events: B has event "knock", A does not
+| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
+| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
+| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
+| error   behavior-differs   open(role=guest): A ends rejected, B ends open
+| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
+| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
+| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
+| -- 10 errors, 10 findings
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 　2　
+exit 1
+--- stdout
+| error   only-in-b          states: B has state "ajar", A does not
+| error   only-in-b          events: B has event "knock", A does not
+| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
+| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
+| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
+| error   behavior-differs   open(role=guest): A ends rejected, B ends open
+| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
+| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
+| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
+| -- 10 errors, 10 findings
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth ２
+exit 1
+--- stdout
+| error   only-in-b          states: B has state "ajar", A does not
+| error   only-in-b          events: B has event "knock", A does not
+| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
+| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
+| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
+| error   behavior-differs   open(role=guest): A ends rejected, B ends open
+| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
+| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
+| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
+| -- 10 errors, 10 findings
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth=
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth=-2
+exit 1
+--- stdout
+| error   only-in-b          states: B has state "ajar", A does not
+| error   only-in-b          events: B has event "knock", A does not
+| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
+| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
+| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
+| -- 6 errors, 6 findings
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth=2
+exit 1
+--- stdout
+| error   only-in-b          states: B has state "ajar", A does not
+| error   only-in-b          events: B has event "knock", A does not
+| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
+| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
+| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
+| error   behavior-differs   open(role=guest): A ends rejected, B ends open
+| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
+| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
+| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
+| -- 10 errors, 10 findings
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --format json --depth 1
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "diff",
+|   "findings": [
+|     {
+|       "code": "only-in-b",
+|       "severity": "error",
+|       "where": "states",
+|       "message": "B has state \"ajar\", A does not"
+|     },
+|     {
+|       "code": "only-in-b",
+|       "severity": "error",
+|       "where": "events",
+|       "message": "B has event \"knock\", A does not"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "closed/open",
+|       "message": "role=guest: A says reject, B says -> open"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "closed/remove",
+|       "message": "role=guest: A says -> gone, B says reject and -> gone"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "open/remove",
+|       "message": "role=owner: A says ignore, B says -> closed"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "open/remove",
+|       "message": "role=guest: A says ignore, B says -> closed"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "open(role=guest)",
+|       "message": "A ends rejected, B ends open"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "remove(role=guest)",
+|       "message": "A ends gone, B ends undefined"
+|     }
+|   ]
+| }
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --junit
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml extra
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine guard --b build/x seeds/policy.yaml src/a.py
+exit 0
+--- stdout
+| info    role               build/x: checked 1 changed files as role builder
+| -- 0 errors, 1 findings
+|
+=== in internal/spine/testdata: spine guard --br=main seeds/policy.yaml src/a.py
+exit 0
+--- stdout
+| info    role               main: checked 1 changed files as role owner
+| -- 0 errors, 1 findings
+|
+=== in internal/spine/testdata: spine guard --branch build/x seeds/policy.yaml src/a.py
+exit 0
+--- stdout
+| info    role               build/x: checked 1 changed files as role builder
+| -- 0 errors, 1 findings
+|
+=== in internal/spine/testdata: spine guard --branch=build/x seeds/policy.yaml src/a.py
+exit 0
+--- stdout
+| info    role               build/x: checked 1 changed files as role builder
+| -- 0 errors, 1 findings
+|
+=== in internal/spine/testdata: spine guard --help
+exit 0
+--- stdout
+| usage: spine guard [-h] [--format {text,json}] [--junit FILE] --branch BRANCH
+|                    policy [files ...]
+|
+| positional arguments:
+|   policy
+|   files                 changed files; read from stdin when omitted
+|
+| options:
+|   -h, --help            show this help message and exit
+|   --format {text,json}
+|   --junit FILE          also write a JUnit XML report
+|   --branch BRANCH
+|
+=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch "" < "src/a.py\n"
+exit 1
+--- stdout
+| error   unknown-role       : no policy entry matches this branch
+| -- 1 errors, 1 findings
+|
+=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch -1 src/a.py
+exit 1
+--- stdout
+| error   unknown-role       -1: no policy entry matches this branch
+| -- 1 errors, 1 findings
+|
+=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch -x src/a.py
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x "a b" -1x
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x --format json src/a.py
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "guard",
+|   "findings": [
+|     {
+|       "code": "role",
+|       "severity": "info",
+|       "where": "build/x",
+|       "message": "checked 1 changed files as role builder"
+|     }
+|   ]
+| }
+|
+=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x < "src/a.py\n"
+exit 0
+--- stdout
+| info    role               build/x: checked 1 changed files as role builder
+| -- 0 errors, 1 findings
+|
+=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x src/a.py --format json spec/b.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "guard",
+|   "findings": [
+|     {
+|       "code": "path-not-allowed",
+|       "severity": "error",
+|       "where": "spec/b.yaml",
+|       "message": "no allow rule for the builder role covers this path"
+|     },
+|     {
+|       "code": "role",
+|       "severity": "info",
+|       "where": "build/x",
+|       "message": "checked 2 changed files as role builder"
+|     }
+|   ]
+| }
+|
+=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x src/a.py -v
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x src/a.py spec/b.yaml
+exit 1
+--- stdout
+| error   path-not-allowed   spec/b.yaml: no allow rule for the builder role covers this path
+| info    role               build/x: checked 2 changed files as role builder
+| -- 1 errors, 2 findings
+|
+=== in internal/spine/testdata: spine guard seeds/policy.yaml src/a.py
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine guard seeds/policy.yaml src/a.py --branch build/x spec/b.yaml
+exit 1
+--- stdout
+| error   path-not-allowed   spec/b.yaml: no allow rule for the builder role covers this path
+| info    role               build/x: checked 2 changed files as role builder
+| -- 1 errors, 2 findings
+|
+=== in internal/spine/testdata: spine hash --format json seeds/spine.yaml
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine hash --junit x seeds/spine.yaml
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine hash -h
+exit 0
+--- stdout
+| usage: spine hash [-h] spec
+|
+| positional arguments:
+|   spec
+|
+| options:
+|   -h, --help  show this help message and exit
+|
+=== in internal/spine/testdata: spine hash seeds/spine.yaml
+exit 0
+--- stdout
+| closed/open@26ccaba33ea0
+| closed/remove@c4ec20806a30
+| open/open@79e9a52da0fe
+| open/remove@6c6a6ee2ab96
+|
+=== in internal/spine/testdata: spine hash spines/not-utf8.yaml
+exit 1
+--- stdout
+| error   spec-unreadable    spines/not-utf8.yaml: not UTF-8: byte 0xe9 at offset 32
+| -- 1 errors, 1 findings
+|
+=== in internal/spine/testdata: spine hash spines/unsound.yaml
+exit 0
+--- stdout
+| s/go@1d93a9c8d9e9
+| s/go@1d93a9c8d9e9
+| t/go@5e745dafed67
+| t/stop@49781a03ae6b
+| t/go@5e745dafed67
+| end/go@d517c5adb451
+| end/stop@df53dfb55f37
+| end/go@d517c5adb451
+|
+=== in internal/spine/testdata: spine stale seeds/spine.yaml
+exit 2
+--- stdout
+|
+=== in internal/spine/testdata: spine stale seeds/spine.yaml checks/door --format=json
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "stale",
+|   "findings": [
+|     {
+|       "code": "orphan-check",
+|       "severity": "error",
+|       "where": "checks/door/sub/test_more.txt",
+|       "message": "covers caf\u00e9/\u00fcber, which the spec no longer defines"
+|     },
+|     {
+|       "code": "orphan-check",
+|       "severity": "error",
+|       "where": "checks/door/sub/test_more.txt",
+|       "message": "covers a-b/c_d, which the spec no longer defines"
+|     },
+|     {
+|       "code": "stale-check",
+|       "severity": "error",
+|       "where": "checks/door/test_door.py",
+|       "message": "covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check"
+|     },
+|     {
+|       "code": "orphan-check",
+|       "severity": "error",
+|       "where": "checks/door/test_door.py",
+|       "message": "covers nowhere/open, which the spec no longer defines"
+|     },
+|     {
+|       "code": "orphan-check",
+|       "severity": "error",
+|       "where": "checks/door/test_door.py",
+|       "message": "covers closed/fly, which the spec no longer defines"
+|     },
+|     {
+|       "code": "stale-check",
+|       "severity": "error",
+|       "where": "checks/door/test_door.py",
+|       "message": "covers closed/open@26, but that cell now hashes to 26ccaba33ea0: re-ratify, then update the check"
+|     },
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "closed/remove",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     }
+|   ]
+| }
+|
+=== in internal/spine/testdata: spine trace --help
+exit 0
+--- stdout
+| usage: spine trace [-h] [--format {text,json}] [--junit FILE] spec behavior
+|
+| positional arguments:
+|   spec
+|   behavior
+|
+| options:
+|   -h, --help            show this help message and exit
+|   --format {text,json}
+|   --junit FILE          also write a JUnit XML report
+|
+=== in internal/spine/testdata: spine trace seeds/spine.yaml
+exit 2
+--- stdout
+|

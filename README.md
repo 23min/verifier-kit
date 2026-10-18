@@ -46,6 +46,11 @@ bin/spine check examples/notes/spec/notes/spine.yaml  # same commands, options a
 go test ./...                                        # runs both on the same inputs; any difference fails
 ```
 
+`go test` also checks the Go `spine` against a record of what it gave on every input, in
+`internal/spine/testdata/record/`, so that it can be checked once `tools/spine.py` retires
+(#44). After a deliberate change, `go test ./internal/spine/ -update` writes the record again,
+and its diff shows what changed.
+
 Or open the repo in its devcontainer (`.devcontainer/`, "Dev Containers: Reopen in Container"),
 which has Python 3 with PyYAML, Go, uv, gh and Claude Code. It needs Docker and VS Code with the Dev
 Containers extension, on macOS or Linux (Windows is untested; open the repo from WSL). Before
