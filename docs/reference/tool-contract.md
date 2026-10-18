@@ -75,6 +75,7 @@ takes a spine validates it first and stops with the validation findings if it is
 | `yaml-boolean-key` | error | all | a key YAML read as a boolean (`on`, `off`, `yes`, `no`) |
 | `yaml-boolean-value` | error | all | a value YAML read as a boolean where a name was meant |
 | `bad-value` | error | all | a value outside its closed set, such as a state kind, a role the policy does not define, or an `expect` that isn't a declared state |
+| `listed-twice` | error | all | an event, or a value of one variable, listed more than once in a spine or reading |
 | `bad-outcome` | error | all | a rule without exactly one outcome |
 | `bad-condition` | error | all | a condition outside the condition language, or an `in` that can't be evaluated |
 | `bad-step` | error | all | a step in a worked example or behavior file that isn't `event var=value ...`, names an undeclared event, or doesn't give each declared variable exactly once, with one of its values, and no other variable |

@@ -2335,7 +2335,7 @@ exit 1
 |       "code": "coverage",
 |       "severity": "info",
 |       "where": "1 sequences up to 1 steps",
-|       "message": "0 of 54 state/event/variable cases exercised"
+|       "message": "0 of 36 state/event/variable cases exercised"
 |     }
 |   ]
 | }
@@ -2830,7 +2830,7 @@ exit 1
 exit 1
 --- stdout
 | error   diverges           start: spine starts in s, code starts in closed
-| info    coverage           1 sequences up to 1 steps: 0 of 54 state/event/variable cases exercised
+| info    coverage           1 sequences up to 1 steps: 0 of 36 state/event/variable cases exercised
 | -- 1 errors, 2 findings
 |
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/door-b.yaml diff/door-c.yaml
@@ -2879,12 +2879,6 @@ exit 1
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
-|       "where": "closed/open",
-|       "message": "role=guest: A says -> open, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
 |       "where": "open/remove",
 |       "message": "role=owner: A says -> closed, B says ignore"
 |     },
@@ -2929,7 +2923,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine diff" tests="14" failures="14"><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;ajar&quot;, B does not">A has state "ajar", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;gone&quot;, B does not">A has state "gone", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;knock&quot;, B does not">A has event "knock", B does not</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=guest: A says -&gt; open, B says reject">role=guest: A says -&gt; open, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=owner: A says -&gt; gone, B says stay">role=owner: A says -&gt; gone, B says stay</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=guest: A says reject and -&gt; gone, B says stay">role=guest: A says reject and -&gt; gone, B says stay</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=guest: A says -&gt; open, B says reject">role=guest: A says -&gt; open, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=owner: A says -&gt; closed, B says ignore">role=owner: A says -&gt; closed, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=guest: A says -&gt; closed, B says ignore">role=guest: A says -&gt; closed, B says ignore</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=guest)"><failure message="A ends open, B ends rejected">A ends open, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=owner)"><failure message="A ends gone, B ends closed">A ends gone, B ends closed</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=guest)"><failure message="A ends undefined, B ends closed">A ends undefined, B ends closed</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=owner)"><failure message="A ends closed, B ends open">A ends closed, B ends open</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=guest)"><failure message="A ends closed, B ends open">A ends closed, B ends open</failure></testcase></testsuite>
+| <testsuite name="spine diff" tests="13" failures="13"><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;ajar&quot;, B does not">A has state "ajar", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;gone&quot;, B does not">A has state "gone", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;knock&quot;, B does not">A has event "knock", B does not</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=guest: A says -&gt; open, B says reject">role=guest: A says -&gt; open, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=owner: A says -&gt; gone, B says stay">role=owner: A says -&gt; gone, B says stay</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=guest: A says reject and -&gt; gone, B says stay">role=guest: A says reject and -&gt; gone, B says stay</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=owner: A says -&gt; closed, B says ignore">role=owner: A says -&gt; closed, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=guest: A says -&gt; closed, B says ignore">role=guest: A says -&gt; closed, B says ignore</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=guest)"><failure message="A ends open, B ends rejected">A ends open, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=owner)"><failure message="A ends gone, B ends closed">A ends gone, B ends closed</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=guest)"><failure message="A ends undefined, B ends closed">A ends undefined, B ends closed</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=owner)"><failure message="A ends closed, B ends open">A ends closed, B ends open</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=guest)"><failure message="A ends closed, B ends open">A ends closed, B ends open</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/door-b.yaml seeds/spine.yaml
 exit 1
 --- stdout
@@ -2960,12 +2954,6 @@ exit 1
 |       "severity": "error",
 |       "where": "closed/remove",
 |       "message": "role=guest: A says reject and -> gone, B says -> gone"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "closed/open",
-|       "message": "role=guest: A says -> open, B says reject"
 |     },
 |     {
 |       "code": "case-disagrees",
@@ -3008,7 +2996,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine diff" tests="11" failures="11"><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;ajar&quot;, B does not">A has state "ajar", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;knock&quot;, B does not">A has event "knock", B does not</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=guest: A says -&gt; open, B says reject">role=guest: A says -&gt; open, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=guest: A says reject and -&gt; gone, B says -&gt; gone">role=guest: A says reject and -&gt; gone, B says -&gt; gone</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=guest: A says -&gt; open, B says reject">role=guest: A says -&gt; open, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=owner: A says -&gt; closed, B says ignore">role=owner: A says -&gt; closed, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=guest: A says -&gt; closed, B says ignore">role=guest: A says -&gt; closed, B says ignore</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=guest)"><failure message="A ends open, B ends rejected">A ends open, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=guest)"><failure message="A ends undefined, B ends gone">A ends undefined, B ends gone</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=owner)"><failure message="A ends closed, B ends open">A ends closed, B ends open</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=guest)"><failure message="A ends closed, B ends open">A ends closed, B ends open</failure></testcase></testsuite>
+| <testsuite name="spine diff" tests="10" failures="10"><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;ajar&quot;, B does not">A has state "ajar", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;knock&quot;, B does not">A has event "knock", B does not</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=guest: A says -&gt; open, B says reject">role=guest: A says -&gt; open, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=guest: A says reject and -&gt; gone, B says -&gt; gone">role=guest: A says reject and -&gt; gone, B says -&gt; gone</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=owner: A says -&gt; closed, B says ignore">role=owner: A says -&gt; closed, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=guest: A says -&gt; closed, B says ignore">role=guest: A says -&gt; closed, B says ignore</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=guest)"><failure message="A ends open, B ends rejected">A ends open, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=guest)"><failure message="A ends undefined, B ends gone">A ends undefined, B ends gone</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=owner)"><failure message="A ends closed, B ends open">A ends closed, B ends open</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=guest)"><failure message="A ends closed, B ends open">A ends closed, B ends open</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/door-c.yaml diff/door-b.yaml
 exit 1
 --- stdout
@@ -3045,12 +3033,6 @@ exit 1
 |       "severity": "error",
 |       "where": "closed/remove",
 |       "message": "role=guest: A says stay, B says reject and -> gone"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "closed/open",
-|       "message": "role=guest: A says reject, B says -> open"
 |     },
 |     {
 |       "code": "case-disagrees",
@@ -3105,7 +3087,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine diff" tests="14" failures="14"><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;ajar&quot;, A does not">B has state "ajar", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;gone&quot;, A does not">B has state "gone", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;knock&quot;, A does not">B has event "knock", A does not</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=owner: A says stay, B says -&gt; gone">role=owner: A says stay, B says -&gt; gone</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=guest: A says stay, B says reject and -&gt; gone">role=guest: A says stay, B says reject and -&gt; gone</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=guest: A says reject, B says -&gt; open">role=guest: A says reject, B says -&gt; open</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=guest: A says reject, B says -&gt; open">role=guest: A says reject, B says -&gt; open</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=owner: A says ignore, B says -&gt; closed">role=owner: A says ignore, B says -&gt; closed</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=guest: A says ignore, B says -&gt; closed">role=guest: A says ignore, B says -&gt; closed</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=owner)"><failure message="A ends closed, B ends gone">A ends closed, B ends gone</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=guest)"><failure message="A ends closed, B ends undefined">A ends closed, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=guest)"><failure message="A ends rejected, B ends open">A ends rejected, B ends open</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=owner)"><failure message="A ends open, B ends closed">A ends open, B ends closed</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=guest)"><failure message="A ends open, B ends closed">A ends open, B ends closed</failure></testcase></testsuite>
+| <testsuite name="spine diff" tests="13" failures="13"><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;ajar&quot;, A does not">B has state "ajar", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;gone&quot;, A does not">B has state "gone", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;knock&quot;, A does not">B has event "knock", A does not</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=owner: A says stay, B says -&gt; gone">role=owner: A says stay, B says -&gt; gone</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=guest: A says stay, B says reject and -&gt; gone">role=guest: A says stay, B says reject and -&gt; gone</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=guest: A says reject, B says -&gt; open">role=guest: A says reject, B says -&gt; open</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=owner: A says ignore, B says -&gt; closed">role=owner: A says ignore, B says -&gt; closed</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=guest: A says ignore, B says -&gt; closed">role=guest: A says ignore, B says -&gt; closed</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=owner)"><failure message="A ends closed, B ends gone">A ends closed, B ends gone</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=guest)"><failure message="A ends closed, B ends undefined">A ends closed, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=guest)"><failure message="A ends rejected, B ends open">A ends rejected, B ends open</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=owner)"><failure message="A ends open, B ends closed">A ends open, B ends closed</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=guest)"><failure message="A ends open, B ends closed">A ends open, B ends closed</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/door-open.yaml diff/door-b.yaml
 exit 1
 --- stdout
@@ -4219,7 +4201,6 @@ exit 1
 | error   case-disagrees     closed/open: role=guest: A says -> open, B says reject
 | error   case-disagrees     closed/remove: role=owner: A says -> gone, B says stay
 | error   case-disagrees     closed/remove: role=guest: A says reject and -> gone, B says stay
-| error   case-disagrees     closed/open: role=guest: A says -> open, B says reject
 | error   case-disagrees     open/remove: role=owner: A says -> closed, B says ignore
 | error   case-disagrees     open/remove: role=guest: A says -> closed, B says ignore
 | error   behavior-differs   open(role=guest): A ends open, B ends rejected
@@ -4227,7 +4208,7 @@ exit 1
 | error   behavior-differs   remove(role=guest): A ends undefined, B ends closed
 | error   behavior-differs   open(role=owner) -> remove(role=owner): A ends closed, B ends open
 | error   behavior-differs   open(role=owner) -> remove(role=guest): A ends closed, B ends open
-| -- 14 errors, 14 findings
+| -- 13 errors, 13 findings
 |
 === in tools/internal/spine/testdata: spine diff diff/door-b.yaml seeds/spine.yaml
 exit 1
@@ -4236,14 +4217,13 @@ exit 1
 | error   only-in-a          events: A has event "knock", B does not
 | error   case-disagrees     closed/open: role=guest: A says -> open, B says reject
 | error   case-disagrees     closed/remove: role=guest: A says reject and -> gone, B says -> gone
-| error   case-disagrees     closed/open: role=guest: A says -> open, B says reject
 | error   case-disagrees     open/remove: role=owner: A says -> closed, B says ignore
 | error   case-disagrees     open/remove: role=guest: A says -> closed, B says ignore
 | error   behavior-differs   open(role=guest): A ends open, B ends rejected
 | error   behavior-differs   remove(role=guest): A ends undefined, B ends gone
 | error   behavior-differs   open(role=owner) -> remove(role=owner): A ends closed, B ends open
 | error   behavior-differs   open(role=owner) -> remove(role=guest): A ends closed, B ends open
-| -- 11 errors, 11 findings
+| -- 10 errors, 10 findings
 |
 === in tools/internal/spine/testdata: spine diff diff/door-c.yaml diff/door-b.yaml
 exit 1
@@ -4254,7 +4234,6 @@ exit 1
 | error   case-disagrees     closed/remove: role=owner: A says stay, B says -> gone
 | error   case-disagrees     closed/remove: role=guest: A says stay, B says reject and -> gone
 | error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
-| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
 | error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
 | error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
 | error   behavior-differs   remove(role=owner): A ends closed, B ends gone
@@ -4262,7 +4241,7 @@ exit 1
 | error   behavior-differs   open(role=guest): A ends rejected, B ends open
 | error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
 | error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
-| -- 14 errors, 14 findings
+| -- 13 errors, 13 findings
 |
 === in tools/internal/spine/testdata: spine diff diff/door-open.yaml diff/door-b.yaml
 exit 1
@@ -5702,14 +5681,14 @@ exit 1
 |       "code": "spine-unsound",
 |       "severity": "error",
 |       "where": "spec",
-|       "message": "28 errors from spine check; run it for details"
+|       "message": "18 errors from spine check; run it for details"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spine-unsound spec"><failure message="28 errors from spine check; run it for details">28 errors from spine check; run it for details</failure></testcase></testsuite>
+| <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spine-unsound spec"><failure message="18 errors from spine check; run it for details">18 errors from spine check; run it for details</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine trace seeds/spine.yaml ./behaviors//door/valid/opens.yaml
 exit 0
 --- stdout
@@ -5795,6 +5774,6 @@ exit 1
 === in tools/internal/spine/testdata: spine trace spines/unsound.yaml seeds/behavior.yaml
 exit 1
 --- stdout
-| error   spine-unsound      spec: 28 errors from spine check; run it for details
+| error   spine-unsound      spec: 18 errors from spine check; run it for details
 | -- 1 errors, 1 findings
 |

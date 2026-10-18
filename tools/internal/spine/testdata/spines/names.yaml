@@ -12,7 +12,7 @@ states:
   "emoji 🙂": {terminal: true}
   "\x7f\u0085": {}
 initial: "café"
-events: ["über", "ev\"q", "über"]
+events: ["über", "ev\"q"]
 rules:
   - {from: "café", event: "über", when: "wer == 'ja'", to: "日本"}
   - {from: "café", event: "über", when: "wer != 'ja'", stay: true}

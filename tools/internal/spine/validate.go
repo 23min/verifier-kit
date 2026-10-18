@@ -192,6 +192,18 @@ func textValues(v *Value) []string {
 	return out
 }
 
+// listedTwice reports each name xs gives more than once, in the order they first come (#49).
+func listedTwice(xs []string, where string, out *Findings) {
+	seen, reported := map[string]bool{}, map[string]bool{}
+	for _, x := range xs {
+		if seen[x] && !reported[x] {
+			reported[x] = true
+			out.Add("listed-twice", where, fmt.Sprintf(`"%s" is listed more than once`, x))
+		}
+		seen[x] = true
+	}
+}
+
 // loadSpec loads and validates a spine file. The spec is nil when there are errors.
 func loadSpec(path string) (*Spec, Findings) {
 	var out Findings
@@ -386,6 +398,7 @@ func validate(spec *Value, path string) Findings {
 		out.Add("spec-shape", "events", "events must be a list of names")
 		return out
 	}
+	listedTwice(textValues(events), "events", &out)
 	if !isMap(variables) {
 		out.Add("spec-shape", "vars", "vars must map each variable to its list of values")
 		return out
@@ -406,6 +419,8 @@ func validate(spec *Value, path string) Findings {
 			out.Add("yaml-boolean-value", where, "a value was read as true/false; quote it")
 		case !allText(values):
 			out.Add("spec-shape", where, "variable values must be text")
+		default:
+			listedTwice(textValues(values), where, &out)
 		}
 	}
 	var known []Var // steps can't be checked against bad vars
