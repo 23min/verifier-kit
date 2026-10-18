@@ -42,7 +42,9 @@ demo/faults.sh       # acceptance test: every seeded fault must be caught; exits
 demo/faults.sh 4     # one scenario
 python3 tools/spine.py --help
 go build -o bin/spine ./cmd/spine   # the Go port of spine.py
-go test ./...        # runs the Go spine and tools/spine.py on the same inputs; any difference fails
+go test ./...        # runs the Go spine and tools/spine.py on the same inputs; any difference fails,
+                     # and so does one from the record in internal/spine/testdata/record/
+go test ./internal/spine/ -update   # writes the record again from the Go spine; review its diff
 ```
 
 Setup needs Python 3 with PyYAML, the `git` program for the ref_sync example's checks, and

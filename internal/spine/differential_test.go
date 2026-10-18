@@ -5,7 +5,8 @@ package spine
 // after parsing, text and hash output byte for byte. Where the message comes from Python itself
 // (a PyYAML error inside spec-unreadable, or argparse's usage errors), everything but the message
 // is compared. The inputs must, between them, produce every finding code the tool contract lists
-// for the ported commands.
+// for the ported commands. Each run of the Go spine is also checked against the record
+// (record_test.go).
 //
 // Python is $PYTHON, or python3, with PyYAML. Help is compared at 80 columns (COLUMNS=80).
 
@@ -153,6 +154,7 @@ func (c diffCase) both(t *testing.T, args []string) (py, gr result, ok bool) {
 		t.Errorf("%s: go: %v", c.name, err)
 		return py, gr, false
 	}
+	c.recordRun(t, args, gr, nil)
 	if py.exit != gr.exit {
 		t.Errorf("%s: spine %s\nexit codes differ: python %d, go %d\npython stdout:\n%s\npython stderr:\n%s\ngo stdout:\n%s\ngo stderr:\n%s",
 			c.name, quoteArgs(args), py.exit, gr.exit, py.stdout, py.stderr, gr.stdout, gr.stderr)
@@ -179,6 +181,14 @@ func (c diffCase) runJSON(t *testing.T) ([]Finding, []Finding) {
 		t.Errorf("%s: go: %v", c.name, err)
 		return nil, nil
 	}
+	recorded := gr
+	recorded.stdout = strings.ReplaceAll(gr.stdout, goReport, "REPORT")
+	var junit *string
+	if data, err := os.ReadFile(goReport); err == nil {
+		s := strings.ReplaceAll(string(data), goReport, "REPORT")
+		junit = &s
+	}
+	c.recordRun(t, args("REPORT"), recorded, junit)
 	shown := "spine " + quoteArgs(args("REPORT"))
 	if py.exit != gr.exit {
 		t.Errorf("%s: %s\nexit codes differ: python %d, go %d\npython:\n%s%s\ngo:\n%s%s", c.name, shown, py.exit, gr.exit, py.stdout, py.stderr, gr.stdout, gr.stderr)
@@ -866,6 +876,7 @@ func TestDifferential(t *testing.T) {
 	}
 	td := testdata(t)
 	tmp := t.TempDir()
+	loadRecord(t, td, tmp)
 	var cases []diffCase
 	add := func(name, dir string, m mode, args ...string) {
 		cases = append(cases, diffCase{name: name, dir: dir, args: args, mode: m})
@@ -948,6 +959,7 @@ func TestDifferential(t *testing.T) {
 			})
 		}
 	})
+	finishRecord(t, td)
 
 	want := contractCodes(t)
 	var missing []string
