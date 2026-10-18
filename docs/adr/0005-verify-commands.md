@@ -1,6 +1,7 @@
 # 0005. `./verify` runs adapters, content checks and mutation given as commands
 
-- Status: accepted
+- Status: accepted; decision 6 extended by `0006-retire-spine-py.md` (a Python mutation script
+  gets `VERIFY_SPINE` too)
 - Date: 2026-10-17
 - Issue: #35
 

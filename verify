@@ -17,6 +17,7 @@
 # line: conformance/adapter_<machine>.cmd, checks/run.cmd, mutation/mutate_<name>.cmd. A
 # command runs from its root, without a shell, with VERIFY_SPINE set to the command line that
 # runs spine; checks and mutation pass when it exits 0. A piece given both ways is an error.
+# A Python mutation script gets VERIFY_SPINE too.
 #
 # Environment:
 #   VERIFY_BASE     commit to diff against; turns on the path guard (CI sets this)
@@ -40,7 +41,7 @@ ROOT=""
 for arg in "$@"; do
   case "$arg" in
     --full) FULL=1 ;;
-    -h|--help) sed -n '2,28p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '2,29p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     -*) echo "verify: unknown argument $arg" >&2; exit 2 ;;
     *)
       if [ -n "$ROOT" ]; then echo "verify: only one ROOT, got $ROOT and $arg" >&2; exit 2; fi
@@ -254,7 +255,7 @@ verify_root() {
             missing "mutants killed ($name)" ambiguous-piece "${p}mutation" \
                 "both $mutate and ${mutate%.py}.cmd; keep one"
           else
-            run "mutants killed ($name)" "$PY" "$mutate"
+            run "mutants killed ($name)" env VERIFY_SPINE="$SPINE_LINE" "$PY" "$mutate"
           fi ;;
         *)  # a .cmd beside a .py of the same name was reported with the .py
           [ -f "${mutate%.cmd}.py" ] && continue

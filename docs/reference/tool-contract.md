@@ -194,7 +194,7 @@ ways, and a piece given both ways is `ambiguous-piece`:
 |---|---|---|
 | the adapter, per machine | `conformance/adapter_<machine>.py`, run by `conform --adapter`, with `src/` and `conformance/` on `PYTHONPATH` | `conformance/adapter_<machine>.cmd`, its line given to `conform --adapter-cmd`, with `conform` run from the root |
 | the content checks | `test_*.py` files under `checks/`, run by `tools/run_checks.py checks --require-checks`, with `src/` on `PYTHONPATH` | `checks/run.cmd` |
-| mutation, under `--full` | each `mutation/mutate_<name>.py`, run with `$PYTHON` | each `mutation/mutate_<name>.cmd` |
+| mutation, under `--full` | each `mutation/mutate_<name>.py`, run with `$PYTHON` and `VERIFY_SPINE` set | each `mutation/mutate_<name>.cmd` |
 
 A `.cmd` file holds one command line, read as `--adapter-cmd` reads one: split by shell quoting
 rules and run without a shell. One line ending, `\n` or `\r\n`, may follow it. A file that can't
@@ -212,7 +212,7 @@ steps, and a final `--` summary line. A root other than the folder `verify` is i
 `== <root>` line, and its failed steps are named `<root>: <step>` in the summary. JUnit
 report names then start with the root, slashes turned into dashes. Environment:
 `VERIFY_BASE`, `VERIFY_BRANCH`, `VERIFY_REPORTS`, `VERIFY_VERBOSE`, `PYTHON`; it sets
-`VERIFY_SPINE` for commands. Exit codes as above; more than one ROOT, or a ROOT that is not a
+`VERIFY_SPINE` for commands and Python mutation scripts. Exit codes as above; more than one ROOT, or a ROOT that is not a
 folder, is a usage error.
 
 Every step that does not run prints `skip  <step> (<reason>)`: the guard without `VERIFY_BASE`,
