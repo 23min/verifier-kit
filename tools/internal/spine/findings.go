@@ -1,6 +1,6 @@
-// Package spine is the Go port of tools/spine.py: the same commands, findings, messages and
-// exit codes (docs/reference/tool-contract.md), checked against the Python version by the
-// differential test in this package.
+// Package spine is the toolkit's spine, a port of tools/spine.py, since retired: the same
+// commands, findings, messages and exit codes (docs/reference/tool-contract.md). The cases
+// test in this package checks it against a record of its output, written while the two agreed.
 package spine
 
 // Finding is one result line: a code from the contract, its severity, where it applies and why.

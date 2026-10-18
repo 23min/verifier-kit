@@ -1,6 +1,6 @@
 # The toolkit's own gate: the sample oracle must hold (./verify --full), every seeded fault
-# must be caught (demo/faults.sh), and the Go spine must match tools/spine.py (go test, which
-# runs both on the same inputs). Make the "verify" job a required check on main.
+# must be caught (demo/faults.sh), and the Go spine must give what its record holds (go test).
+# Make the "verify" job a required check on main.
 name: verify
 
 on:
@@ -37,7 +37,7 @@ jobs:
 
       - run: go -C tools vet ./...
 
-      - name: Go spine against tools/spine.py
+      - name: Go spine against its record
         run: go -C tools test ./...
 
       - name: verify

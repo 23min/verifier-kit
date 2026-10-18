@@ -640,7 +640,7 @@ func stdinLines(r io.Reader) []string {
 }
 
 // The help argparse prints at 80 columns, the width it uses when COLUMNS is unset and output
-// is not a terminal; the differential test checks each against tools/spine.py.
+// is not a terminal; the record holds each (cases_test.go).
 const (
 	helpTop = `usage: spine [-h] {check,hash,diff,stale,behaviors,trace,conform,guard} ...
 

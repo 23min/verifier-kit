@@ -1,14 +1,13 @@
 package spine
 
-// The record (#44): what the Go spine gave on every input of the differential test, kept in
-// testdata/record/ so that the Go spine can be checked once tools/spine.py is gone. For each
+// The record (#44): what the Go spine gave on every input of the cases test, kept in
+// testdata/record/ as the Go spine's reference now that tools/spine.py is gone. For each
 // run it holds the exit code, the output, and in JSON runs the JUnit report, with the paths that
 // differ between machines written as $ROOT and $TMP. The Go spine must give exactly what is
 // recorded, and every entry must still have its case.
 //
 // `go -C tools test ./internal/spine/ -update` writes the record again from the Go spine.
-// Review the diff before committing it: once tools/spine.py is gone, the record is the only
-// reference.
+// Review the diff before committing it: the record is the only reference.
 
 import (
 	"bufio"
@@ -34,7 +33,7 @@ type entry struct {
 
 var record = struct {
 	sync.Mutex
-	tmp  string                      // TestDifferential's temporary folder, written $TMP
+	tmp  string                      // TestCases's temporary folder, written $TMP
 	want map[string]map[string]entry // file, then key
 	got  map[string]map[string]entry
 }{}
@@ -76,7 +75,7 @@ func word(s string) string {
 }
 
 // key names one run of a case: its folder, its command line, its input and its environment.
-func (c diffCase) key(args []string) string {
+func (c spineCase) key(args []string) string {
 	dir := normal(c.dir)
 	if rel, err := filepath.Rel(repoRoot, c.dir); err == nil && !strings.HasPrefix(rel, "..") {
 		dir = rel
@@ -97,7 +96,7 @@ func (c diffCase) key(args []string) string {
 }
 
 // recordRun compares one run of the Go spine with the record, or keeps it to write the record.
-func (c diffCase) recordRun(t *testing.T, args []string, r result, junit *string) {
+func (c spineCase) recordRun(t *testing.T, args []string, r result, junit *string) {
 	t.Helper()
 	file := recordFile(c.name)
 	if file == "" {

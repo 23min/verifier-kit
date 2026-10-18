@@ -1,7 +1,7 @@
 # 0004. `spine` in Go, checked against the Python one
 
 - Status: accepted; the module's place in decision 1 superseded by `0006-retire-spine-py.md`
-  (it lives in `tools/`)
+  (it lives in `tools/`), and decision 3 ended there: `tools/spine.py` retired
 - Date: 2026-10-15
 - Issue: #27
 
