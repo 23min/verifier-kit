@@ -85,7 +85,7 @@ flowchart TD
 Each adapter, the content checks and each mutation script is given as Python or as a `.cmd`
 file holding one command line, for code in any language. A command runs from its root, without
 a shell, with `VERIFY_SPINE` set to the command line that runs `spine`; checks and mutation
-pass when it exits 0.
+pass when it exits 0. A Python mutation script gets `VERIFY_SPINE` too.
 
 A step that cannot run because a piece is missing is an error, not a skip, reported per root:
 no spine at all (`no-machines`), no adapter for a machine (`no-adapter`), no `test_*` function
@@ -201,7 +201,8 @@ flowchart LR
 
 `./verify --full` runs each example's mutation script. `examples/notes/mutation/mutate_notes.py`
 breaks the service on purpose and expects the oracle to notice. It runs from the example's
-folder and finds `tools/` above it. `examples/ref_sync/mutation/mutate_ref_sync.py` works the
+folder, finds `tools/` above it, and runs `conform` through `VERIFY_SPINE`.
+`examples/ref_sync/mutation/mutate_ref_sync.py` works the
 same way with six edits to `src/ref_sync_client.py`, and names every check that failed.
 `examples/elixir_job/mutation/mutate_job.exs` makes five edits to `src/job.ex`, each in a copy
 of the example, and runs `conform` through `VERIFY_SPINE` and the command in `checks/run.cmd`

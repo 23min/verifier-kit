@@ -9,6 +9,7 @@ Real projects can use a mutation tool for their language (mutmut, Stryker, PIT);
 file shows the principle with hand-picked breaks.
 """
 import os
+import shlex
 import subprocess
 import sys
 import tempfile
@@ -16,8 +17,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 # The toolkit's tools/: in ROOT for a project, further up for an example under examples/.
-TOOLS = next((d / "tools" for d in (ROOT, *ROOT.parents) if (d / "tools" / "spine.py").is_file()),
-             None)
+TOOLS = next((d / "tools" for d in (ROOT, *ROOT.parents)
+              if (d / "tools" / "run_checks.py").is_file()), None)
+# The command line that runs the toolkit's spine, which ./verify sets.
+SPINE = shlex.split(os.environ.get("VERIFY_SPINE", ""))
 
 MUTANTS = [
     ("editors may restore",
@@ -33,7 +36,7 @@ MUTANTS = [
 ]
 
 ORACLE = {
-    "conformance": [sys.executable, str(TOOLS / "spine.py"), "conform", "spec/notes/spine.yaml",
+    "conformance": [*SPINE, "conform", "spec/notes/spine.yaml",
                     "--adapter", "conformance/adapter_notes.py"],
     "checks": [sys.executable, str(TOOLS / "run_checks.py"), "checks"],
 } if TOOLS else {}
@@ -41,7 +44,10 @@ ORACLE = {
 
 def main():
     if TOOLS is None:
-        print(f"mutate_notes: no tools/spine.py in {ROOT} or above it", file=sys.stderr)
+        print(f"mutate_notes: no tools/run_checks.py in {ROOT} or above it", file=sys.stderr)
+        return 2
+    if not SPINE:
+        print("mutate_notes: VERIFY_SPINE is not set; ./verify --full sets it", file=sys.stderr)
         return 2
     source = (ROOT / "src" / "notes_app.py").read_text()
     survivors = 0
