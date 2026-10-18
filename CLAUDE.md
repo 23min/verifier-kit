@@ -40,17 +40,17 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
 ./verify examples/notes --full   # one example only
 demo/faults.sh       # acceptance test: every seeded fault must be caught; exits 1 otherwise
 demo/faults.sh 4     # one scenario
-python3 tools/spine.py --help
-go -C tools build -o bin/spine ./cmd/spine   # the Go port of spine.py, into tools/bin/spine
+go -C tools build -o bin/spine ./cmd/spine   # spine, into tools/bin/spine; ./verify does this too
+tools/bin/spine --help
 go -C tools vet ./...
-go -C tools test ./...   # runs the Go spine and tools/spine.py on the same inputs; any difference
-                         # fails, and so does one from the record (tools/internal/spine/testdata/)
+go -C tools test ./...   # runs spine on every test input; any difference from the record
+                         # (tools/internal/spine/testdata/record/) fails
 go -C tools test ./internal/spine/ -update   # writes the record again from the Go spine; review its diff
 ```
 
-Setup needs Python 3 with PyYAML, the `git` program for the ref_sync example's checks, and
-Elixir 1.18 or later for the elixir_job example's; `./verify` and `demo/faults.sh` need Go
-1.27, to build the Go `spine`. The
+Setup needs Python 3; PyYAML and the `git` program for the ref_sync example's checks; Elixir
+1.18 or later for the elixir_job example's; and Go 1.27, which `./verify` and `demo/faults.sh`
+build `spine` with. The
 devcontainer image has all five; don't create a `.venv` there
 (the repo is shared with the host). Elsewhere: `uv venv && uv pip install -r requirements.txt`;
 `./verify` and `demo/faults.sh` use `.venv` automatically when it exists.

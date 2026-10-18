@@ -1,14 +1,14 @@
 package spine
 
-// The differential test (#27): tools/spine.py and the Go spine run on the same inputs and must
-// give the same exit code and the same output. JSON findings and JUnit reports are compared
-// after parsing, text and hash output byte for byte. Where the message comes from Python itself
-// (a PyYAML error inside spec-unreadable, or argparse's usage errors), everything but the message
-// is compared. The inputs must, between them, produce every finding code the tool contract lists
-// for the ported commands. Each run of the Go spine is also checked against the record
-// (record_test.go).
+// The cases test (#27, #44): the Go spine runs on every input below, and each run must give
+// exactly what the record holds (record_test.go). The inputs are the ones the differential test
+// ran, which compared the Go spine with tools/spine.py until that retired; the record was written
+// while the two agreed. Between them, the inputs must produce every finding code the tool
+// contract lists. JSON output must parse, and a JUnit report must parse and refer to no character
+// XML can't hold.
 //
-// Python is $PYTHON, or python3, with PyYAML. Help is compared at 80 columns (COLUMNS=80).
+// A Python adapter is served with $PYTHON, or python3. Help is written at 80 columns
+// (COLUMNS=80).
 
 import (
 	"bytes"
@@ -30,7 +30,6 @@ import (
 
 var (
 	pythonPath string // $PYTHON, or python3
-	spinePy    string // tools/spine.py
 	goSpine    string // the binary TestMain builds
 	repoRoot   string
 )
@@ -54,7 +53,6 @@ func runTests(m *testing.M) int {
 		return 1
 	}
 	repoRoot, _ = filepath.Abs("../../..")
-	spinePy = filepath.Join(repoRoot, "tools", "spine.py")
 	pythonPath = os.Getenv("PYTHON")
 	if pythonPath == "" {
 		pythonPath = "python3"
@@ -62,24 +60,18 @@ func runTests(m *testing.M) int {
 	return m.Run()
 }
 
-// ---------- running both ----------
+// ---------- running the Go spine ----------
 
 type result struct {
 	exit   int
 	stdout string
 	stderr string
-	junit  string
 }
 
-func execute(python bool, dir string, args []string, stdin string, env []string) (result, error) {
-	var cmd *exec.Cmd
-	if python {
-		cmd = exec.Command(pythonPath, append([]string{spinePy}, args...)...)
-	} else {
-		cmd = exec.Command(goSpine, args...)
-	}
+func execute(dir string, args []string, stdin string, env []string) (result, error) {
+	cmd := exec.Command(goSpine, args...)
 	cmd.Dir = dir
-	// PYTHON is the Python the Go spine serves a Python adapter with: the one tools/spine.py runs on
+	// PYTHON is the Python the Go spine serves a Python adapter with
 	cmd.Env = append(append(os.Environ(), "COLUMNS=80", "PYTHON="+pythonPath), env...)
 	cmd.Stdin = strings.NewReader(stdin)
 	var out, errOut bytes.Buffer
@@ -105,7 +97,7 @@ const (
 	full = asGiven | asJSON
 )
 
-type diffCase struct {
+type spineCase struct {
 	name  string
 	dir   string
 	args  []string
@@ -116,17 +108,11 @@ type diffCase struct {
 
 var formatCommands = map[string]bool{"check": true, "diff": true, "stale": true, "behaviors": true, "trace": true, "conform": true, "guard": true}
 
-// codesSeen collects the finding codes Python gave, across all cases.
+// codesSeen collects the finding codes the Go spine gave, across all cases.
 var codesSeen = struct {
 	sync.Mutex
 	m map[string]bool
 }{m: map[string]bool{}}
-
-// pythonMessage tells a spec-unreadable finding whose message PyYAML wrote.
-func pythonMessage(f Finding) bool {
-	return f.Code == "spec-unreadable" && !strings.HasPrefix(f.Message, "cannot be read: ") &&
-		!strings.HasPrefix(f.Message, "not UTF-8: ")
-}
 
 type report struct {
 	Tool     string    `json:"tool"`
@@ -134,124 +120,64 @@ type report struct {
 	Findings []Finding `json:"findings"`
 }
 
-func (c diffCase) run(t *testing.T) {
-	var masked []Finding // findings whose message Python's libraries wrote
+func (c spineCase) run(t *testing.T) {
 	if c.mode&asJSON != 0 && len(c.args) > 0 && formatCommands[c.args[0]] {
-		masked, _ = c.runJSON(t)
+		c.runJSON(t)
 	}
 	if c.mode&asGiven != 0 {
-		c.runAsGiven(t, masked)
+		c.runAsGiven(t)
 	}
 }
 
-func (c diffCase) both(t *testing.T, args []string) (py, gr result, ok bool) {
-	var err error
-	if py, err = execute(true, c.dir, args, c.stdin, c.env); err != nil {
-		t.Errorf("%s: python: %v", c.name, err)
-		return py, gr, false
+func (c spineCase) runAsGiven(t *testing.T) {
+	r, err := execute(c.dir, c.args, c.stdin, c.env)
+	if err != nil {
+		t.Errorf("%s: %v", c.name, err)
+		return
 	}
-	if gr, err = execute(false, c.dir, args, c.stdin, c.env); err != nil {
-		t.Errorf("%s: go: %v", c.name, err)
-		return py, gr, false
-	}
-	c.recordRun(t, args, gr, nil)
-	if py.exit != gr.exit {
-		t.Errorf("%s: spine %s\nexit codes differ: python %d, go %d\npython stdout:\n%s\npython stderr:\n%s\ngo stdout:\n%s\ngo stderr:\n%s",
-			c.name, quoteArgs(args), py.exit, gr.exit, py.stdout, py.stderr, gr.stdout, gr.stderr)
-		return py, gr, false
-	}
-	return py, gr, true
+	c.recordRun(t, c.args, r, nil)
 }
 
-// runJSON compares the case in JSON with a JUnit report. It gives the findings whose message
-// Python's libraries wrote, and Python's findings.
-func (c diffCase) runJSON(t *testing.T) ([]Finding, []Finding) {
-	tmp := t.TempDir()
-	pyReport, goReport := filepath.Join(tmp, "py.xml"), filepath.Join(tmp, "go.xml")
+// runJSON runs the case in JSON with a JUnit report, and gives the findings.
+func (c spineCase) runJSON(t *testing.T) []Finding {
+	path := filepath.Join(t.TempDir(), "report.xml")
 	args := func(junit string) []string {
 		return append([]string{c.args[0], "--format", "json", "--junit", junit}, c.args[1:]...)
 	}
-	py, err := execute(true, c.dir, args(pyReport), c.stdin, c.env)
+	r, err := execute(c.dir, args(path), c.stdin, c.env)
 	if err != nil {
-		t.Errorf("%s: python: %v", c.name, err)
-		return nil, nil
+		t.Errorf("%s: %v", c.name, err)
+		return nil
 	}
-	gr, err := execute(false, c.dir, args(goReport), c.stdin, c.env)
-	if err != nil {
-		t.Errorf("%s: go: %v", c.name, err)
-		return nil, nil
-	}
-	recorded := gr
-	recorded.stdout = strings.ReplaceAll(gr.stdout, goReport, "REPORT")
+	recorded := r
+	recorded.stdout = strings.ReplaceAll(r.stdout, path, "REPORT")
 	var junit *string
-	if data, err := os.ReadFile(goReport); err == nil {
-		s := strings.ReplaceAll(string(data), goReport, "REPORT")
+	data, readErr := os.ReadFile(path)
+	if readErr == nil {
+		s := strings.ReplaceAll(string(data), path, "REPORT")
 		junit = &s
 	}
 	c.recordRun(t, args("REPORT"), recorded, junit)
+	if r.exit == 2 { // a usage error: no JSON and no report
+		return nil
+	}
 	shown := "spine " + quoteArgs(args("REPORT"))
-	if py.exit != gr.exit {
-		t.Errorf("%s: %s\nexit codes differ: python %d, go %d\npython:\n%s%s\ngo:\n%s%s", c.name, shown, py.exit, gr.exit, py.stdout, py.stderr, gr.stdout, gr.stderr)
-		return nil, nil
-	}
-	if py.exit == 2 { // a usage error: argparse writes the message
-		if py.stdout != gr.stdout {
-			t.Errorf("%s: %s\nusage error, but stdout differs:\npython:\n%s\ngo:\n%s", c.name, shown, py.stdout, gr.stdout)
-		}
-		return nil, nil
-	}
-	var pr, gor report
-	if err := json.Unmarshal([]byte(py.stdout), &pr); err != nil {
-		t.Errorf("%s: %s\npython output is not JSON: %v\n%s%s", c.name, shown, err, py.stdout, py.stderr)
-		return nil, nil
-	}
-	if err := json.Unmarshal([]byte(gr.stdout), &gor); err != nil {
-		t.Errorf("%s: %s\ngo output is not JSON: %v\n%s%s", c.name, shown, err, gr.stdout, gr.stderr)
-		return nil, nil
+	var rep report
+	if err := json.Unmarshal([]byte(r.stdout), &rep); err != nil {
+		t.Errorf("%s: %s\noutput is not JSON: %v\n%s%s", c.name, shown, err, r.stdout, r.stderr)
+		return nil
 	}
 	codesSeen.Lock()
-	for _, f := range pr.Findings {
+	for _, f := range rep.Findings {
 		codesSeen.m[f.Code] = true
 	}
 	codesSeen.Unlock()
-	var masked []Finding
-	for _, f := range pr.Findings {
-		if pythonMessage(f) {
-			masked = append(masked, f)
-		}
+	if readErr != nil {
+		t.Errorf("%s: %s\nno JUnit report: %v", c.name, shown, readErr)
+	} else if msg := checkJUnit(data); msg != "" {
+		t.Errorf("%s: %s\n%s:\n%s", c.name, shown, msg, data)
 	}
-	if pr.Tool != gor.Tool || pr.Command != gor.Command {
-		t.Errorf("%s: %s\nJSON differs:\npython:\n%s\ngo:\n%s", c.name, shown, py.stdout, gr.stdout)
-	} else if diff := findingsDiff(pr.Findings, gor.Findings); diff != "" {
-		t.Errorf("%s: %s\nJSON findings differ: %s", c.name, shown, diff)
-	}
-	pj, perr := os.ReadFile(pyReport)
-	gj, gerr := os.ReadFile(goReport)
-	if perr != nil || gerr != nil {
-		t.Errorf("%s: %s\nJUnit report missing: python %v, go %v", c.name, shown, perr, gerr)
-		return masked, pr.Findings
-	}
-	if msg := compareJUnit(pj, gj, masked); msg != "" {
-		t.Errorf("%s: %s\nJUnit differs: %s\npython:\n%s\ngo:\n%s", c.name, shown, msg, pj, gj)
-	}
-	return masked, pr.Findings
-}
-
-// findingsDiff describes the first difference between two lists of findings, or is "".
-func findingsDiff(py, gr []Finding) string {
-	for i := 0; i < len(py) || i < len(gr); i++ {
-		switch {
-		case i >= len(py):
-			return fmt.Sprintf("go has %d findings, python %d; go's next:\n  %+v", len(gr), len(py), gr[i])
-		case i >= len(gr):
-			return fmt.Sprintf("python has %d findings, go %d; python's next:\n  %+v", len(py), len(gr), py[i])
-		}
-		p, g := py[i], gr[i]
-		if p.Code != g.Code || p.Severity != g.Severity || p.Where != g.Where || (p.Message != g.Message && !pythonMessage(p)) {
-			return fmt.Sprintf("finding %d of %d:\n  python %+v\n  go     %+v", i+1, len(py), p, g)
-		}
-	}
-	return ""
+	return rep.Findings
 }
 
 type junitSuite struct {
@@ -293,79 +219,16 @@ func badCharRef(data []byte) string {
 	return ""
 }
 
-func compareJUnit(py, gr []byte, masked []Finding) string {
-	if ref := badCharRef(py); ref != "" {
-		return "python's report refers to a character XML can't hold: " + ref
+// checkJUnit says what is wrong with a JUnit report, or is "".
+func checkJUnit(data []byte) string {
+	if ref := badCharRef(data); ref != "" {
+		return "the report refers to a character XML can't hold: " + ref
 	}
-	if ref := badCharRef(gr); ref != "" {
-		return "go's report refers to a character XML can't hold: " + ref
-	}
-	var p, g junitSuite
-	if err := xml.Unmarshal(py, &p); err != nil {
-		return "python's report doesn't parse: " + err.Error()
-	}
-	if err := xml.Unmarshal(gr, &g); err != nil {
-		return "go's report doesn't parse: " + err.Error()
-	}
-	if p.Name != g.Name || p.Tests != g.Tests || p.Failures != g.Failures || len(p.Cases) != len(g.Cases) {
-		return "the suites differ"
-	}
-	skip := map[string]bool{}
-	for _, f := range masked {
-		skip[f.Code+" "+f.Where] = true
-	}
-	for i := range p.Cases {
-		pc, gc := p.Cases[i], g.Cases[i]
-		if pc.Classname != gc.Classname || pc.Name != gc.Name || (pc.Failure == nil) != (gc.Failure == nil) {
-			return fmt.Sprintf("test case %d differs", i+1)
-		}
-		if pc.Failure != nil && !skip[pc.Name] && *pc.Failure != *gc.Failure {
-			return fmt.Sprintf("the failure of test case %d differs", i+1)
-		}
+	var s junitSuite
+	if err := xml.Unmarshal(data, &s); err != nil {
+		return "the report doesn't parse: " + err.Error()
 	}
 	return ""
-}
-
-func (c diffCase) runAsGiven(t *testing.T, masked []Finding) {
-	py, gr, ok := c.both(t, c.args)
-	if !ok {
-		return
-	}
-	shown := "spine " + quoteArgs(c.args)
-	if py.exit == 2 {
-		if py.stdout != gr.stdout {
-			t.Errorf("%s: %s\nusage error, but stdout differs:\npython:\n%s\ngo:\n%s", c.name, shown, py.stdout, gr.stdout)
-		}
-		return
-	}
-	var prefixes []string
-	for _, f := range masked {
-		prefixes = append(prefixes, fmt.Sprintf("%-7s %-18s %s: ", f.Severity, f.Code, f.Where))
-	}
-	for _, a := range c.args { // hash has no JSON run: a file named on the command line may have a PyYAML message
-		p := fmt.Sprintf("%-7s %-18s %s: ", "error", "spec-unreadable", a)
-		for _, line := range strings.Split(py.stdout, "\n") {
-			if rest, ok := strings.CutPrefix(line, p); ok && pythonMessage(Finding{Code: "spec-unreadable", Message: rest}) {
-				prefixes = append(prefixes, p)
-			}
-		}
-	}
-	pl, gl := strings.Split(py.stdout, "\n"), strings.Split(gr.stdout, "\n")
-	same := len(pl) == len(gl)
-	for i := 0; same && i < len(pl); i++ {
-		if pl[i] == gl[i] {
-			continue
-		}
-		same = false
-		for _, p := range prefixes {
-			if strings.HasPrefix(pl[i], p) && strings.HasPrefix(gl[i], p) {
-				same = true
-			}
-		}
-	}
-	if !same {
-		t.Errorf("%s: %s\noutput differs:\npython:\n%s%s\ngo:\n%s%s", c.name, shown, py.stdout, py.stderr, gr.stdout, gr.stderr)
-	}
 }
 
 func quoteArgs(args []string) string {
@@ -405,17 +268,17 @@ func files(t *testing.T, dir string) []string {
 
 // argLines reads a file of command lines, one JSON array per line, or an object
 // {"args": [...], "stdin": "..."}; blank lines and lines starting with # are skipped.
-func argLines(t *testing.T, path string) []diffCase {
+func argLines(t *testing.T, path string) []spineCase {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		t.Fatal(err)
 	}
-	var out []diffCase
+	var out []spineCase
 	for i, line := range strings.Split(string(data), "\n") {
 		if strings.TrimSpace(line) == "" || strings.HasPrefix(line, "#") {
 			continue
 		}
-		var c diffCase
+		var c spineCase
 		if strings.HasPrefix(line, "{") {
 			var obj struct {
 				Args  []string          `json:"args"`
@@ -643,7 +506,7 @@ func valueSpine(spelling string) string {
 }
 
 // filesystemCases builds the inputs git can't hold: links, unreadable files, __pycache__.
-func filesystemCases(t *testing.T, td, dir string) []diffCase {
+func filesystemCases(t *testing.T, td, dir string) []spineCase {
 	spine := filepath.Join(td, "seeds", "spine.yaml")
 	link := func(target, name string) {
 		if err := os.Symlink(target, filepath.Join(dir, name)); err != nil {
@@ -703,12 +566,12 @@ func filesystemCases(t *testing.T, td, dir string) []diffCase {
 		{"check", filepath.Join(td, "seeds", "spine.yaml") + "/"},
 		{"hash", "locked.yaml"},
 	}
-	var out []diffCase
+	var out []spineCase
 	for i, args := range cases {
-		out = append(out, diffCase{name: fmt.Sprintf("filesystem %d", i+1), dir: dir, args: args, mode: full})
+		out = append(out, spineCase{name: fmt.Sprintf("filesystem %d", i+1), dir: dir, args: args, mode: full})
 	}
-	// a changed file whose name isn't UTF-8: Python reads stdin with surrogateescape
-	out = append(out, diffCase{name: "stdin not UTF-8", dir: dir, mode: full, stdin: "spec/\xff.py\nsrc/\xfe\n",
+	// a changed file whose name isn't UTF-8, as tools/spine.py read stdin with surrogateescape
+	out = append(out, spineCase{name: "stdin not UTF-8", dir: dir, mode: full, stdin: "spec/\xff.py\nsrc/\xfe\n",
 		args: []string{"guard", filepath.Join(td, "seeds", "policy.yaml"), "--branch", "build/x"}})
 	return out
 }
@@ -716,10 +579,10 @@ func filesystemCases(t *testing.T, td, dir string) []diffCase {
 // exampleCases runs every command on both examples as they are: spines, readings, behaviors,
 // checks and the policy, and diff on every ordered pair of an example's spine and readings
 // (demo/faults.sh's scenario 5 among them) and on the two spines.
-func exampleCases(t *testing.T) []diffCase {
-	var out []diffCase
+func exampleCases(t *testing.T) []spineCase {
+	var out []spineCase
 	add := func(m mode, args ...string) {
-		out = append(out, diffCase{name: "example " + quoteArgs(args), dir: repoRoot, args: args, mode: m})
+		out = append(out, spineCase{name: "example " + quoteArgs(args), dir: repoRoot, args: args, mode: m})
 	}
 	specs, err := filepath.Glob(filepath.Join(repoRoot, "examples", "*", "spec", "*"))
 	if err != nil || len(specs) < 2 {
@@ -754,10 +617,10 @@ func exampleCases(t *testing.T) []diffCase {
 		// conform as ./verify runs it, with the example's src/ and conformance/ importable
 		adapter := filepath.Join(root, "conformance", "adapter_"+machine+".py")
 		env := []string{"PYTHONPATH=" + filepath.Join(root, "src") + ":" + filepath.Join(root, "conformance")}
-		out = append(out, diffCase{name: "example conform " + machine, dir: repoRoot, env: env, mode: full,
+		out = append(out, spineCase{name: "example conform " + machine, dir: repoRoot, env: env, mode: full,
 			args: []string{"conform", spine, "--adapter", adapter}})
 		if machine == "notes" {
-			out = append(out, diffCase{name: "example conform notes, adapter-cmd", dir: repoRoot, env: env, mode: full,
+			out = append(out, spineCase{name: "example conform notes, adapter-cmd", dir: repoRoot, env: env, mode: full,
 				args: []string{"conform", spine, "--adapter-cmd", shellQuote(pythonPath) + " tools/adapter_shim.py " + adapter, "--depth", "3"}})
 		}
 	}
@@ -769,7 +632,7 @@ func exampleCases(t *testing.T) []diffCase {
 // into copies of the notes spine and service: scenario 1 is the service as first written, 2
 // loosens restore, 3 writes `on:` for `event:`, 4 is a builder's branch that also edits the
 // spine, 9 imports a module that doesn't exist, and 10 is 1 through --adapter-cmd.
-func faultCases(t *testing.T, dir string) []diffCase {
+func faultCases(t *testing.T, dir string) []spineCase {
 	notes := filepath.Join(repoRoot, "examples", "notes")
 	data, err := os.ReadFile(filepath.Join(notes, "spec", "notes", "spine.yaml"))
 	if err != nil {
@@ -789,9 +652,9 @@ func faultCases(t *testing.T, dir string) []diffCase {
 	writeFile(t, filepath.Join(dir, "2", "spine.yaml"), loosened)
 	writeFile(t, filepath.Join(dir, "3", "spine.yaml"), replace(spine, "event: publish", "on: publish", 1))
 	writeFile(t, filepath.Join(dir, "4", "spine.yaml"), spine+"# and here\n")
-	var out []diffCase
+	var out []spineCase
 	add := func(name string, args ...string) {
-		out = append(out, diffCase{name: name, dir: dir, args: args, mode: full})
+		out = append(out, spineCase{name: name, dir: dir, args: args, mode: full})
 	}
 	behaviors, checks := filepath.Join(notes, "spec", "notes", "behaviors"), filepath.Join(notes, "checks", "notes")
 	add("fault 2 check", "check", "2/spine.yaml")
@@ -819,7 +682,7 @@ func faultCases(t *testing.T, dir string) []diffCase {
 	spineFile, adapter := filepath.Join(notes, "spec", "notes", "spine.yaml"), filepath.Join(notes, "conformance", "adapter_notes.py")
 	conform := func(name, src string, args ...string) {
 		env := []string{"PYTHONPATH=" + filepath.Join(dir, src, "src") + ":" + filepath.Join(notes, "conformance")}
-		out = append(out, diffCase{name: name, dir: dir, args: append([]string{"conform"}, args...), env: env, mode: full})
+		out = append(out, spineCase{name: name, dir: dir, args: append([]string{"conform"}, args...), env: env, mode: full})
 	}
 	conform("fault 1 conform", "1", spineFile, "--adapter", adapter)
 	conform("fault 2 conform", "2", "2/spine.yaml", "--adapter", adapter)
@@ -870,16 +733,13 @@ func contractCodes(t *testing.T) map[string]bool {
 
 // ---------- the test ----------
 
-func TestDifferential(t *testing.T) {
-	if out, err := exec.Command(pythonPath, "-c", "import yaml").CombinedOutput(); err != nil {
-		t.Fatalf("this test runs tools/spine.py, which needs %s with PyYAML: %v\n%s", pythonPath, err, out)
-	}
+func TestCases(t *testing.T) {
 	td := testdata(t)
 	tmp := t.TempDir()
 	loadRecord(t, td, tmp)
-	var cases []diffCase
+	var cases []spineCase
 	add := func(name, dir string, m mode, args ...string) {
-		cases = append(cases, diffCase{name: name, dir: dir, args: args, mode: m})
+		cases = append(cases, spineCase{name: name, dir: dir, args: args, mode: m})
 	}
 
 	for _, sub := range []string{"spines", "seeds"} {
@@ -979,8 +839,8 @@ func TestDifferential(t *testing.T) {
 // outside the language; then the allowed ones alone, where check reports their truth tables.
 func conditionBatch(t *testing.T, dir string, conds []string) {
 	writeFile(t, filepath.Join(dir, "all.yaml"), conditionSpine(conds))
-	c := diffCase{name: filepath.Base(dir), dir: dir, args: []string{"check", "all.yaml"}, mode: asJSON}
-	_, findings := c.runJSON(t)
+	c := spineCase{name: filepath.Base(dir), dir: dir, args: []string{"check", "all.yaml"}, mode: asJSON}
+	findings := c.runJSON(t)
 	if findings == nil {
 		return
 	}
@@ -998,5 +858,5 @@ func conditionBatch(t *testing.T, dir string, conds []string) {
 		return
 	}
 	writeFile(t, filepath.Join(dir, "allowed.yaml"), conditionSpine(allowed))
-	diffCase{name: filepath.Base(dir) + " allowed", dir: dir, args: []string{"check", "allowed.yaml"}, mode: asJSON}.runJSON(t)
+	spineCase{name: filepath.Base(dir) + " allowed", dir: dir, args: []string{"check", "allowed.yaml"}, mode: asJSON}.runJSON(t)
 }

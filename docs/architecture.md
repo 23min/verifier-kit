@@ -267,20 +267,17 @@ This repo's CI (`.github/workflows/verify.yml`) runs `go vet` and `go test`, the
 `./verify --full`, then `demo/faults.sh`, on every pull request and push to `main`. It does
 not set `VERIFY_BASE`, so the path guard runs here only inside scenario 4.
 
-`go test` holds the differential test (`tools/internal/spine/differential_test.go`). The Go
-`spine` (`tools/cmd/spine/`, `tools/internal/spine/`, one module in `tools/`) and
-`tools/spine.py` run on the same inputs, among them the repo's spines, readings, behaviors,
-checks, adapters and policy and the faults scenarios 1 to 4, 9 and 10 seed, and must give the
-same exit codes and output. Nothing else runs `tools/spine.py`: `./verify`, `demo/faults.sh`
-and the mutation scripts run the Go `spine`.
+`go test` holds the cases test (`tools/internal/spine/cases_test.go`). It runs the Go `spine`
+(`tools/cmd/spine/`, `tools/internal/spine/`, one module in `tools/`) on every input it has,
+among them the repo's spines, readings, behaviors, checks, adapters and policy and the faults
+scenarios 1 to 4, 9 and 10 seed. Between them they give every finding code the contract lists.
 
-The same test checks the Go `spine` against a record of what it gave on every one of those
-inputs (`tools/internal/spine/testdata/record/`, written by `record_test.go` beside it): the exit
-code and output of each run, and in JSON runs the JUnit report, with the paths that differ
-between machines written as `$ROOT` and `$TMP`. The Go `spine` must give exactly what is
-recorded. `go -C tools test ./internal/spine/ -update` writes the record again; its diff is what a
-reviewer reads. Once `tools/spine.py` retires (#44), the record is the Go `spine`'s only
-reference.
+Each run must give exactly what the record holds (`tools/internal/spine/testdata/record/`,
+written by `record_test.go` beside it): its exit code and output, and in JSON runs the JUnit
+report, with the paths that differ between machines written as `$ROOT` and `$TMP`.
+`go -C tools test ./internal/spine/ -update` writes the record again; its diff is what a
+reviewer reads. The record was written while the Go `spine` still matched `tools/spine.py` on
+every input, before that retired (#44).
 
 ## Per machine, per root and repo-wide
 

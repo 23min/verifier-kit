@@ -17,8 +17,9 @@ needs an issue and the owner's approval first (see `CLAUDE.md`).
   each character XML can't hold as an escape, such as `\x1b`, and a byte of a file name that isn't
   UTF-8 as `\xff`, so it always parses. `spine hash` is the exception: it prints hashes to copy,
   not findings, and takes neither option.
-- **Dependencies:** the Python standard library plus PyYAML (`requirements.txt`). The Go
-  `spine` uses the Go standard library plus `go.yaml.in/yaml/v4` (`tools/go.mod`).
+- **Dependencies:** `spine` uses the Go standard library plus `go.yaml.in/yaml/v4`
+  (`tools/go.mod`). `tools/run_checks.py` and `tools/adapter_shim.py` use the Python standard
+  library only.
 - **Nothing is skipped silently.** Whatever is not checked is reported with the reason; a
   missing piece that a check needs is an error finding, never a pass.
 
@@ -42,7 +43,7 @@ JSON output:
 `severity` is `error`, `warning` or `info`. Only `error` affects the exit code. Finding codes
 are part of the contract: new codes may be added, existing codes are never renamed or reused.
 
-## `tools/spine.py`
+## `spine`
 
 | Command | Arguments | Does |
 |---|---|---|
@@ -55,9 +56,10 @@ are part of the contract: new codes may be added, existing codes are never renam
 | `conform` | `SPEC (--adapter FILE \| --adapter-cmd COMMAND) [--depth N]` | Runs every event sequence up to N steps (default 4) against the spine and against the code through the adapter, and reports where they differ. The adapter is a Python file, which `conform` serves through `tools/adapter_shim.py`, or a program that speaks the adapter protocol (below) |
 | `guard` | `POLICY --branch NAME [FILES...]` | Maps the branch to a role and reports changed files that role may not touch; reads files from stdin when none are given |
 
-`tools/bin/spine`, built from `tools/cmd/spine/`, is the Go port of `tools/spine.py` and follows
-the same contract. It has every command above. `go -C tools test ./...` runs both on the same
-inputs. `./verify`, `demo/faults.sh` and the mutation scripts run the Go one.
+`spine` is `tools/bin/spine`, built from `tools/cmd/spine/` (`go -C tools build -o bin/spine
+./cmd/spine`); `./verify` builds it on every run. It replaced `tools/spine.py`, of which it is a
+port (`docs/adr/0004-go-spine.md`, `docs/adr/0006-retire-spine-py.md`). `go -C tools test ./...`
+checks it against a record of what it gave on every test input.
 
 All commands except `hash` accept `--format text|json` and `--junit FILE`. Every command that
 takes a spine validates it first and stops with the validation findings if it is invalid.
@@ -118,10 +120,9 @@ An exception from `new()` or `observe()`, or while importing the file, is `adapt
 divergence: without a fresh instance or a reading of its state there is nothing to compare.
 
 `conform --adapter FILE` runs the file through `tools/adapter_shim.py` (below), in a Python
-process of its own: `tools/spine.py`'s own Python, or for the Go `spine` `$PYTHON`, else
-`python3`. The adapter's printing goes to stderr, and what `apply()` and `observe()`
-return reaches `conform` as JSON: a tuple arrives as a list, and a value JSON can't encode, such
-as a set, makes the shim fail (`adapter-failed`).
+process of its own: `$PYTHON`, else `python3`. The adapter's printing goes to stderr, and what
+`apply()` and `observe()` return reaches `conform` as JSON: a tuple arrives as a list, and a
+value JSON can't encode, such as a set, makes the shim fail (`adapter-failed`).
 
 The adapter translates and never decides whether an action is allowed.
 
