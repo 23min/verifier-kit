@@ -1,4 +1,4 @@
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0001.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0001.yaml
 exit 1
 --- stdout
 | {
@@ -17,7 +17,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="yaml-boolean-key v0001.yaml"><failure message="behavior key read as True; YAML reads `on`, `off`, `yes` and `no` as true or false, so quote it">behavior key read as True; YAML reads `on`, `off`, `yes` and `no` as true or false, so quote it</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0002.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0002.yaml
 exit 1
 --- stdout
 | {
@@ -36,7 +36,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="unknown-key v0002.yaml"><failure message="a behavior key is not text">a behavior key is not text</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0003.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0003.yaml
 exit 1
 --- stdout
 | {
@@ -55,7 +55,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="unknown-key v0003.yaml"><failure message="a behavior key is not text">a behavior key is not text</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0004.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0004.yaml
 exit 1
 --- stdout
 | {
@@ -74,7 +74,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="unknown-key v0004.yaml"><failure message="a behavior key is not text">a behavior key is not text</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0005.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0005.yaml
 exit 1
 --- stdout
 | {
@@ -93,7 +93,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="unknown-key v0005.yaml"><failure message="a behavior key is not text">a behavior key is not text</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0006.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0006.yaml
 exit 1
 --- stdout
 | {
@@ -112,7 +112,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="unknown-key v0006.yaml"><failure message="unknown behavior key &quot;zz&quot;">unknown behavior key "zz"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0007.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0007.yaml
 exit 1
 --- stdout
 | {
@@ -131,7 +131,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0007.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0008.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0008.yaml
 exit 1
 --- stdout
 | {
@@ -150,7 +150,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused v0008.yaml"><failure message="ends in closed, expected open">ends in closed, expected open</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0009.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0009.yaml
 exit 1
 --- stdout
 | {
@@ -169,7 +169,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="bad-step v0009.yaml"><failure message="step 1 &quot;a&quot;: &quot;a&quot; is not a declared event">step 1 "a": "a" is not a declared event</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0010.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0010.yaml
 exit 1
 --- stdout
 | {
@@ -188,7 +188,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0010.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0011.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0011.yaml
 exit 1
 --- stdout
 | {
@@ -207,7 +207,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0011.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0012.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0012.yaml
 exit 1
 --- stdout
 | {
@@ -226,7 +226,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0012.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0013.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0013.yaml
 exit 1
 --- stdout
 | {
@@ -245,7 +245,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0013.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0014.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0014.yaml
 exit 1
 --- stdout
 | {
@@ -264,7 +264,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0014.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0015.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0015.yaml
 exit 1
 --- stdout
 | {
@@ -283,7 +283,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0015.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0016.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0016.yaml
 exit 1
 --- stdout
 | {
@@ -302,7 +302,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0016.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0017.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0017.yaml
 exit 1
 --- stdout
 | {
@@ -321,7 +321,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0017.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0018.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0018.yaml
 exit 1
 --- stdout
 | {
@@ -340,7 +340,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0018.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0019.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0019.yaml
 exit 1
 --- stdout
 | {
@@ -359,7 +359,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0019.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0020.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0020.yaml
 exit 1
 --- stdout
 | {
@@ -378,7 +378,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0020.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0021.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0021.yaml
 exit 1
 --- stdout
 | {
@@ -397,7 +397,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0021.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0022.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0022.yaml
 exit 1
 --- stdout
 | {
@@ -416,7 +416,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0022.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0023.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0023.yaml
 exit 1
 --- stdout
 | {
@@ -435,7 +435,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0023.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0024.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0024.yaml
 exit 1
 --- stdout
 | {
@@ -454,7 +454,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0024.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0025.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0025.yaml
 exit 1
 --- stdout
 | {
@@ -473,7 +473,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0025.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0026.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0026.yaml
 exit 1
 --- stdout
 | {
@@ -492,7 +492,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0026.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0027.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0027.yaml
 exit 1
 --- stdout
 | {
@@ -511,7 +511,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0027.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0028.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0028.yaml
 exit 1
 --- stdout
 | {
@@ -530,7 +530,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="bad-step v0028.yaml"><failure message="step 1 &quot;&quot;: a step needs an event">step 1 "": a step needs an event</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0029.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0029.yaml
 exit 1
 --- stdout
 | {
@@ -549,7 +549,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="bad-step v0029.yaml"><failure message="step 1 &quot;x y&quot;: &quot;y&quot; is not variable=value">step 1 "x y": "y" is not variable=value</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0030.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0030.yaml
 exit 1
 --- stdout
 | {
@@ -568,7 +568,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0030.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0031.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0031.yaml
 exit 1
 --- stdout
 | {
@@ -587,7 +587,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0031.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0032.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0032.yaml
 exit 1
 --- stdout
 | {
@@ -606,7 +606,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0032.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0033.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0033.yaml
 exit 1
 --- stdout
 | {
@@ -625,7 +625,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0033.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0034.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0034.yaml
 exit 1
 --- stdout
 | {
@@ -644,7 +644,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0034.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0035.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0035.yaml
 exit 1
 --- stdout
 | {
@@ -663,7 +663,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0035.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0036.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0036.yaml
 exit 1
 --- stdout
 | {
@@ -682,7 +682,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0036.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0037.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0037.yaml
 exit 1
 --- stdout
 | {
@@ -701,7 +701,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0037.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0038.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0038.yaml
 exit 1
 --- stdout
 | {
@@ -720,7 +720,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0038.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0039.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0039.yaml
 exit 1
 --- stdout
 | {
@@ -739,7 +739,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0039.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0040.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0040.yaml
 exit 1
 --- stdout
 | {
@@ -758,7 +758,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="bad-step v0040.yaml"><failure message="step 2 &quot;&quot;: a step needs an event">step 2 "": a step needs an event</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0041.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0041.yaml
 exit 1
 --- stdout
 | {
@@ -777,7 +777,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="bad-step v0041.yaml"><failure message="step 2 &quot;x y&quot;: &quot;y&quot; is not variable=value">step 2 "x y": "y" is not variable=value</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0042.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0042.yaml
 exit 1
 --- stdout
 | {
@@ -796,7 +796,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0042.yaml"><failure message="&quot;steps&quot; must be a list of steps such as &quot;restore role=editor&quot;">"steps" must be a list of steps such as "restore role=editor"</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0043.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0043.yaml
 exit 1
 --- stdout
 | {
@@ -815,7 +815,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0043.yaml"><failure message="&quot;expect&quot; must be text">"expect" must be text</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0044.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0044.yaml
 exit 1
 --- stdout
 | {
@@ -834,7 +834,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0044.yaml"><failure message="&quot;expect&quot; must be text">"expect" must be text</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0045.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0045.yaml
 exit 1
 --- stdout
 | {
@@ -853,7 +853,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0045.yaml"><failure message="&quot;expect&quot; must be text">"expect" must be text</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0046.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0046.yaml
 exit 1
 --- stdout
 | {
@@ -872,7 +872,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0046.yaml"><failure message="&quot;expect&quot; must be text">"expect" must be text</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0047.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0047.yaml
 exit 1
 --- stdout
 | {
@@ -891,7 +891,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0047.yaml"><failure message="&quot;expect&quot; must be text">"expect" must be text</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0048.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0048.yaml
 exit 1
 --- stdout
 | {
@@ -910,7 +910,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="yaml-boolean-value v0048.yaml"><failure message="&quot;expect&quot; was read as true or false; quote it">"expect" was read as true or false; quote it</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0049.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0049.yaml
 exit 1
 --- stdout
 | {
@@ -929,7 +929,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="yaml-boolean-value v0049.yaml"><failure message="&quot;expect&quot; was read as true or false; quote it">"expect" was read as true or false; quote it</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0050.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0050.yaml
 exit 1
 --- stdout
 | {
@@ -948,7 +948,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0050.yaml"><failure message="&quot;expect&quot; must be text">"expect" must be text</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0051.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0051.yaml
 exit 1
 --- stdout
 | {
@@ -967,7 +967,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape v0051.yaml"><failure message="&quot;expect&quot; must be text">"expect" must be text</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0052.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0052.yaml
 exit 1
 --- stdout
 | {
@@ -986,7 +986,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="bad-value v0052.yaml"><failure message="expect &quot;&quot; is not a declared state">expect "" is not a declared state</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0053.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0053.yaml
 exit 1
 --- stdout
 | {
@@ -1005,7 +1005,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="bad-value v0053.yaml"><failure message="expect &quot;x y&quot; is not a declared state">expect "x y" is not a declared state</failure></testcase></testsuite>
-=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml v0054.yaml
+=== in $TMP/behavior: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml v0054.yaml
 exit 1
 --- stdout
 | {

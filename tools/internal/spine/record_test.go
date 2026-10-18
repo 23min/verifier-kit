@@ -6,8 +6,9 @@ package spine
 // differ between machines written as $ROOT and $TMP. The Go spine must give exactly what is
 // recorded, and every entry must still have its case.
 //
-// `go test ./internal/spine/ -update` writes the record again from the Go spine. Review the
-// diff before committing it: once tools/spine.py is gone, the record is the only reference.
+// `go -C tools test ./internal/spine/ -update` writes the record again from the Go spine.
+// Review the diff before committing it: once tools/spine.py is gone, the record is the only
+// reference.
 
 import (
 	"bufio"
@@ -123,7 +124,7 @@ func (c diffCase) recordRun(t *testing.T, args []string, r result, junit *string
 	want, ok := record.want[file][k]
 	switch {
 	case !ok:
-		t.Errorf("%s: not in testdata/record/%s.txt: %s\nrun go test ./internal/spine/ -update, and review the diff", c.name, file, k)
+		t.Errorf("%s: not in testdata/record/%s.txt: %s\nrun go -C tools test ./internal/spine/ -update, and review the diff", c.name, file, k)
 	case want.exit != got.exit || want.stdout != got.stdout || (want.junit == nil) != (got.junit == nil) ||
 		want.junit != nil && *want.junit != *got.junit:
 		t.Errorf("%s: %s\nthe Go spine differs from testdata/record/%s.txt\nrecorded:\n%s\ngot:\n%s", c.name, k, file,
@@ -140,7 +141,7 @@ func loadRecord(t *testing.T, td, tmp string) {
 	}
 	paths, err := filepath.Glob(filepath.Join(td, "record", "*.txt"))
 	if err != nil || len(paths) == 0 {
-		t.Fatalf("no testdata/record/*.txt (%v); run go test ./internal/spine/ -update", err)
+		t.Fatalf("no testdata/record/*.txt (%v); run go -C tools test ./internal/spine/ -update", err)
 	}
 	for _, p := range paths {
 		entries, err := readRecord(p)
@@ -192,7 +193,7 @@ func finishRecord(t *testing.T, td string) {
 		}
 		sort.Strings(stale)
 		if len(stale) > 0 {
-			t.Errorf("testdata/record/%s.txt has %d entries no case gives, first: %s\nrun go test ./internal/spine/ -update, and review the diff",
+			t.Errorf("testdata/record/%s.txt has %d entries no case gives, first: %s\nrun go -C tools test ./internal/spine/ -update, and review the diff",
 				file, len(stale), stale[0])
 		}
 	}

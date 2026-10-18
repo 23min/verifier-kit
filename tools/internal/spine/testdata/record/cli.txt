@@ -1,12 +1,12 @@
-=== in internal/spine/testdata: spine
+=== in tools/internal/spine/testdata: spine
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine --format json check seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine --format json check seeds/spine.yaml
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine --he
+=== in tools/internal/spine/testdata: spine --he
 exit 0
 --- stdout
 | usage: spine [-h] {check,hash,diff,stale,behaviors,trace,conform,guard} ...
@@ -20,7 +20,7 @@ exit 0
 | options:
 |   -h, --help            show this help message and exit
 |
-=== in internal/spine/testdata: spine --help
+=== in tools/internal/spine/testdata: spine --help
 exit 0
 --- stdout
 | usage: spine [-h] {check,hash,diff,stale,behaviors,trace,conform,guard} ...
@@ -34,7 +34,7 @@ exit 0
 | options:
 |   -h, --help            show this help message and exit
 |
-=== in internal/spine/testdata: spine -h
+=== in tools/internal/spine/testdata: spine -h
 exit 0
 --- stdout
 | usage: spine [-h] {check,hash,diff,stale,behaviors,trace,conform,guard} ...
@@ -48,7 +48,7 @@ exit 0
 | options:
 |   -h, --help            show this help message and exit
 |
-=== in internal/spine/testdata: spine -h check
+=== in tools/internal/spine/testdata: spine -h check
 exit 0
 --- stdout
 | usage: spine [-h] {check,hash,diff,stale,behaviors,trace,conform,guard} ...
@@ -62,7 +62,7 @@ exit 0
 | options:
 |   -h, --help            show this help message and exit
 |
-=== in internal/spine/testdata: spine behaviors --format json seeds/spine.yaml behaviors/door
+=== in tools/internal/spine/testdata: spine behaviors --format json seeds/spine.yaml behaviors/door
 exit 1
 --- stdout
 | {
@@ -150,46 +150,46 @@ exit 1
 |   ]
 | }
 |
-=== in internal/spine/testdata: spine bogus
+=== in tools/internal/spine/testdata: spine bogus
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine check
+=== in tools/internal/spine/testdata: spine check
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine check "-a b"
+=== in tools/internal/spine/testdata: spine check "-a b"
 exit 1
 --- stdout
 | error   spec-unreadable    -a b: cannot be read: No such file or directory
 | -- 1 errors, 1 findings
 |
-=== in internal/spine/testdata: spine check "a b"
+=== in tools/internal/spine/testdata: spine check "a b"
 exit 1
 --- stdout
 | error   spec-unreadable    a b: cannot be read: No such file or directory
 | -- 1 errors, 1 findings
 |
-=== in internal/spine/testdata: spine check -- --
+=== in tools/internal/spine/testdata: spine check -- --
 exit 1
 --- stdout
 | error   spec-unreadable    --: cannot be read: No such file or directory
 | -- 1 errors, 1 findings
 |
-=== in internal/spine/testdata: spine check -- seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine check -- seeds/spine.yaml
 exit 0
 --- stdout
 | -- 0 errors, 0 findings
 |
-=== in internal/spine/testdata: spine check --bogus seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine check --bogus seeds/spine.yaml
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine check --bogus=1 seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine check --bogus=1 seeds/spine.yaml
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine check --fo=json spines/unsound.yaml
+=== in tools/internal/spine/testdata: spine check --fo=json spines/unsound.yaml
 exit 1
 --- stdout
 | {
@@ -367,7 +367,7 @@ exit 1
 |   ]
 | }
 |
-=== in internal/spine/testdata: spine check --form json seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine check --form json seeds/spine.yaml
 exit 0
 --- stdout
 | {
@@ -376,7 +376,7 @@ exit 0
 |   "findings": []
 | }
 |
-=== in internal/spine/testdata: spine check --format json --format text spines/unsound.yaml
+=== in tools/internal/spine/testdata: spine check --format json --format text spines/unsound.yaml
 exit 1
 --- stdout
 | error   unknown-state      nowhere/go: rule starts in undeclared state "nowhere"
@@ -409,7 +409,7 @@ exit 1
 | error   example-fails      refused: expected rejected, got t
 | -- 28 errors, 28 findings
 |
-=== in internal/spine/testdata: spine check --format json seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine check --format json seeds/spine.yaml
 exit 0
 --- stdout
 | {
@@ -418,19 +418,19 @@ exit 0
 |   "findings": []
 | }
 |
-=== in internal/spine/testdata: spine check --format seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine check --format seeds/spine.yaml
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine check --format yaml seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine check --format yaml seeds/spine.yaml
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine check --format=
+=== in tools/internal/spine/testdata: spine check --format=
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine check --format=json seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine check --format=json seeds/spine.yaml
 exit 0
 --- stdout
 | {
@@ -439,7 +439,7 @@ exit 0
 |   "findings": []
 | }
 |
-=== in internal/spine/testdata: spine check --help
+=== in tools/internal/spine/testdata: spine check --help
 exit 0
 --- stdout
 | usage: spine check [-h] [--format {text,json}] [--junit FILE] spec
@@ -452,38 +452,38 @@ exit 0
 |   --format {text,json}
 |   --junit FILE          also write a JUnit XML report
 |
-=== in internal/spine/testdata: spine check --help=x
+=== in tools/internal/spine/testdata: spine check --help=x
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine check --junit= seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine check --junit= seeds/spine.yaml
 exit 0
 --- stdout
 | -- 0 errors, 0 findings
 |
-=== in internal/spine/testdata: spine check -.5
+=== in tools/internal/spine/testdata: spine check -.5
 exit 1
 --- stdout
 | error   spec-unreadable    -.5: cannot be read: No such file or directory
 | -- 1 errors, 1 findings
 |
-=== in internal/spine/testdata: spine check -1
+=== in tools/internal/spine/testdata: spine check -1
 exit 1
 --- stdout
 | error   spec-unreadable    -1: cannot be read: No such file or directory
 | -- 1 errors, 1 findings
 |
-=== in internal/spine/testdata: spine check -1.5
+=== in tools/internal/spine/testdata: spine check -1.5
 exit 1
 --- stdout
 | error   spec-unreadable    -1.5: cannot be read: No such file or directory
 | -- 1 errors, 1 findings
 |
-=== in internal/spine/testdata: spine check -1e5
+=== in tools/internal/spine/testdata: spine check -1e5
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine check -h seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine check -h seeds/spine.yaml
 exit 0
 --- stdout
 | usage: spine check [-h] [--format {text,json}] [--junit FILE] spec
@@ -496,16 +496,16 @@ exit 0
 |   --format {text,json}
 |   --junit FILE          also write a JUnit XML report
 |
-=== in internal/spine/testdata: spine check -x seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine check -x seeds/spine.yaml
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine check seeds/spine.yaml --
+=== in tools/internal/spine/testdata: spine check seeds/spine.yaml --
 exit 0
 --- stdout
 | -- 0 errors, 0 findings
 |
-=== in internal/spine/testdata: spine check seeds/spine.yaml --format json
+=== in tools/internal/spine/testdata: spine check seeds/spine.yaml --format json
 exit 0
 --- stdout
 | {
@@ -514,7 +514,7 @@ exit 0
 |   "findings": []
 | }
 |
-=== in internal/spine/testdata: spine check seeds/spine.yaml --h
+=== in tools/internal/spine/testdata: spine check seeds/spine.yaml --h
 exit 0
 --- stdout
 | usage: spine check [-h] [--format {text,json}] [--junit FILE] spec
@@ -527,29 +527,29 @@ exit 0
 |   --format {text,json}
 |   --junit FILE          also write a JUnit XML report
 |
-=== in internal/spine/testdata: spine check seeds/spine.yaml extra
+=== in tools/internal/spine/testdata: spine check seeds/spine.yaml extra
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine check seeds/spine.yaml seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine check seeds/spine.yaml seeds/spine.yaml
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine conform
+=== in tools/internal/spine/testdata: spine conform
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine conform --adapter a
+=== in tools/internal/spine/testdata: spine conform --adapter a
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine conform --adapter adapters/door.py seeds/spine.yaml --depth 1
+=== in tools/internal/spine/testdata: spine conform --adapter adapters/door.py seeds/spine.yaml --depth 1
 exit 0
 --- stdout
 | info    coverage           5 sequences up to 1 steps: 4 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
-=== in internal/spine/testdata: spine conform --he
+=== in tools/internal/spine/testdata: spine conform --he
 exit 0
 --- stdout
 | usage: spine conform [-h] [--format {text,json}] [--junit FILE]
@@ -570,7 +570,7 @@ exit 0
 |                         shell would, run without one
 |   --depth DEPTH
 |
-=== in internal/spine/testdata: spine conform --help
+=== in tools/internal/spine/testdata: spine conform --help
 exit 0
 --- stdout
 | usage: spine conform [-h] [--format {text,json}] [--junit FILE]
@@ -591,7 +591,7 @@ exit 0
 |                         shell would, run without one
 |   --depth DEPTH
 |
-=== in internal/spine/testdata: spine conform -h
+=== in tools/internal/spine/testdata: spine conform -h
 exit 0
 --- stdout
 | usage: spine conform [-h] [--format {text,json}] [--junit FILE]
@@ -612,62 +612,62 @@ exit 0
 |                         shell would, run without one
 |   --depth DEPTH
 |
-=== in internal/spine/testdata: spine conform seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine conform seeds/spine.yaml --ad x
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --ad x
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine conform seeds/spine.yaml --adapter
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine conform seeds/spine.yaml --adapter a --adapter-cmd b
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter a --adapter-cmd b
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door.py --adapter adapters/door_start.py --depth 1
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door.py --adapter adapters/door_start.py --depth 1
 exit 1
 --- stdout
 | error   diverges           start: spine starts in closed, code starts in open
 | info    coverage           1 sequences up to 1 steps: 0 of 8 state/event/variable cases exercised
 | -- 1 errors, 2 findings
 |
-=== in internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door.py --depth x
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door.py --depth x
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door.py extra
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door.py extra
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine conform seeds/spine.yaml --adapter-c true
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-c true
 exit 1
 --- stdout
 | error   adapter-failed     true: exited with status 0 before replying to new
 | -- 1 errors, 1 findings
 |
-=== in internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd b --adapter a
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd b --adapter a
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine conform seeds/spine.yaml --adapter=adapters/door.py --depth=1
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter=adapters/door.py --depth=1
 exit 0
 --- stdout
 | info    coverage           5 sequences up to 1 steps: 4 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
-=== in internal/spine/testdata: spine conform seeds/spine.yaml --depth 1
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --depth 1
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff
+=== in tools/internal/spine/testdata: spine diff
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff -- seeds/spine.yaml diff/door-b.yaml
+=== in tools/internal/spine/testdata: spine diff -- seeds/spine.yaml diff/door-b.yaml
 exit 1
 --- stdout
 | error   only-in-b          states: B has state "ajar", A does not
@@ -682,11 +682,11 @@ exit 1
 | error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
 | -- 10 errors, 10 findings
 |
-=== in internal/spine/testdata: spine diff --depth
+=== in tools/internal/spine/testdata: spine diff --depth
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff --depth 2 seeds/spine.yaml diff/door-b.yaml
+=== in tools/internal/spine/testdata: spine diff --depth 2 seeds/spine.yaml diff/door-b.yaml
 exit 1
 --- stdout
 | error   only-in-b          states: B has state "ajar", A does not
@@ -701,7 +701,7 @@ exit 1
 | error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
 | -- 10 errors, 10 findings
 |
-=== in internal/spine/testdata: spine diff --he
+=== in tools/internal/spine/testdata: spine diff --he
 exit 0
 --- stdout
 | usage: spine diff [-h] [--format {text,json}] [--junit FILE] [--depth DEPTH]
@@ -717,7 +717,7 @@ exit 0
 |   --junit FILE          also write a JUnit XML report
 |   --depth DEPTH
 |
-=== in internal/spine/testdata: spine diff --help
+=== in tools/internal/spine/testdata: spine diff --help
 exit 0
 --- stdout
 | usage: spine diff [-h] [--format {text,json}] [--junit FILE] [--depth DEPTH]
@@ -733,7 +733,7 @@ exit 0
 |   --junit FILE          also write a JUnit XML report
 |   --depth DEPTH
 |
-=== in internal/spine/testdata: spine diff -h
+=== in tools/internal/spine/testdata: spine diff -h
 exit 0
 --- stdout
 | usage: spine diff [-h] [--format {text,json}] [--junit FILE] [--depth DEPTH]
@@ -749,19 +749,19 @@ exit 0
 |   --junit FILE          also write a JUnit XML report
 |   --depth DEPTH
 |
-=== in internal/spine/testdata: spine diff diff/stop-a.yaml diff/stop-b.yaml --depth 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001
+=== in tools/internal/spine/testdata: spine diff diff/stop-a.yaml diff/stop-b.yaml --depth 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff diff/stop-a.yaml diff/stop-b.yaml --depth 99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+=== in tools/internal/spine/testdata: spine diff diff/stop-a.yaml diff/stop-b.yaml --depth 99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml --depth 2 diff/door-b.yaml
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml --depth 2 diff/door-b.yaml
 exit 1
 --- stdout
 | error   only-in-b          states: B has state "ajar", A does not
@@ -776,7 +776,7 @@ exit 1
 | error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
 | -- 10 errors, 10 findings
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --d 2
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --d 2
 exit 1
 --- stdout
 | error   only-in-b          states: B has state "ajar", A does not
@@ -791,7 +791,7 @@ exit 1
 | error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
 | -- 10 errors, 10 findings
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --dep 2
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --dep 2
 exit 1
 --- stdout
 | error   only-in-b          states: B has state "ajar", A does not
@@ -806,11 +806,11 @@ exit 1
 | error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
 | -- 10 errors, 10 findings
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth " 2 "
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth " 2 "
 exit 1
 --- stdout
 | error   only-in-b          states: B has state "ajar", A does not
@@ -825,15 +825,15 @@ exit 1
 | error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
 | -- 10 errors, 10 findings
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth "- 2"
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth "- 2"
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth "2\x1c"
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth "2\x1c"
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth +2
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth +2
 exit 1
 --- stdout
 | error   only-in-b          states: B has state "ajar", A does not
@@ -848,11 +848,11 @@ exit 1
 | error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
 | -- 10 errors, 10 findings
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth --format json
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth --format json
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth -2
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth -2
 exit 1
 --- stdout
 | error   only-in-b          states: B has state "ajar", A does not
@@ -863,7 +863,7 @@ exit 1
 | error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
 | -- 6 errors, 6 findings
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth -٢
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth -٢
 exit 1
 --- stdout
 | error   only-in-b          states: B has state "ajar", A does not
@@ -874,7 +874,7 @@ exit 1
 | error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
 | -- 6 errors, 6 findings
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 0_2
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 0_2
 exit 1
 --- stdout
 | error   only-in-b          states: B has state "ajar", A does not
@@ -889,23 +889,23 @@ exit 1
 | error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
 | -- 10 errors, 10 findings
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 1e1
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 1e1
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 2 --depth x
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 2 --depth x
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 2.0
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 2.0
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 2_
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 2_
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 2
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 2
 exit 1
 --- stdout
 | error   only-in-b          states: B has state "ajar", A does not
@@ -920,15 +920,15 @@ exit 1
 | error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
 | -- 10 errors, 10 findings
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth x
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth x
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth x --depth 2
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth x --depth 2
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth ٢
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth ٢
 exit 1
 --- stdout
 | error   only-in-b          states: B has state "ajar", A does not
@@ -943,7 +943,7 @@ exit 1
 | error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
 | -- 10 errors, 10 findings
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 　2　
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 　2　
 exit 1
 --- stdout
 | error   only-in-b          states: B has state "ajar", A does not
@@ -958,7 +958,7 @@ exit 1
 | error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
 | -- 10 errors, 10 findings
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth ２
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth ２
 exit 1
 --- stdout
 | error   only-in-b          states: B has state "ajar", A does not
@@ -973,11 +973,11 @@ exit 1
 | error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
 | -- 10 errors, 10 findings
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth=
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth=
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth=-2
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth=-2
 exit 1
 --- stdout
 | error   only-in-b          states: B has state "ajar", A does not
@@ -988,7 +988,7 @@ exit 1
 | error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
 | -- 6 errors, 6 findings
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth=2
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth=2
 exit 1
 --- stdout
 | error   only-in-b          states: B has state "ajar", A does not
@@ -1003,7 +1003,7 @@ exit 1
 | error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
 | -- 10 errors, 10 findings
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --format json --depth 1
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --format json --depth 1
 exit 1
 --- stdout
 | {
@@ -1061,39 +1061,39 @@ exit 1
 |   ]
 | }
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --junit
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --junit
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml extra
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml extra
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine guard --b build/x seeds/policy.yaml src/a.py
+=== in tools/internal/spine/testdata: spine guard --b build/x seeds/policy.yaml src/a.py
 exit 0
 --- stdout
 | info    role               build/x: checked 1 changed files as role builder
 | -- 0 errors, 1 findings
 |
-=== in internal/spine/testdata: spine guard --br=main seeds/policy.yaml src/a.py
+=== in tools/internal/spine/testdata: spine guard --br=main seeds/policy.yaml src/a.py
 exit 0
 --- stdout
 | info    role               main: checked 1 changed files as role owner
 | -- 0 errors, 1 findings
 |
-=== in internal/spine/testdata: spine guard --branch build/x seeds/policy.yaml src/a.py
+=== in tools/internal/spine/testdata: spine guard --branch build/x seeds/policy.yaml src/a.py
 exit 0
 --- stdout
 | info    role               build/x: checked 1 changed files as role builder
 | -- 0 errors, 1 findings
 |
-=== in internal/spine/testdata: spine guard --branch=build/x seeds/policy.yaml src/a.py
+=== in tools/internal/spine/testdata: spine guard --branch=build/x seeds/policy.yaml src/a.py
 exit 0
 --- stdout
 | info    role               build/x: checked 1 changed files as role builder
 | -- 0 errors, 1 findings
 |
-=== in internal/spine/testdata: spine guard --help
+=== in tools/internal/spine/testdata: spine guard --help
 exit 0
 --- stdout
 | usage: spine guard [-h] [--format {text,json}] [--junit FILE] --branch BRANCH
@@ -1109,31 +1109,31 @@ exit 0
 |   --junit FILE          also write a JUnit XML report
 |   --branch BRANCH
 |
-=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch
+=== in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch "" < "src/a.py\n"
+=== in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch "" < "src/a.py\n"
 exit 1
 --- stdout
 | error   unknown-role       : no policy entry matches this branch
 | -- 1 errors, 1 findings
 |
-=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch -1 src/a.py
+=== in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch -1 src/a.py
 exit 1
 --- stdout
 | error   unknown-role       -1: no policy entry matches this branch
 | -- 1 errors, 1 findings
 |
-=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch -x src/a.py
+=== in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch -x src/a.py
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x "a b" -1x
+=== in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x "a b" -1x
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x --format json src/a.py
+=== in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x --format json src/a.py
 exit 0
 --- stdout
 | {
@@ -1149,13 +1149,13 @@ exit 0
 |   ]
 | }
 |
-=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x < "src/a.py\n"
+=== in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x < "src/a.py\n"
 exit 0
 --- stdout
 | info    role               build/x: checked 1 changed files as role builder
 | -- 0 errors, 1 findings
 |
-=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x src/a.py --format json spec/b.yaml
+=== in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x src/a.py --format json spec/b.yaml
 exit 1
 --- stdout
 | {
@@ -1177,37 +1177,37 @@ exit 1
 |   ]
 | }
 |
-=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x src/a.py -v
+=== in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x src/a.py -v
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x src/a.py spec/b.yaml
+=== in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x src/a.py spec/b.yaml
 exit 1
 --- stdout
 | error   path-not-allowed   spec/b.yaml: no allow rule for the builder role covers this path
 | info    role               build/x: checked 2 changed files as role builder
 | -- 1 errors, 2 findings
 |
-=== in internal/spine/testdata: spine guard seeds/policy.yaml src/a.py
+=== in tools/internal/spine/testdata: spine guard seeds/policy.yaml src/a.py
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine guard seeds/policy.yaml src/a.py --branch build/x spec/b.yaml
+=== in tools/internal/spine/testdata: spine guard seeds/policy.yaml src/a.py --branch build/x spec/b.yaml
 exit 1
 --- stdout
 | error   path-not-allowed   spec/b.yaml: no allow rule for the builder role covers this path
 | info    role               build/x: checked 2 changed files as role builder
 | -- 1 errors, 2 findings
 |
-=== in internal/spine/testdata: spine hash --format json seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine hash --format json seeds/spine.yaml
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine hash --junit x seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine hash --junit x seeds/spine.yaml
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine hash -h
+=== in tools/internal/spine/testdata: spine hash -h
 exit 0
 --- stdout
 | usage: spine hash [-h] spec
@@ -1218,7 +1218,7 @@ exit 0
 | options:
 |   -h, --help  show this help message and exit
 |
-=== in internal/spine/testdata: spine hash seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine hash seeds/spine.yaml
 exit 0
 --- stdout
 | closed/open@26ccaba33ea0
@@ -1226,13 +1226,13 @@ exit 0
 | open/open@79e9a52da0fe
 | open/remove@6c6a6ee2ab96
 |
-=== in internal/spine/testdata: spine hash spines/not-utf8.yaml
+=== in tools/internal/spine/testdata: spine hash spines/not-utf8.yaml
 exit 1
 --- stdout
 | error   spec-unreadable    spines/not-utf8.yaml: not UTF-8: byte 0xe9 at offset 32
 | -- 1 errors, 1 findings
 |
-=== in internal/spine/testdata: spine hash spines/unsound.yaml
+=== in tools/internal/spine/testdata: spine hash spines/unsound.yaml
 exit 0
 --- stdout
 | s/go@1d93a9c8d9e9
@@ -1244,11 +1244,11 @@ exit 0
 | end/stop@df53dfb55f37
 | end/go@d517c5adb451
 |
-=== in internal/spine/testdata: spine stale seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine stale seeds/spine.yaml
 exit 2
 --- stdout
 |
-=== in internal/spine/testdata: spine stale seeds/spine.yaml checks/door --format=json
+=== in tools/internal/spine/testdata: spine stale seeds/spine.yaml checks/door --format=json
 exit 1
 --- stdout
 | {
@@ -1300,7 +1300,7 @@ exit 1
 |   ]
 | }
 |
-=== in internal/spine/testdata: spine trace --help
+=== in tools/internal/spine/testdata: spine trace --help
 exit 0
 --- stdout
 | usage: spine trace [-h] [--format {text,json}] [--junit FILE] spec behavior
@@ -1314,7 +1314,7 @@ exit 0
 |   --format {text,json}
 |   --junit FILE          also write a JUnit XML report
 |
-=== in internal/spine/testdata: spine trace seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine trace seeds/spine.yaml
 exit 2
 --- stdout
 |

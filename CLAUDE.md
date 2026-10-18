@@ -9,8 +9,8 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
 
 ## Rules
 
-- **Before you finish any change,** `./verify --full`, `demo/faults.sh`, `go vet ./...` and
-  `go test ./...` all pass, as they must in CI. Show their last lines. Don't call something done
+- **Before you finish any change,** `./verify --full`, `demo/faults.sh`, `go -C tools vet ./...` and
+  `go -C tools test ./...` all pass, as they must in CI. Show their last lines. Don't call something done
   because it looks right; show the command and its output.
 - **The notes example is the acceptance fixture.** Don't edit `examples/notes/` (its spec,
   checks, conformance adapter, `src/notes_app.py`, mutation and demo) or `demo/` to make a
@@ -23,7 +23,7 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
 - **Tools stay standalone:** files in, findings out. No network, no model calls (the planned
   `interpret` tool is the one exception), no knowledge of who calls them, no aiwf or other
   workflow tool. Python standard library plus PyYAML unless an issue says otherwise; the Go
-  `spine` (`cmd/spine/`, `internal/spine/`) uses the Go standard library plus
+  `spine` (`tools/cmd/spine/`, `tools/internal/spine/`) uses the Go standard library plus
   `go.yaml.in/yaml/v4`.
 - **Docs move with code.** A change to a tool updates `docs/reference/` in the same commit;
   `docs/design.md` changes with the code it describes.
@@ -41,10 +41,11 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
 demo/faults.sh       # acceptance test: every seeded fault must be caught; exits 1 otherwise
 demo/faults.sh 4     # one scenario
 python3 tools/spine.py --help
-go build -o bin/spine ./cmd/spine   # the Go port of spine.py
-go test ./...        # runs the Go spine and tools/spine.py on the same inputs; any difference fails,
-                     # and so does one from the record in internal/spine/testdata/record/
-go test ./internal/spine/ -update   # writes the record again from the Go spine; review its diff
+go -C tools build -o bin/spine ./cmd/spine   # the Go port of spine.py, into tools/bin/spine
+go -C tools vet ./...
+go -C tools test ./...   # runs the Go spine and tools/spine.py on the same inputs; any difference
+                         # fails, and so does one from the record (tools/internal/spine/testdata/)
+go -C tools test ./internal/spine/ -update   # writes the record again from the Go spine; review its diff
 ```
 
 Setup needs Python 3 with PyYAML, the `git` program for the ref_sync example's checks, and

@@ -5,7 +5,7 @@ package main
 import (
 	"os"
 
-	"github.com/23min/verifier-kit/internal/spine"
+	"github.com/23min/verifier-kit/tools/internal/spine"
 )
 
 func main() {
