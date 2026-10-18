@@ -426,8 +426,8 @@ func sortedMinus(xs, ys []string) []string {
 	return out
 }
 
-// sameVars is the dict comparison of two readings' vars: the same names, each with the same
-// values in the same order.
+// sameVars compares two readings' vars: the same names, each with the same values in any order
+// (#38).
 func sameVars(a, b []Var) bool {
 	if len(a) != len(b) {
 		return false
@@ -438,7 +438,7 @@ func sameVars(a, b []Var) bool {
 	}
 	for _, v := range a {
 		w, ok := values[v.Name]
-		if !ok || !slices.Equal(v.Values, w) {
+		if !ok || len(sortedMinus(v.Values, w)) > 0 || len(sortedMinus(w, v.Values)) > 0 {
 			return false
 		}
 	}

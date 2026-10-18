@@ -54,6 +54,7 @@
 ["diff", "diff/door-open.yaml", "diff/door-b.yaml"]
 ["diff", "seeds/spine.yaml", "diff/vars-order.yaml"]
 ["diff", "diff/vars-more.yaml", "seeds/spine.yaml"]
+["diff", "seeds/spine.yaml", "diff/vars-value.yaml"]
 ["diff", "diff/vars-order.yaml", "diff/door-open.yaml"]
 ["diff", "diff/plain-a.yaml", "diff/plain-b.yaml"]
 ["diff", "diff/plain-b.yaml", "diff/plain-a.yaml", "--depth", "5"]
