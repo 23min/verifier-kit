@@ -3391,19 +3391,13 @@ exit 1
 |       "severity": "error",
 |       "where": "initial",
 |       "message": "A starts in \"closed\", B starts in \"open\""
-|     },
-|     {
-|       "code": "vars-differ",
-|       "severity": "error",
-|       "where": "vars",
-|       "message": "A and B declare different variables; case comparison skipped"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine diff" tests="2" failures="2"><testcase classname="spine diff" name="initial-differs initial"><failure message="A starts in &quot;closed&quot;, B starts in &quot;open&quot;">A starts in "closed", B starts in "open"</failure></testcase><testcase classname="spine diff" name="vars-differ vars"><failure message="A and B declare different variables; case comparison skipped">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>
+| <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="initial-differs initial"><failure message="A starts in &quot;closed&quot;, B starts in &quot;open&quot;">A starts in "closed", B starts in "open"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/verdicts-a.yaml diff/verdicts-b.yaml
 exit 1
 --- stdout
@@ -3865,6 +3859,18 @@ exit 1
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="missing-key diff/invalid.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml diff/vars-order.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "diff",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml diff/vars-value.yaml
 exit 1
 --- stdout
 | {
@@ -4336,8 +4342,7 @@ exit 1
 exit 1
 --- stdout
 | error   initial-differs    initial: A starts in "closed", B starts in "open"
-| error   vars-differ        vars: A and B declare different variables; case comparison skipped
-| -- 2 errors, 2 findings
+| -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine diff diff/verdicts-a.yaml diff/verdicts-b.yaml
 exit 1
@@ -4445,6 +4450,11 @@ exit 1
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/vars-order.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/vars-value.yaml
 exit 1
 --- stdout
 | error   vars-differ        vars: A and B declare different variables; case comparison skipped

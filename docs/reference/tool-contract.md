@@ -87,7 +87,7 @@ takes a spine validates it first and stops with the validation findings if it is
 | `example-fails` | error | `check` | a worked example ends somewhere else |
 | `only-in-a`, `only-in-b` | error | `diff` | a state or event exists in one reading only |
 | `initial-differs` | error | `diff` | the readings start in different states; every sequence then starts apart, so the behavior comparison stops there |
-| `vars-differ` | error | `diff` | the readings declare different variables |
+| `vars-differ` | error | `diff` | the readings declare different variable names, or different values for one; the order of the values doesn't count |
 | `case-disagrees` | error | `diff` | the readings decide a case differently |
 | `behavior-differs` | error | `diff` | a shortest event sequence on which the readings end differently |
 | `stale-check` | error | `stale` | a check cites a cell whose hash has changed |
