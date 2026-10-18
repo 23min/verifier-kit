@@ -1,5 +1,5 @@
-# Another reading of seeds/spine.yaml: a state and an event only it has, events listed twice,
-# guests let in, removing a guest both refused and allowed, and removing an open door closing it.
+# Another reading of seeds/spine.yaml: a state and an event only it has, guests let in,
+# removing a guest both refused and allowed, and removing an open door closing it.
 machine: door
 section: "1.2"
 vars:
@@ -10,7 +10,7 @@ states:
   ajar: {}
   gone: {kind: design, terminal: true}
 initial: closed
-events: [open, remove, knock, open]
+events: [open, remove, knock]
 rules:
   - {from: closed, event: open, to: open}
   - {from: closed, event: remove, to: gone}

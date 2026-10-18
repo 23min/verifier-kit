@@ -10,7 +10,7 @@ states:
   island: {kind: policy}
   end: {terminal: true}
 initial: s
-events: [go, stop, go]
+events: [go, stop]
 rules:
   - {from: s, event: go, when: "role == 'owner'", to: t}
   - {from: s, event: go, when: "role == 'owner' and mode == 'a'", reject: true}

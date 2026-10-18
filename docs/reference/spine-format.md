@@ -13,10 +13,10 @@ lifecycle and permissions only. Computations, content and timing belong in other
 |---|---|---|
 | `machine` | yes | the machine's name |
 | `section` | no | the chapter section it was ratified from |
-| `vars` | no | each variable mapped to a short, finite list of values |
+| `vars` | no | each variable mapped to a short, finite list of values, each listed once (a repeat is a `listed-twice`) |
 | `states` | yes | each state mapped to `{kind: fact|policy|design, terminal: true}` (`terminal` optional) |
 | `initial` | yes | the starting state |
-| `events` | yes | the list of event names |
+| `events` | yes | the list of event names, each listed once (a repeat is a `listed-twice`) |
 | `rules` | yes | the list of rules |
 | `examples` | no | worked examples that `check` replays |
 

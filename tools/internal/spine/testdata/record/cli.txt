@@ -251,54 +251,6 @@ exit 1
 |       "message": "nothing says what \"stop\" does in \"s\""
 |     },
 |     {
-|       "code": "overlap",
-|       "severity": "error",
-|       "where": "s/go",
-|       "message": "mode=a, role=owner matches conflicting rules: reject and -> t"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "s/go",
-|       "message": "no rule covers mode=a, role=guest"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "s/go",
-|       "message": "no rule covers mode=a, role=\u00e9di tor"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "s/go",
-|       "message": "no rule covers mode=b, role=guest"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "s/go",
-|       "message": "no rule covers mode=b, role=\u00e9di tor"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "t/go",
-|       "message": "no rule covers mode=b, role=owner"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "t/go",
-|       "message": "no rule covers mode=b, role=guest"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "t/go",
-|       "message": "no rule covers mode=b, role=\u00e9di tor"
-|     },
-|     {
 |       "code": "missing-case",
 |       "severity": "error",
 |       "where": "t/go",
@@ -327,18 +279,6 @@ exit 1
 |       "severity": "error",
 |       "where": "island/stop",
 |       "message": "nothing says what \"stop\" does in \"island\""
-|     },
-|     {
-|       "code": "undecided-cell",
-|       "severity": "error",
-|       "where": "island/go",
-|       "message": "nothing says what \"go\" does in \"island\""
-|     },
-|     {
-|       "code": "terminal-has-exit",
-|       "severity": "error",
-|       "where": "end/go",
-|       "message": "\"end\" is terminal but \"go\" leaves it"
 |     },
 |     {
 |       "code": "terminal-has-exit",
@@ -388,26 +328,16 @@ exit 1
 | error   missing-case       s/go: no rule covers mode=b, role=guest
 | error   missing-case       s/go: no rule covers mode=b, role=édi tor
 | error   undecided-cell     s/stop: nothing says what "stop" does in "s"
-| error   overlap            s/go: mode=a, role=owner matches conflicting rules: reject and -> t
-| error   missing-case       s/go: no rule covers mode=a, role=guest
-| error   missing-case       s/go: no rule covers mode=a, role=édi tor
-| error   missing-case       s/go: no rule covers mode=b, role=guest
-| error   missing-case       s/go: no rule covers mode=b, role=édi tor
-| error   missing-case       t/go: no rule covers mode=b, role=owner
-| error   missing-case       t/go: no rule covers mode=b, role=guest
-| error   missing-case       t/go: no rule covers mode=b, role=édi tor
 | error   missing-case       t/go: no rule covers mode=b, role=owner
 | error   missing-case       t/go: no rule covers mode=b, role=guest
 | error   missing-case       t/go: no rule covers mode=b, role=édi tor
 | error   undecided-cell     island/go: nothing says what "go" does in "island"
 | error   undecided-cell     island/stop: nothing says what "stop" does in "island"
-| error   undecided-cell     island/go: nothing says what "go" does in "island"
-| error   terminal-has-exit  end/go: "end" is terminal but "go" leaves it
 | error   terminal-has-exit  end/go: "end" is terminal but "go" leaves it
 | error   unreachable        island: no sequence of events reaches "island" from "s"
 | error   example-fails      wrong end: expected s, got t
 | error   example-fails      refused: expected rejected, got t
-| -- 28 errors, 28 findings
+| -- 18 errors, 18 findings
 |
 === in tools/internal/spine/testdata: spine check --format json seeds/spine.yaml
 exit 0
@@ -1236,13 +1166,10 @@ exit 1
 exit 0
 --- stdout
 | s/go@1d93a9c8d9e9
-| s/go@1d93a9c8d9e9
 | t/go@5e745dafed67
 | t/stop@49781a03ae6b
-| t/go@5e745dafed67
 | end/go@d517c5adb451
 | end/stop@df53dfb55f37
-| end/go@d517c5adb451
 |
 === in tools/internal/spine/testdata: spine stale seeds/spine.yaml
 exit 2

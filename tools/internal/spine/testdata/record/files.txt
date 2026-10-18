@@ -10,6 +10,25 @@ exit 0
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/event-twice.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": [
+|     {
+|       "code": "listed-twice",
+|       "severity": "error",
+|       "where": "events",
+|       "message": "\"open\" is listed more than once"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="listed-twice events"><failure message="&quot;open&quot; is listed more than once">"open" is listed more than once</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/names.yaml
 exit 0
 --- stdout
@@ -171,54 +190,6 @@ exit 1
 |       "message": "nothing says what \"stop\" does in \"s\""
 |     },
 |     {
-|       "code": "overlap",
-|       "severity": "error",
-|       "where": "s/go",
-|       "message": "mode=a, role=owner matches conflicting rules: reject and -> t"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "s/go",
-|       "message": "no rule covers mode=a, role=guest"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "s/go",
-|       "message": "no rule covers mode=a, role=\u00e9di tor"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "s/go",
-|       "message": "no rule covers mode=b, role=guest"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "s/go",
-|       "message": "no rule covers mode=b, role=\u00e9di tor"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "t/go",
-|       "message": "no rule covers mode=b, role=owner"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "t/go",
-|       "message": "no rule covers mode=b, role=guest"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "t/go",
-|       "message": "no rule covers mode=b, role=\u00e9di tor"
-|     },
-|     {
 |       "code": "missing-case",
 |       "severity": "error",
 |       "where": "t/go",
@@ -249,18 +220,6 @@ exit 1
 |       "message": "nothing says what \"stop\" does in \"island\""
 |     },
 |     {
-|       "code": "undecided-cell",
-|       "severity": "error",
-|       "where": "island/go",
-|       "message": "nothing says what \"go\" does in \"island\""
-|     },
-|     {
-|       "code": "terminal-has-exit",
-|       "severity": "error",
-|       "where": "end/go",
-|       "message": "\"end\" is terminal but \"go\" leaves it"
-|     },
-|     {
 |       "code": "terminal-has-exit",
 |       "severity": "error",
 |       "where": "end/go",
@@ -289,11 +248,36 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="28" failures="28"><testcase classname="spine check" name="unknown-state nowhere/go"><failure message="rule starts in undeclared state &quot;nowhere&quot;">rule starts in undeclared state "nowhere"</failure></testcase><testcase classname="spine check" name="unknown-state nowhere/go"><failure message="rule goes to undeclared state &quot;elsewhere&quot;">rule goes to undeclared state "elsewhere"</failure></testcase><testcase classname="spine check" name="unknown-event s/fly"><failure message="rule uses undeclared event &quot;fly&quot;">rule uses undeclared event "fly"</failure></testcase><testcase classname="spine check" name="overlap s/go"><failure message="mode=a, role=owner matches conflicting rules: reject and -&gt; t">mode=a, role=owner matches conflicting rules: reject and -&gt; t</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=a, role=guest">no rule covers mode=a, role=guest</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=a, role=édi tor">no rule covers mode=a, role=édi tor</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=b, role=guest">no rule covers mode=b, role=guest</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=b, role=édi tor">no rule covers mode=b, role=édi tor</failure></testcase><testcase classname="spine check" name="undecided-cell s/stop"><failure message="nothing says what &quot;stop&quot; does in &quot;s&quot;">nothing says what "stop" does in "s"</failure></testcase><testcase classname="spine check" name="overlap s/go"><failure message="mode=a, role=owner matches conflicting rules: reject and -&gt; t">mode=a, role=owner matches conflicting rules: reject and -&gt; t</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=a, role=guest">no rule covers mode=a, role=guest</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=a, role=édi tor">no rule covers mode=a, role=édi tor</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=b, role=guest">no rule covers mode=b, role=guest</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=b, role=édi tor">no rule covers mode=b, role=édi tor</failure></testcase><testcase classname="spine check" name="missing-case t/go"><failure message="no rule covers mode=b, role=owner">no rule covers mode=b, role=owner</failure></testcase><testcase classname="spine check" name="missing-case t/go"><failure message="no rule covers mode=b, role=guest">no rule covers mode=b, role=guest</failure></testcase><testcase classname="spine check" name="missing-case t/go"><failure message="no rule covers mode=b, role=édi tor">no rule covers mode=b, role=édi tor</failure></testcase><testcase classname="spine check" name="missing-case t/go"><failure message="no rule covers mode=b, role=owner">no rule covers mode=b, role=owner</failure></testcase><testcase classname="spine check" name="missing-case t/go"><failure message="no rule covers mode=b, role=guest">no rule covers mode=b, role=guest</failure></testcase><testcase classname="spine check" name="missing-case t/go"><failure message="no rule covers mode=b, role=édi tor">no rule covers mode=b, role=édi tor</failure></testcase><testcase classname="spine check" name="undecided-cell island/go"><failure message="nothing says what &quot;go&quot; does in &quot;island&quot;">nothing says what "go" does in "island"</failure></testcase><testcase classname="spine check" name="undecided-cell island/stop"><failure message="nothing says what &quot;stop&quot; does in &quot;island&quot;">nothing says what "stop" does in "island"</failure></testcase><testcase classname="spine check" name="undecided-cell island/go"><failure message="nothing says what &quot;go&quot; does in &quot;island&quot;">nothing says what "go" does in "island"</failure></testcase><testcase classname="spine check" name="terminal-has-exit end/go"><failure message="&quot;end&quot; is terminal but &quot;go&quot; leaves it">"end" is terminal but "go" leaves it</failure></testcase><testcase classname="spine check" name="terminal-has-exit end/go"><failure message="&quot;end&quot; is terminal but &quot;go&quot; leaves it">"end" is terminal but "go" leaves it</failure></testcase><testcase classname="spine check" name="unreachable island"><failure message="no sequence of events reaches &quot;island&quot; from &quot;s&quot;">no sequence of events reaches "island" from "s"</failure></testcase><testcase classname="spine check" name="example-fails wrong end"><failure message="expected s, got t">expected s, got t</failure></testcase><testcase classname="spine check" name="example-fails refused"><failure message="expected rejected, got t">expected rejected, got t</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="18" failures="18"><testcase classname="spine check" name="unknown-state nowhere/go"><failure message="rule starts in undeclared state &quot;nowhere&quot;">rule starts in undeclared state "nowhere"</failure></testcase><testcase classname="spine check" name="unknown-state nowhere/go"><failure message="rule goes to undeclared state &quot;elsewhere&quot;">rule goes to undeclared state "elsewhere"</failure></testcase><testcase classname="spine check" name="unknown-event s/fly"><failure message="rule uses undeclared event &quot;fly&quot;">rule uses undeclared event "fly"</failure></testcase><testcase classname="spine check" name="overlap s/go"><failure message="mode=a, role=owner matches conflicting rules: reject and -&gt; t">mode=a, role=owner matches conflicting rules: reject and -&gt; t</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=a, role=guest">no rule covers mode=a, role=guest</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=a, role=édi tor">no rule covers mode=a, role=édi tor</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=b, role=guest">no rule covers mode=b, role=guest</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=b, role=édi tor">no rule covers mode=b, role=édi tor</failure></testcase><testcase classname="spine check" name="undecided-cell s/stop"><failure message="nothing says what &quot;stop&quot; does in &quot;s&quot;">nothing says what "stop" does in "s"</failure></testcase><testcase classname="spine check" name="missing-case t/go"><failure message="no rule covers mode=b, role=owner">no rule covers mode=b, role=owner</failure></testcase><testcase classname="spine check" name="missing-case t/go"><failure message="no rule covers mode=b, role=guest">no rule covers mode=b, role=guest</failure></testcase><testcase classname="spine check" name="missing-case t/go"><failure message="no rule covers mode=b, role=édi tor">no rule covers mode=b, role=édi tor</failure></testcase><testcase classname="spine check" name="undecided-cell island/go"><failure message="nothing says what &quot;go&quot; does in &quot;island&quot;">nothing says what "go" does in "island"</failure></testcase><testcase classname="spine check" name="undecided-cell island/stop"><failure message="nothing says what &quot;stop&quot; does in &quot;island&quot;">nothing says what "stop" does in "island"</failure></testcase><testcase classname="spine check" name="terminal-has-exit end/go"><failure message="&quot;end&quot; is terminal but &quot;go&quot; leaves it">"end" is terminal but "go" leaves it</failure></testcase><testcase classname="spine check" name="unreachable island"><failure message="no sequence of events reaches &quot;island&quot; from &quot;s&quot;">no sequence of events reaches "island" from "s"</failure></testcase><testcase classname="spine check" name="example-fails wrong end"><failure message="expected s, got t">expected s, got t</failure></testcase><testcase classname="spine check" name="example-fails refused"><failure message="expected rejected, got t">expected rejected, got t</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/value-twice.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": [
+|     {
+|       "code": "listed-twice",
+|       "severity": "error",
+|       "where": "vars/role",
+|       "message": "\"owner\" is listed more than once"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="listed-twice vars/role"><failure message="&quot;owner&quot; is listed more than once">"owner" is listed more than once</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check seeds/spine.yaml
 exit 0
 --- stdout
 | -- 0 errors, 0 findings
+|
+=== in tools/internal/spine/testdata: spine check spines/event-twice.yaml
+exit 1
+--- stdout
+| error   listed-twice       events: "open" is listed more than once
+| -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine check spines/names.yaml
 exit 0
@@ -335,26 +319,22 @@ exit 1
 | error   missing-case       s/go: no rule covers mode=b, role=guest
 | error   missing-case       s/go: no rule covers mode=b, role=édi tor
 | error   undecided-cell     s/stop: nothing says what "stop" does in "s"
-| error   overlap            s/go: mode=a, role=owner matches conflicting rules: reject and -> t
-| error   missing-case       s/go: no rule covers mode=a, role=guest
-| error   missing-case       s/go: no rule covers mode=a, role=édi tor
-| error   missing-case       s/go: no rule covers mode=b, role=guest
-| error   missing-case       s/go: no rule covers mode=b, role=édi tor
-| error   missing-case       t/go: no rule covers mode=b, role=owner
-| error   missing-case       t/go: no rule covers mode=b, role=guest
-| error   missing-case       t/go: no rule covers mode=b, role=édi tor
 | error   missing-case       t/go: no rule covers mode=b, role=owner
 | error   missing-case       t/go: no rule covers mode=b, role=guest
 | error   missing-case       t/go: no rule covers mode=b, role=édi tor
 | error   undecided-cell     island/go: nothing says what "go" does in "island"
 | error   undecided-cell     island/stop: nothing says what "stop" does in "island"
-| error   undecided-cell     island/go: nothing says what "go" does in "island"
-| error   terminal-has-exit  end/go: "end" is terminal but "go" leaves it
 | error   terminal-has-exit  end/go: "end" is terminal but "go" leaves it
 | error   unreachable        island: no sequence of events reaches "island" from "s"
 | error   example-fails      wrong end: expected s, got t
 | error   example-fails      refused: expected rejected, got t
-| -- 28 errors, 28 findings
+| -- 18 errors, 18 findings
+|
+=== in tools/internal/spine/testdata: spine check spines/value-twice.yaml
+exit 1
+--- stdout
+| error   listed-twice       vars/role: "owner" is listed more than once
+| -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine hash seeds/spine.yaml
 exit 0
@@ -364,27 +344,27 @@ exit 0
 | open/open@79e9a52da0fe
 | open/remove@6c6a6ee2ab96
 |
+=== in tools/internal/spine/testdata: spine hash spines/event-twice.yaml
+exit 1
+--- stdout
+| error   listed-twice       events: "open" is listed more than once
+| -- 1 errors, 1 findings
+|
 === in tools/internal/spine/testdata: spine hash spines/names.yaml
 exit 0
 --- stdout
 | café/über@8be38720bae1
 | café/ev"q@6adfc9b92e36
-| café/über@8be38720bae1
 | 日本/über@185eb0ebc4d1
 | 日本/ev"q@25d121abc62a
-| 日本/über@185eb0ebc4d1
 | quote"d/über@153c8222e520
 | quote"d/ev"q@4c75f2e1bea0
-| quote"d/über@153c8222e520
 | back\slash/über@6660710efe8f
 | back\slash/ev"q@b88214d7a034
-| back\slash/über@6660710efe8f
 | tab	name/über@83a11253ae62
 | tab	name/ev"q@c0204794eeec
-| tab	name/über@83a11253ae62
 |q "\x7f\u0085/\u00fcber@e31e9d4cc612"
 |q "\x7f\u0085/ev\"q@547ffcf8486c"
-|q "\x7f\u0085/\u00fcber@e31e9d4cc612"
 |
 === in tools/internal/spine/testdata: spine hash spines/not-utf8.yaml
 exit 1
@@ -413,11 +393,14 @@ exit 1
 exit 0
 --- stdout
 | s/go@1d93a9c8d9e9
-| s/go@1d93a9c8d9e9
 | t/go@5e745dafed67
 | t/stop@49781a03ae6b
-| t/go@5e745dafed67
 | end/go@d517c5adb451
 | end/stop@df53dfb55f37
-| end/go@d517c5adb451
+|
+=== in tools/internal/spine/testdata: spine hash spines/value-twice.yaml
+exit 1
+--- stdout
+| error   listed-twice       vars/role: "owner" is listed more than once
+| -- 1 errors, 1 findings
 |
