@@ -36,9 +36,10 @@ demo/faults.sh              # acceptance test: seeds one fault at a time and che
 demo/live-builder.sh        # optional: a real Claude Code builder session against the oracle
 ```
 
-`spine` is being ported to Go, so that checking a spine needs neither Python nor PyYAML
-([`docs/adr/0004-go-spine.md`](docs/adr/0004-go-spine.md)). The Go `spine` has every command;
-`./verify` still runs `tools/spine.py`. With Go 1.27:
+`spine` is written in Go, so that checking a spine needs neither Python nor PyYAML
+([`docs/adr/0004-go-spine.md`](docs/adr/0004-go-spine.md)). `./verify` builds it on every run,
+into `tools/bin/spine`, so it needs Go 1.27; `tools/spine.py`, the Python original, stays until
+#44 removes it ([`docs/adr/0006-retire-spine-py.md`](docs/adr/0006-retire-spine-py.md)). By hand:
 
 ```sh
 go -C tools build -o bin/spine ./cmd/spine                 # into tools/bin/, which git ignores

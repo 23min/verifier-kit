@@ -6,11 +6,13 @@
 #   demo/faults.sh 3        run scenario 3 only
 #
 # Exit 0 when every scenario behaves as expected, 1 otherwise. CI runs this on every push.
-# Needs python3 with PyYAML (or a .venv), git, and elixir for scenarios 11-13.
+# Needs python3 with PyYAML (or a .venv), Go, git, and elixir for scenarios 11-13.
 set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SCRATCH="$(mktemp -d)"
 trap 'rm -rf "$SCRATCH"' EXIT
+SPINE="$SCRATCH/spine"   # for the scenarios that run spine directly; ./verify builds its own
+go -C "$ROOT/tools" build -trimpath -o "$SPINE" ./cmd/spine || { echo "faults: cannot build spine" >&2; exit 1; }
 W="$SCRATCH/repo"
 ONLY="${1:-}"
 FAILS=0
@@ -102,7 +104,7 @@ fi
 
 if scenario 5 "Two readings of the chapter disagree (interpretation loop, not a gate)" \
    "spine diff lists each disagreement with a witness: the question to put to the spec author"; then
-  show "$PY" tools/spine.py diff examples/notes/spec/notes/readings/reading-a.yaml examples/notes/spec/notes/readings/reading-b.yaml
+  show "$SPINE" diff examples/notes/spec/notes/readings/reading-a.yaml examples/notes/spec/notes/readings/reading-b.yaml
   expect 1 "case-disagrees     draft/trash: role=owner" "case-disagrees     trashed/restore: role=editor"
 fi
 
@@ -149,7 +151,7 @@ fi
 if scenario 10 "The service as first written, through the adapter protocol" \
    "spine conform --adapter-cmd, through the shim, finds the same two bugs as scenario 1"; then
   cp "$W/examples/notes/demo/notes_app_as_written.py" "$W/examples/notes/src/notes_app.py"
-  show env PYTHONPATH=examples/notes/src:examples/notes/conformance "$PY" tools/spine.py conform \
+  show env PYTHONPATH=examples/notes/src:examples/notes/conformance "$SPINE" conform \
     examples/notes/spec/notes/spine.yaml \
     --adapter-cmd "$(printf %q "$PY") tools/adapter_shim.py examples/notes/conformance/adapter_notes.py"
   expect 1 "diverges           draft/trash role=owner" "diverges           trashed/edit role=owner"
