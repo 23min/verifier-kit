@@ -47,13 +47,13 @@ func runTests(m *testing.M) int {
 	}
 	defer os.RemoveAll(dir)
 	goSpine = filepath.Join(dir, "spine")
-	build := exec.Command("go", "build", "-o", goSpine, "github.com/23min/verifier-kit/cmd/spine")
+	build := exec.Command("go", "build", "-o", goSpine, "github.com/23min/verifier-kit/tools/cmd/spine")
 	build.Stdout, build.Stderr = os.Stderr, os.Stderr
 	if err := build.Run(); err != nil {
 		fmt.Fprintln(os.Stderr, "building spine:", err)
 		return 1
 	}
-	repoRoot, _ = filepath.Abs("../..")
+	repoRoot, _ = filepath.Abs("../../..")
 	spinePy = filepath.Join(repoRoot, "tools", "spine.py")
 	pythonPath = os.Getenv("PYTHON")
 	if pythonPath == "" {

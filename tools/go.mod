@@ -1,4 +1,4 @@
-module github.com/23min/verifier-kit
+module github.com/23min/verifier-kit/tools
 
 go 1.27
 

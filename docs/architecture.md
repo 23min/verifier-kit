@@ -262,16 +262,16 @@ This repo's CI (`.github/workflows/verify.yml`) runs `go vet` and `go test`, the
 `./verify --full`, then `demo/faults.sh`, on every pull request and push to `main`. It does
 not set `VERIFY_BASE`, so the path guard runs here only inside scenario 4.
 
-`go test` holds the differential test (`internal/spine/differential_test.go`). The Go `spine`
-(`cmd/spine/`, `internal/spine/`) and `tools/spine.py` run on the same inputs, among them the
+`go test` holds the differential test (`tools/internal/spine/differential_test.go`). The Go
+`spine` (`tools/cmd/spine/`, `tools/internal/spine/`, one module in `tools/`) and `tools/spine.py` run on the same inputs, among them the
 repo's spines, readings, behaviors, checks, adapters and policy and the faults scenarios 1 to 4,
 9 and 10 seed, and must give the same exit codes and output. Nothing else calls the Go `spine` yet.
 
 The same test checks the Go `spine` against a record of what it gave on every one of those
-inputs (`internal/spine/testdata/record/`, written by `internal/spine/record_test.go`): the exit
+inputs (`tools/internal/spine/testdata/record/`, written by `record_test.go` beside it): the exit
 code and output of each run, and in JSON runs the JUnit report, with the paths that differ
 between machines written as `$ROOT` and `$TMP`. The Go `spine` must give exactly what is
-recorded. `go test ./internal/spine/ -update` writes the record again; its diff is what a
+recorded. `go -C tools test ./internal/spine/ -update` writes the record again; its diff is what a
 reviewer reads. Once `tools/spine.py` retires (#44), the record is the Go `spine`'s only
 reference.
 

@@ -14,7 +14,7 @@ import (
 	"syscall"
 	"unicode/utf8"
 
-	verifierkit "github.com/23min/verifier-kit"
+	verifierkit "github.com/23min/verifier-kit/tools"
 )
 
 // ---------- conform ----------

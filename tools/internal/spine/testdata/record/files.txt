@@ -1,4 +1,4 @@
-=== in internal/spine/testdata: spine check --format json --junit REPORT seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT seeds/spine.yaml
 exit 0
 --- stdout
 | {
@@ -10,7 +10,7 @@ exit 0
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
-=== in internal/spine/testdata: spine check --format json --junit REPORT spines/names.yaml
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/names.yaml
 exit 0
 --- stdout
 | {
@@ -22,7 +22,7 @@ exit 0
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
-=== in internal/spine/testdata: spine check --format json --junit REPORT spines/not-utf8.yaml
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/not-utf8.yaml
 exit 1
 --- stdout
 | {
@@ -41,7 +41,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable spines/not-utf8.yaml"><failure message="not UTF-8: byte 0xe9 at offset 32">not UTF-8: byte 0xe9 at offset 32</failure></testcase></testsuite>
-=== in internal/spine/testdata: spine check --format json --junit REPORT spines/on-key.yaml
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/on-key.yaml
 exit 1
 --- stdout
 | {
@@ -72,7 +72,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="3" failures="3"><testcase classname="spine check" name="yaml-boolean-key rules[1]"><failure message="rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it">rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it</failure></testcase><testcase classname="spine check" name="missing-key rules[1]"><failure message="rule needs &quot;event&quot;">rule needs "event"</failure></testcase><testcase classname="spine check" name="yaml-boolean-value rules[2]"><failure message="&quot;to&quot; was read as true or false; quote it">"to" was read as true or false; quote it</failure></testcase></testsuite>
-=== in internal/spine/testdata: spine check --format json --junit REPORT spines/typos.yaml
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/typos.yaml
 exit 1
 --- stdout
 | {
@@ -109,7 +109,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="4" failures="4"><testcase classname="spine check" name="bad-step examples[1]"><failure message="step 1 &quot;publsh role=owner&quot;: &quot;publsh&quot; is not a declared event">step 1 "publsh role=owner": "publsh" is not a declared event</failure></testcase><testcase classname="spine check" name="bad-value examples[2]"><failure message="expect &quot;activ&quot; is not a declared state, rejected or undefined">expect "activ" is not a declared state, rejected or undefined</failure></testcase><testcase classname="spine check" name="bad-value examples[3]"><failure message="expect &quot;Active&quot; is not a declared state, rejected or undefined">expect "Active" is not a declared state, rejected or undefined</failure></testcase><testcase classname="spine check" name="bad-step examples[3]"><failure message="step 1 &quot;publsh rol=owner&quot;: &quot;publsh&quot; is not a declared event">step 1 "publsh rol=owner": "publsh" is not a declared event</failure></testcase></testsuite>
-=== in internal/spine/testdata: spine check --format json --junit REPORT spines/unsound.yaml
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/unsound.yaml
 exit 1
 --- stdout
 | {
@@ -290,23 +290,23 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="28" failures="28"><testcase classname="spine check" name="unknown-state nowhere/go"><failure message="rule starts in undeclared state &quot;nowhere&quot;">rule starts in undeclared state "nowhere"</failure></testcase><testcase classname="spine check" name="unknown-state nowhere/go"><failure message="rule goes to undeclared state &quot;elsewhere&quot;">rule goes to undeclared state "elsewhere"</failure></testcase><testcase classname="spine check" name="unknown-event s/fly"><failure message="rule uses undeclared event &quot;fly&quot;">rule uses undeclared event "fly"</failure></testcase><testcase classname="spine check" name="overlap s/go"><failure message="mode=a, role=owner matches conflicting rules: reject and -&gt; t">mode=a, role=owner matches conflicting rules: reject and -&gt; t</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=a, role=guest">no rule covers mode=a, role=guest</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=a, role=édi tor">no rule covers mode=a, role=édi tor</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=b, role=guest">no rule covers mode=b, role=guest</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=b, role=édi tor">no rule covers mode=b, role=édi tor</failure></testcase><testcase classname="spine check" name="undecided-cell s/stop"><failure message="nothing says what &quot;stop&quot; does in &quot;s&quot;">nothing says what "stop" does in "s"</failure></testcase><testcase classname="spine check" name="overlap s/go"><failure message="mode=a, role=owner matches conflicting rules: reject and -&gt; t">mode=a, role=owner matches conflicting rules: reject and -&gt; t</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=a, role=guest">no rule covers mode=a, role=guest</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=a, role=édi tor">no rule covers mode=a, role=édi tor</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=b, role=guest">no rule covers mode=b, role=guest</failure></testcase><testcase classname="spine check" name="missing-case s/go"><failure message="no rule covers mode=b, role=édi tor">no rule covers mode=b, role=édi tor</failure></testcase><testcase classname="spine check" name="missing-case t/go"><failure message="no rule covers mode=b, role=owner">no rule covers mode=b, role=owner</failure></testcase><testcase classname="spine check" name="missing-case t/go"><failure message="no rule covers mode=b, role=guest">no rule covers mode=b, role=guest</failure></testcase><testcase classname="spine check" name="missing-case t/go"><failure message="no rule covers mode=b, role=édi tor">no rule covers mode=b, role=édi tor</failure></testcase><testcase classname="spine check" name="missing-case t/go"><failure message="no rule covers mode=b, role=owner">no rule covers mode=b, role=owner</failure></testcase><testcase classname="spine check" name="missing-case t/go"><failure message="no rule covers mode=b, role=guest">no rule covers mode=b, role=guest</failure></testcase><testcase classname="spine check" name="missing-case t/go"><failure message="no rule covers mode=b, role=édi tor">no rule covers mode=b, role=édi tor</failure></testcase><testcase classname="spine check" name="undecided-cell island/go"><failure message="nothing says what &quot;go&quot; does in &quot;island&quot;">nothing says what "go" does in "island"</failure></testcase><testcase classname="spine check" name="undecided-cell island/stop"><failure message="nothing says what &quot;stop&quot; does in &quot;island&quot;">nothing says what "stop" does in "island"</failure></testcase><testcase classname="spine check" name="undecided-cell island/go"><failure message="nothing says what &quot;go&quot; does in &quot;island&quot;">nothing says what "go" does in "island"</failure></testcase><testcase classname="spine check" name="terminal-has-exit end/go"><failure message="&quot;end&quot; is terminal but &quot;go&quot; leaves it">"end" is terminal but "go" leaves it</failure></testcase><testcase classname="spine check" name="terminal-has-exit end/go"><failure message="&quot;end&quot; is terminal but &quot;go&quot; leaves it">"end" is terminal but "go" leaves it</failure></testcase><testcase classname="spine check" name="unreachable island"><failure message="no sequence of events reaches &quot;island&quot; from &quot;s&quot;">no sequence of events reaches "island" from "s"</failure></testcase><testcase classname="spine check" name="example-fails wrong end"><failure message="expected s, got t">expected s, got t</failure></testcase><testcase classname="spine check" name="example-fails refused"><failure message="expected rejected, got t">expected rejected, got t</failure></testcase></testsuite>
-=== in internal/spine/testdata: spine check seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine check seeds/spine.yaml
 exit 0
 --- stdout
 | -- 0 errors, 0 findings
 |
-=== in internal/spine/testdata: spine check spines/names.yaml
+=== in tools/internal/spine/testdata: spine check spines/names.yaml
 exit 0
 --- stdout
 | -- 0 errors, 0 findings
 |
-=== in internal/spine/testdata: spine check spines/not-utf8.yaml
+=== in tools/internal/spine/testdata: spine check spines/not-utf8.yaml
 exit 1
 --- stdout
 | error   spec-unreadable    spines/not-utf8.yaml: not UTF-8: byte 0xe9 at offset 32
 | -- 1 errors, 1 findings
 |
-=== in internal/spine/testdata: spine check spines/on-key.yaml
+=== in tools/internal/spine/testdata: spine check spines/on-key.yaml
 exit 1
 --- stdout
 | error   yaml-boolean-key   rules[1]: rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it
@@ -314,7 +314,7 @@ exit 1
 | error   yaml-boolean-value rules[2]: "to" was read as true or false; quote it
 | -- 3 errors, 3 findings
 |
-=== in internal/spine/testdata: spine check spines/typos.yaml
+=== in tools/internal/spine/testdata: spine check spines/typos.yaml
 exit 1
 --- stdout
 | error   bad-step           examples[1]: step 1 "publsh role=owner": "publsh" is not a declared event
@@ -323,7 +323,7 @@ exit 1
 | error   bad-step           examples[3]: step 1 "publsh rol=owner": "publsh" is not a declared event
 | -- 4 errors, 4 findings
 |
-=== in internal/spine/testdata: spine check spines/unsound.yaml
+=== in tools/internal/spine/testdata: spine check spines/unsound.yaml
 exit 1
 --- stdout
 | error   unknown-state      nowhere/go: rule starts in undeclared state "nowhere"
@@ -356,7 +356,7 @@ exit 1
 | error   example-fails      refused: expected rejected, got t
 | -- 28 errors, 28 findings
 |
-=== in internal/spine/testdata: spine hash seeds/spine.yaml
+=== in tools/internal/spine/testdata: spine hash seeds/spine.yaml
 exit 0
 --- stdout
 | closed/open@26ccaba33ea0
@@ -364,7 +364,7 @@ exit 0
 | open/open@79e9a52da0fe
 | open/remove@6c6a6ee2ab96
 |
-=== in internal/spine/testdata: spine hash spines/names.yaml
+=== in tools/internal/spine/testdata: spine hash spines/names.yaml
 exit 0
 --- stdout
 | café/über@8be38720bae1
@@ -386,13 +386,13 @@ exit 0
 |q "\x7f\u0085/ev\"q@547ffcf8486c"
 |q "\x7f\u0085/\u00fcber@e31e9d4cc612"
 |
-=== in internal/spine/testdata: spine hash spines/not-utf8.yaml
+=== in tools/internal/spine/testdata: spine hash spines/not-utf8.yaml
 exit 1
 --- stdout
 | error   spec-unreadable    spines/not-utf8.yaml: not UTF-8: byte 0xe9 at offset 32
 | -- 1 errors, 1 findings
 |
-=== in internal/spine/testdata: spine hash spines/on-key.yaml
+=== in tools/internal/spine/testdata: spine hash spines/on-key.yaml
 exit 1
 --- stdout
 | error   yaml-boolean-key   rules[1]: rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it
@@ -400,7 +400,7 @@ exit 1
 | error   yaml-boolean-value rules[2]: "to" was read as true or false; quote it
 | -- 3 errors, 3 findings
 |
-=== in internal/spine/testdata: spine hash spines/typos.yaml
+=== in tools/internal/spine/testdata: spine hash spines/typos.yaml
 exit 1
 --- stdout
 | error   bad-step           examples[1]: step 1 "publsh role=owner": "publsh" is not a declared event
@@ -409,7 +409,7 @@ exit 1
 | error   bad-step           examples[3]: step 1 "publsh rol=owner": "publsh" is not a declared event
 | -- 4 errors, 4 findings
 |
-=== in internal/spine/testdata: spine hash spines/unsound.yaml
+=== in tools/internal/spine/testdata: spine hash spines/unsound.yaml
 exit 0
 --- stdout
 | s/go@1d93a9c8d9e9

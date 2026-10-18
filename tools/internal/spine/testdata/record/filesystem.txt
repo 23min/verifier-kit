@@ -1,4 +1,4 @@
-=== in $TMP/fs: spine behaviors $ROOT/internal/spine/testdata/seeds/spine.yaml b
+=== in $TMP/fs: spine behaviors $ROOT/tools/internal/spine/testdata/seeds/spine.yaml b
 exit 1
 --- stdout
 | error   spec-unreadable    b/valid/broken.yaml: cannot be read: No such file or directory
@@ -7,7 +7,7 @@ exit 1
 | info    behaviors          b: 6 behavior files checked
 | -- 3 errors, 4 findings
 |
-=== in $TMP/fs: spine behaviors --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml b
+=== in $TMP/fs: spine behaviors --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml b
 exit 1
 --- stdout
 | {
@@ -44,12 +44,12 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine behaviors" tests="3" failures="3"><testcase classname="spine behaviors" name="spec-unreadable b/valid/broken.yaml"><failure message="cannot be read: No such file or directory">cannot be read: No such file or directory</failure></testcase><testcase classname="spine behaviors" name="spec-unreadable b/valid/dir.yaml"><failure message="cannot be read: Is a directory">cannot be read: Is a directory</failure></testcase><testcase classname="spine behaviors" name="spec-unreadable b/invalid/locked.yaml"><failure message="cannot be read: Permission denied">cannot be read: Permission denied</failure></testcase></testsuite>
-=== in $TMP/fs: spine check $ROOT/internal/spine/testdata/seeds/spine.yaml/
+=== in $TMP/fs: spine check $ROOT/tools/internal/spine/testdata/seeds/spine.yaml/
 exit 0
 --- stdout
 | -- 0 errors, 0 findings
 |
-=== in $TMP/fs: spine check --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml/
+=== in $TMP/fs: spine check --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml/
 exit 0
 --- stdout
 | {
@@ -136,14 +136,14 @@ exit 1
 | error   spec-unreadable    locked.yaml: cannot be read: Permission denied
 | -- 1 errors, 1 findings
 |
-=== in $TMP/fs: spine guard $ROOT/internal/spine/testdata/seeds/policy.yaml --branch build/x < "spec/\xff.py\nsrc/\xfe\n"
+=== in $TMP/fs: spine guard $ROOT/tools/internal/spine/testdata/seeds/policy.yaml --branch build/x < "spec/\xff.py\nsrc/\xfe\n"
 exit 1
 --- stdout
 |q "error   path-not-allowed   spec/\xff.py: no allow rule for the builder role covers this path"
 | info    role               build/x: checked 2 changed files as role builder
 | -- 1 errors, 2 findings
 |
-=== in $TMP/fs: spine guard --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/policy.yaml --branch build/x < "spec/\xff.py\nsrc/\xfe\n"
+=== in $TMP/fs: spine guard --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/policy.yaml --branch build/x < "spec/\xff.py\nsrc/\xfe\n"
 exit 1
 --- stdout
 | {
@@ -174,7 +174,7 @@ exit 1
 | error   spec-unreadable    locked.yaml: cannot be read: Permission denied
 | -- 1 errors, 1 findings
 |
-=== in $TMP/fs: spine stale $ROOT/internal/spine/testdata/seeds/spine.yaml ./c/../c
+=== in $TMP/fs: spine stale $ROOT/tools/internal/spine/testdata/seeds/spine.yaml ./c/../c
 exit 1
 --- stdout
 | error   stale-check        c/../c/b/x.py: covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check
@@ -184,7 +184,7 @@ exit 1
 | info    uncovered          closed/remove: no check cites this transition; conformance still exercises it
 | -- 4 errors, 5 findings
 |
-=== in $TMP/fs: spine stale $ROOT/internal/spine/testdata/seeds/spine.yaml c
+=== in $TMP/fs: spine stale $ROOT/tools/internal/spine/testdata/seeds/spine.yaml c
 exit 1
 --- stdout
 | error   stale-check        c/b/x.py: covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check
@@ -194,7 +194,7 @@ exit 1
 | info    uncovered          closed/remove: no check cites this transition; conformance still exercises it
 | -- 4 errors, 5 findings
 |
-=== in $TMP/fs: spine stale $ROOT/internal/spine/testdata/seeds/spine.yaml c/
+=== in $TMP/fs: spine stale $ROOT/tools/internal/spine/testdata/seeds/spine.yaml c/
 exit 1
 --- stdout
 | error   stale-check        c/b/x.py: covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check
@@ -204,14 +204,14 @@ exit 1
 | info    uncovered          closed/remove: no check cites this transition; conformance still exercises it
 | -- 4 errors, 5 findings
 |
-=== in $TMP/fs: spine stale $ROOT/internal/spine/testdata/seeds/spine.yaml c/a.py
+=== in $TMP/fs: spine stale $ROOT/tools/internal/spine/testdata/seeds/spine.yaml c/a.py
 exit 0
 --- stdout
 | info    uncovered          closed/open: no check cites this transition; conformance still exercises it
 | info    uncovered          closed/remove: no check cites this transition; conformance still exercises it
 | -- 0 errors, 2 findings
 |
-=== in $TMP/fs: spine stale --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml ./c/../c
+=== in $TMP/fs: spine stale --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml ./c/../c
 exit 1
 --- stdout
 | {
@@ -254,7 +254,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine stale" tests="4" failures="4"><testcase classname="spine stale" name="stale-check c/../c/b/x.py"><failure message="covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check c/../c/b-c/x.py"><failure message="covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check c/../c/linked-file.py"><failure message="covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="spec-unreadable c/../c/locked.py"><failure message="cannot be read: Permission denied">cannot be read: Permission denied</failure></testcase></testsuite>
-=== in $TMP/fs: spine stale --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml c
+=== in $TMP/fs: spine stale --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml c
 exit 1
 --- stdout
 | {
@@ -297,7 +297,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine stale" tests="4" failures="4"><testcase classname="spine stale" name="stale-check c/b/x.py"><failure message="covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check c/b-c/x.py"><failure message="covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check c/linked-file.py"><failure message="covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="spec-unreadable c/locked.py"><failure message="cannot be read: Permission denied">cannot be read: Permission denied</failure></testcase></testsuite>
-=== in $TMP/fs: spine stale --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml c/
+=== in $TMP/fs: spine stale --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml c/
 exit 1
 --- stdout
 | {
@@ -340,7 +340,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine stale" tests="4" failures="4"><testcase classname="spine stale" name="stale-check c/b/x.py"><failure message="covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check c/b-c/x.py"><failure message="covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check c/linked-file.py"><failure message="covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="spec-unreadable c/locked.py"><failure message="cannot be read: Permission denied">cannot be read: Permission denied</failure></testcase></testsuite>
-=== in $TMP/fs: spine stale --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml c/a.py
+=== in $TMP/fs: spine stale --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml c/a.py
 exit 0
 --- stdout
 | {
@@ -365,30 +365,30 @@ exit 0
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine stale" tests="1" failures="0"><testcase classname="spine stale" name="no errors" /></testsuite>
-=== in $TMP/fs: spine trace $ROOT/internal/spine/testdata/seeds/spine.yaml b/invalid/locked.yaml
+=== in $TMP/fs: spine trace $ROOT/tools/internal/spine/testdata/seeds/spine.yaml b/invalid/locked.yaml
 exit 1
 --- stdout
 | error   spec-unreadable    b/invalid/locked.yaml: cannot be read: Permission denied
 | -- 1 errors, 1 findings
 |
-=== in $TMP/fs: spine trace $ROOT/internal/spine/testdata/seeds/spine.yaml b/valid/broken.yaml
+=== in $TMP/fs: spine trace $ROOT/tools/internal/spine/testdata/seeds/spine.yaml b/valid/broken.yaml
 exit 1
 --- stdout
 | error   spec-unreadable    b/valid/broken.yaml: cannot be read: No such file or directory
 | -- 1 errors, 1 findings
 |
-=== in $TMP/fs: spine trace $ROOT/internal/spine/testdata/seeds/spine.yaml b/valid/dir.yaml
+=== in $TMP/fs: spine trace $ROOT/tools/internal/spine/testdata/seeds/spine.yaml b/valid/dir.yaml
 exit 1
 --- stdout
 | error   spec-unreadable    b/valid/dir.yaml: cannot be read: Is a directory
 | -- 1 errors, 1 findings
 |
-=== in $TMP/fs: spine trace $ROOT/internal/spine/testdata/seeds/spine.yaml b/valid/link.yaml
+=== in $TMP/fs: spine trace $ROOT/tools/internal/spine/testdata/seeds/spine.yaml b/valid/link.yaml
 exit 0
 --- stdout
 | -- 0 errors, 0 findings
 |
-=== in $TMP/fs: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml b/invalid/locked.yaml
+=== in $TMP/fs: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml b/invalid/locked.yaml
 exit 1
 --- stdout
 | {
@@ -407,7 +407,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-unreadable b/invalid/locked.yaml"><failure message="cannot be read: Permission denied">cannot be read: Permission denied</failure></testcase></testsuite>
-=== in $TMP/fs: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml b/valid/broken.yaml
+=== in $TMP/fs: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml b/valid/broken.yaml
 exit 1
 --- stdout
 | {
@@ -426,7 +426,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-unreadable b/valid/broken.yaml"><failure message="cannot be read: No such file or directory">cannot be read: No such file or directory</failure></testcase></testsuite>
-=== in $TMP/fs: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml b/valid/dir.yaml
+=== in $TMP/fs: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml b/valid/dir.yaml
 exit 1
 --- stdout
 | {
@@ -445,7 +445,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-unreadable b/valid/dir.yaml"><failure message="cannot be read: Is a directory">cannot be read: Is a directory</failure></testcase></testsuite>
-=== in $TMP/fs: spine trace --format json --junit REPORT $ROOT/internal/spine/testdata/seeds/spine.yaml b/valid/link.yaml
+=== in $TMP/fs: spine trace --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml b/valid/link.yaml
 exit 0
 --- stdout
 | {

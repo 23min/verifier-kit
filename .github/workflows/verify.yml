@@ -26,7 +26,8 @@ jobs:
 
       - uses: actions/setup-go@v7
         with:
-          go-version-file: go.mod
+          go-version-file: tools/go.mod
+          cache-dependency-path: tools/go.sum
 
       # The elixir_job example's adapter, checks and mutation run with elixir (1.18+ for JSON).
       - uses: erlef/setup-beam@v1
@@ -34,10 +35,10 @@ jobs:
           otp-version: "29"
           elixir-version: "1.20"
 
-      - run: go vet ./...
+      - run: go -C tools vet ./...
 
       - name: Go spine against tools/spine.py
-        run: go test ./...
+        run: go -C tools test ./...
 
       - name: verify
         shell: bash

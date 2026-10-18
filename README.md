@@ -41,15 +41,15 @@ demo/live-builder.sh        # optional: a real Claude Code builder session again
 `./verify` still runs `tools/spine.py`. With Go 1.27:
 
 ```sh
-go build -o bin/spine ./cmd/spine                    # bin/ is ignored by git
-bin/spine check examples/notes/spec/notes/spine.yaml  # same commands, options and output as tools/spine.py
-go test ./...                                        # runs both on the same inputs; any difference fails
+go -C tools build -o bin/spine ./cmd/spine                 # into tools/bin/, which git ignores
+tools/bin/spine check examples/notes/spec/notes/spine.yaml  # same commands, options and output as tools/spine.py
+go -C tools test ./...                                     # runs both on the same inputs; any difference fails
 ```
 
 `go test` also checks the Go `spine` against a record of what it gave on every input, in
-`internal/spine/testdata/record/`, so that it can be checked once `tools/spine.py` retires
-(#44). After a deliberate change, `go test ./internal/spine/ -update` writes the record again,
-and its diff shows what changed.
+`tools/internal/spine/testdata/record/`, so that it can be checked once `tools/spine.py`
+retires (#44). After a deliberate change, `go -C tools test ./internal/spine/ -update` writes
+the record again, and its diff shows what changed.
 
 Or open the repo in its devcontainer (`.devcontainer/`, "Dev Containers: Reopen in Container"),
 which has Python 3 with PyYAML, Go, uv, gh and Claude Code. It needs Docker and VS Code with the Dev
@@ -69,7 +69,7 @@ local Python.
 ```
 verify                           the single entry point
 tools/spine.py, run_checks.py    the tools (no knowledge of any CI or agent)
-cmd/spine/, internal/spine/      the Go port of spine.py, and its test against spine.py
+tools/cmd/, tools/internal/      the Go port of spine.py, and its test against spine.py
 tools/adapter_shim.py            serves a Python adapter over the adapter protocol
 policy.yaml                      which branch role may change which paths
 examples/<name>/                 one worked example each, laid out like a project (below)
