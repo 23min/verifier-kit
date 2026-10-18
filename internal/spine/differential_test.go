@@ -969,7 +969,7 @@ func TestDifferential(t *testing.T) {
 		}
 	}
 	sort.Strings(missing)
-	if len(missing) > 0 {
+	if len(missing) > 0 && !filtered() { // only some cases ran
 		t.Errorf("no input produces these finding codes from the contract: %s", strings.Join(missing, ", "))
 	}
 	t.Logf("%d cases and %d condition batches; %d of the contract's %d codes seen", len(cases), len(batches), len(want)-len(missing), len(want))
