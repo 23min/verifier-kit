@@ -57,7 +57,7 @@ are part of the contract: new codes may be added, existing codes are never renam
 
 `tools/bin/spine`, built from `tools/cmd/spine/`, is the Go port of `tools/spine.py` and follows
 the same contract. It has every command above. `go -C tools test ./...` runs both on the same
-inputs.
+inputs. `./verify`, `demo/faults.sh` and the mutation scripts run the Go one.
 
 All commands except `hash` accept `--format text|json` and `--junit FILE`. Every command that
 takes a spine validates it first and stops with the validation findings if it is invalid.
@@ -185,6 +185,10 @@ relative ROOT is taken from the caller's working directory. Without ROOT, the ro
 `examples/*/` folder in turn (sorted) when the folder `verify` is in has no `spec/` but has
 `examples/*/`; otherwise the root is that folder itself.
 
+First it builds the toolkit's `spine`: `go -C tools build -trimpath -o bin/spine ./cmd/spine`,
+next to `verify`. Every step below runs that binary. When the build fails, or Go is missing,
+it prints `FAIL  spine built` with the reason and exits 1 before any other step.
+
 Runs, per `spec/<machine>/spine.yaml`: `check`, then `behaviors` over `spec/<machine>/behaviors`,
 `stale` over `checks/<machine>`, and `conform` with the machine's adapter. Then the content
 checks, and with `--full` every mutation script. Each of these three pieces is given one of two
@@ -211,9 +215,10 @@ roots are. Output is one `ok`, `FAIL` or `skip` line per step, with error lines 
 steps, and a final `--` summary line. A root other than the folder `verify` is in starts with a
 `== <root>` line, and its failed steps are named `<root>: <step>` in the summary. JUnit
 report names then start with the root, slashes turned into dashes. Environment:
-`VERIFY_BASE`, `VERIFY_BRANCH`, `VERIFY_REPORTS`, `VERIFY_VERBOSE`, `PYTHON`; it sets
-`VERIFY_SPINE` for commands and Python mutation scripts. Exit codes as above; more than one ROOT, or a ROOT that is not a
-folder, is a usage error.
+`VERIFY_BASE`, `VERIFY_BRANCH`, `VERIFY_REPORTS`, `VERIFY_VERBOSE`, `PYTHON`. It exports
+`PYTHON`, as an absolute path, which `spine` serves a Python adapter with, and sets
+`VERIFY_SPINE`, naming `tools/bin/spine`, for commands and Python mutation scripts. Exit codes
+as above; more than one ROOT, or a ROOT that is not a folder, is a usage error.
 
 Every step that does not run prints `skip  <step> (<reason>)`: the guard without `VERIFY_BASE`,
 behaviors without `spec/<machine>/behaviors/`, `stale` without `checks/<machine>/`, mutation

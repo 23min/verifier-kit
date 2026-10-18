@@ -23,7 +23,7 @@ flowchart LR
   end
   verify["./verify<br/>finds the pieces by folder name"]
   subgraph tools["Tools: files in, findings out"]
-    spine["tools/spine.py<br/>check, behaviors, stale, conform, guard"]
+    spine["tools/bin/spine, built from tools/ with Go<br/>check, behaviors, stale, conform, guard"]
     rc["tools/run_checks.py"]
     shim["tools/adapter_shim.py<br/>a Python adapter over JSON lines"]
   end
@@ -60,9 +60,10 @@ flowchart TD
   roots -- no --> has{"spec/ here, or<br/>no examples/*/?"}
   has -- yes --> here["this folder"]
   has -- no --> each["every examples/*/, sorted"]
-  one --> g
-  here --> g
-  each --> g
+  one --> build
+  here --> build
+  each --> build
+  build["go -C tools build: tools/bin/spine<br/>without Go, FAIL spine built, exit 1"] --> g
   g{"VERIFY_BASE set?"} -- yes --> guard["spine guard policy.yaml<br/>files changed since VERIFY_BASE<br/>once, whatever the roots"]
   g -- no --> skipg["skip guard"]
   guard --> rootloop
@@ -85,7 +86,10 @@ flowchart TD
 Each adapter, the content checks and each mutation script is given as Python or as a `.cmd`
 file holding one command line, for code in any language. A command runs from its root, without
 a shell, with `VERIFY_SPINE` set to the command line that runs `spine`; checks and mutation
-pass when it exits 0. A Python mutation script gets `VERIFY_SPINE` too.
+pass when it exits 0. A Python mutation script gets `VERIFY_SPINE` too. `spine` is the Go one,
+which `./verify` builds into `tools/bin/spine` before anything else, and `./verify` exports
+`PYTHON`, the interpreter it picked, which `spine` serves a Python adapter with
+(`docs/adr/0006-retire-spine-py.md`).
 
 A step that cannot run because a piece is missing is an error, not a skip, reported per root:
 no spine at all (`no-machines`), no adapter for a machine (`no-adapter`), no `test_*` function
@@ -264,9 +268,11 @@ This repo's CI (`.github/workflows/verify.yml`) runs `go vet` and `go test`, the
 not set `VERIFY_BASE`, so the path guard runs here only inside scenario 4.
 
 `go test` holds the differential test (`tools/internal/spine/differential_test.go`). The Go
-`spine` (`tools/cmd/spine/`, `tools/internal/spine/`, one module in `tools/`) and `tools/spine.py` run on the same inputs, among them the
-repo's spines, readings, behaviors, checks, adapters and policy and the faults scenarios 1 to 4,
-9 and 10 seed, and must give the same exit codes and output. Nothing else calls the Go `spine` yet.
+`spine` (`tools/cmd/spine/`, `tools/internal/spine/`, one module in `tools/`) and
+`tools/spine.py` run on the same inputs, among them the repo's spines, readings, behaviors,
+checks, adapters and policy and the faults scenarios 1 to 4, 9 and 10 seed, and must give the
+same exit codes and output. Nothing else runs `tools/spine.py`: `./verify`, `demo/faults.sh`
+and the mutation scripts run the Go `spine`.
 
 The same test checks the Go `spine` against a record of what it gave on every one of those
 inputs (`tools/internal/spine/testdata/record/`, written by `record_test.go` beside it): the exit

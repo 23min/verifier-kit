@@ -49,7 +49,8 @@ go -C tools test ./internal/spine/ -update   # writes the record again from the 
 ```
 
 Setup needs Python 3 with PyYAML, the `git` program for the ref_sync example's checks, and
-Elixir 1.18 or later for the elixir_job example's; the Go `spine` needs Go 1.27. The
+Elixir 1.18 or later for the elixir_job example's; `./verify` and `demo/faults.sh` need Go
+1.27, to build the Go `spine`. The
 devcontainer image has all five; don't create a `.venv` there
 (the repo is shared with the host). Elsewhere: `uv venv && uv pip install -r requirements.txt`;
 `./verify` and `demo/faults.sh` use `.venv` automatically when it exists.
