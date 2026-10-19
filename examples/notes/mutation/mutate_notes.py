@@ -3,7 +3,8 @@
 
 Each mutant is one small edit to src/notes_app.py, placed ahead of the real module on the
 import path. A mutant is killed when conformance or the content checks fail on it. A
-surviving mutant marks behavior nothing in the oracle describes.
+surviving mutant marks behavior nothing in the oracle describes. Conformance and the content
+checks must first pass on the service as it is, or every mutant would look caught.
 
 Real projects can use a mutation tool for their language (mutmut, Stryker, PIT); this
 file shows the principle with hand-picked breaks.
@@ -42,6 +43,12 @@ ORACLE = {
 } if TOOLS else {}
 
 
+def failing(env):
+    """The parts of the oracle that don't pass."""
+    return [label for label, cmd in ORACLE.items()
+            if subprocess.run(cmd, cwd=ROOT, env=env, capture_output=True).returncode != 0]
+
+
 def main():
     if TOOLS is None:
         print(f"mutate_notes: no tools/run_checks.py in {ROOT} or above it", file=sys.stderr)
@@ -50,6 +57,12 @@ def main():
         print("mutate_notes: VERIFY_SPINE is not set; ./verify --full sets it", file=sys.stderr)
         return 2
     source = (ROOT / "src" / "notes_app.py").read_text()
+    failed = failing(dict(os.environ, PYTHONPATH=os.pathsep.join(["src", "conformance"])))
+    if failed:
+        print("error   oracle-fails       on src/notes_app.py as it is: "
+              f"{', '.join(failed)} did not pass")
+        print("-- 1 errors, 0 mutants")
+        return 1
     survivors = 0
     for name, find, replace in MUTANTS:
         if source.count(find) != 1:

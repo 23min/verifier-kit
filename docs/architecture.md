@@ -210,8 +210,9 @@ folder, finds `tools/` above it, and runs `conform` through `VERIFY_SPINE`.
 same way with six edits to `src/ref_sync_client.py`, and names every check that failed.
 `examples/elixir_job/mutation/mutate_job.exs` makes five edits to `src/job.ex`, each in a copy
 of the example, and runs `conform` through `VERIFY_SPINE` and the command in `checks/run.cmd`
-there. It first runs both on the job as it is and stops unless they pass, because a broken
-command would count every mutant as caught.
+there. Each script first runs the oracle on the code as it is, and stops with `oracle-fails`
+unless conformance passes and the checks pass or find none, because an oracle that already
+fails would count every mutant as caught.
 
 ```mermaid
 sequenceDiagram
@@ -219,6 +220,9 @@ sequenceDiagram
   participant T as temp folder
   participant C as spine conform (notes)
   participant R as run_checks.py checks
+  M->>C: run on src/notes_app.py as it is, PYTHONPATH=src:conformance
+  M->>R: run over the example's checks/, same PYTHONPATH
+  Note over M: oracle-fails, and no mutant, unless both exit 0
   loop each of 5 hand-picked edits to src/notes_app.py
     M->>T: write notes_app.py with one edit
     M->>C: run with PYTHONPATH=temp:src:conformance
@@ -234,7 +238,8 @@ sequenceDiagram
 repo (without `.git`) in a temp folder, seeds one fault, runs a command there, and checks the
 exit code and the lines it must print. Scenarios 0 to 10 seed faults in the notes example, and
 `./verify` in the copy checks every example, so ref_sync's and elixir_job's checks run in each of
-them too. Scenarios 11 to 13 seed faults in elixir_job and check it alone.
+them too. Scenarios 11 to 13 seed faults in elixir_job and check it alone. Scenario 14 breaks
+the code of all three examples, so that each mutation script finds its oracle failing.
 
 ```mermaid
 flowchart LR
@@ -262,6 +267,7 @@ flowchart LR
 | 11 | the job retries after its last attempt fails | `./verify examples/elixir_job` | `diverges running/fail attempts=last` |
 | 12 | the job counts one attempt too many | `./verify examples/elixir_job` | conformance `ok`, content checks `FAIL` with J03 |
 | 13 | elixir_job's content checks deleted | `./verify examples/elixir_job --full` | `no checks ran`, and `mutant-survived` for a counting mutant |
+| 14 | the code of all three examples, as in scenarios 1 and 11 and ref_sync's first mutant | `./verify --full` | `oracle-fails` from each mutation script |
 
 This repo's CI (`.github/workflows/verify.yml`) runs `go vet` and `go test`, then
 `./verify --full`, then `demo/faults.sh`, on every pull request and push to `main`. It does
@@ -289,6 +295,6 @@ every input, before that retired (#44).
 | `src/` | per root: on `PYTHONPATH` for Python, loaded by the commands otherwise | module name (`notes_app`, `ref_sync_client`); elixir_job's commands load `src/**/*.ex` |
 | path guard | repo-wide | `policy.yaml` patterns over `examples/*/` and the toolkit's folders |
 | deny rules, CODEOWNERS (`integrations/`) | a project's root | folder patterns for a project with `spec/` at its root |
-| `demo/faults.sh` | seeds faults in notes (0-10) and elixir_job (11-13) | hard-coded `examples/notes/` and `examples/elixir_job/` paths |
+| `demo/faults.sh` | seeds faults in notes (0-10), elixir_job (11-13) and all three examples (14) | hard-coded `examples/notes/`, `examples/elixir_job/` and `examples/ref_sync/` paths |
 | `demo/live-builder.sh` | notes only | hard-coded `examples/notes/` paths |
 | choosing what to run | one root per call | `./verify ROOT`; without it, the discovery rule above |

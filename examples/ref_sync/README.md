@@ -100,7 +100,8 @@ after: alice fetches [e-alice: prepared] -> bob fetches [e-bob: prepared]
 ## The mutants
 
 `mutate_ref_sync.py` makes one small edit at a time to `src/ref_sync_client.py` and runs
-conformance and the content checks against it.
+conformance and the content checks against it. It first runs them on the client as it is, and
+stops with `oracle-fails` if they don't pass there, since every mutant would then look caught.
 
 | Mutant | First problem found | Checks that fail |
 |---|---|---|
