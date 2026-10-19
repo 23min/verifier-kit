@@ -6,7 +6,7 @@
 #   demo/faults.sh 3        run scenario 3 only
 #
 # Exit 0 when every scenario behaves as expected, 1 otherwise. CI runs this on every push.
-# Needs python3 with PyYAML (or a .venv), Go, git, and elixir for scenarios 11-13.
+# Needs python3 with PyYAML (or a .venv), Go, git, and elixir for scenarios 11-14.
 set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SCRATCH="$(mktemp -d)"
@@ -179,6 +179,18 @@ if scenario 13 "Elixir: checking the checker, the content checks are deleted" \
   rm "$W/examples/elixir_job/checks/job/job_test.exs"
   show ./verify examples/elixir_job --full
   expect 1 "no checks ran from checks/job/" "mutant-survived    one attempt too many"
+fi
+
+if scenario 14 "Checking the checker: every example's code already fails its oracle" \
+   "each mutation script stops with oracle-fails, rather than counting every mutant as caught"; then
+  cp "$W/examples/notes/demo/notes_app_as_written.py" "$W/examples/notes/src/notes_app.py"
+  sed -i.bak 's/self.remote.push(parent, files, force=False)/self.remote.push(parent, files, force=True)/' \
+    "$W/examples/ref_sync/src/ref_sync_client.py"
+  sed -i.bak 's/def transition(:running, :fail, :last), do: {:ok, :discarded}/def transition(:running, :fail, :last), do: {:ok, :retrying}/' "$W/$JOB"
+  show ./verify --full
+  expect 1 "oracle-fails       on src/notes_app.py as it is: conformance did not pass" \
+    "oracle-fails       on src/ref_sync_client.py as it is: checks did not pass" \
+    "oracle-fails       on the job as it is"
 fi
 
 echo

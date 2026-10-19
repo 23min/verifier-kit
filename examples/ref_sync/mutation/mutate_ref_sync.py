@@ -4,7 +4,8 @@
 Each mutant is one small edit to src/ref_sync_client.py, placed ahead of the real module on
 the import path. A mutant is killed when conformance or a content check fails on it; the
 output names every check that failed and the first problem found. A surviving mutant marks
-behavior nothing in the oracle describes.
+behavior nothing in the oracle describes. Conformance and the content checks must first pass
+on the client as it is, or every mutant would look caught.
 
 The six are the ones the example was proposed with; the first, "remove the fast-forward
 check", becomes "the client forces its push", since the remote, not the client, does that
@@ -51,6 +52,12 @@ ORACLE = {
 FAILED_CHECK = re.compile(r"check-failed\s+\S*?([^/\s]+)\.py::(\w+): (?:\w+: )?(.*)")
 
 
+def failing(env):
+    """The parts of the oracle that don't pass."""
+    return [label for label, cmd in ORACLE.items()
+            if subprocess.run(cmd, cwd=ROOT, env=env, capture_output=True).returncode != 0]
+
+
 def killers(env):
     """The parts of the oracle that fail, and the first problem one of them reports."""
     found, first = [], None
@@ -77,6 +84,12 @@ def main():
         print("mutate_ref_sync: VERIFY_SPINE is not set; ./verify --full sets it", file=sys.stderr)
         return 2
     source = (ROOT / "src" / "ref_sync_client.py").read_text()
+    failed = failing(dict(os.environ, PYTHONPATH=os.pathsep.join(["src", "conformance"])))
+    if failed:
+        print("error   oracle-fails       on src/ref_sync_client.py as it is: "
+              f"{', '.join(failed)} did not pass")
+        print("-- 1 errors, 0 mutants")
+        return 1
     survivors = 0
     for name, find, replace in MUTANTS:
         if source.count(find) != 1:
