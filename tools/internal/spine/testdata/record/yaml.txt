@@ -2663,47 +2663,17 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "unknown-key",
+|       "code": "spec-unreadable",
 |       "severity": "error",
 |       "where": "yaml/key-duplicate-nested.yaml",
-|       "message": "unknown top-level key \"r\""
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/key-duplicate-nested.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/key-duplicate-nested.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/key-duplicate-nested.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/key-duplicate-nested.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/key-duplicate-nested.yaml",
-|       "message": "required key \"states\" is missing"
+|       "message": "key 'from' is given twice in one mapping, at lines 2 and 3"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/key-duplicate-nested.yaml"><failure message="unknown top-level key &quot;r&quot;">unknown top-level key "r"</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-duplicate-nested.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-duplicate-nested.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-duplicate-nested.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-duplicate-nested.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-duplicate-nested.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/key-duplicate-nested.yaml"><failure message="key 'from' is given twice in one mapping, at lines 2 and 3">key 'from' is given twice in one mapping, at lines 2 and 3</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/key-duplicate.yaml
 exit 1
 --- stdout
@@ -2712,47 +2682,17 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "unknown-key",
+|       "code": "spec-unreadable",
 |       "severity": "error",
 |       "where": "yaml/key-duplicate.yaml",
-|       "message": "unknown top-level key \"a\""
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/key-duplicate.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/key-duplicate.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/key-duplicate.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/key-duplicate.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/key-duplicate.yaml",
-|       "message": "required key \"states\" is missing"
+|       "message": "key 'a' is given twice in one mapping, at lines 1 and 2"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/key-duplicate.yaml"><failure message="unknown top-level key &quot;a&quot;">unknown top-level key "a"</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-duplicate.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-duplicate.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-duplicate.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-duplicate.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-duplicate.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/key-duplicate.yaml"><failure message="key 'a' is given twice in one mapping, at lines 1 and 2">key 'a' is given twice in one mapping, at lines 1 and 2</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/key-explicit-plain.yaml
 exit 1
 --- stdout
@@ -9445,47 +9385,17 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "unknown-key",
+|       "code": "spec-unreadable",
 |       "severity": "error",
 |       "where": "yaml/value-set.yaml",
-|       "message": "unknown top-level key \"v\""
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-set.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-set.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-set.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-set.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-set.yaml",
-|       "message": "required key \"states\" is missing"
+|       "message": "key 'a' is given twice in one mapping, on line 1"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/value-set.yaml"><failure message="unknown top-level key &quot;v&quot;">unknown top-level key "v"</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-set.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-set.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-set.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-set.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-set.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/value-set.yaml"><failure message="key 'a' is given twice in one mapping, on line 1">key 'a' is given twice in one mapping, on line 1</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-tag-handle.yaml
 exit 1
 --- stdout

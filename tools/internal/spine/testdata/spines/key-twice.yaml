@@ -1,0 +1,21 @@
+# seeds/spine.yaml with role given again, without guest: spec-unreadable, so check goes no
+# further.
+machine: door
+section: "1.2"
+vars:
+  role: [owner, guest]
+  role: [owner]
+states:
+  closed: {kind: fact}
+  open: {}
+  gone: {kind: design, terminal: true}
+initial: closed
+events: [open, remove]
+rules:
+  - {from: closed, event: open, when: "role == 'owner'", to: open}
+  - {from: closed, event: open, when: "role != 'owner'", reject: true}
+  - {from: closed, event: remove, to: gone}
+  - {from: open, event: open, stay: true}
+  - {from: open, event: remove, ignore: true}
+examples:
+  - {name: owner opens, steps: ["open role=owner"], expect: open}

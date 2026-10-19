@@ -92,6 +92,9 @@ A file is UTF-8 text. An escape for a surrogate, U+D800 to U+DFFF, such as `"\ud
 JSON-style pair `"\ud83d\ude00"`, isn't a character: the file is `spec-unreadable`. Write the
 character itself, or `\U` and its eight hex digits.
 
+Each mapping gives a key once. A key given twice, such as `role` twice under `vars`, makes the
+file `spec-unreadable`, and the finding names the key and its lines.
+
 ## Steps, examples and behaviors
 
 A step is `"<event> <var>=<value> ..."`, for example `"restore role=editor"`. It names a

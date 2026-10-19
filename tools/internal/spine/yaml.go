@@ -572,6 +572,9 @@ func (c *constructor) mapping(n *yaml.Node) (*Value, error) {
 			}
 			v.Map.Set(k, x)
 		}
+		if err := c.keysOnce(n); err != nil {
+			return nil, err
+		}
 		return v, nil
 	case tagSeq, tagOmap, tagPairs:
 		return nil, constructorError("expected a sequence node, but found mapping")
@@ -579,6 +582,41 @@ func (c *constructor) mapping(n *yaml.Node) (*Value, error) {
 		return nil, constructorError("expected a scalar node, but found mapping")
 	}
 	return nil, constructorError("could not determine a constructor for the tag %s", pyRepr(tag))
+}
+
+// keysOnce: the YAML spec allows a key once in a mapping, where PyYAML kept the last (#55).
+// Only text keys count, as every key the format defines is text; a key a merge brings in may
+// be given again, which is what merging is for.
+func (c *constructor) keysOnce(n *yaml.Node) error {
+	seen := map[string]int{}
+	for i := 0; i+1 < len(n.Content); i += 2 {
+		k, key := n.Content[i], "="
+		switch keyTag(deref(k)) {
+		case tagMerge:
+			continue
+		case tagValue: // a `=` key, which flatten_mapping turns into text
+		default:
+			v, err := c.value(k)
+			if err != nil {
+				return err
+			}
+			if v.Kind != KStr {
+				continue
+			}
+			key = v.Str
+		}
+		first, ok := seen[key]
+		switch {
+		case !ok:
+			seen[key] = k.Line
+		case first == k.Line:
+			return fmt.Errorf("key %s is given twice in one mapping, on line %d", pyRepr(key), first)
+		default:
+			return fmt.Errorf("key %s is given twice in one mapping, at lines %d and %d", pyRepr(key),
+				first, k.Line)
+		}
+	}
+	return nil
 }
 
 // keyTag is the tag PyYAML gives a key node, for spotting `<<` and `=` keys.
