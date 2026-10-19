@@ -3883,6 +3883,25 @@ exit 0
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml spines/key-twice.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "diff",
+|   "findings": [
+|     {
+|       "code": "spec-unreadable",
+|       "severity": "error",
+|       "where": "spines/key-twice.yaml",
+|       "message": "key 'role' is given twice in one mapping, at lines 6 and 7"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="spec-unreadable spines/key-twice.yaml"><failure message="key 'role' is given twice in one mapping, at lines 6 and 7">key 'role' is given twice in one mapping, at lines 6 and 7</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml spines/names.yaml
 exit 1
 --- stdout
@@ -4444,6 +4463,12 @@ exit 0
 --- stdout
 | -- 0 errors, 0 findings
 |
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml spines/key-twice.yaml
+exit 1
+--- stdout
+| error   spec-unreadable    spines/key-twice.yaml: key 'role' is given twice in one mapping, at lines 6 and 7
+| -- 1 errors, 1 findings
+|
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml spines/names.yaml
 exit 1
 --- stdout
@@ -4504,6 +4529,25 @@ exit 1
 | error   vars-differ        vars: A and B declare different variables; case comparison skipped
 | -- 13 errors, 13 findings
 |
+=== in tools/internal/spine/testdata: spine guard --format json --junit REPORT policies/key-twice.yaml --branch build/x src/a.py src/secret.py spec/b.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "guard",
+|   "findings": [
+|     {
+|       "code": "spec-unreadable",
+|       "severity": "error",
+|       "where": "policies/key-twice.yaml",
+|       "message": "key 'builder' is given twice in one mapping, at lines 7 and 10"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="spec-unreadable policies/key-twice.yaml"><failure message="key 'builder' is given twice in one mapping, at lines 7 and 10">key 'builder' is given twice in one mapping, at lines 7 and 10</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine guard --format json --junit REPORT policies/missing.yaml --branch build/x a
 exit 1
 --- stdout
@@ -4888,6 +4932,12 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="spec-unreadable spines/not-utf8.yaml"><failure message="not UTF-8: byte 0xe9 at offset 32">not UTF-8: byte 0xe9 at offset 32</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine guard policies/key-twice.yaml --branch build/x src/a.py src/secret.py spec/b.yaml
+exit 1
+--- stdout
+| error   spec-unreadable    policies/key-twice.yaml: key 'builder' is given twice in one mapping, at lines 7 and 10
+| -- 1 errors, 1 findings
+|
 === in tools/internal/spine/testdata: spine guard policies/missing.yaml --branch build/x a
 exit 1
 --- stdout
@@ -5565,6 +5615,25 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused behaviors/door/valid/wrong-end.yml"><failure message="ends in open, expected gone">ends in open, expected gone</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine trace --format json --junit REPORT seeds/spine.yaml behaviors/key-twice.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": [
+|     {
+|       "code": "spec-unreadable",
+|       "severity": "error",
+|       "where": "behaviors/key-twice.yaml",
+|       "message": "key 'steps' is given twice in one mapping, at lines 2 and 3"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-unreadable behaviors/key-twice.yaml"><failure message="key 'steps' is given twice in one mapping, at lines 2 and 3">key 'steps' is given twice in one mapping, at lines 2 and 3</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine trace --format json --junit REPORT seeds/spine.yaml behaviors/missing.yaml
 exit 1
 --- stdout
@@ -5743,6 +5812,12 @@ exit 1
 exit 1
 --- stdout
 | error   refused            behaviors/door/valid/wrong-end.yml: ends in open, expected gone
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine trace seeds/spine.yaml behaviors/key-twice.yaml
+exit 1
+--- stdout
+| error   spec-unreadable    behaviors/key-twice.yaml: key 'steps' is given twice in one mapping, at lines 2 and 3
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine trace seeds/spine.yaml behaviors/missing.yaml

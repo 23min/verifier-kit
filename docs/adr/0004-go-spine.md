@@ -42,7 +42,7 @@ settled it on 2026-10-15 in #27.
    `tools/spine.py` until it retires, in its own issue.
 5. **YAML:** `go.yaml.in/yaml/v4`, pinned at v4.0.0-rc.6 until 4.0.0 is out, for its node tree
    only. `internal/spine` builds values from the tree with PyYAML's rules: YAML 1.1 booleans,
-   `012`, `1:20`, dates, merge keys and the last of duplicate keys. It adds the checks v4
+   `012`, `1:20`, dates and merge keys. It adds the checks v4
    doesn't make: duplicate anchors, UTF-8, and simple keys over 1,024 characters. It reads the
    escape `\/` as `/`, as PyYAML does; v4 refuses it. On 205 test inputs, v4's parser agreed
    with PyYAML on 200 and goccy/go-yaml v1.19.2 on 194; both matched every real file.
@@ -73,6 +73,8 @@ While porting, the owner settled behavior the port would otherwise have copied b
 - `spec-unreadable` covers any file PyYAML fails on, and a check file `stale` can't read.
 - A file that escapes a surrogate, such as `"\ud800"`, is `spec-unreadable`. PyYAML read it, and
   printing the name crashed `tools/spine.py`; go-yaml refuses it.
+- A mapping that gives a key twice is `spec-unreadable`, as the YAML spec allows a key once;
+  PyYAML kept the last. Settled on 2026-10-19 in #55, after `tools/spine.py` retired.
 - `guard` checks a role's patterns in a fixed order, and accepts files after `--branch`.
 - The JUnit report writes each character XML can't hold as an escape such as `\x1b`, and a
   byte of a file name that isn't UTF-8 as `\xff`. Before, such a report didn't parse.

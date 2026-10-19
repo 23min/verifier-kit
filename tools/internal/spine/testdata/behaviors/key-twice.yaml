@@ -1,0 +1,4 @@
+# seeds/behavior.yaml with steps given twice: spec-unreadable, so trace goes no further.
+steps: ["open role=guest"]
+steps: ["open role=owner", "remove role=guest"]
+expect: open

@@ -1,0 +1,13 @@
+# seeds/policy.yaml with the builder role given again, allowing every path: spec-unreadable,
+# so guard goes no further.
+branches:
+  "build/*": builder
+  main: owner
+roles:
+  builder:
+    allow: ["src/*", "tests/*"]
+    deny: ["src/secret*"]
+  builder:
+    allow: ["*"]
+  owner:
+    allow: ["*"]
