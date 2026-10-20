@@ -218,6 +218,7 @@ exit 1
 === in $TMP/value007: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@d69fb994193c
 | 08/08@0d044b7eaf06
 | b/go@5470cd63ac3e
 |
@@ -249,6 +250,7 @@ exit 1
 === in $TMP/value008: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@6d7a5db937b5
 | 0o17/0o17@b4f8f09bfe11
 | b/go@eda961cd1870
 |
@@ -369,6 +371,7 @@ exit 1
 === in $TMP/value012: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@7cd82f514cf8
 | 0b/0b@b48be88726c7
 | b/go@b250d8fb09ac
 |
@@ -553,6 +556,7 @@ exit 1
 === in $TMP/value018: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@528f9add7f7f
 | _1/_1@2e2745cec4ed
 | b/go@2e44c6b841f7
 |
@@ -712,6 +716,7 @@ exit 1
 === in $TMP/value023: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@aeae54917d9b
 | 1:60/1:60@1814d0e78531
 | b/go@1476d8aaf877
 |
@@ -999,6 +1004,7 @@ exit 1
 === in $TMP/value032: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@0d5d610a6641
 | -.5/-.5@5d45e53c5d7e
 | b/go@0219f715df5a
 |
@@ -1094,6 +1100,7 @@ exit 1
 === in $TMP/value035: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@021d07554ca6
 | 1.0e3/1.0e3@0890f41d498a
 | b/go@fd1697468d64
 |
@@ -1125,6 +1132,7 @@ exit 1
 === in $TMP/value036: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@e8b6c0bedfee
 | 1e3/1e3@838f578adfb6
 | b/go@c7426f6049a0
 |
@@ -1444,6 +1452,7 @@ exit 1
 === in $TMP/value046: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@45bd8129403f
 | nan/nan@f595c55f9830
 | b/go@50494c12b292
 |
@@ -1475,6 +1484,7 @@ exit 1
 === in $TMP/value047: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@2d05d3bc9a7d
 | inf/inf@b68ae1846936
 | b/go@10cc0b293360
 |
@@ -1634,6 +1644,7 @@ exit 1
 === in $TMP/value052: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@7f958dff9992
 | nULL/nULL@747d39fcab2e
 | b/go@5e76c1c6253d
 |
@@ -1754,6 +1765,7 @@ exit 1
 === in $TMP/value056: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@3a8d17f30219
 | tRue/tRue@c6fc63a83d33
 | b/go@1195019b7f4f
 |
@@ -1849,6 +1861,7 @@ exit 1
 === in $TMP/value059: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@2cbcb97f2662
 | y/y@9890c127c0e9
 | b/go@6d4ba5d87691
 |
@@ -1880,6 +1893,7 @@ exit 1
 === in $TMP/value060: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@82536a4cd870
 | n/n@5955a54578f9
 | b/go@aa5cbe0e5e8c
 |
@@ -2007,6 +2021,7 @@ exit 1
 === in $TMP/value064: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@e02faef4ff40
 | 2026-1-4/2026-1-4@6659b6caff7f
 | b/go@1fd3324ce130
 |
@@ -2202,6 +2217,7 @@ exit 1
 === in $TMP/value071: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@165ced57833d
 | 2026-10-14t10:00:00z/2026-10-14t10:00:00z@64506301e5b7
 | b/go@0d93a20cb359
 |
@@ -2739,6 +2755,7 @@ exit 1
 === in $TMP/value090: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@11c2057478ff
 | 1e999/1e999@4716e8ac0161
 | b/go@98fc9ce0715b
 |
@@ -2770,6 +2787,7 @@ exit 1
 === in $TMP/value091: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@5b17d048a658
 | 1.0e999/1.0e999@438f60894433
 | b/go@af1f2a690594
 |
@@ -7826,6 +7844,7 @@ exit 1
 === in $TMP/value286: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@f35a56ae496f
 | aGVsbG8=/aGVsbG8=@54bdbc4772b7
 | b/go@6c7ab6ac3d20
 |
@@ -7857,6 +7876,7 @@ exit 1
 === in $TMP/value287: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@eb78f1dbbc97
 | 0x1F/0x1F@45869f22f377
 | b/go@d973792d45b0
 |
@@ -7888,6 +7908,7 @@ exit 1
 === in $TMP/value288: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@ff9ac2fc3795
 | +/+@5605dc044556
 | b/go@c06812526129
 |
@@ -7944,6 +7965,7 @@ exit 1
 === in $TMP/value290: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@28c0f065465a
 | /@5c8709dbfb70
 | b/go@c3d1c4563575
 |
@@ -7975,6 +7997,7 @@ exit 1
 === in $TMP/value291: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@75897cee4a33
 | aGVsbG8/aGVsbG8@7e25b4994157
 | b/go@ba37c6ec0549
 |
@@ -8006,6 +8029,7 @@ exit 1
 === in $TMP/value292: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@f0991dea879f
 | abc/abc@415af4de9b06
 | b/go@41693ca55fcf
 |
@@ -8087,6 +8111,7 @@ exit 1
 === in $TMP/value295: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@a0efcb11ccca
 | yes/yes@cae75d78c085
 | b/go@71d1a5b71b6d
 |
@@ -8143,6 +8168,7 @@ exit 1
 === in $TMP/value297: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@39de0fe7bce6
 | 2026-10-14/2026-10-14@93f3884edb17
 | b/go@bed5e24671c0
 |
@@ -8174,6 +8200,7 @@ exit 1
 === in $TMP/value298: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@7d5435f5b14a
 | 1:30/1:30@9e8c4bbbc79b
 | b/go@9d8f681f342f
 |
@@ -8230,6 +8257,7 @@ exit 1
 === in $TMP/value300: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@0fba10c2c029
 | 12/12@29ec1e40a157
 | b/go@cc560585cc64
 |
@@ -8261,6 +8289,7 @@ exit 1
 === in $TMP/value301: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@0fba10c2c029
 | 12/12@29ec1e40a157
 | b/go@cc560585cc64
 |
@@ -9099,6 +9128,7 @@ exit 1
 === in $TMP/value334: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@5b67536f1f6b
 | café/café@4d5d53559600
 | b/go@9db569b13352
 |
@@ -9130,6 +9160,7 @@ exit 1
 === in $TMP/value335: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@0c572d4dd68c
 | it's/it's@308bd5b0a110
 | b/go@6c16f99726f6
 |
@@ -9161,6 +9192,7 @@ exit 1
 === in $TMP/value336: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@9e67799af9a3
 | a	b/a	b@cf5168abed38
 | b/go@da332d2f12e3
 |
@@ -9192,6 +9224,7 @@ exit 1
 === in $TMP/value337: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@9a2055537026
 | é/é@c6c5eb996a44
 | b/go@9efc1d247e7a
 |
@@ -9223,6 +9256,7 @@ exit 1
 === in $TMP/value338: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@3a357e62f4db
 |q "\x7f/\x7f@42697ef478ce"
 | b/go@4315fd568d5f
 |
@@ -9254,6 +9288,7 @@ exit 1
 === in $TMP/value339: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@583d5c9cc580
 | 🙂/🙂@017ac61b48fa
 | b/go@c8ac21ba7af1
 |
@@ -9285,6 +9320,7 @@ exit 1
 === in $TMP/value340: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@583d5c9cc580
 | 🙂/🙂@017ac61b48fa
 | b/go@c8ac21ba7af1
 |
@@ -9318,6 +9354,7 @@ exit 1
 === in $TMP/value341: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@71c7a30bb274
 | line
 | break/line
 | break@95479820d0e5
@@ -9351,6 +9388,7 @@ exit 1
 === in $TMP/value342: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@11b919ec0632
 | back\slash/back\slash@0e8ec9d3686c
 | b/go@5994a5628fbe
 |
@@ -9382,6 +9420,7 @@ exit 1
 === in $TMP/value343: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@4bbd69e5f9f6
 | quote"d/quote"d@c8f7375ce7df
 | b/go@544561b818c8
 |
@@ -9413,6 +9452,7 @@ exit 1
 === in $TMP/value344: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@3323b68aebe5
 | single/single@68271f03e46f
 | b/go@f56e1503281e
 |
@@ -9444,6 +9484,7 @@ exit 1
 === in $TMP/value345: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@f2b100b8c070
 | 日本/日本@f94e2a3b3a71
 | b/go@bc43b06b59a4
 |
@@ -9475,6 +9516,7 @@ exit 1
 === in $TMP/value346: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@e09578e81459
 | naïve/naïve@0489df919459
 | b/go@86189c61c1e1
 |
@@ -9506,6 +9548,7 @@ exit 1
 === in $TMP/value347: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@76a873c978df
 |   padded  /  padded  @b39ae45ac7e0
 | b/go@b13ae45b0b6c
 |
@@ -9537,6 +9580,7 @@ exit 1
 === in $TMP/value348: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@efc99df1c3ce
 | a: b/a: b@7147895fef86
 | b/go@fa43775c7119
 |
@@ -9568,6 +9612,7 @@ exit 1
 === in $TMP/value349: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@9b2b7abfce70
 | #x/#x@07dcb6387ee2
 | b/go@7d750a136613
 |
@@ -9599,6 +9644,7 @@ exit 1
 === in $TMP/value350: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@7691d8ec85d1
 | x	y/x	y@8123f78d5702
 | b/go@2dd61c0a0be7
 |
@@ -9632,6 +9678,7 @@ exit 1
 === in $TMP/value351: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@d2a0d3523d8e
 | x
 | y/x
 | y@8a544ced6d6a
@@ -9665,6 +9712,7 @@ exit 1
 === in $TMP/value352: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@cc2c2da67edb
 |q "x\ry/x\ry@18f148e70b91"
 | b/go@159f9ad2faa7
 |
@@ -9696,6 +9744,7 @@ exit 1
 === in $TMP/value353: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@6a8cbd074d02
 | x y/x y@e090a17e4449
 | b/go@9024893bfc1a
 |
@@ -9727,6 +9776,7 @@ exit 1
 === in $TMP/value354: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@37412d71d7f9
 | x/y/x/y@d36d67c25006
 | b/go@13ba5a8fb672
 |
@@ -9758,6 +9808,7 @@ exit 1
 === in $TMP/value355: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@16d4f4aab293
 | xy/xy@82a8d269b38b
 | b/go@05742137416a
 |
@@ -9789,6 +9840,7 @@ exit 1
 === in $TMP/value356: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@6999e300928c
 | x y/x y@eabb28d8d3b1
 | b/go@0f6920529d7f
 |
@@ -9820,6 +9872,7 @@ exit 1
 === in $TMP/value357: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@9c09c9bba139
 | x y/x y@e105742649e3
 | b/go@2867e4619cf1
 |
@@ -9851,6 +9904,7 @@ exit 1
 === in $TMP/value358: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@ca6b3ada7657
 | x y/x y@8fe58290d1f0
 | b/go@9aabdfe60715
 |
@@ -9882,6 +9936,7 @@ exit 1
 === in $TMP/value359: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@3e254ef28a51
 | xy/xy@1fbbb88bcd1d
 | b/go@ae2fde2de6a5
 |
@@ -9913,6 +9968,7 @@ exit 1
 === in $TMP/value360: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@f13860a5a189
 | xÿy/xÿy@e41a933869b3
 | b/go@05fbabe77766
 |
@@ -9944,6 +10000,7 @@ exit 1
 === in $TMP/value361: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@16d4f4aab293
 | xy/xy@82a8d269b38b
 | b/go@05742137416a
 |
@@ -9975,6 +10032,7 @@ exit 1
 === in $TMP/value362: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@582e9c2ba36b
 | x﻿y/x﻿y@3ab5d61f0aab
 | b/go@646e2aaaeeb9
 |
@@ -10006,6 +10064,7 @@ exit 1
 === in $TMP/value363: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@c1c556b29ca4
 | x퟿y/x퟿y@c244ad59b625
 | b/go@1b1a89e12924
 |
@@ -10037,6 +10096,7 @@ exit 1
 === in $TMP/value364: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@3e41e3c7c9c7
 | xy/xy@7848d2a3be84
 | b/go@0f81abc398b7
 |
@@ -10068,6 +10128,7 @@ exit 1
 === in $TMP/value365: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@c56612ef2b32
 | x𐀀y/x𐀀y@a712bfa642c8
 | b/go@305fe29be4b3
 |
@@ -10099,6 +10160,7 @@ exit 1
 === in $TMP/value366: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@ce7341b8da07
 | x􏿿y/x􏿿y@02901ab9bb57
 | b/go@78ec1e765f54
 |
@@ -10230,6 +10292,7 @@ exit 1
 === in $TMP/value371: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@89d92783c753
 | //x////x/@0ca6cb928a28
 | b/go@e7a1b73189dd
 |
@@ -10261,6 +10324,7 @@ exit 1
 === in $TMP/value372: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@91e2f284df04
 | c\/d/c\/d@348f9a831937
 | b/go@7db9752e4bdd
 |
@@ -10342,6 +10406,7 @@ exit 1
 === in $TMP/value375: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@88abca88befb
 |q "x\x00y/x\x00y@88068f9a5b6c"
 | b/go@5b1058114344
 |
@@ -10373,6 +10438,7 @@ exit 1
 === in $TMP/value376: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@782abc1eeef6
 |q "x\ay/x\ay@29cdd81c954e"
 | b/go@26844c56d7ca
 |
@@ -10404,6 +10470,7 @@ exit 1
 === in $TMP/value377: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@3cdff74d80d6
 |q "x\by/x\by@7c01ee319172"
 | b/go@82a751b584ef
 |
@@ -10435,6 +10502,7 @@ exit 1
 === in $TMP/value378: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@53469c6d1639
 |q "x\vy/x\vy@f2194148f60b"
 | b/go@0632b921f8da
 |
@@ -10466,6 +10534,7 @@ exit 1
 === in $TMP/value379: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@62672ba8f9d7
 |q "x\fy/x\fy@bf46a1393bf6"
 | b/go@6fa19c721ba5
 |
@@ -10497,6 +10566,7 @@ exit 1
 === in $TMP/value380: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@3ba82f7c2abb
 |q "x\x1by/x\x1by@31fcfdcb2fdf"
 | b/go@5759c200b4dd
 |
@@ -10528,6 +10598,7 @@ exit 1
 === in $TMP/value381: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@88abca88befb
 |q "x\x00y/x\x00y@88068f9a5b6c"
 | b/go@5b1058114344
 |
@@ -10559,6 +10630,7 @@ exit 1
 === in $TMP/value382: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@f4b952ce0c4e
 | x￾y/x￾y@77c4a8ce348a
 | b/go@f2f92d404b63
 |
@@ -10590,6 +10662,7 @@ exit 1
 === in $TMP/value383: spine hash spine.yaml
 exit 0
 --- stdout
+| spine@0fd8d00115bb
 | x￿y/x￿y@a06e5d4d3d19
 | b/go@c2dda74893cc
 |

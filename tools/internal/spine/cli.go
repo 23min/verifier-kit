@@ -573,6 +573,7 @@ func Main(argv []string, stdin io.Reader, stdout, stderr io.Writer) int {
 		findings = append(findings, problems...)
 		if findings.Errors() == 0 {
 			if cmd == "hash" {
+				fmt.Fprintf(out, "spine@%s\n", spec.spineHash())
 				for _, st := range spec.States {
 					for _, ev := range spec.Events {
 						if len(spec.rulesFor(st, ev)) > 0 {

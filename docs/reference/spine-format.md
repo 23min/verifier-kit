@@ -117,7 +117,7 @@ declared, so a misspelling is reported rather than refused, which in `invalid/` 
 Unratified interpretations of a chapter, `spec/<machine>/readings/*.yaml`, use the same format.
 `spine diff` compares two of them, or a reading against the ratified spine.
 
-## Citing a cell
+## Citing a cell, or the whole spine
 
 A content check states which cell it depends on, anywhere in the file:
 
@@ -127,3 +127,17 @@ A content check states which cell it depends on, anywhere in the file:
 
 `spine hash <spec>` prints the current hash of every cell. When the rules for a cell change,
 its hash changes and `spine stale` reports every check that cites the old one.
+
+A check that depends on the whole machine rather than on single cells, such as one that
+explores every interleaving, cites the spine instead (#59):
+
+```python
+# covers: spine@23fc1b40ab2e
+```
+
+That hash covers what the machine does: the states and which are terminal, `initial`, the
+events, the variables and their values, and the rules. The machine's name, its section, a
+state's kind, the worked examples, comments and the order anything is written in leave it
+alone. `spine hash` prints it first, as `spine@<hash>`. When it changes, `spine stale` reports
+every check that cites the old one; while it is current, `stale` counts every transition as
+cited.

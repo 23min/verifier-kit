@@ -120,7 +120,7 @@ root: `conformance/adapter_notes.cmd`, `checks/run.cmd`, `mutation/mutate_notes.
 | guard (when `VERIFY_BASE` is set) | `spine guard` | a role changing paths it does not own | anything about behavior |
 | spine is sound | `spine check` | unknown keys, YAML slips (`on:` read as `true`), cases no rule covers, overlapping rules, unreachable states, failing worked examples | a spine that is complete but wrong |
 | behaviors match spine | `spine behaviors` | the spine drifting from the example runs you agreed on | |
-| checks cite current spine | `spine stale` | content checks that cite a spine cell which has since changed | checks that never cite anything (listed as info) |
+| checks cite current spine | `spine stale` | content checks that cite a spine cell, or the whole spine, which has since changed | checks that never cite anything (listed as info) |
 | code conforms to spine | `spine conform`, with `adapter_<machine>.py` or the command in `adapter_<machine>.cmd` | any state/event/role case where the code allows, refuses or ends up somewhere other than the spine says, with the shortest sequence that shows it | anything beyond 4 steps; data the adapter does not observe |
 | content checks | `run_checks.py`, or the command in `checks/run.cmd` | wrong text, values, formats | whatever no check asserts |
 | mutants killed (`--full`) | `mutation/mutate_*.py`, or the command in each `mutate_*.cmd` | an oracle too weak to notice a planted bug | bugs unlike the planted ones |
@@ -198,8 +198,9 @@ rule for every state, event and variable combination. Every name and value is te
 anything YAML would read as something else, such as `"yes"`, `"012"` or `"2026-10-14"`.
 
 A content check cites the cell it depends on with a comment like
-`# covers: trashed/restore@95f9c8204e9f`; `spine hash examples/notes/spec/notes/spine.yaml`
-prints the current hashes.
+`# covers: trashed/restore@95f9c8204e9f`, or, when it depends on the whole machine, the spine
+with `# covers: spine@<hash>`; `spine hash examples/notes/spec/notes/spine.yaml` prints the
+current hashes.
 
 ## Adding an example or a machine
 

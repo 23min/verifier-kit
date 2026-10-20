@@ -145,8 +145,8 @@ missing and overlapping cases.
 Failure behavior (timeouts, retries) is written as events in the spine. Concurrency needs a
 model checker or deterministic simulation.
 
-Views are kept consistent through the spine: checks cite cells by hash, decision tables hang on
-transitions, sequence rules and the spine judge the same trace.
+Views are kept consistent through the spine: checks cite cells, or the whole spine, by hash,
+decision tables hang on transitions, sequence rules and the spine judge the same trace.
 
 ### The adapter
 
@@ -182,7 +182,7 @@ Blast radius, cheapest first: a guard changes; a transition is added; a state is
 is removed, merged or split; the model is reframed. The last two need a migration table that
 maps every old state to a new one, and the gate checks it is total. Changing a fact state needs
 a decision; a policy change cites one; a design change needs none while facts and policy hold.
-`spine stale` marks every check that cites a changed cell.
+`spine stale` marks every check that cites a changed cell, or a spine that has changed.
 
 ## One change, end to end
 

@@ -364,6 +364,7 @@ exit 1
 === in tools/internal/spine/testdata: spine hash seeds/spine.yaml
 exit 0
 --- stdout
+| spine@7ffd784dee4d
 | closed/open@26ccaba33ea0
 | closed/remove@c4ec20806a30
 | open/open@79e9a52da0fe
@@ -384,6 +385,7 @@ exit 1
 === in tools/internal/spine/testdata: spine hash spines/names.yaml
 exit 0
 --- stdout
+| spine@2fa9dee817b1
 | café/über@8be38720bae1
 | café/ev"q@6adfc9b92e36
 | 日本/über@185eb0ebc4d1
@@ -423,6 +425,7 @@ exit 1
 === in tools/internal/spine/testdata: spine hash spines/unsound.yaml
 exit 0
 --- stdout
+| spine@d8e1dc736e1f
 | s/go@1d93a9c8d9e9
 | t/go@5e745dafed67
 | t/stop@49781a03ae6b

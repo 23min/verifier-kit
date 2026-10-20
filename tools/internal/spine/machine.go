@@ -457,14 +457,48 @@ func (s *Spec) cellHash(state, event string) string {
 	return hex.EncodeToString(sum[:])[:12]
 }
 
-// covers is COVERS in tools/spine.py, with Python's Unicode \s and \w spelled out.
-var covers = regexp.MustCompile(`covers:` + pySpaceClass + `*([\p{L}\p{N}_-]+)/([\p{L}\p{N}_-]+)@([0-9a-f]+)`)
+// spineHash is what a check that depends on the whole machine cites, as spine@<hash> (#59):
+// the states and which are terminal, initial, the events, the variables and their values, and
+// the rules. The machine's name, its section, a state's kind, the worked examples, comments and
+// the order anything is written in don't change what the machine does, so they don't change it.
+func (s *Spec) spineHash() string {
+	var states, events, vars, rules []string
+	for _, st := range s.States {
+		states = append(states, fmt.Sprintf("[%s, %t]", pyJSONString(st), s.terminal[st]))
+	}
+	for _, e := range s.Events {
+		events = append(events, pyJSONString(e))
+	}
+	for _, v := range s.Vars {
+		values := make([]string, len(v.Values))
+		for i, x := range v.Values {
+			values[i] = pyJSONString(x)
+		}
+		sort.Strings(values)
+		vars = append(vars, fmt.Sprintf("[%s, [%s]]", pyJSONString(v.Name), strings.Join(values, ", ")))
+	}
+	for _, r := range s.Rules {
+		rules = append(rules, r.canon)
+	}
+	for _, list := range [][]string{states, events, vars, rules} {
+		sort.Strings(list)
+	}
+	canon := fmt.Sprintf(`{"events": [%s], "initial": %s, "rules": [%s], "states": [%s], "vars": [%s]}`,
+		strings.Join(events, ", "), pyJSONString(s.Initial), strings.Join(rules, ", "),
+		strings.Join(states, ", "), strings.Join(vars, ", "))
+	sum := sha256.Sum256([]byte(canon))
+	return hex.EncodeToString(sum[:])[:12]
+}
+
+// covers is COVERS in tools/spine.py, with Python's Unicode \s and \w spelled out, and the
+// whole spine as `spine` where a cell would be (#59); a cell always has a slash.
+var covers = regexp.MustCompile(`covers:` + pySpaceClass + `*(?:([\p{L}\p{N}_-]+)/([\p{L}\p{N}_-]+)|(spine))@([0-9a-f]+)`)
 
 const pySpaceClass = `[\t\n\v\f\r\x1c-\x1f \x{85}\x{a0}\x{1680}\x{2000}-\x{200a}\x{2028}\x{2029}\x{202f}\x{205f}\x{3000}]`
 
 func stale(s *Spec, checksDir string) Findings {
 	var out Findings
-	covered := map[string]bool{}
+	covered, whole := map[string]bool{}, false
 	for _, path := range rglob(checksDir) {
 		if !isFile(path) || contains(strings.Split(path, "/"), "__pycache__") {
 			continue
@@ -476,7 +510,16 @@ func stale(s *Spec, checksDir string) Findings {
 		}
 		text := strings.ToValidUTF8(string(data), "�")
 		for _, m := range covers.FindAllStringSubmatch(text, -1) {
-			st, e, h := m[1], m[2], m[3]
+			if m[3] != "" {
+				if h := s.spineHash(); m[4] != h {
+					out.Add("stale-check", path, fmt.Sprintf(
+						"covers spine@%s, but the spine now hashes to %s: re-ratify, then update the check", m[4], h))
+				} else {
+					whole = true
+				}
+				continue
+			}
+			st, e, h := m[1], m[2], m[4]
 			cell := st + "/" + e
 			switch {
 			case !s.stateSet[st] || !contains(s.Events, e) || len(s.rulesFor(st, e)) == 0:
@@ -491,7 +534,7 @@ func stale(s *Spec, checksDir string) Findings {
 	}
 	cells := map[string]bool{}
 	for _, r := range s.Rules {
-		if r.Outcome.Kind == "to" && !covered[r.From+"/"+r.Event] {
+		if r.Outcome.Kind == "to" && !whole && !covered[r.From+"/"+r.Event] {
 			cells[r.From+"/"+r.Event] = true
 		}
 	}
