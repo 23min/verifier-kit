@@ -2602,6 +2602,7 @@ exit 1
 === in .: spine hash examples/elixir_job/spec/job/readings/reading-a.yaml
 exit 0
 --- stdout
+| spine@9fadd1856ba9
 | queued/start@4252715ad208
 | queued/succeed@4e489d90ae01
 | queued/fail@ce9ab9a949eb
@@ -2621,6 +2622,7 @@ exit 0
 === in .: spine hash examples/elixir_job/spec/job/readings/reading-b.yaml
 exit 0
 --- stdout
+| spine@9fadd1856ba9
 | queued/start@4252715ad208
 | queued/succeed@4e489d90ae01
 | queued/fail@ce9ab9a949eb
@@ -2640,6 +2642,7 @@ exit 0
 === in .: spine hash examples/elixir_job/spec/job/spine.yaml
 exit 0
 --- stdout
+| spine@9fadd1856ba9
 | queued/start@4252715ad208
 | queued/succeed@4e489d90ae01
 | queued/fail@ce9ab9a949eb
@@ -2659,6 +2662,7 @@ exit 0
 === in .: spine hash examples/notes/spec/notes/readings/reading-a.yaml
 exit 0
 --- stdout
+| spine@bd4857a0c271
 | draft/publish@0566b0558560
 | draft/edit@4a79e65e9c2b
 | draft/trash@3d2fd08161b0
@@ -2678,6 +2682,7 @@ exit 0
 === in .: spine hash examples/notes/spec/notes/readings/reading-b.yaml
 exit 0
 --- stdout
+| spine@b10dfd3551ce
 | draft/publish@0566b0558560
 | draft/edit@4a79e65e9c2b
 | draft/trash@29a34ca30b21
@@ -2697,6 +2702,7 @@ exit 0
 === in .: spine hash examples/notes/spec/notes/spine.yaml
 exit 0
 --- stdout
+| spine@5ec654ba79f5
 | draft/publish@0566b0558560
 | draft/edit@4a79e65e9c2b
 | draft/trash@29a34ca30b21
@@ -2716,6 +2722,7 @@ exit 0
 === in .: spine hash examples/ref_sync/spec/ref_sync/readings/reading-a.yaml
 exit 0
 --- stdout
+| spine@23fc1b40ab2e
 | queued/prepare@b8678268248e
 | queued/accepted@3121271eb548
 | queued/non_fast_forward@7a75e4064384
@@ -2747,6 +2754,7 @@ exit 0
 === in .: spine hash examples/ref_sync/spec/ref_sync/readings/reading-b.yaml
 exit 0
 --- stdout
+| spine@3575d6a8cf49
 | queued/prepare@b8678268248e
 | queued/seen_on_remote@fce4617145ba
 | queued/absent_on_remote@3e7dd903276c
@@ -2765,6 +2773,7 @@ exit 0
 === in .: spine hash examples/ref_sync/spec/ref_sync/spine.yaml
 exit 0
 --- stdout
+| spine@23fc1b40ab2e
 | queued/prepare@b8678268248e
 | queued/accepted@3121271eb548
 | queued/non_fast_forward@7a75e4064384

@@ -5080,17 +5080,23 @@ exit 1
 |       "message": "covers closed/open@26, but that cell now hashes to 26ccaba33ea0: re-ratify, then update the check"
 |     },
 |     {
-|       "code": "uncovered",
-|       "severity": "info",
-|       "where": "closed/remove",
-|       "message": "no check cites this transition; conformance still exercises it"
+|       "code": "stale-check",
+|       "severity": "error",
+|       "where": "checks/spine-malformed/test_whole.py",
+|       "message": "covers spine@7, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check"
+|     },
+|     {
+|       "code": "stale-check",
+|       "severity": "error",
+|       "where": "checks/spine-old/test_whole.py",
+|       "message": "covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine stale" tests="6" failures="6"><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers café/über, which the spec no longer defines">covers café/über, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers a-b/c_d, which the spec no longer defines">covers a-b/c_d, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="stale-check checks/door/test_door.py"><failure message="covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers nowhere/open, which the spec no longer defines">covers nowhere/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/fly, which the spec no longer defines">covers closed/fly, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="stale-check checks/door/test_door.py"><failure message="covers closed/open@26, but that cell now hashes to 26ccaba33ea0: re-ratify, then update the check">covers closed/open@26, but that cell now hashes to 26ccaba33ea0: re-ratify, then update the check</failure></testcase></testsuite>
+| <testsuite name="spine stale" tests="8" failures="8"><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers café/über, which the spec no longer defines">covers café/über, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers a-b/c_d, which the spec no longer defines">covers a-b/c_d, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="stale-check checks/door/test_door.py"><failure message="covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers nowhere/open, which the spec no longer defines">covers nowhere/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/fly, which the spec no longer defines">covers closed/fly, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="stale-check checks/door/test_door.py"><failure message="covers closed/open@26, but that cell now hashes to 26ccaba33ea0: re-ratify, then update the check">covers closed/open@26, but that cell now hashes to 26ccaba33ea0: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check checks/spine-malformed/test_whole.py"><failure message="covers spine@7, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check">covers spine@7, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check checks/spine-old/test_whole.py"><failure message="covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check">covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine stale --format json --junit REPORT seeds/spine.yaml checks/door
 exit 1
 --- stdout
@@ -5171,6 +5177,80 @@ exit 0
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine stale" tests="1" failures="0"><testcase classname="spine stale" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine stale --format json --junit REPORT seeds/spine.yaml checks/spine-current
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "stale",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine stale" tests="1" failures="0"><testcase classname="spine stale" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine stale --format json --junit REPORT seeds/spine.yaml checks/spine-malformed
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "stale",
+|   "findings": [
+|     {
+|       "code": "stale-check",
+|       "severity": "error",
+|       "where": "checks/spine-malformed/test_whole.py",
+|       "message": "covers spine@7, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check"
+|     },
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "closed/open",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     },
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "closed/remove",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine stale" tests="1" failures="1"><testcase classname="spine stale" name="stale-check checks/spine-malformed/test_whole.py"><failure message="covers spine@7, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check">covers spine@7, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine stale --format json --junit REPORT seeds/spine.yaml checks/spine-old
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "stale",
+|   "findings": [
+|     {
+|       "code": "stale-check",
+|       "severity": "error",
+|       "where": "checks/spine-old/test_whole.py",
+|       "message": "covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check"
+|     },
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "closed/open",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     },
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "closed/remove",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine stale" tests="1" failures="1"><testcase classname="spine stale" name="stale-check checks/spine-old/test_whole.py"><failure message="covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check">covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine stale --format json --junit REPORT spines/names.yaml checks/door
 exit 1
 --- stdout
@@ -5374,8 +5454,9 @@ exit 1
 | error   orphan-check       checks/door/test_door.py: covers nowhere/open, which the spec no longer defines
 | error   orphan-check       checks/door/test_door.py: covers closed/fly, which the spec no longer defines
 | error   stale-check        checks/door/test_door.py: covers closed/open@26, but that cell now hashes to 26ccaba33ea0: re-ratify, then update the check
-| info    uncovered          closed/remove: no check cites this transition; conformance still exercises it
-| -- 6 errors, 7 findings
+| error   stale-check        checks/spine-malformed/test_whole.py: covers spine@7, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check
+| error   stale-check        checks/spine-old/test_whole.py: covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check
+| -- 8 errors, 8 findings
 |
 === in tools/internal/spine/testdata: spine stale seeds/spine.yaml checks/door
 exit 1
@@ -5395,6 +5476,27 @@ exit 0
 | info    uncovered          closed/open: no check cites this transition; conformance still exercises it
 | info    uncovered          closed/remove: no check cites this transition; conformance still exercises it
 | -- 0 errors, 2 findings
+|
+=== in tools/internal/spine/testdata: spine stale seeds/spine.yaml checks/spine-current
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in tools/internal/spine/testdata: spine stale seeds/spine.yaml checks/spine-malformed
+exit 1
+--- stdout
+| error   stale-check        checks/spine-malformed/test_whole.py: covers spine@7, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check
+| info    uncovered          closed/open: no check cites this transition; conformance still exercises it
+| info    uncovered          closed/remove: no check cites this transition; conformance still exercises it
+| -- 1 errors, 3 findings
+|
+=== in tools/internal/spine/testdata: spine stale seeds/spine.yaml checks/spine-old
+exit 1
+--- stdout
+| error   stale-check        checks/spine-old/test_whole.py: covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check
+| info    uncovered          closed/open: no check cites this transition; conformance still exercises it
+| info    uncovered          closed/remove: no check cites this transition; conformance still exercises it
+| -- 1 errors, 3 findings
 |
 === in tools/internal/spine/testdata: spine stale spines/names.yaml checks/door
 exit 1
