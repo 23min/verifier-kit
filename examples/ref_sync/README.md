@@ -72,6 +72,10 @@ pushes into the spine's events; the explorer and the Git checks drive it.
 | Publishing leaves `main` and code branches alone (S6) | `test_git_ref.py`, C10 | one repository |
 | A fresh clone has the workflow ref only after fetching it | `test_git_ref.py`, C11 | one repository |
 
+`world.py` and `test_protocol.py` depend on the whole spine rather than on single cells, so each
+cites it as `covers: spine@<hash>`: when what the machine does changes, `spine stale` asks for
+them to be read again. The Git checks and `explore.py` don't depend on the spine and cite nothing.
+
 The explorer runs two clients with one intent each. A fault is a push whose reply is lost
 after the remote applied it, or a push held back and delivered later; a crash replaces a client
 with a new one built from the same journal. Every scenario explored every world reachable
@@ -144,8 +148,6 @@ checked against real Git, and only for one push at a time:
   One more lost reply takes C05 from 1,272 worlds in 0.8 s to 7,516 in 5.7 s (no problem
   found); the bound stays at one so `./verify` stays fast.
 - **Liveness.** Nothing promises that every operation is eventually published.
-- **Cell citations.** The checks cite no spine cells, so `spine stale` lists every transition
-  as uncovered; the explorer depends on the whole spine rather than on single cells.
 - Authorization, malicious clients and anything about a hosted Git service (chapter section 6).
 
 ## Measured

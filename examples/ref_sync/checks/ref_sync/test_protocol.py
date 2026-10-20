@@ -5,6 +5,7 @@ up to a bound, and checks S1-S5 and S7 in every world it reaches (world.problems
 every operation has ended, it also checks what the chapter says must happen. A failure names
 the shortest sequence of moves that shows it. A pass means "no problem within this bound".
 """
+# covers: spine@23fc1b40ab2e  (the scenarios follow the lifecycle, and their outcomes name its states)
 import json
 import sys
 from pathlib import Path

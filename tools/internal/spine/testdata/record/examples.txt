@@ -2851,80 +2851,7 @@ exit 0
 | {
 |   "tool": "spine",
 |   "command": "stale",
-|   "findings": [
-|     {
-|       "code": "uncovered",
-|       "severity": "info",
-|       "where": "prepared/accepted",
-|       "message": "no check cites this transition; conformance still exercises it"
-|     },
-|     {
-|       "code": "uncovered",
-|       "severity": "info",
-|       "where": "prepared/non_fast_forward",
-|       "message": "no check cites this transition; conformance still exercises it"
-|     },
-|     {
-|       "code": "uncovered",
-|       "severity": "info",
-|       "where": "prepared/response_lost",
-|       "message": "no check cites this transition; conformance still exercises it"
-|     },
-|     {
-|       "code": "uncovered",
-|       "severity": "info",
-|       "where": "prepared/restart",
-|       "message": "no check cites this transition; conformance still exercises it"
-|     },
-|     {
-|       "code": "uncovered",
-|       "severity": "info",
-|       "where": "queued/digest_mismatch",
-|       "message": "no check cites this transition; conformance still exercises it"
-|     },
-|     {
-|       "code": "uncovered",
-|       "severity": "info",
-|       "where": "queued/invalidated",
-|       "message": "no check cites this transition; conformance still exercises it"
-|     },
-|     {
-|       "code": "uncovered",
-|       "severity": "info",
-|       "where": "queued/prepare",
-|       "message": "no check cites this transition; conformance still exercises it"
-|     },
-|     {
-|       "code": "uncovered",
-|       "severity": "info",
-|       "where": "queued/seen_on_remote",
-|       "message": "no check cites this transition; conformance still exercises it"
-|     },
-|     {
-|       "code": "uncovered",
-|       "severity": "info",
-|       "where": "uncertain/absent_on_remote",
-|       "message": "no check cites this transition; conformance still exercises it"
-|     },
-|     {
-|       "code": "uncovered",
-|       "severity": "info",
-|       "where": "uncertain/digest_mismatch",
-|       "message": "no check cites this transition; conformance still exercises it"
-|     },
-|     {
-|       "code": "uncovered",
-|       "severity": "info",
-|       "where": "uncertain/restart",
-|       "message": "no check cites this transition; conformance still exercises it"
-|     },
-|     {
-|       "code": "uncovered",
-|       "severity": "info",
-|       "where": "uncertain/seen_on_remote",
-|       "message": "no check cites this transition; conformance still exercises it"
-|     }
-|   ]
+|   "findings": []
 | }
 |
 --- junit
@@ -2946,19 +2873,7 @@ exit 0
 === in .: spine stale examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/checks/ref_sync
 exit 0
 --- stdout
-| info    uncovered          prepared/accepted: no check cites this transition; conformance still exercises it
-| info    uncovered          prepared/non_fast_forward: no check cites this transition; conformance still exercises it
-| info    uncovered          prepared/response_lost: no check cites this transition; conformance still exercises it
-| info    uncovered          prepared/restart: no check cites this transition; conformance still exercises it
-| info    uncovered          queued/digest_mismatch: no check cites this transition; conformance still exercises it
-| info    uncovered          queued/invalidated: no check cites this transition; conformance still exercises it
-| info    uncovered          queued/prepare: no check cites this transition; conformance still exercises it
-| info    uncovered          queued/seen_on_remote: no check cites this transition; conformance still exercises it
-| info    uncovered          uncertain/absent_on_remote: no check cites this transition; conformance still exercises it
-| info    uncovered          uncertain/digest_mismatch: no check cites this transition; conformance still exercises it
-| info    uncovered          uncertain/restart: no check cites this transition; conformance still exercises it
-| info    uncovered          uncertain/seen_on_remote: no check cites this transition; conformance still exercises it
-| -- 0 errors, 12 findings
+| -- 0 errors, 0 findings
 |
 === in .: spine trace --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml examples/elixir_job/spec/job/behaviors/invalid/fourth-attempt.yaml
 exit 1
