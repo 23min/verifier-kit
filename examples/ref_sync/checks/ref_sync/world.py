@@ -10,6 +10,7 @@ remote's assumed behavior against real Git.
 
 explore.py searches the moves below; problems() says what is wrong in a world.
 """
+# covers: spine@23fc1b40ab2e  (reads the states, and which are terminal, from the spine)
 import hashlib
 import json
 from pathlib import Path

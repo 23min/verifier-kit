@@ -162,6 +162,7 @@ flowchart LR
   proto --> explore
   proto --> world
   world -->|"reads the states"| spineY
+  world -.->|"with test_protocol.py, cites the whole spine as covers: spine@hash"| spineY
   world -->|"steps two Clients against a simulated remote"| client
   gitc -->|"publishes with GitRemote"| client
   gitc --> git
