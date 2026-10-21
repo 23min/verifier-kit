@@ -17,6 +17,9 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
   failure go away. If a tool change needs the fixture to change, stop and say why.
 - **Each example lives in `examples/<name>/`,** laid out like a project that uses the toolkit
   (`docs/adr/0001-examples-layout.md`); `./verify examples/<name>` runs one alone.
+- **Examples are equal.** They differ in what they show and in what their language dictates,
+  never otherwise in how they are set up (`docs/adr/0007-no-language-built-in.md`). notes alone
+  is the acceptance fixture.
 - **The spine format and the tool contract are fixed** (`docs/reference/`). Changing them,
   including exit codes, JSON shape or finding codes, needs a GitHub issue the owner has
   approved. New finding codes may be added; existing ones are never renamed or reused.
@@ -27,8 +30,16 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
   `go.yaml.in/yaml/v4`.
 - **Docs move with code.** A change to a tool updates `docs/reference/` in the same commit;
   `docs/design.md` changes with the code it describes.
+- **Keep it clean.** A change leaves no second copy of anything, no code or file that nothing
+  uses, and no description that disagrees with the code. Each pull request says, besides the
+  four commands:
+  - which documents it changed, and the search that found every place the changed fact is told;
+  - that `go run golang.org/x/tools/cmd/deadcode@v0.52.0 -test ./...`, run in `tools/`, reports
+    nothing (a check run by hand, not a dependency of the toolkit);
+  - what it removed, and that nothing it added is unused.
 - **Work is tracked in GitHub issues** with `gh`. One issue per piece of work, with acceptance
   criteria and open questions; reference it in commits (`Refs #12`). Ask before closing one.
+  #61 holds the plan: the steps, in order, toward the design in ADR 0007.
 - **Branches and pull requests.** Work on a branch; ask before pushing to `main`, merging or
   tagging.
 
