@@ -248,6 +248,14 @@ print("the failing lines are as printed" if got == want else f"they differ: {got
   expect 0 "the failing lines are as printed"
 fi
 
+if scenario 17 "The agent's Stop hook when the project folder it is given doesn't exist" \
+   "a block saying ./verify did not run, rather than letting the builder stop"; then
+  show env CLAUDE_PROJECT_DIR="$W/gone" CLAUDE_CODE_SESSION_ID=demo \
+    bash -c 'echo "{}" | integrations/claude-code/hooks/stop-verify.sh'
+  show "$PY" -c "$READ_REPLY" "$OUT"
+  expect 0 "decision: block" "cannot enter the project folder" "so ./verify did not run"
+fi
+
 echo
 if [ "$RAN" = 0 ]; then echo "-- no scenario named ${ONLY}"; exit 2; fi
 if [ "$FAILS" = 0 ]; then

@@ -241,8 +241,9 @@ exit code and the lines it must print. Scenarios 0 to 10 seed faults in the note
 `./verify` in the copy checks every example, so ref_sync's and elixir_job's checks run in each of
 them too. Scenarios 11 to 13 seed faults in elixir_job and check it alone. Scenario 14 breaks
 the code of all three examples, so that each mutation script finds its oracle failing.
-Scenarios 15 and 16 run the Stop hook and read its reply as JSON, as Claude Code does: on a
-machine without `python3`, and on failing lines that hold characters JSON must escape.
+Scenarios 15 to 17 run the Stop hook and read its reply as JSON, as Claude Code does: on a
+machine without `python3`, on failing lines that hold characters JSON must escape, and with a
+project folder that doesn't exist.
 
 ```mermaid
 flowchart LR
@@ -273,6 +274,7 @@ flowchart LR
 | 14 | the code of all three examples, as in scenarios 1 and 11 and ref_sync's first mutant | `./verify --full` | `oracle-fails` from each mutation script |
 | 15 | no `python3` on the PATH, and no session id | the Stop hook, twice | a block with the failing lines, then the attempt-cap warning, each saying every session shares the count |
 | 16 | `./verify` prints failing lines with quotes, backslashes, control characters and a byte that isn't UTF-8 | the Stop hook | a block whose failing lines are exactly those |
+| 17 | the project folder given to the Stop hook doesn't exist | the Stop hook | a block saying `./verify` did not run |
 
 This repo's CI (`.github/workflows/verify.yml`) runs `go vet` and `go test`, then
 `./verify --full`, then `demo/faults.sh`, on every pull request and push to `main`. It does
