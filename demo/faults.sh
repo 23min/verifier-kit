@@ -224,6 +224,30 @@ if scenario 15 "The agent's Stop hook on a machine without python3, nor a sessio
   done
 fi
 
+if scenario 16 "The agent's Stop hook on failing lines with quotes, backslashes, control characters and a byte that isn't UTF-8" \
+   "the reply is JSON, and its failing lines are exactly the ones ./verify printed"; then
+  cat > "$W/verify" <<'EOF'
+#!/usr/bin/env bash
+printf 'ok    left out of the feedback\n'
+printf 'FAIL  "quotes", a backslash \\ and \\n as text\n'
+printf '      error   a tab\t, a bell\a, an escape \e[31m, a unit separator \x1f, a carriage return \r here\n'
+printf '      warning caf\xc3\xa9, \xe2\x98\x83, and a byte that is not UTF-8: \xff\n'
+printf -- '-- 1 step(s) failed\n'
+exit 1
+EOF
+  show env CLAUDE_PROJECT_DIR="$W" CLAUDE_CODE_SESSION_ID=demo \
+    bash -c 'echo "{}" | integrations/claude-code/hooks/stop-verify.sh'
+  show "$PY" -c 'import json, sys
+want = [b"FAIL  \"quotes\", a backslash \\ and \\n as text",
+        b"      error   a tab\t, a bell\a, an escape \x1b[31m, a unit separator \x1f, a carriage return \r here",
+        b"      warning caf\xc3\xa9, \xe2\x98\x83, and a byte that is not UTF-8: \xff",
+        b"-- 1 step(s) failed"]
+reply = json.loads(sys.argv[1])
+got = reply["reason"].encode("utf-8", "surrogateescape").split(b"\n")[1:]
+print("the failing lines are as printed" if got == want else f"they differ: {got!r}")' "$OUT"
+  expect 0 "the failing lines are as printed"
+fi
+
 echo
 if [ "$RAN" = 0 ]; then echo "-- no scenario named ${ONLY}"; exit 2; fi
 if [ "$FAILS" = 0 ]; then

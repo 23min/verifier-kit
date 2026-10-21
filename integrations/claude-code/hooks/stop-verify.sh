@@ -67,7 +67,8 @@ if [ "$n" -gt "$max" ]; then
   exit 0
 fi
 
-# Keep the feedback short: the failing steps and their error lines only.
-details="$(printf '%s\n' "$out" | grep -E '^(FAIL|skip|--)|^      (error|warning)' | head -40)"
+# Keep the feedback short: the failing steps and their error lines only. -a: GNU grep would
+# leave out a line that isn't valid UTF-8.
+details="$(printf '%s\n' "$out" | grep -a -E '^(FAIL|skip|--)|^      (error|warning)' | head -40)"
 block "./verify failed (attempt $n of $max).$shared Change only src/; the spec, checks, conformance adapter and tools are fixed for you. If the spec itself looks wrong, stop and say so instead of working around it.
 $details"
