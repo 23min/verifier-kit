@@ -241,6 +241,8 @@ exit code and the lines it must print. Scenarios 0 to 10 seed faults in the note
 `./verify` in the copy checks every example, so ref_sync's and elixir_job's checks run in each of
 them too. Scenarios 11 to 13 seed faults in elixir_job and check it alone. Scenario 14 breaks
 the code of all three examples, so that each mutation script finds its oracle failing.
+Scenario 15 runs the Stop hook on a machine without `python3`, and reads its reply as JSON, as
+Claude Code does.
 
 ```mermaid
 flowchart LR
@@ -269,6 +271,7 @@ flowchart LR
 | 12 | the job counts one attempt too many | `./verify examples/elixir_job` | conformance `ok`, content checks `FAIL` with J03 |
 | 13 | elixir_job's content checks deleted | `./verify examples/elixir_job --full` | `no checks ran`, and `mutant-survived` for a counting mutant |
 | 14 | the code of all three examples, as in scenarios 1 and 11 and ref_sync's first mutant | `./verify --full` | `oracle-fails` from each mutation script |
+| 15 | no `python3` on the PATH, and no session id | the Stop hook, twice | a block with the failing lines, then the attempt-cap warning, each saying every session shares the count |
 
 This repo's CI (`.github/workflows/verify.yml`) runs `go vet` and `go test`, then
 `./verify --full`, then `demo/faults.sh`, on every pull request and push to `main`. It does
