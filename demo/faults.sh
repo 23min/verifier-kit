@@ -120,11 +120,11 @@ if scenario 7 "The agent's Stop hook on a failing tree" \
   cp "$W/examples/notes/demo/notes_app_as_written.py" "$W/examples/notes/src/notes_app.py"
   (cd "$W" && git init -q -b main)
   echo "    -- attempt 1"
-  show env CLAUDE_PROJECT_DIR="$W" VERIFY_MAX_ATTEMPTS=1 \
+  show env CLAUDE_PROJECT_DIR="$W" CLAUDE_CODE_SESSION_ID=demo VERIFY_MAX_ATTEMPTS=1 \
     bash -c 'echo "{\"session_id\": \"demo\"}" | integrations/claude-code/hooks/stop-verify.sh'
   expect 0 '"decision": "block"' "draft/trash role=owner"
   echo "    -- attempt 2"
-  show env CLAUDE_PROJECT_DIR="$W" VERIFY_MAX_ATTEMPTS=1 \
+  show env CLAUDE_PROJECT_DIR="$W" CLAUDE_CODE_SESSION_ID=demo VERIFY_MAX_ATTEMPTS=1 \
     bash -c 'echo "{\"session_id\": \"demo\"}" | integrations/claude-code/hooks/stop-verify.sh'
   expect 0 '"systemMessage"' "attempt cap (1) is reached"
 fi
@@ -191,6 +191,37 @@ if scenario 14 "Checking the checker: every example's code already fails its ora
   expect 1 "oracle-fails       on src/notes_app.py as it is: conformance did not pass" \
     "oracle-fails       on src/ref_sync_client.py as it is: checks did not pass" \
     "oracle-fails       on the job as it is"
+fi
+
+# The Stop hook's reply, read as JSON, as Claude Code reads it.
+READ_REPLY='import json, sys
+for key, value in json.loads(sys.argv[1]).items():
+    print(f"{key}: {value}")'
+
+if scenario 15 "The agent's Stop hook on a machine without python3, nor a session id" \
+   "./verify fails, and the hook still blocks with the failing lines, then warns at the attempt cap; both say every session shares the count"; then
+  (cd "$W" && git init -q -b main)
+  NOPY="$SCRATCH/no-python3"   # every program on PATH but python3, found as PATH would
+  mkdir -p "$NOPY"
+  IFS=: read -ra path_dirs <<< "$PATH"
+  for d in "${path_dirs[@]}"; do
+    for f in "$d"/*; do
+      case "${f##*/}" in python3*) continue ;; esac
+      [ -f "$f" ] && [ -x "$f" ] && [ ! -e "$NOPY/${f##*/}" ] && ln -s "$f" "$NOPY/${f##*/}"
+    done
+  done
+  for attempt in 1 2; do
+    echo "    -- attempt $attempt"
+    show env -u PYTHON -u CLAUDE_CODE_SESSION_ID PATH="$NOPY" CLAUDE_PROJECT_DIR="$W" VERIFY_MAX_ATTEMPTS=1 \
+      bash -c 'echo "{}" | integrations/claude-code/hooks/stop-verify.sh'
+    expect 0
+    show "$PY" -c "$READ_REPLY" "$OUT"
+    if [ "$attempt" = 1 ]; then
+      expect 0 "decision: block" "FAIL  content checks" "every session shares this count"
+    else
+      expect 0 "systemMessage: ./verify still fails and the attempt cap (1) is reached" "every session shares this count"
+    fi
+  done
 fi
 
 echo
