@@ -49,7 +49,7 @@ if [ -z "$session" ]; then
   shared=" Claude Code gave no usable session id (CLAUDE_CODE_SESSION_ID), so every session shares this count."
 fi
 
-cd "${CLAUDE_PROJECT_DIR:-.}" || exit 0
+cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || block "The Stop hook cannot enter the project folder (${CLAUDE_PROJECT_DIR:-.}), so ./verify did not run."
 max="${VERIFY_MAX_ATTEMPTS:-5}"
 counter="$(git rev-parse --git-dir 2>/dev/null || echo .)/verify-attempts-$session"
 
