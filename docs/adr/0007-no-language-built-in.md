@@ -52,7 +52,8 @@ projects: no project uses the toolkit yet.
    the mutants, judges each step, and prints what `./verify` prints. Its decisions are pure.
    `./verify` stays the one entry point: a short Bash script that builds `spine` and `verify`
    into `tools/bin/` and runs `verify` with its arguments. `spine` stays files in, findings
-   out: it calls nothing, and nothing depends on its insides.
+   out: the one program it runs is the adapter's line, for `spine conform`, and nothing
+   depends on its insides.
 4. **No language built in** (D3). Every piece is a command, in any language:
    - the adapter, per machine: `conformance/adapter_<machine>.cmd`, whose line
      `spine conform --adapter-cmd` runs;
@@ -80,14 +81,18 @@ flowchart TD
   entry["./verify, Bash<br/>a few lines: builds the two programs, then runs verify with the same arguments"]
   verify["verify, Go<br/>finds the pieces, runs the steps, reads mutation/mutants.yaml<br/>and runs each mutant on a copy, judges them all by one rule, and prints;<br/>its decisions are pure"]
   subgraph programs["Run as programs"]
-    spine["spine, Go<br/>files in, findings out; calls nothing"]
-    pieces["adapter and checks<br/>a command each, in any language"]
+    spine["spine, Go<br/>files in, findings out; runs only the adapter's line"]
+    checks["content checks<br/>a command, in any language"]
+    adapter["adapter, per machine<br/>a command, in any language"]
   end
   code["src/, in the example's language"]
   callers -->|"./verify [example] [--full]"| entry
   entry -->|"verify [example] [--full]"| verify
-  verify -->|"runs, as separate programs"| programs
-  programs -->|"call the code"| code
+  verify -->|"runs"| spine
+  verify -->|"runs"| checks
+  spine -->|"spine conform runs its line"| adapter
+  checks -->|"call the code"| code
+  adapter -->|"calls the code"| code
 ```
 
 ## Consequences
