@@ -26,7 +26,7 @@ are in [`docs/reference/`](docs/reference/). Rules for agents working here are i
 ## Try it
 
 ```sh
-pip install -r requirements.txt   # PyYAML, for the ref_sync example's checks; or: uv venv && uv pip install -r requirements.txt
+pip install -r requirements.txt   # PyYAML, for the ref_sync example's checks; or in a uv venv, activated
 ./verify                    # fast checks on every example, a few seconds
 ./verify --full             # also breaks the code on purpose to check the checks
 ./verify examples/notes     # one example only
@@ -72,8 +72,8 @@ local Python.
 ```
 verify                           the single entry point
 tools/cmd/, tools/internal/      spine, in Go, and the tests of spine and ./verify (no knowledge of any CI or agent)
-tools/run_checks.py              runs Python content checks
-tools/adapter_shim.py            serves a Python adapter over the adapter protocol
+tools/run_checks.py              runs Python content checks; a Python project's checks/run.cmd calls it
+tools/adapter_shim.py            serves a Python adapter over the adapter protocol; an adapter line calls it
 policy.yaml                      which branch role may change which paths
 examples/<name>/                 one worked example each, laid out like a project (below)
 demo/                            the toolkit's demos on the notes example: faults.sh, live-builder.sh
@@ -91,16 +91,20 @@ spec/notes/spine.yaml            the ratified state machine: the oracle's spine 
 spec/notes/behaviors/            example runs: valid/ must be allowed, invalid/ refused
 checks/notes/                    content checks the spine cannot see; each cites a spine cell
 conformance/adapter_notes.py     translates spine events into calls on the service
+conformance/adapter_notes.cmd    the line that runs it: env PYTHONPATH=src adapter_shim.py conformance/adapter_notes.py
+checks/run.cmd                   the line that runs the checks: env PYTHONPATH=src run_checks.py checks --require-checks
 mutation/mutate_notes.py         deliberate bugs the oracle must catch
+mutation/mutate_notes.cmd        the line that runs it: python3 mutation/mutate_notes.py
 src/notes_app.py                 the service                                        builder
 demo/notes_app_as_written.py     the service as first written (two bugs)
 README.md                        what the example shows and how to run it
 ```
 
 A project that uses the toolkit has the same folders at its own root, next to `verify` and
-`tools/`. In a project not written in Python, the adapter, the content checks and each mutation
-script are `.cmd` files instead, each holding one command line that `./verify` runs from the
-root: `conformance/adapter_notes.cmd`, `checks/run.cmd`, `mutation/mutate_notes.cmd`.
+`tools/`. In any language, the adapter, the content checks and each mutation script are `.cmd`
+files, each holding one command line that `./verify` runs from the root, with `tools/` first on
+`PATH` (`docs/adr/0007-no-language-built-in.md`). A Python project's lines call the helpers in
+`tools/` and put `src/` on Python's import path themselves, as notes' do.
 
 ## The three loops
 
@@ -123,16 +127,17 @@ root: `conformance/adapter_notes.cmd`, `checks/run.cmd`, `mutation/mutate_notes.
 | spine is sound | `spine check` | unknown keys, YAML slips (`on:` read as `true`), cases no rule covers, overlapping rules, unreachable states, failing worked examples | a spine that is complete but wrong |
 | behaviors match spine | `spine behaviors` | the spine drifting from the example runs you agreed on | |
 | checks cite current spine | `spine stale` | content checks that cite a spine cell, or the whole spine, which has since changed | checks that never cite anything (listed as info) |
-| code conforms to spine | `spine conform`, with `adapter_<machine>.py` or the command in `adapter_<machine>.cmd` | any state/event/role case where the code allows, refuses or ends up somewhere other than the spine says, with the shortest sequence that shows it | anything beyond 4 steps; data the adapter does not observe |
-| content checks | `run_checks.py`, or the command in `checks/run.cmd` | wrong text, values, formats | whatever no check asserts |
-| mutants killed (`--full`) | `mutation/mutate_*.py`, or the command in each `mutate_*.cmd` | an oracle too weak to notice a planted bug | bugs unlike the planted ones |
+| code conforms to spine | `spine conform`, with the command in `adapter_<machine>.cmd` | any state/event/role case where the code allows, refuses or ends up somewhere other than the spine says, with the shortest sequence that shows it | anything beyond 4 steps; data the adapter does not observe |
+| content checks | the command in `checks/run.cmd` | wrong text, values, formats | whatever no check asserts |
+| mutants killed (`--full`) | the command in each `mutation/mutate_*.cmd` | an oracle too weak to notice a planted bug | bugs unlike the planted ones |
 
 Nothing is skipped silently. A step that does not run prints `skip` with the reason (no
 `VERIFY_BASE`, no behaviors folder, no `--full`, or a spine that is not sound), and a missing
 piece is an error: no spine at all, no adapter, no content checks, or no mutation script under
-`--full`. So is a piece given both as Python and as a `.cmd` file. Output is one line per step, with error lines only for failing steps. `VERIFY_REPORTS=dir` writes JUnit XML
-for the spine steps; `spine ... --format json` gives machine-readable findings. Exit codes:
-0 pass, 1 findings, 2 misuse.
+`--full`. So is a `.cmd` file that holds no single command line, or whose program can't be
+started. Output is one line per step, with error lines only for failing steps.
+`VERIFY_REPORTS=dir` writes JUnit XML for the spine steps; `spine ... --format json` gives
+machine-readable findings. Exit codes: 0 pass, 1 findings, 2 misuse.
 
 ## Jacking it in
 
@@ -213,11 +218,12 @@ example only.
 
 Within an example (or a project), everything is keyed by folder name, so for a machine called
 `invoice`: `spec/invoice/spine.yaml`, optional `spec/invoice/behaviors/{valid,invalid}/`,
-`checks/invoice/`, `conformance/adapter_invoice.py` (three functions: `new()`, `apply()`,
-`observe()`), and optionally `mutation/mutate_invoice.py`. `./verify` picks them up, and fails
-with `no-adapter` until the adapter exists. For code in another language, the adapter is a
-program speaking the adapter protocol (`docs/reference/tool-contract.md`), named in
-`conformance/adapter_invoice.cmd`, and the content checks and mutation are commands too.
+`checks/invoice/`, and `conformance/adapter_invoice.cmd`, the line that runs a program speaking
+the adapter protocol (`docs/reference/tool-contract.md`). In Python that program is the shim on
+a file with three functions, `new()`, `apply()` and `observe()`:
+`env PYTHONPATH=src adapter_shim.py conformance/adapter_invoice.py`. `./verify` picks them up,
+and fails with `no-adapter` until the line exists. The content checks and mutation are commands
+too: `checks/run.cmd` and `mutation/mutate_*.cmd`.
 
 ## Limits
 
@@ -228,9 +234,9 @@ program speaking the adapter protocol (`docs/reference/tool-contract.md`), named
   general one.
 - **The spine sees states and permissions, not content.** Text, totals and formats need
   ordinary checks; the mutation step exists to show where that gap is.
-- **Every adapter is a program.** `spine conform` serves a Python adapter through
-  `tools/adapter_shim.py`, as a program speaking JSON lines over stdin and stdout, and runs an
-  adapter in any other language the same way, named in `adapter_<machine>.cmd`. Each request is
+- **Every adapter is a program.** `spine conform` runs the program named in
+  `adapter_<machine>.cmd`, speaking JSON lines over stdin and stdout; a Python adapter's line
+  runs it through `tools/adapter_shim.py`. Each request is
   a round trip between processes, about 0.2 ms here, so notes' 1,426 sequences take about 2 s.
 - **The adapter is part of the oracle.** It must only translate, never decide; a person
   reviews it like the spine.

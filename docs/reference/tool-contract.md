@@ -193,21 +193,26 @@ it prints `FAIL  spine built` with the reason and exits 1 before any other step.
 
 Runs, per `spec/<machine>/spine.yaml`: `check`, then `behaviors` over `spec/<machine>/behaviors`,
 `stale` over `checks/<machine>`, and `conform` with the machine's adapter. Then the content
-checks, and with `--full` every mutation script. Each of these three pieces is given one of two
-ways, and a piece given both ways is `ambiguous-piece`:
+checks, and with `--full` every mutation command. Each of these three pieces is a command, in
+any language:
 
-| Piece | As Python | As a command |
+| Piece | File | Run |
 |---|---|---|
-| the adapter, per machine | `conformance/adapter_<machine>.py`, run by `conform --adapter`, with `src/` and `conformance/` on `PYTHONPATH` | `conformance/adapter_<machine>.cmd`, its line given to `conform --adapter-cmd`, with `conform` run from the root |
-| the content checks | `test_*.py` files under `checks/`, run by `tools/run_checks.py checks --require-checks`, with `src/` on `PYTHONPATH` | `checks/run.cmd` |
-| mutation, under `--full` | each `mutation/mutate_<name>.py`, run with `$PYTHON` and `VERIFY_SPINE` set | each `mutation/mutate_<name>.cmd` |
+| the adapter, per machine | `conformance/adapter_<machine>.cmd` | its line given to `conform --adapter-cmd`, with `conform` run from the root |
+| the content checks | `checks/run.cmd` | from the root |
+| mutation, under `--full` | each `mutation/mutate_<name>.cmd` | from the root |
 
 A `.cmd` file holds one command line, read as `--adapter-cmd` reads one: split by shell quoting
 rules and run without a shell. One line ending, `\n` or `\r\n`, may follow it. A file that can't
-be read, is empty, holds a second line, or can't be split is `bad-command`. The command runs
-from the root, with `./verify`'s environment plus `VERIFY_SPINE`, the command line that runs
-the toolkit's `spine` (absolute paths, quoted by shell rules); `./verify` sets no `PYTHONPATH`
-for it. A content-check command passes when it exits 0, which must mean that at least one check
+be read, is empty, holds a second line, or can't be split is `bad-command`, and so is a checks or
+mutation command whose program can't be started; an adapter's is `conform`'s `adapter-failed`.
+The command runs from the root, with `./verify`'s environment, with the `tools/` next to
+`verify` first on `PATH`, so that a line can name a helper such as `adapter_shim.py` or
+`run_checks.py` alone, and with `VERIFY_SPINE`, the command line that runs the toolkit's
+`spine` (absolute paths, quoted by shell rules). It sets nothing for any language: a Python
+line puts `src/` on the import path itself, for example
+`env PYTHONPATH=src adapter_shim.py conformance/adapter_notes.py`, and finds Python on `PATH`.
+A content-check command passes when it exits 0, which must mean that at least one check
 ran and every one passed: a command that finds no checks must fail. A mutation command passes
 when it exits 0, which must mean that at least one mutant ran and every one was caught; it runs
 the oracle on each mutant itself, through `VERIFY_SPINE`. Either one's output is shown when it
@@ -217,10 +222,8 @@ roots are. Output is one `ok`, `FAIL` or `skip` line per step, with error lines 
 steps, and a final `--` summary line. A root other than the folder `verify` is in starts with a
 `== <root>` line, and its failed steps are named `<root>: <step>` in the summary. JUnit
 report names then start with the root, slashes turned into dashes. Environment:
-`VERIFY_BASE`, `VERIFY_BRANCH`, `VERIFY_REPORTS`, `VERIFY_VERBOSE`, `PYTHON`. It exports
-`PYTHON`, as an absolute path, which `spine` serves a Python adapter with, and sets
-`VERIFY_SPINE`, naming `tools/bin/spine`, for commands and Python mutation scripts. Exit codes
-as above; more than one ROOT, or a ROOT that is not a folder, is a usage error.
+`VERIFY_BASE`, `VERIFY_BRANCH`, `VERIFY_REPORTS`, `VERIFY_VERBOSE`. Exit codes as above; more
+than one ROOT, or a ROOT that is not a folder, is a usage error.
 
 Every step that does not run prints `skip  <step> (<reason>)`: the guard without `VERIFY_BASE`,
 behaviors without `spec/<machine>/behaviors/`, `stale` without `checks/<machine>/`, mutation
@@ -230,18 +233,21 @@ missing piece, or one given wrongly, is an error instead, reported per root:
 | Code | Severity | From | Meaning |
 |---|---|---|---|
 | `no-machines` | error | `./verify` | no `spec/*/spine.yaml` at all, including an `examples/*/` folder without `spec/` |
-| `no-adapter` | error | `./verify` | a machine has neither `conformance/adapter_<machine>.py` nor `conformance/adapter_<machine>.cmd` |
-| `no-checks` | error | `run_checks.py --require-checks` | no `test_*` functions under the folder, which may be missing; `./verify` passes the flag, and runs `run_checks.py` only when there is no `checks/run.cmd` |
-| `no-mutation` | error | `./verify --full` | no `mutation/mutate_*.py` or `mutation/mutate_*.cmd` |
-| `ambiguous-piece` | error | `./verify` | a piece is given both as Python and as a command: `adapter_<machine>.py` and `.cmd`, `test_*.py` files and `checks/run.cmd`, or `mutate_<name>.py` and `.cmd` |
-| `bad-command` | error | `./verify` | a `.cmd` file can't be read, is empty, holds more than one line, or can't be split |
+| `no-adapter` | error | `./verify` | a machine has no `conformance/adapter_<machine>.cmd` |
+| `no-checks` | error | `./verify`; `run_checks.py --require-checks` | from `./verify`: no `checks/run.cmd`; from `run_checks.py` with the flag: no `test_*` functions under the folder, which may be missing |
+| `no-mutation` | error | `./verify --full` | no `mutation/mutate_*.cmd` |
+| `bad-command` | error | `./verify` | a `.cmd` file can't be read, is empty, holds more than one line, or can't be split; or a checks or mutation command's program can't be started |
 
-`tools/run_checks.py` and `mutation/mutate_*.py` follow the same exit codes and line format.
+`ambiguous-piece`, for a piece given both as a Python file and as a command, is retired: with
+one form per piece it can't arise (#69). It is never reused.
+
+`tools/run_checks.py` follows the same exit codes and line format.
 `run_checks.py` reports `check-failed` (error) for a `test_*` function that raised, with the
 exception's last line, and `check-unloadable` (error) for a `test_*.py` file it can't import,
 then runs the other files.
-Without `--require-checks`, `run_checks.py` passes on zero checks, so that the mutation script,
-which counts a failing run as a caught mutant, is not fooled by an empty folder.
+Without `--require-checks`, `run_checks.py` passes on zero checks, so that a mutation script,
+which counts a failing run as a caught mutant, is not fooled by an empty folder. A Python
+example's `checks/run.cmd` passes the flag: `env PYTHONPATH=src run_checks.py checks --require-checks`.
 
 ## Known gaps
 

@@ -38,7 +38,8 @@ MUTANTS = [
 
 ORACLE = {
     "conformance": [*SPINE, "conform", "spec/notes/spine.yaml",
-                    "--adapter", "conformance/adapter_notes.py"],
+                    "--adapter-cmd", shlex.join([sys.executable, str(TOOLS / "adapter_shim.py"),
+                                                 "conformance/adapter_notes.py"])],
     "checks": [sys.executable, str(TOOLS / "run_checks.py"), "checks"],
 } if TOOLS else {}
 

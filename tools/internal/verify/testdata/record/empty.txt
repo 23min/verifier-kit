@@ -5,8 +5,7 @@ exit 1
 | FAIL  spines found
 |       error   no-machines        spec: no spec/*/spine.yaml
 | FAIL  content checks
-|       error   no-checks          checks: no test_* functions found
-|       -- 1 errors, 0 checks run
+|       error   no-checks          checks: no checks/run.cmd
 | skip  mutants killed (fast mode; --full runs them)
 | -- 2 step(s) failed: spines found, content checks
 |

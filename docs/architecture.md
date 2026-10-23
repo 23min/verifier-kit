@@ -27,7 +27,7 @@ flowchart LR
     rc["tools/run_checks.py"]
     shim["tools/adapter_shim.py<br/>a Python adapter over JSON lines"]
   end
-  mut["{root}/mutation/mutate_*.py"]
+  mut["{root}/mutation/mutate_*.cmd"]
   subgraph files["Files in the repo"]
     oracle["the oracle, per root<br/>spec/, checks/, conformance/"]
     code["the code, per root<br/>src/"]
@@ -39,8 +39,8 @@ flowchart LR
   faults -->|"./verify, on a broken copy"| verify
   person --> verify
   verify --> spine
-  verify --> rc
-  spine -->|"conform, for a Python adapter"| shim
+  verify -->|"a Python root's checks/run.cmd"| rc
+  spine -->|"conform, a Python root's adapter line"| shim
   verify -->|"--full only"| mut
   mut -->|"runs as subprocesses"| spine
   mut --> rc
@@ -73,29 +73,29 @@ flowchart TD
       check["spine check"] -- sound --> beh["spine behaviors<br/>spec/{m}/behaviors/"]
       check -- not sound --> skipm["skip the machine's other steps"]
       beh --> stale["spine stale<br/>checks/{m}/"]
-      stale --> conf["spine conform with conformance/adapter_{m}.py,<br/>PYTHONPATH={root}/src:{root}/conformance;<br/>or with the line in adapter_{m}.cmd, from {root}"]
+      stale --> conf["spine conform with the line in<br/>conformance/adapter_{m}.cmd, from {root}"]
     end
-    loop --> content["content checks: run_checks.py {root}/checks --require-checks,<br/>PYTHONPATH={root}/src; or {root}/checks/run.cmd, from {root}"]
+    loop --> content["content checks: the line in<br/>{root}/checks/run.cmd, from {root}"]
     content --> f{"--full?"}
-    f -- yes --> mut["every {root}/mutation/mutate_*.py,<br/>and every mutate_*.cmd, from {root}"]
+    f -- yes --> mut["the line in every<br/>{root}/mutation/mutate_*.cmd, from {root}"]
     f -- no --> skipmut["skip mutation"]
   end
   rootloop --> sum["one summary line; exit 0 or 1"]
 ```
 
-Each adapter, the content checks and each mutation script is given as Python or as a `.cmd`
-file holding one command line, for code in any language. A command runs from its root, without
-a shell, with `VERIFY_SPINE` set to the command line that runs `spine`; checks and mutation
-pass when it exits 0. A Python mutation script gets `VERIFY_SPINE` too. `spine` is the Go one,
-which `./verify` builds into `tools/bin/spine` before anything else, and `./verify` exports
-`PYTHON`, the interpreter it picked, which `spine` serves a Python adapter with
-(`docs/adr/0006-retire-spine-py.md`).
+Each adapter, the content checks and each mutation script is a `.cmd` file holding one command
+line, in any language (`docs/adr/0007-no-language-built-in.md`). A command runs from its root,
+without a shell, with the `tools/` next to `verify` first on `PATH`, so that a line can name a
+helper such as `adapter_shim.py` or `run_checks.py` alone, and with `VERIFY_SPINE` set to the
+command line that runs `spine`; checks and mutation pass when it exits 0. `./verify` sets
+nothing for any language: a Python line puts `src/` on the import path itself, with
+`env PYTHONPATH=src`. `spine` is the Go one, which `./verify` builds into `tools/bin/spine`
+before anything else.
 
 A step that cannot run because a piece is missing is an error, not a skip, reported per root:
-no spine at all (`no-machines`), no adapter for a machine (`no-adapter`), no `test_*` function
-anywhere under the root's `checks/` and no `checks/run.cmd` (`no-checks`), or no mutation
-script under `--full` (`no-mutation`). So is a piece given both ways (`ambiguous-piece`), and a
-`.cmd` file that holds no single command line (`bad-command`). A root other than the repo
+no spine at all (`no-machines`), no adapter for a machine (`no-adapter`), no `checks/run.cmd`
+(`no-checks`), or no mutation command under `--full` (`no-mutation`). So is a `.cmd` file that
+holds no single command line, or whose program can't be started (`bad-command`). A root other than the repo
 itself starts with a `== <root>` line.
 
 ## The notes example
@@ -267,7 +267,7 @@ flowchart LR
 | 7 | the service as first written | the Stop hook, twice | a block, then the attempt-cap warning |
 | 8 | the notes adapter, content checks and mutation removed | `./verify --full` | `no-adapter`, `no-checks`, `no-mutation` |
 | 9 | the notes service imports a module that doesn't exist | `./verify examples/notes` | `adapter-failed`, `check-unloadable` |
-| 10 | the service as first written | `spine conform --adapter-cmd` through the shim | the same `diverges` lines as scenario 1 |
+| 10 | unused since #69, when notes' adapter became a command line: scenario 1 runs it through the adapter protocol | | |
 | 11 | the job retries after its last attempt fails | `./verify examples/elixir_job` | `diverges running/fail attempts=last` |
 | 12 | the job counts one attempt too many | `./verify examples/elixir_job` | conformance `ok`, content checks `FAIL` with J03 |
 | 13 | elixir_job's content checks deleted | `./verify examples/elixir_job --full` | `no checks ran`, and `mutant-survived` for a counting mutant |
@@ -295,24 +295,25 @@ Go `spine` still matched `tools/spine.py` on every input, before that retired (#
 `go test` also holds the record of `./verify` (`tools/internal/verify/record_test.go`, #68).
 It copies `verify` and `tools/` into fixture projects, as a project does, and runs `./verify`
 in them as its callers do. Between them the fixtures reach every path through it: misuse, a
-failed build, which roots run, the guard, every skip, each piece in each form, passing and
-failing, each missing or doubled piece, each `bad-command`, and how Python is found. Each run
-must give exactly what `tools/internal/verify/testdata/record/` holds: its exit code, standard
-output, standard error and every JUnit report, with the test's temporary folder written as
-`$TMP` and Bash's line numbers as `line N`. Every run is in the C locale. The fixtures need no
-Elixir. `go -C tools test ./internal/verify/ -update` writes the record again. It is what the
-change to commands (#69) and the Go `verify` (#70) are checked against.
+failed build, which roots run, the guard, every skip, each piece as a command line, passing and
+failing, each missing piece, each `bad-command`, a root that gives its pieces only by Python
+file names, and `PYTHON` and `.venv`, which it ignores. Each run must give exactly what
+`tools/internal/verify/testdata/record/` holds: its exit code, standard output, standard error
+and every JUnit report, with the test's temporary folder written as `$TMP` and Bash's line
+numbers as `line N`. Every run is in the C locale. The fixtures need no Elixir.
+`go -C tools test ./internal/verify/ -update` writes the record again. It is what the change to
+commands (#69) and the Go `verify` (#70) are checked against.
 
 ## Per machine, per root and repo-wide
 
 | Part | Scope today | How it finds its inputs |
 |---|---|---|
-| `spine check`, `behaviors`, `stale`, `conform` | per machine | `{root}/spec/{m}/`, `{root}/checks/{m}/`, `{root}/conformance/adapter_{m}.py` or `.cmd` |
-| content checks | per root: one run over all of `{root}/checks/` | every `test_*.py` under `{root}/checks/`, or `{root}/checks/run.cmd` |
-| mutation | per root: every `{root}/mutation/mutate_*.py` and `mutate_*.cmd` under `--full` | file name pattern; each script runs all of its root's `checks/` |
-| `src/` | per root: on `PYTHONPATH` for Python, loaded by the commands otherwise | module name (`notes_app`, `ref_sync_client`); elixir_job's commands load `src/**/*.ex` |
+| `spine check`, `behaviors`, `stale`, `conform` | per machine | `{root}/spec/{m}/`, `{root}/checks/{m}/`, `{root}/conformance/adapter_{m}.cmd` |
+| content checks | per root: one run over all of `{root}/checks/` | `{root}/checks/run.cmd` |
+| mutation | per root: every `{root}/mutation/mutate_*.cmd` under `--full` | file name pattern; each script runs all of its root's `checks/` |
+| `src/` | per root: loaded by the commands | module name (`notes_app`, `ref_sync_client`), with `src/` on `PYTHONPATH` from the line; elixir_job's commands load `src/**/*.ex` |
 | path guard | repo-wide | `policy.yaml` patterns over `examples/*/` and the toolkit's folders |
 | deny rules, CODEOWNERS (`integrations/`) | a project's root | folder patterns for a project with `spec/` at its root |
-| `demo/faults.sh` | seeds faults in notes (0-10), elixir_job (11-13) and all three examples (14) | hard-coded `examples/notes/`, `examples/elixir_job/` and `examples/ref_sync/` paths |
+| `demo/faults.sh` | seeds faults in notes (0-9), elixir_job (11-13) and all three examples (14) | hard-coded `examples/notes/`, `examples/elixir_job/` and `examples/ref_sync/` paths |
 | `demo/live-builder.sh` | notes only | hard-coded `examples/notes/` paths |
 | choosing what to run | one root per call | `./verify ROOT`; without it, the discovery rule above |

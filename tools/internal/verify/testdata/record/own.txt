@@ -34,14 +34,14 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | FAIL  lamp: code conforms to spine
-|       error   adapter-failed     conformance/adapter_lamp.py: cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'python3'
-|       -- 1 errors, 1 findings
+|q "      "
 | FAIL  content checks
-|       env: 'python3': No such file or directory
+|       ./verify: line N: python3: command not found
 | skip  mutants killed (fast mode; --full runs them)
 | -- 2 step(s) failed: lamp: code conforms to spine, content checks
 |
 --- stderr
+| ./verify: line N: python3: command not found
 | ./verify: line N: python3: command not found
 |
 === own: ./verify with PYTHON=$TMP/wrapper/python
@@ -57,7 +57,6 @@ exit 0
 | -- all steps passed
 |
 --- stderr
-| python from PYTHON
 |
 === own: ./verify with VERIFY_BASE=base
 exit 1

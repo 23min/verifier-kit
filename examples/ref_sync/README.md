@@ -49,11 +49,14 @@ spec/ref_sync/spine.yaml             the ratified lifecycle of one operation    
 spec/ref_sync/behaviors/             valid/ must be allowed, invalid/ refused                 person
 conformance/adapter_ref_sync.py      the lifecycle adapter; its docstring is the whole        person
                                      contract with src/
+conformance/adapter_ref_sync.cmd     the line that runs it, through adapter_shim.py           person
+checks/run.cmd                       the line that runs the checks, through run_checks.py     person
 checks/ref_sync/explore.py           breadth-first search over moves; knows nothing of Git    person
 checks/ref_sync/world.py             the simulated remote, faults, crashes, S1-S5 and S7      person
 checks/ref_sync/test_protocol.py     scenarios C01-C08                                        person
 checks/ref_sync/test_git_ref.py      C09-C11 and S6 against real Git                          person
 mutation/mutate_ref_sync.py          six deliberate bugs the oracle must catch                person
+mutation/mutate_ref_sync.cmd         the line that runs it                                    person
 src/ref_sync_client.py               the lifecycle, the client and its Git remote             builder
 ```
 
