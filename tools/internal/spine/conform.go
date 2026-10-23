@@ -8,13 +8,10 @@ import (
 	"math"
 	"math/big"
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 	"syscall"
 	"unicode/utf8"
-
-	verifierkit "github.com/23min/verifier-kit/tools"
 )
 
 // ---------- conform ----------
@@ -38,42 +35,27 @@ func stepsText(steps []parsedStep) string {
 }
 
 // commandAdapter is CommandAdapter in tools/spine.py: an adapter program spoken to in JSON
-// lines. Given file, the program is tools/adapter_shim.py serving that Python adapter file, its
-// stderr passed through with its last line kept.
+// lines.
 type commandAdapter struct {
-	shim       bool   // serving file through tools/adapter_shim.py
-	file       string // the Python adapter file the shim serves
-	proc       *os.Process
-	stdin      *os.File
-	stdout     *bufio.Reader
-	lastStderr []byte
-	copied     chan struct{} // closed when the shim's stderr ends
-	status     *int
+	proc   *os.Process
+	stdin  *os.File
+	stdout *bufio.Reader
+	status *int
 }
 
 var replies = map[string][2]string{
 	"new": {"ok", `{"ok": true}`}, "apply": {"result", `{"result": ...}`}, "observe": {"state", `{"state": ...}`},
 }
 
-// startAdapter starts the program: Python running the shim, which shimPath holds, on file, or,
-// when shimPath is "", argv split from command. Python is $PYTHON, or python3.
-func startAdapter(command, file, shimPath string) (*commandAdapter, error) {
-	a := &commandAdapter{shim: shimPath != "", file: file}
-	var argv []string
-	if a.shim {
-		python := os.Getenv("PYTHON")
-		if python == "" {
-			python = "python3"
-		}
-		argv = []string{python, shimPath, file}
-	} else {
-		var err error
-		if argv, err = shlexSplit(command); err != nil {
-			return nil, &adapterFailed{"cannot be started: ValueError: " + err.Error()}
-		}
-		if len(argv) == 0 {
-			return nil, &adapterFailed{"cannot be started: ValueError: the command is empty"}
-		}
+// startAdapter starts the program, its argv split from command.
+func startAdapter(command string) (*commandAdapter, error) {
+	a := &commandAdapter{}
+	argv, err := shlexSplit(command)
+	if err != nil {
+		return nil, &adapterFailed{"cannot be started: ValueError: " + err.Error()}
+	}
+	if len(argv) == 0 {
+		return nil, &adapterFailed{"cannot be started: ValueError: the command is empty"}
 	}
 	stdinR, stdinW, err := os.Pipe()
 	if err != nil {
@@ -83,48 +65,16 @@ func startAdapter(command, file, shimPath string) (*commandAdapter, error) {
 	if err != nil {
 		return nil, &adapterFailed{"cannot be started: " + err.Error()}
 	}
-	stderrR, stderrW := (*os.File)(nil), os.Stderr
-	if a.shim {
-		if stderrR, stderrW, err = os.Pipe(); err != nil {
-			return nil, &adapterFailed{"cannot be started: " + err.Error()}
-		}
-	}
-	proc, err := startProgram(argv, []*os.File{stdinR, stdoutW, stderrW})
+	proc, err := startProgram(argv, []*os.File{stdinR, stdoutW, os.Stderr})
 	stdinR.Close()
 	stdoutW.Close()
-	if a.shim {
-		stderrW.Close()
-	}
 	if err != nil {
 		stdinW.Close()
 		stdoutR.Close()
-		if stderrR != nil {
-			stderrR.Close()
-		}
 		return nil, &adapterFailed{"cannot be started: " + err.Error()}
 	}
 	a.proc, a.stdin, a.stdout = proc, stdinW, bufio.NewReader(stdoutR)
-	if a.shim {
-		a.copied = make(chan struct{})
-		go a.copyStderr(stderrR)
-	}
 	return a, nil
-}
-
-func (a *commandAdapter) copyStderr(r *os.File) {
-	defer close(a.copied)
-	defer r.Close()
-	lines := bufio.NewReader(r)
-	for {
-		line, err := lines.ReadBytes('\n')
-		if len(line) > 0 {
-			os.Stderr.Write(line)
-			a.lastStderr = line
-		}
-		if err != nil {
-			return
-		}
-	}
 }
 
 // startProgram is subprocess.Popen(argv): a name without a slash is looked for in each
@@ -230,19 +180,9 @@ func (a *commandAdapter) ask(op, request string) (*jsonValue, error) {
 	return reply.vals[0], nil
 }
 
-// exited is the failure when the program exits before replying to op: for the shim, the reason
-// it gave when the file did not load.
+// exited is the failure when the program exits before replying to op.
 func (a *commandAdapter) exited(op string) error {
-	status := a.wait()
-	if a.shim {
-		<-a.copied
-		prefix := "adapter_shim: " + a.file + " "
-		last := strings.TrimRight(pyDecode(a.lastStderr), "\n")
-		if status == 1 && strings.HasPrefix(last, prefix) {
-			return &adapterFailed{strings.TrimPrefix(last, prefix)}
-		}
-	}
-	return &adapterFailed{fmt.Sprintf("exited with status %d before replying to %s", status, op)}
+	return &adapterFailed{fmt.Sprintf("exited with status %d before replying to %s", a.wait(), op)}
 }
 
 // wait is Popen.wait(): the exit status, or minus the signal that ended the program.
@@ -268,9 +208,6 @@ func (a *commandAdapter) close(kill bool) {
 	}
 	a.stdin.Close() // the end of input ends the adapter
 	a.wait()
-	if a.shim {
-		<-a.copied
-	}
 }
 
 // readTextLine is readline() on a pipe Python opened in text mode: a line ends at \n, \r\n or
@@ -905,34 +842,18 @@ func replay(s *Spec, a *commandAdapter, seq []parsedStep, exercised map[string]b
 	return nil, state, kind, nil
 }
 
-// conform compares code with the spine through a Python adapter file, served by the shim, or,
-// with useCommand, an adapter program. depthText is the depth as Python prints it.
-func conform(s *Spec, file string, useCommand bool, command string, depth int, depthText string) Findings {
+// conform compares code with the spine through an adapter program, started from command.
+// depthText is the depth as Python prints it.
+func conform(s *Spec, command string, depth int, depthText string) Findings {
 	var out Findings
-	where := file
-	shimPath := ""
-	if useCommand {
-		where = command
-	} else {
-		dir, err := os.MkdirTemp("", "spine-shim-")
-		if err == nil {
-			defer os.RemoveAll(dir)
-			shimPath = filepath.Join(dir, "adapter_shim.py")
-			err = os.WriteFile(shimPath, verifierkit.AdapterShim, 0o644)
-		}
-		if err != nil {
-			out.Add("adapter-failed", where, "cannot be started: the shim cannot be written: "+err.Error())
-			return out
-		}
-	}
-	a, err := startAdapter(command, file, shimPath)
+	a, err := startAdapter(command)
 	if err != nil {
-		out.Add("adapter-failed", where, err.Error())
+		out.Add("adapter-failed", command, err.Error())
 		return out
 	}
 	err = compareCode(s, a, depth, depthText, &out)
 	if err != nil { // keep what was found; past this, nothing compares
-		out.Add("adapter-failed", where, err.Error())
+		out.Add("adapter-failed", command, err.Error())
 	}
 	a.close(err != nil)
 	return out

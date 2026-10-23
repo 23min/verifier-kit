@@ -334,7 +334,7 @@ exit 0
 --- stdout
 | -- 0 errors, 0 findings
 |
-=== in .: spine conform --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml --adapter examples/elixir_job/conformance/adapter_job.py with PYTHONPATH=examples/elixir_job/src:examples/elixir_job/conformance
+=== in .: spine conform --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/elixir_job/conformance/adapter_job.py" with PYTHONPATH=examples/elixir_job/src
 exit 1
 --- stdout
 | {
@@ -344,16 +344,16 @@ exit 1
 |     {
 |       "code": "adapter-failed",
 |       "severity": "error",
-|       "where": "examples/elixir_job/conformance/adapter_job.py",
-|       "message": "cannot be imported: FileNotFoundError: [Errno 2] No such file or directory: '$ROOT/examples/elixir_job/conformance/adapter_job.py'"
+|       "where": "python3 tools/adapter_shim.py examples/elixir_job/conformance/adapter_job.py",
+|       "message": "exited with status 1 before replying to new"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed examples/elixir_job/conformance/adapter_job.py"><failure message="cannot be imported: FileNotFoundError: [Errno 2] No such file or directory: '$ROOT/examples/elixir_job/conformance/adapter_job.py'">cannot be imported: FileNotFoundError: [Errno 2] No such file or directory: '$ROOT/examples/elixir_job/conformance/adapter_job.py'</failure></testcase></testsuite>
-=== in .: spine conform --format json --junit REPORT examples/notes/spec/notes/spine.yaml --adapter examples/notes/conformance/adapter_notes.py with PYTHONPATH=examples/notes/src:examples/notes/conformance
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 tools/adapter_shim.py examples/elixir_job/conformance/adapter_job.py"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
+=== in .: spine conform --format json --junit REPORT examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/notes/conformance/adapter_notes.py" with PYTHONPATH=examples/notes/src
 exit 0
 --- stdout
 | {
@@ -372,26 +372,7 @@ exit 0
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
-=== in .: spine conform --format json --junit REPORT examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/notes/conformance/adapter_notes.py" --depth 3 with PYTHONPATH=examples/notes/src:examples/notes/conformance
-exit 0
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "coverage",
-|       "severity": "info",
-|       "where": "331 sequences up to 3 steps",
-|       "message": "45 of 45 state/event/variable cases exercised"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
-=== in .: spine conform --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml --adapter examples/ref_sync/conformance/adapter_ref_sync.py with PYTHONPATH=examples/ref_sync/src:examples/ref_sync/conformance
+=== in .: spine conform --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/ref_sync/conformance/adapter_ref_sync.py" with PYTHONPATH=examples/ref_sync/src
 exit 0
 --- stdout
 | {
@@ -410,25 +391,19 @@ exit 0
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
-=== in .: spine conform examples/elixir_job/spec/job/spine.yaml --adapter examples/elixir_job/conformance/adapter_job.py with PYTHONPATH=examples/elixir_job/src:examples/elixir_job/conformance
+=== in .: spine conform examples/elixir_job/spec/job/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/elixir_job/conformance/adapter_job.py" with PYTHONPATH=examples/elixir_job/src
 exit 1
 --- stdout
-| error   adapter-failed     examples/elixir_job/conformance/adapter_job.py: cannot be imported: FileNotFoundError: [Errno 2] No such file or directory: '$ROOT/examples/elixir_job/conformance/adapter_job.py'
+| error   adapter-failed     python3 tools/adapter_shim.py examples/elixir_job/conformance/adapter_job.py: exited with status 1 before replying to new
 | -- 1 errors, 1 findings
 |
-=== in .: spine conform examples/notes/spec/notes/spine.yaml --adapter examples/notes/conformance/adapter_notes.py with PYTHONPATH=examples/notes/src:examples/notes/conformance
+=== in .: spine conform examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/notes/conformance/adapter_notes.py" with PYTHONPATH=examples/notes/src
 exit 0
 --- stdout
 | info    coverage           1426 sequences up to 4 steps: 45 of 45 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
-=== in .: spine conform examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/notes/conformance/adapter_notes.py" --depth 3 with PYTHONPATH=examples/notes/src:examples/notes/conformance
-exit 0
---- stdout
-| info    coverage           331 sequences up to 3 steps: 45 of 45 state/event/variable cases exercised
-| -- 0 errors, 1 findings
-|
-=== in .: spine conform examples/ref_sync/spec/ref_sync/spine.yaml --adapter examples/ref_sync/conformance/adapter_ref_sync.py with PYTHONPATH=examples/ref_sync/src:examples/ref_sync/conformance
+=== in .: spine conform examples/ref_sync/spec/ref_sync/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/ref_sync/conformance/adapter_ref_sync.py" with PYTHONPATH=examples/ref_sync/src
 exit 0
 --- stdout
 | info    coverage           352 sequences up to 4 steps: 27 of 27 state/event/variable cases exercised

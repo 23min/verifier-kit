@@ -7,8 +7,8 @@ package spine
 // contract lists. JSON output must parse, and a JUnit report must parse and refer to no character
 // XML can't hold.
 //
-// A Python adapter is served with $PYTHON, or python3. Help is written at 80 columns
-// (COLUMNS=80).
+// A Python adapter is served through tools/adapter_shim.py, run by the python3 on PATH. Help is
+// written at 80 columns (COLUMNS=80).
 
 import (
 	"bytes"
@@ -31,9 +31,8 @@ import (
 )
 
 var (
-	pythonPath string // $PYTHON, or python3
-	goSpine    string // the binary TestMain builds
-	repoRoot   string
+	goSpine  string // the binary TestMain builds
+	repoRoot string
 )
 
 func TestMain(m *testing.M) {
@@ -55,10 +54,6 @@ func runTests(m *testing.M) int {
 		return 1
 	}
 	repoRoot, _ = filepath.Abs("../../..")
-	pythonPath = os.Getenv("PYTHON")
-	if pythonPath == "" {
-		pythonPath = "python3"
-	}
 	return m.Run()
 }
 
@@ -73,8 +68,7 @@ type result struct {
 func execute(dir string, args []string, stdin string, env []string) (result, error) {
 	cmd := exec.Command(goSpine, args...)
 	cmd.Dir = dir
-	// PYTHON is the Python the Go spine serves a Python adapter with
-	cmd.Env = append(append(os.Environ(), "COLUMNS=80", "PYTHON="+pythonPath), env...)
+	cmd.Env = append(append(os.Environ(), "COLUMNS=80"), env...)
 	cmd.Stdin = strings.NewReader(stdin)
 	var out, errOut bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &out, &errOut
@@ -616,15 +610,11 @@ func exampleCases(t *testing.T) []spineCase {
 			add(full, "trace", spine, r)
 		}
 		add(full, "guard", "policy.yaml", "--branch", "build/x", filepath.Join(root, "src", "a.py"), spine)
-		// conform as ./verify runs it, with the example's src/ and conformance/ importable
+		// conform as the example's line runs it, with its src/ importable, through the shim
 		adapter := filepath.Join(root, "conformance", "adapter_"+machine+".py")
-		env := []string{"PYTHONPATH=" + filepath.Join(root, "src") + ":" + filepath.Join(root, "conformance")}
+		env := []string{"PYTHONPATH=" + filepath.Join(root, "src")}
 		out = append(out, spineCase{name: "example conform " + machine, dir: repoRoot, env: env, mode: full,
-			args: []string{"conform", spine, "--adapter", adapter}})
-		if machine == "notes" {
-			out = append(out, spineCase{name: "example conform notes, adapter-cmd", dir: repoRoot, env: env, mode: full,
-				args: []string{"conform", spine, "--adapter-cmd", shellQuote(pythonPath) + " tools/adapter_shim.py " + adapter, "--depth", "3"}})
-		}
+			args: []string{"conform", spine, "--adapter-cmd", "python3 tools/adapter_shim.py " + adapter}})
 	}
 	add(full, "diff", "examples/notes/spec/notes/spine.yaml", "examples/ref_sync/spec/ref_sync/spine.yaml")
 	return out
@@ -633,7 +623,7 @@ func exampleCases(t *testing.T) []spineCase {
 // faultCases seeds the faults demo/faults.sh seeds that the ported commands see, the same way,
 // into copies of the notes spine and service: scenario 1 is the service as first written, 2
 // loosens restore, 3 writes `on:` for `event:`, 4 is a builder's branch that also edits the
-// spine, 9 imports a module that doesn't exist, and 10 is 1 through --adapter-cmd.
+// spine, and 9 imports a module that doesn't exist.
 func faultCases(t *testing.T, dir string) []spineCase {
 	notes := filepath.Join(repoRoot, "examples", "notes")
 	data, err := os.ReadFile(filepath.Join(notes, "spec", "notes", "spine.yaml"))
@@ -682,15 +672,14 @@ func faultCases(t *testing.T, dir string) []spineCase {
 	writeFile(t, filepath.Join(dir, "2", "src", "notes_app.py"), string(service))
 	writeFile(t, filepath.Join(dir, "9", "src", "notes_app.py"), string(service)+"import no_such_module\n")
 	spineFile, adapter := filepath.Join(notes, "spec", "notes", "spine.yaml"), filepath.Join(notes, "conformance", "adapter_notes.py")
-	conform := func(name, src string, args ...string) {
-		env := []string{"PYTHONPATH=" + filepath.Join(dir, src, "src") + ":" + filepath.Join(notes, "conformance")}
-		out = append(out, spineCase{name: name, dir: dir, args: append([]string{"conform"}, args...), env: env, mode: full})
+	line := "python3 " + shellQuote(filepath.Join(repoRoot, "tools", "adapter_shim.py")) + " " + shellQuote(adapter)
+	conform := func(name, src, spine string) {
+		env := []string{"PYTHONPATH=" + filepath.Join(dir, src, "src")}
+		out = append(out, spineCase{name: name, dir: dir, args: []string{"conform", spine, "--adapter-cmd", line}, env: env, mode: full})
 	}
-	conform("fault 1 conform", "1", spineFile, "--adapter", adapter)
-	conform("fault 2 conform", "2", "2/spine.yaml", "--adapter", adapter)
-	conform("fault 9 conform", "9", spineFile, "--adapter", adapter)
-	conform("fault 10 conform", "1", spineFile, "--adapter-cmd",
-		shellQuote(pythonPath)+" "+shellQuote(filepath.Join(repoRoot, "tools", "adapter_shim.py"))+" "+shellQuote(adapter))
+	conform("fault 1 conform", "1", spineFile)
+	conform("fault 2 conform", "2", "2/spine.yaml")
+	conform("fault 9 conform", "9", spineFile)
 	return out
 }
 

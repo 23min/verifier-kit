@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"regexp"
-	"slices"
 	"strings"
 )
 
@@ -30,13 +29,6 @@ type argParser struct {
 	byOption map[string]*argAction
 	defaults map[string]any
 	commands map[string]*argParser
-	groups   []argGroup // mutually exclusive groups
-}
-
-// argGroup is a mutually exclusive group: at most one of its actions, and with required, one.
-type argGroup struct {
-	actions  []*argAction
-	required bool
 }
 
 func newParser(prog, help string) *argParser {
@@ -270,16 +262,6 @@ func (p *argParser) parseKnownArgs(args []string, ns map[string]any) ([]string, 
 			} else {
 				ns[a.dest] = values[0]
 			}
-			for _, g := range p.groups { // argparse's mutually exclusive groups
-				if !slices.Contains(g.actions, a) {
-					continue
-				}
-				for _, other := range g.actions {
-					if other != a && seen[other] {
-						return p.fail("argument %s: not allowed with argument %s", actionName(a), actionName(other))
-					}
-				}
-			}
 		case "*":
 			ns[a.dest] = append([]string{}, values...)
 		case "parser":
@@ -449,16 +431,6 @@ func (p *argParser) parseKnownArgs(args []string, ns map[string]any) ([]string, 
 	if len(missing) > 0 {
 		return nil, p.fail("the following arguments are required: %s", strings.Join(missing, ", "))
 	}
-	for _, g := range p.groups {
-		if !g.required || slices.ContainsFunc(g.actions, func(a *argAction) bool { return seen[a] }) {
-			continue
-		}
-		names := make([]string, len(g.actions))
-		for i, a := range g.actions {
-			names[i] = actionName(a)
-		}
-		return nil, p.fail("one of the arguments %s is required", strings.Join(names, " "))
-	}
 	if rest, ok := ns["_unrecognized"].([]string); ok {
 		delete(ns, "_unrecognized")
 		extras = append(extras, rest...)
@@ -504,11 +476,7 @@ func buildParser() *argParser {
 		case "conform":
 			p.common()
 			p.positional("spec", "1")
-			adapter := &argAction{dest: "adapter", options: []string{"--adapter"}, nargs: "1"}
-			command := &argAction{dest: "adapter_cmd", options: []string{"--adapter-cmd"}, nargs: "1"}
-			p.add(adapter)
-			p.add(command)
-			p.groups = append(p.groups, argGroup{[]*argAction{adapter, command}, true})
+			p.add(&argAction{dest: "adapter_cmd", options: []string{"--adapter-cmd"}, nargs: "1", required: true})
 			p.add(&argAction{dest: "depth", options: []string{"--depth"}, nargs: "1", isInt: true})
 			p.defaults["depth"], p.defaults["depth_text"] = 4, "4"
 		case "guard":
@@ -593,9 +561,7 @@ func Main(argv []string, stdin io.Reader, stdout, stderr io.Writer) int {
 			case "trace":
 				findings = append(findings, trace(spec, str("behavior"))...)
 			case "conform":
-				_, useCommand := ns["adapter_cmd"].(string)
-				findings = append(findings, conform(spec, str("adapter"), useCommand, str("adapter_cmd"),
-					ns["depth"].(int), str("depth_text"))...)
+				findings = append(findings, conform(spec, str("adapter_cmd"), ns["depth"].(int), str("depth_text"))...)
 			}
 		}
 	}
@@ -686,8 +652,7 @@ options:
   --depth DEPTH
 `
 	helpConform = `usage: spine conform [-h] [--format {text,json}] [--junit FILE]
-                     (--adapter ADAPTER | --adapter-cmd COMMAND)
-                     [--depth DEPTH]
+                     --adapter-cmd COMMAND [--depth DEPTH]
                      spec
 
 positional arguments:
@@ -697,7 +662,6 @@ options:
   -h, --help            show this help message and exit
   --format {text,json}
   --junit FILE          also write a JUnit XML report
-  --adapter ADAPTER     Python file defining new(), apply(), observe()
   --adapter-cmd COMMAND
                         a program speaking the adapter protocol; split like a
                         shell would, run without one

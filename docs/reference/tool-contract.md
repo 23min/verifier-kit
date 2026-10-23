@@ -9,7 +9,8 @@ needs an issue and the owner's approval first (see `CLAUDE.md`).
 - **Input is files in the repo.** No network access, no model calls. The one planned
   exception is `interpret`, whose output is files that `spine diff` then judges.
 - **No knowledge of callers.** A tool never calls aiwf, a CI API, an agent or another tool's
-  internals. Callers call tools; tools call nothing.
+  internals. Callers call tools, and a tool runs no program but the adapter command `conform`
+  is given.
 - **Same input, same output.** Results are sorted and carry no timestamps or random ids.
 - **Exit codes:** `0` no errors, `1` at least one finding at error severity, `2` usage error.
 - **Output:** text by default; `--format json` for machines; `--junit FILE` additionally
@@ -53,7 +54,7 @@ are part of the contract: new codes may be added, existing codes are never renam
 | `stale` | `SPEC CHECKS_DIR` | Finds `covers: state/event@hash` and `covers: spine@hash` citations in files under `CHECKS_DIR` and reports stale, orphaned and uncovered cells. A check that cites the current whole spine counts every transition as cited |
 | `behaviors` | `SPEC DIR` | Replays every file in `DIR/valid/` (must be allowed) and `DIR/invalid/` (must be refused) |
 | `trace` | `SPEC FILE` | Replays one behavior file; for callers that run a validator once per fixture |
-| `conform` | `SPEC (--adapter FILE \| --adapter-cmd COMMAND) [--depth N]` | Runs every event sequence up to N steps (default 4) against the spine and against the code through the adapter, and reports where they differ. The adapter is a Python file, which `conform` serves through `tools/adapter_shim.py`, or a program that speaks the adapter protocol (below) |
+| `conform` | `SPEC --adapter-cmd COMMAND [--depth N]` | Runs every event sequence up to N steps (default 4) against the spine and against the code through the adapter, and reports where they differ. The adapter is a program that speaks the adapter protocol (below); a Python adapter's command runs it through `tools/adapter_shim.py` |
 | `guard` | `POLICY --branch NAME [FILES...]` | Maps the branch to a role and reports changed files that role may not touch; reads files from stdin when none are given |
 
 `spine` is `tools/bin/spine`, built from `tools/cmd/spine/` (`go -C tools build -o bin/spine
@@ -102,7 +103,7 @@ takes a spine validates it first and stops with the validation findings if it is
 | `spine-unsound` | error | `trace` | the spine fails `check` |
 | `diverges` | error | `conform` | code and spine disagree; the message carries the sequence |
 | `coverage` | info | `conform` | sequences run and cases exercised |
-| `adapter-failed` | error | `conform` | the adapter can't be imported, lacks `new`, `apply` or `observe`, or its `new()` or `observe()` raised; an adapter command can't be started or breaks the protocol. `conform` stops there |
+| `adapter-failed` | error | `conform` | the adapter command can't be started, exits before replying, breaks the protocol, or replies `{"error": ...}` to `new` or `observe`; the shim does when a Python adapter's `new()` or `observe()` raised, and exits before replying when the file can't be imported or lacks a function. `conform` stops there |
 | `path-denied` | error | `guard` | a deny pattern for the role matches a changed file |
 | `path-not-allowed` | error | `guard` | no allow pattern for the role matches a changed file |
 | `unknown-role` | error | `guard` | no branch pattern matches |
@@ -110,7 +111,9 @@ takes a spine validates it first and stops with the validation findings if it is
 
 ## The adapter
 
-A Python file with three functions, owned by the oracle side:
+A program that speaks the adapter protocol (below), owned by the oracle side;
+`conform --adapter-cmd COMMAND` runs it. In Python it is a file with three functions, which
+`tools/adapter_shim.py` serves over the protocol:
 
 - `new()` returns a handle to a fresh instance of the system under test, in the spine's initial state.
 - `apply(handle, event, env)` performs one spine event, with `env` holding the variable values
@@ -120,18 +123,17 @@ A Python file with three functions, owned by the oracle side:
 An exception from `new()` or `observe()`, or while importing the file, is `adapter-failed`, not a
 divergence: without a fresh instance or a reading of its state there is nothing to compare.
 
-`conform --adapter FILE` runs the file through `tools/adapter_shim.py` (below), in a Python
-process of its own: `$PYTHON`, else `python3`. The adapter's printing goes to stderr, and what
-`apply()` and `observe()` return reaches `conform` as JSON: a tuple arrives as a list, and a
-value JSON can't encode, such as a set, makes the shim fail (`adapter-failed`).
+The shim runs in a Python process of its own, the one its command line names. The adapter's
+printing goes to stderr, and what `apply()` and `observe()` return reaches `conform` as JSON: a
+tuple arrives as a list, and a value JSON can't encode, such as a set, makes the shim fail
+(`adapter-failed`).
 
 The adapter translates and never decides whether an action is allowed.
 
 ### The adapter protocol
 
-`spine conform --adapter-cmd COMMAND` runs the adapter as a program instead of importing a
-Python file, so the code under test can be in any language. `--adapter` and `--adapter-cmd`
-exclude each other. COMMAND is one string, split by shell quoting rules and run without a shell
+`spine conform --adapter-cmd COMMAND` runs the adapter as a program, so the code under test can
+be in any language. COMMAND is one string, split by shell quoting rules and run without a shell
 (no pipes, variables or globs), in `conform`'s working directory and environment.
 
 `conform` writes one JSON request per line to the program's stdin and reads one JSON reply per
@@ -159,7 +161,7 @@ program that never replies makes `conform` wait.
 example `--adapter-cmd "python3 tools/adapter_shim.py conformance/adapter_notes.py"`. It sends
 the adapter's own printing to stderr. When the adapter can't be imported or doesn't define
 `new()`, `apply()` and `observe()`, it exits 1 with one line on stderr,
-`adapter_shim: ADAPTER_FILE <reason>`; `conform --adapter` reports that reason.
+`adapter_shim: ADAPTER_FILE <reason>`, before replying to `new`.
 
 ## The policy file
 

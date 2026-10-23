@@ -700,7 +700,7 @@ exit 1
 | error   spec-unreadable    spines/missing.yaml: cannot be read: No such file or directory
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/plain-a.yaml --adapter adapters/lamp.py
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/plain-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/lamp.py"
 exit 1
 --- stdout
 | {
@@ -725,7 +725,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges lit/press "><failure message="after press() -&gt; press(): spine expects ok in dark, code gave ok in lit">after press() -&gt; press(): spine expects ok in dark, code gave ok in lit</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/stop-a.yaml --adapter adapters/stop.py --depth -1
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --depth -1
 exit 0
 --- stdout
 | {
@@ -744,7 +744,7 @@ exit 0
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/stop-a.yaml --adapter adapters/stop.py --depth 0
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --depth 0
 exit 0
 --- stdout
 | {
@@ -763,7 +763,7 @@ exit 0
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/stop-a.yaml --adapter adapters/stop.py --depth 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --depth 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
 exit 0
 --- stdout
 | {
@@ -782,7 +782,7 @@ exit 0
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/stop-a.yaml --adapter adapters/stop.py --depth ٣
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --depth ٣
 exit 0
 --- stdout
 | {
@@ -801,7 +801,7 @@ exit 0
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/unreadable.yaml --adapter adapters/door.py
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/unreadable.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py"
 exit 1
 --- stdout
 | {
@@ -820,430 +820,6 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="spec-unreadable diff/unreadable.yaml"><failure message="go-yaml load error in parser (while parsing a flow sequence) at L2.C9-L3.C1: did not find expected ',' or ']'">go-yaml load error in parser (while parsing a flow sequence) at L2.C9-L3.C1: did not find expected ',' or ']'</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter ""
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "adapter-failed",
-|       "severity": "error",
-|       "where": "",
-|       "message": "cannot be imported: not a Python file"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed "><failure message="cannot be imported: not a Python file">cannot be imported: not a Python file</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter adapters
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "adapter-failed",
-|       "severity": "error",
-|       "where": "adapters",
-|       "message": "cannot be imported: not a Python file"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters"><failure message="cannot be imported: not a Python file">cannot be imported: not a Python file</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter adapters/door.py
-exit 0
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "coverage",
-|       "severity": "info",
-|       "where": "89 sequences up to 4 steps",
-|       "message": "8 of 8 state/event/variable cases exercised"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter adapters/door_bugs.py --depth 2
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "closed/open role=guest",
-|       "message": "after open(role=guest): spine expects rejected in closed, code gave None in open"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "closed/remove role=owner",
-|       "message": "after remove(role=owner): spine expects ok in gone, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "closed/remove role=guest",
-|       "message": "after remove(role=guest): spine expects ok in gone, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "open/open role=owner",
-|       "message": "after open(role=owner) -> open(role=owner): spine expects ok in open, code gave ['ok'] in open"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "open/open role=guest",
-|       "message": "after open(role=owner) -> open(role=guest): spine expects ok in open, code gave ['ok'] in open"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "open/remove role=owner",
-|       "message": "after open(role=owner) -> remove(role=owner): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "open/remove role=guest",
-|       "message": "after open(role=owner) -> remove(role=guest): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone"
-|     },
-|     {
-|       "code": "coverage",
-|       "severity": "info",
-|       "where": "9 sequences up to 2 steps",
-|       "message": "8 of 8 state/event/variable cases exercised"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="7" failures="7"><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave None in open">after open(role=guest): spine expects rejected in closed, code gave None in open</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok in gone, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone">after remove(role=owner): spine expects ok in gone, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone">after remove(role=guest): spine expects ok in gone, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone</failure></testcase><testcase classname="spine conform" name="diverges open/open role=owner"><failure message="after open(role=owner) -&gt; open(role=owner): spine expects ok in open, code gave ['ok'] in open">after open(role=owner) -&gt; open(role=owner): spine expects ok in open, code gave ['ok'] in open</failure></testcase><testcase classname="spine conform" name="diverges open/open role=guest"><failure message="after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave ['ok'] in open">after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave ['ok'] in open</failure></testcase><testcase classname="spine conform" name="diverges open/remove role=owner"><failure message="after open(role=owner) -&gt; remove(role=owner): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone">after open(role=owner) -&gt; remove(role=owner): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone</failure></testcase><testcase classname="spine conform" name="diverges open/remove role=guest"><failure message="after open(role=owner) -&gt; remove(role=guest): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone">after open(role=owner) -&gt; remove(role=guest): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter adapters/door_crash.py --depth 2
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "closed/open role=guest",
-|       "message": "after open(role=guest): spine expects rejected in closed, code gave crashed (ValueError: guests can't open) in closed"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "closed/remove role=guest",
-|       "message": "after remove(role=guest): spine expects ok in gone, code gave crashed (ValueError: guests can't remove) in closed"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "open/open role=guest",
-|       "message": "after open(role=owner) -> open(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't open) in open"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "open/remove role=guest",
-|       "message": "after open(role=owner) -> remove(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't remove) in open"
-|     },
-|     {
-|       "code": "coverage",
-|       "severity": "info",
-|       "where": "9 sequences up to 2 steps",
-|       "message": "8 of 8 state/event/variable cases exercised"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="4" failures="4"><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave crashed (ValueError: guests can't open) in closed">after open(role=guest): spine expects rejected in closed, code gave crashed (ValueError: guests can't open) in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave crashed (ValueError: guests can't remove) in closed">after remove(role=guest): spine expects ok in gone, code gave crashed (ValueError: guests can't remove) in closed</failure></testcase><testcase classname="spine conform" name="diverges open/open role=guest"><failure message="after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't open) in open">after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't open) in open</failure></testcase><testcase classname="spine conform" name="diverges open/remove role=guest"><failure message="after open(role=owner) -&gt; remove(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't remove) in open">after open(role=owner) -&gt; remove(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't remove) in open</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter adapters/door_exit.py --depth 2
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "adapter-failed",
-|       "severity": "error",
-|       "where": "adapters/door_exit.py",
-|       "message": "exited with status -9 before replying to apply"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters/door_exit.py"><failure message="exited with status -9 before replying to apply">exited with status -9 before replying to apply</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter adapters/door_import.py --depth 2
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "adapter-failed",
-|       "severity": "error",
-|       "where": "adapters/door_import.py",
-|       "message": "cannot be imported: ModuleNotFoundError: No module named 'no_such_module_for_spine'"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters/door_import.py"><failure message="cannot be imported: ModuleNotFoundError: No module named 'no_such_module_for_spine'">cannot be imported: ModuleNotFoundError: No module named 'no_such_module_for_spine'</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter adapters/door_missing.py --depth 2
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "adapter-failed",
-|       "severity": "error",
-|       "where": "adapters/door_missing.py",
-|       "message": "does not define apply(), observe()"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters/door_missing.py"><failure message="does not define apply(), observe()">does not define apply(), observe()</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter adapters/door_new_raises.py --depth 2
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "adapter-failed",
-|       "severity": "error",
-|       "where": "adapters/door_new_raises.py",
-|       "message": "new() raised RuntimeError: no database"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters/door_new_raises.py"><failure message="new() raised RuntimeError: no database">new() raised RuntimeError: no database</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter adapters/door_observe_raises.py --depth 2
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "adapter-failed",
-|       "severity": "error",
-|       "where": "adapters/door_observe_raises.py",
-|       "message": "observe() raised KeyError: 'gone' after remove(role=owner)"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters/door_observe_raises.py"><failure message="observe() raised KeyError: 'gone' after remove(role=owner)">observe() raised KeyError: 'gone' after remove(role=owner)</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter adapters/door_set.py --depth 2
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "adapter-failed",
-|       "severity": "error",
-|       "where": "adapters/door_set.py",
-|       "message": "exited with status 1 before replying to observe"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters/door_set.py"><failure message="exited with status 1 before replying to observe">exited with status 1 before replying to observe</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter adapters/door_start.py --depth 2
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "start",
-|       "message": "spine starts in closed, code starts in open"
-|     },
-|     {
-|       "code": "coverage",
-|       "severity": "info",
-|       "where": "1 sequences up to 2 steps",
-|       "message": "0 of 8 state/event/variable cases exercised"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges start"><failure message="spine starts in closed, code starts in open">spine starts in closed, code starts in open</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter adapters/door_values.py --depth 2
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "closed/open role=owner",
-|       "message": "after open(role=owner): spine expects ok in open, code gave None in closed"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "closed/open role=guest",
-|       "message": "after open(role=guest): spine expects rejected in closed, code gave 1e+16 in closed"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "closed/remove role=owner",
-|       "message": "after remove(role=owner): spine expects ok in gone, code gave 1e-05 in closed"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "closed/remove role=guest",
-|       "message": "after remove(role=guest): spine expects ok in gone, code gave -0.0 in closed"
-|     },
-|     {
-|       "code": "coverage",
-|       "severity": "info",
-|       "where": "5 sequences up to 2 steps",
-|       "message": "4 of 8 state/event/variable cases exercised"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="4" failures="4"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave None in closed">after open(role=owner): spine expects ok in open, code gave None in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave 1e+16 in closed">after open(role=guest): spine expects rejected in closed, code gave 1e+16 in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok in gone, code gave 1e-05 in closed">after remove(role=owner): spine expects ok in gone, code gave 1e-05 in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave -0.0 in closed">after remove(role=guest): spine expects ok in gone, code gave -0.0 in closed</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter adapters/door_values.py --depth 3
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "closed/open role=owner",
-|       "message": "after open(role=owner): spine expects ok in open, code gave None in closed"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "closed/open role=guest",
-|       "message": "after open(role=guest): spine expects rejected in closed, code gave 1e+16 in closed"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "closed/remove role=owner",
-|       "message": "after remove(role=owner): spine expects ok in gone, code gave 1e-05 in closed"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "closed/remove role=guest",
-|       "message": "after remove(role=guest): spine expects ok in gone, code gave -0.0 in closed"
-|     },
-|     {
-|       "code": "coverage",
-|       "severity": "info",
-|       "where": "5 sequences up to 3 steps",
-|       "message": "4 of 8 state/event/variable cases exercised"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="4" failures="4"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave None in closed">after open(role=owner): spine expects ok in open, code gave None in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave 1e+16 in closed">after open(role=guest): spine expects rejected in closed, code gave 1e+16 in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok in gone, code gave 1e-05 in closed">after remove(role=owner): spine expects ok in gone, code gave 1e-05 in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave -0.0 in closed">after remove(role=guest): spine expects ok in gone, code gave -0.0 in closed</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter adapters/missing.py
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "adapter-failed",
-|       "severity": "error",
-|       "where": "adapters/missing.py",
-|       "message": "cannot be imported: FileNotFoundError: [Errno 2] No such file or directory: '$ROOT/tools/internal/spine/testdata/adapters/missing.py'"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters/missing.py"><failure message="cannot be imported: FileNotFoundError: [Errno 2] No such file or directory: '$ROOT/tools/internal/spine/testdata/adapters/missing.py'">cannot be imported: FileNotFoundError: [Errno 2] No such file or directory: '$ROOT/tools/internal/spine/testdata/adapters/missing.py'</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter adapters/not-python.txt
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "adapter-failed",
-|       "severity": "error",
-|       "where": "adapters/not-python.txt",
-|       "message": "cannot be imported: not a Python file"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters/not-python.txt"><failure message="cannot be imported: not a Python file">cannot be imported: not a Python file</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "   "
 exit 1
 --- stdout
@@ -1320,6 +896,430 @@ exit 0
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py ''"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 ../../../adapter_shim.py ''",
+|       "message": "exited with status 1 before replying to new"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py ''"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 ../../../adapter_shim.py adapters",
+|       "message": "exited with status 1 before replying to new"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py"
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "89 sequences up to 4 steps",
+|       "message": "8 of 8 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_bugs.py" --depth 2
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "closed/open role=guest",
+|       "message": "after open(role=guest): spine expects rejected in closed, code gave None in open"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "closed/remove role=owner",
+|       "message": "after remove(role=owner): spine expects ok in gone, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "closed/remove role=guest",
+|       "message": "after remove(role=guest): spine expects ok in gone, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "open/open role=owner",
+|       "message": "after open(role=owner) -> open(role=owner): spine expects ok in open, code gave ['ok'] in open"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "open/open role=guest",
+|       "message": "after open(role=owner) -> open(role=guest): spine expects ok in open, code gave ['ok'] in open"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "open/remove role=owner",
+|       "message": "after open(role=owner) -> remove(role=owner): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "open/remove role=guest",
+|       "message": "after open(role=owner) -> remove(role=guest): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone"
+|     },
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "9 sequences up to 2 steps",
+|       "message": "8 of 8 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="7" failures="7"><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave None in open">after open(role=guest): spine expects rejected in closed, code gave None in open</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok in gone, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone">after remove(role=owner): spine expects ok in gone, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone">after remove(role=guest): spine expects ok in gone, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone</failure></testcase><testcase classname="spine conform" name="diverges open/open role=owner"><failure message="after open(role=owner) -&gt; open(role=owner): spine expects ok in open, code gave ['ok'] in open">after open(role=owner) -&gt; open(role=owner): spine expects ok in open, code gave ['ok'] in open</failure></testcase><testcase classname="spine conform" name="diverges open/open role=guest"><failure message="after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave ['ok'] in open">after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave ['ok'] in open</failure></testcase><testcase classname="spine conform" name="diverges open/remove role=owner"><failure message="after open(role=owner) -&gt; remove(role=owner): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone">after open(role=owner) -&gt; remove(role=owner): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone</failure></testcase><testcase classname="spine conform" name="diverges open/remove role=guest"><failure message="after open(role=owner) -&gt; remove(role=guest): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone">after open(role=owner) -&gt; remove(role=guest): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_crash.py" --depth 2
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "closed/open role=guest",
+|       "message": "after open(role=guest): spine expects rejected in closed, code gave crashed (ValueError: guests can't open) in closed"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "closed/remove role=guest",
+|       "message": "after remove(role=guest): spine expects ok in gone, code gave crashed (ValueError: guests can't remove) in closed"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "open/open role=guest",
+|       "message": "after open(role=owner) -> open(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't open) in open"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "open/remove role=guest",
+|       "message": "after open(role=owner) -> remove(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't remove) in open"
+|     },
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "9 sequences up to 2 steps",
+|       "message": "8 of 8 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="4" failures="4"><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave crashed (ValueError: guests can't open) in closed">after open(role=guest): spine expects rejected in closed, code gave crashed (ValueError: guests can't open) in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave crashed (ValueError: guests can't remove) in closed">after remove(role=guest): spine expects ok in gone, code gave crashed (ValueError: guests can't remove) in closed</failure></testcase><testcase classname="spine conform" name="diverges open/open role=guest"><failure message="after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't open) in open">after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't open) in open</failure></testcase><testcase classname="spine conform" name="diverges open/remove role=guest"><failure message="after open(role=owner) -&gt; remove(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't remove) in open">after open(role=owner) -&gt; remove(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't remove) in open</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_exit.py" --depth 2
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 ../../../adapter_shim.py adapters/door_exit.py",
+|       "message": "exited with status -9 before replying to apply"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_exit.py"><failure message="exited with status -9 before replying to apply">exited with status -9 before replying to apply</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_import.py" --depth 2
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 ../../../adapter_shim.py adapters/door_import.py",
+|       "message": "exited with status 1 before replying to new"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_import.py"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_missing.py" --depth 2
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 ../../../adapter_shim.py adapters/door_missing.py",
+|       "message": "exited with status 1 before replying to new"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_missing.py"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_new_raises.py" --depth 2
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 ../../../adapter_shim.py adapters/door_new_raises.py",
+|       "message": "new() raised RuntimeError: no database"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_new_raises.py"><failure message="new() raised RuntimeError: no database">new() raised RuntimeError: no database</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_observe_raises.py" --depth 2
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 ../../../adapter_shim.py adapters/door_observe_raises.py",
+|       "message": "observe() raised KeyError: 'gone' after remove(role=owner)"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_observe_raises.py"><failure message="observe() raised KeyError: 'gone' after remove(role=owner)">observe() raised KeyError: 'gone' after remove(role=owner)</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_set.py" --depth 2
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 ../../../adapter_shim.py adapters/door_set.py",
+|       "message": "exited with status 1 before replying to observe"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_set.py"><failure message="exited with status 1 before replying to observe">exited with status 1 before replying to observe</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_start.py" --depth 2
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "start",
+|       "message": "spine starts in closed, code starts in open"
+|     },
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "1 sequences up to 2 steps",
+|       "message": "0 of 8 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges start"><failure message="spine starts in closed, code starts in open">spine starts in closed, code starts in open</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_values.py" --depth 2
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "closed/open role=owner",
+|       "message": "after open(role=owner): spine expects ok in open, code gave None in closed"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "closed/open role=guest",
+|       "message": "after open(role=guest): spine expects rejected in closed, code gave 1e+16 in closed"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "closed/remove role=owner",
+|       "message": "after remove(role=owner): spine expects ok in gone, code gave 1e-05 in closed"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "closed/remove role=guest",
+|       "message": "after remove(role=guest): spine expects ok in gone, code gave -0.0 in closed"
+|     },
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "5 sequences up to 2 steps",
+|       "message": "4 of 8 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="4" failures="4"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave None in closed">after open(role=owner): spine expects ok in open, code gave None in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave 1e+16 in closed">after open(role=guest): spine expects rejected in closed, code gave 1e+16 in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok in gone, code gave 1e-05 in closed">after remove(role=owner): spine expects ok in gone, code gave 1e-05 in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave -0.0 in closed">after remove(role=guest): spine expects ok in gone, code gave -0.0 in closed</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_values.py" --depth 3
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "closed/open role=owner",
+|       "message": "after open(role=owner): spine expects ok in open, code gave None in closed"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "closed/open role=guest",
+|       "message": "after open(role=guest): spine expects rejected in closed, code gave 1e+16 in closed"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "closed/remove role=owner",
+|       "message": "after remove(role=owner): spine expects ok in gone, code gave 1e-05 in closed"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "closed/remove role=guest",
+|       "message": "after remove(role=guest): spine expects ok in gone, code gave -0.0 in closed"
+|     },
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "5 sequences up to 3 steps",
+|       "message": "4 of 8 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="4" failures="4"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave None in closed">after open(role=owner): spine expects ok in open, code gave None in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave 1e+16 in closed">after open(role=guest): spine expects rejected in closed, code gave 1e+16 in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok in gone, code gave 1e-05 in closed">after remove(role=owner): spine expects ok in gone, code gave 1e-05 in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave -0.0 in closed">after remove(role=guest): spine expects ok in gone, code gave -0.0 in closed</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/missing.py"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 ../../../adapter_shim.py adapters/missing.py",
+|       "message": "exited with status 1 before replying to new"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/missing.py"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/not-python.txt"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 ../../../adapter_shim.py adapters/not-python.txt",
+|       "message": "exited with status 1 before replying to new"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/not-python.txt"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/proto\\col.py ok" --depth 1
 exit 0
 --- stdout
@@ -2318,7 +2318,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed tool"><failure message="cannot be started: PermissionError: [Errno 13] Permission denied: 'tool'">cannot be started: PermissionError: [Errno 13] Permission denied: 'tool'</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/unsound.yaml --adapter adapters/door.py --depth 1
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/unsound.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --depth 1
 exit 1
 --- stdout
 | {
@@ -2343,157 +2343,41 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges start"><failure message="spine starts in s, code starts in closed">spine starts in s, code starts in closed</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform diff/plain-a.yaml --adapter adapters/lamp.py
+=== in tools/internal/spine/testdata: spine conform diff/plain-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/lamp.py"
 exit 1
 --- stdout
 | error   diverges           lit/press : after press() -> press(): spine expects ok in dark, code gave ok in lit
 | info    coverage           9 sequences up to 4 steps: 5 of 6 state/event/variable cases exercised
 | -- 1 errors, 2 findings
 |
-=== in tools/internal/spine/testdata: spine conform diff/stop-a.yaml --adapter adapters/stop.py --depth -1
+=== in tools/internal/spine/testdata: spine conform diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --depth -1
 exit 0
 --- stdout
 | info    coverage           1 sequences up to -1 steps: 0 of 2 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform diff/stop-a.yaml --adapter adapters/stop.py --depth 0
+=== in tools/internal/spine/testdata: spine conform diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --depth 0
 exit 0
 --- stdout
 | info    coverage           1 sequences up to 0 steps: 0 of 2 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform diff/stop-a.yaml --adapter adapters/stop.py --depth 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+=== in tools/internal/spine/testdata: spine conform diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --depth 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
 exit 0
 --- stdout
 | info    coverage           3 sequences up to 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999 steps: 2 of 2 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform diff/stop-a.yaml --adapter adapters/stop.py --depth ٣
+=== in tools/internal/spine/testdata: spine conform diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --depth ٣
 exit 0
 --- stdout
 | info    coverage           3 sequences up to 3 steps: 2 of 2 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform diff/unreadable.yaml --adapter adapters/door.py
+=== in tools/internal/spine/testdata: spine conform diff/unreadable.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py"
 exit 1
 --- stdout
 | error   spec-unreadable    diff/unreadable.yaml: go-yaml load error in parser (while parsing a flow sequence) at L2.C9-L3.C1: did not find expected ',' or ']'
-| -- 1 errors, 1 findings
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter ""
-exit 1
---- stdout
-| error   adapter-failed     : cannot be imported: not a Python file
-| -- 1 errors, 1 findings
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters
-exit 1
---- stdout
-| error   adapter-failed     adapters: cannot be imported: not a Python file
-| -- 1 errors, 1 findings
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door.py
-exit 0
---- stdout
-| info    coverage           89 sequences up to 4 steps: 8 of 8 state/event/variable cases exercised
-| -- 0 errors, 1 findings
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door_bugs.py --depth 2
-exit 1
---- stdout
-| error   diverges           closed/open role=guest: after open(role=guest): spine expects rejected in closed, code gave None in open
-| error   diverges           closed/remove role=owner: after remove(role=owner): spine expects ok in gone, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone
-| error   diverges           closed/remove role=guest: after remove(role=guest): spine expects ok in gone, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone
-| error   diverges           open/open role=owner: after open(role=owner) -> open(role=owner): spine expects ok in open, code gave ['ok'] in open
-| error   diverges           open/open role=guest: after open(role=owner) -> open(role=guest): spine expects ok in open, code gave ['ok'] in open
-| error   diverges           open/remove role=owner: after open(role=owner) -> remove(role=owner): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone
-| error   diverges           open/remove role=guest: after open(role=owner) -> remove(role=guest): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone
-| info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
-| -- 7 errors, 8 findings
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door_crash.py --depth 2
-exit 1
---- stdout
-| error   diverges           closed/open role=guest: after open(role=guest): spine expects rejected in closed, code gave crashed (ValueError: guests can't open) in closed
-| error   diverges           closed/remove role=guest: after remove(role=guest): spine expects ok in gone, code gave crashed (ValueError: guests can't remove) in closed
-| error   diverges           open/open role=guest: after open(role=owner) -> open(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't open) in open
-| error   diverges           open/remove role=guest: after open(role=owner) -> remove(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't remove) in open
-| info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
-| -- 4 errors, 5 findings
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door_exit.py --depth 2
-exit 1
---- stdout
-| error   adapter-failed     adapters/door_exit.py: exited with status -9 before replying to apply
-| -- 1 errors, 1 findings
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door_import.py --depth 2
-exit 1
---- stdout
-| error   adapter-failed     adapters/door_import.py: cannot be imported: ModuleNotFoundError: No module named 'no_such_module_for_spine'
-| -- 1 errors, 1 findings
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door_missing.py --depth 2
-exit 1
---- stdout
-| error   adapter-failed     adapters/door_missing.py: does not define apply(), observe()
-| -- 1 errors, 1 findings
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door_new_raises.py --depth 2
-exit 1
---- stdout
-| error   adapter-failed     adapters/door_new_raises.py: new() raised RuntimeError: no database
-| -- 1 errors, 1 findings
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door_observe_raises.py --depth 2
-exit 1
---- stdout
-| error   adapter-failed     adapters/door_observe_raises.py: observe() raised KeyError: 'gone' after remove(role=owner)
-| -- 1 errors, 1 findings
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door_set.py --depth 2
-exit 1
---- stdout
-| error   adapter-failed     adapters/door_set.py: exited with status 1 before replying to observe
-| -- 1 errors, 1 findings
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door_start.py --depth 2
-exit 1
---- stdout
-| error   diverges           start: spine starts in closed, code starts in open
-| info    coverage           1 sequences up to 2 steps: 0 of 8 state/event/variable cases exercised
-| -- 1 errors, 2 findings
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door_values.py --depth 2
-exit 1
---- stdout
-| error   diverges           closed/open role=owner: after open(role=owner): spine expects ok in open, code gave None in closed
-| error   diverges           closed/open role=guest: after open(role=guest): spine expects rejected in closed, code gave 1e+16 in closed
-| error   diverges           closed/remove role=owner: after remove(role=owner): spine expects ok in gone, code gave 1e-05 in closed
-| error   diverges           closed/remove role=guest: after remove(role=guest): spine expects ok in gone, code gave -0.0 in closed
-| info    coverage           5 sequences up to 2 steps: 4 of 8 state/event/variable cases exercised
-| -- 4 errors, 5 findings
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door_values.py --depth 3
-exit 1
---- stdout
-| error   diverges           closed/open role=owner: after open(role=owner): spine expects ok in open, code gave None in closed
-| error   diverges           closed/open role=guest: after open(role=guest): spine expects rejected in closed, code gave 1e+16 in closed
-| error   diverges           closed/remove role=owner: after remove(role=owner): spine expects ok in gone, code gave 1e-05 in closed
-| error   diverges           closed/remove role=guest: after remove(role=guest): spine expects ok in gone, code gave -0.0 in closed
-| info    coverage           5 sequences up to 3 steps: 4 of 8 state/event/variable cases exercised
-| -- 4 errors, 5 findings
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/missing.py
-exit 1
---- stdout
-| error   adapter-failed     adapters/missing.py: cannot be imported: FileNotFoundError: [Errno 2] No such file or directory: '$ROOT/tools/internal/spine/testdata/adapters/missing.py'
-| -- 1 errors, 1 findings
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/not-python.txt
-exit 1
---- stdout
-| error   adapter-failed     adapters/not-python.txt: cannot be imported: not a Python file
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "   "
@@ -2519,6 +2403,122 @@ exit 0
 --- stdout
 | info    coverage           5 sequences up to 1 steps: 4 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py ''"
+exit 1
+--- stdout
+| error   adapter-failed     python3 ../../../adapter_shim.py '': exited with status 1 before replying to new
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters"
+exit 1
+--- stdout
+| error   adapter-failed     python3 ../../../adapter_shim.py adapters: exited with status 1 before replying to new
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py"
+exit 0
+--- stdout
+| info    coverage           89 sequences up to 4 steps: 8 of 8 state/event/variable cases exercised
+| -- 0 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_bugs.py" --depth 2
+exit 1
+--- stdout
+| error   diverges           closed/open role=guest: after open(role=guest): spine expects rejected in closed, code gave None in open
+| error   diverges           closed/remove role=owner: after remove(role=owner): spine expects ok in gone, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone
+| error   diverges           closed/remove role=guest: after remove(role=guest): spine expects ok in gone, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone
+| error   diverges           open/open role=owner: after open(role=owner) -> open(role=owner): spine expects ok in open, code gave ['ok'] in open
+| error   diverges           open/open role=guest: after open(role=owner) -> open(role=guest): spine expects ok in open, code gave ['ok'] in open
+| error   diverges           open/remove role=owner: after open(role=owner) -> remove(role=owner): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone
+| error   diverges           open/remove role=guest: after open(role=owner) -> remove(role=guest): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone
+| info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
+| -- 7 errors, 8 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_crash.py" --depth 2
+exit 1
+--- stdout
+| error   diverges           closed/open role=guest: after open(role=guest): spine expects rejected in closed, code gave crashed (ValueError: guests can't open) in closed
+| error   diverges           closed/remove role=guest: after remove(role=guest): spine expects ok in gone, code gave crashed (ValueError: guests can't remove) in closed
+| error   diverges           open/open role=guest: after open(role=owner) -> open(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't open) in open
+| error   diverges           open/remove role=guest: after open(role=owner) -> remove(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't remove) in open
+| info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
+| -- 4 errors, 5 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_exit.py" --depth 2
+exit 1
+--- stdout
+| error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_exit.py: exited with status -9 before replying to apply
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_import.py" --depth 2
+exit 1
+--- stdout
+| error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_import.py: exited with status 1 before replying to new
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_missing.py" --depth 2
+exit 1
+--- stdout
+| error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_missing.py: exited with status 1 before replying to new
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_new_raises.py" --depth 2
+exit 1
+--- stdout
+| error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_new_raises.py: new() raised RuntimeError: no database
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_observe_raises.py" --depth 2
+exit 1
+--- stdout
+| error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_observe_raises.py: observe() raised KeyError: 'gone' after remove(role=owner)
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_set.py" --depth 2
+exit 1
+--- stdout
+| error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_set.py: exited with status 1 before replying to observe
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_start.py" --depth 2
+exit 1
+--- stdout
+| error   diverges           start: spine starts in closed, code starts in open
+| info    coverage           1 sequences up to 2 steps: 0 of 8 state/event/variable cases exercised
+| -- 1 errors, 2 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_values.py" --depth 2
+exit 1
+--- stdout
+| error   diverges           closed/open role=owner: after open(role=owner): spine expects ok in open, code gave None in closed
+| error   diverges           closed/open role=guest: after open(role=guest): spine expects rejected in closed, code gave 1e+16 in closed
+| error   diverges           closed/remove role=owner: after remove(role=owner): spine expects ok in gone, code gave 1e-05 in closed
+| error   diverges           closed/remove role=guest: after remove(role=guest): spine expects ok in gone, code gave -0.0 in closed
+| info    coverage           5 sequences up to 2 steps: 4 of 8 state/event/variable cases exercised
+| -- 4 errors, 5 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_values.py" --depth 3
+exit 1
+--- stdout
+| error   diverges           closed/open role=owner: after open(role=owner): spine expects ok in open, code gave None in closed
+| error   diverges           closed/open role=guest: after open(role=guest): spine expects rejected in closed, code gave 1e+16 in closed
+| error   diverges           closed/remove role=owner: after remove(role=owner): spine expects ok in gone, code gave 1e-05 in closed
+| error   diverges           closed/remove role=guest: after remove(role=guest): spine expects ok in gone, code gave -0.0 in closed
+| info    coverage           5 sequences up to 3 steps: 4 of 8 state/event/variable cases exercised
+| -- 4 errors, 5 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/missing.py"
+exit 1
+--- stdout
+| error   adapter-failed     python3 ../../../adapter_shim.py adapters/missing.py: exited with status 1 before replying to new
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/not-python.txt"
+exit 1
+--- stdout
+| error   adapter-failed     python3 ../../../adapter_shim.py adapters/not-python.txt: exited with status 1 before replying to new
+| -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/proto\\col.py ok" --depth 1
 exit 0
@@ -2826,7 +2826,7 @@ exit 1
 | error   adapter-failed     tool: cannot be started: PermissionError: [Errno 13] Permission denied: 'tool'
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform spines/unsound.yaml --adapter adapters/door.py --depth 1
+=== in tools/internal/spine/testdata: spine conform spines/unsound.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --depth 1
 exit 1
 --- stdout
 | error   diverges           start: spine starts in s, code starts in closed

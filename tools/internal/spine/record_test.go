@@ -48,12 +48,8 @@ func recordFile(name string) string {
 	return ""
 }
 
-// normal writes the paths that differ between machines as $TMP and $ROOT, and the Python the
-// test puts in an --adapter-cmd, $PYTHON, as python3, its default.
+// normal writes the paths that differ between machines as $TMP and $ROOT.
 func normal(s string) string {
-	if pythonPath != "python3" {
-		s = strings.ReplaceAll(s, shellQuote(pythonPath), "python3")
-	}
 	if recordTmp != "" {
 		s = strings.ReplaceAll(s, recordTmp, "$TMP")
 	}
