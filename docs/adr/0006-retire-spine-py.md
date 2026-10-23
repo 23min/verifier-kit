@@ -1,6 +1,7 @@
 # 0006. `tools/spine.py` retires; the Go `spine` lives in `tools/`, and `./verify` builds it
 
-- Status: accepted
+- Status: accepted; the end of decision 3 reversed by `0007-no-language-built-in.md`
+  (`./verify` no longer exports `PYTHON`)
 - Date: 2026-10-18
 - Issue: #44
 
@@ -29,7 +30,8 @@ in any language. #44 retires `spine.py`. The owner decided its three open questi
    by `run_checks.py`. This extends ADR 0005's decision 6. It changes
    `examples/notes/mutation/mutate_notes.py`, part of the acceptance fixture; the owner
    approved that change. `./verify` exports `PYTHON`, so `spine` serves a Python adapter with
-   the Python `./verify` picked.
+   the Python `./verify` picked. (Reversed on 2026-10-23: `./verify` picks no Python and
+   `spine` serves none; see `0007-no-language-built-in.md`.)
 4. **A record takes over from `spine.py` as the reference** (OQ3).
    `tools/internal/spine/testdata/record/` holds what the Go `spine` gave on every input of the
    differential test, recorded while the test showed both implementations agree. `go test`

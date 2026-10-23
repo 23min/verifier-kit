@@ -1,7 +1,8 @@
 # 0004. `spine` in Go, checked against the Python one
 
 - Status: accepted; the module's place in decision 1 superseded by `0006-retire-spine-py.md`
-  (it lives in `tools/`), and decision 3 ended there: `tools/spine.py` retired
+  (it lives in `tools/`), and decision 3 ended there: `tools/spine.py` retired; decision 8
+  superseded by `0007-no-language-built-in.md` (`conform` takes `--adapter-cmd` only)
 - Date: 2026-10-15
 - Issue: #27
 
@@ -58,6 +59,8 @@ settled it on 2026-10-15 in #27.
    shim, which now checks for the three functions, rather than record those as differences.
    This supersedes ADR 0003's decision 7. It costs time: `./verify --full` took 25 s instead of
    10 s, and `demo/faults.sh` 97 s instead of 47 s, measured before the Go `spine` ran either.
+   (Superseded on 2026-10-23: `conform --adapter` and the shim built into `spine` are gone; a
+   Python adapter's command line runs the shim itself; see `0007-no-language-built-in.md`.)
 
 While porting, the owner settled behavior the port would otherwise have copied by accident:
 
