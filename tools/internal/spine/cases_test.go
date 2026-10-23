@@ -26,6 +26,8 @@ import (
 	"strings"
 	"sync"
 	"testing"
+
+	"github.com/23min/verifier-kit/tools/internal/record"
 )
 
 var (
@@ -819,7 +821,7 @@ func TestCases(t *testing.T) {
 			})
 		}
 	})
-	finishRecord(t, td)
+	rec.Finish(t)
 
 	want := contractCodes(t)
 	var missing []string
@@ -829,7 +831,7 @@ func TestCases(t *testing.T) {
 		}
 	}
 	sort.Strings(missing)
-	if len(missing) > 0 && !filtered() { // only some cases ran
+	if len(missing) > 0 && !record.Filtered() { // only some cases ran
 		t.Errorf("no input produces these finding codes from the contract: %s", strings.Join(missing, ", "))
 	}
 	t.Logf("%d cases and %d condition batches; %d of the contract's %d codes seen", len(cases), len(batches), len(want)-len(missing), len(want))
