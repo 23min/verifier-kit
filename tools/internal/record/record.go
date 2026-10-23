@@ -156,7 +156,7 @@ func (r *Record) Finish(t testing.TB) {
 
 // Word is s as one word of a key: as it is when that is unambiguous, else Go-quoted.
 func Word(s string) string {
-	if s != "" && Plain(s) && !strings.ContainsAny(s, " \"'\\") {
+	if s != "" && plain(s) && !strings.ContainsAny(s, " \"'\\") {
 		return s
 	}
 	return strconv.Quote(s)
@@ -169,9 +169,9 @@ func Word(s string) string {
 // line; a line that isn't plain text is "|q " and the line Go-quoted in ASCII. An output ending
 // in a newline ends in an empty line.
 
-// Plain tells a line that can be written as it is: UTF-8, no control characters but tab, and
+// plain tells a line that can be written as it is: UTF-8, no control characters but tab, and
 // no space or tab at the end, which editors strip.
-func Plain(s string) bool {
+func plain(s string) bool {
 	if !utf8.ValidString(s) || strings.HasSuffix(s, " ") || strings.HasSuffix(s, "\t") {
 		return false
 	}
@@ -189,7 +189,7 @@ func formatOutput(b *strings.Builder, name, s string) {
 		switch {
 		case line == "":
 			b.WriteString("|\n")
-		case Plain(line):
+		case plain(line):
 			b.WriteString("| " + line + "\n")
 		default:
 			b.WriteString("|q " + strconv.QuoteToASCII(line) + "\n")
