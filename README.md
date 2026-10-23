@@ -44,13 +44,15 @@ every run, into `tools/bin/spine`, so it needs Go 1.27. By hand:
 ```sh
 go -C tools build -o bin/spine ./cmd/spine                 # into tools/bin/, which git ignores
 tools/bin/spine check examples/notes/spec/notes/spine.yaml  # check one spine
-go -C tools test ./...                                     # runs spine on every test input, against its record
+go -C tools test ./...                                     # spine on every test input, ./verify on its fixtures
 ```
 
 The record, in `tools/internal/spine/testdata/record/`, holds what `spine` gave on every test
 input, written while it still matched `tools/spine.py`, the Python original it replaced (#44).
 After a deliberate change, `go -C tools test ./internal/spine/ -update` writes it again, and its
-diff shows what changed.
+diff shows what changed. `./verify` has a record of its own, in
+`tools/internal/verify/testdata/record/`: what it gives on fixture projects that between them
+reach every path through it. `go -C tools test ./internal/verify/ -update` writes it again.
 
 Or open the repo in its devcontainer (`.devcontainer/`, "Dev Containers: Reopen in Container"),
 which has Python 3 with PyYAML, Go, uv, gh and Claude Code. It needs Docker and VS Code with the Dev
@@ -69,7 +71,7 @@ local Python.
 
 ```
 verify                           the single entry point
-tools/cmd/, tools/internal/      spine, in Go, and its tests (no knowledge of any CI or agent)
+tools/cmd/, tools/internal/      spine, in Go, and the tests of spine and ./verify (no knowledge of any CI or agent)
 tools/run_checks.py              runs Python content checks
 tools/adapter_shim.py            serves a Python adapter over the adapter protocol
 policy.yaml                      which branch role may change which paths

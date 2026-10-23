@@ -1,0 +1,180 @@
+=== own: ./verify
+exit 0
+--- stdout
+| skip  guard (VERIFY_BASE not set)
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| ok    lamp: code conforms to spine
+| ok    content checks
+| skip  mutants killed (fast mode; --full runs them)
+| -- all steps passed
+|
+--- stderr
+|
+=== own: ./verify .
+exit 0
+--- stdout
+| skip  guard (VERIFY_BASE not set)
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| ok    lamp: code conforms to spine
+| ok    content checks
+| skip  mutants killed (fast mode; --full runs them)
+| -- all steps passed
+|
+--- stderr
+|
+=== own: ./verify with PATH without python3
+exit 1
+--- stdout
+| skip  guard (VERIFY_BASE not set)
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| FAIL  lamp: code conforms to spine
+|       error   adapter-failed     conformance/adapter_lamp.py: cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'python3'
+|       -- 1 errors, 1 findings
+| FAIL  content checks
+|       env: 'python3': No such file or directory
+| skip  mutants killed (fast mode; --full runs them)
+| -- 2 step(s) failed: lamp: code conforms to spine, content checks
+|
+--- stderr
+| ./verify: line N: python3: command not found
+|
+=== own: ./verify with PYTHON=$TMP/wrapper/python
+exit 0
+--- stdout
+| skip  guard (VERIFY_BASE not set)
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| ok    lamp: code conforms to spine
+| ok    content checks
+| skip  mutants killed (fast mode; --full runs them)
+| -- all steps passed
+|
+--- stderr
+| python from PYTHON
+|
+=== own: ./verify with VERIFY_BASE=base
+exit 1
+--- stdout
+| FAIL  guard (build/lamp)
+|       error   path-denied        spec/lamp/spine.yaml: the builder role may not change this path
+|       -- 1 errors, 2 findings
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| ok    lamp: code conforms to spine
+| ok    content checks
+| skip  mutants killed (fast mode; --full runs them)
+| -- 1 step(s) failed: guard (build/lamp)
+|
+--- stderr
+|
+=== own: ./verify with VERIFY_BASE=base with VERIFY_BRANCH=main
+exit 0
+--- stdout
+| ok    guard (main)
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| ok    lamp: code conforms to spine
+| ok    content checks
+| skip  mutants killed (fast mode; --full runs them)
+| -- all steps passed
+|
+--- stderr
+|
+=== own: ./verify with VERIFY_BASE=base with VERIFY_BRANCH=main with VERIFY_REPORTS=reports
+exit 0
+--- stdout
+| ok    guard (main)
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| ok    lamp: code conforms to spine
+| ok    content checks
+| skip  mutants killed (fast mode; --full runs them)
+| -- all steps passed
+|
+--- stderr
+|
+--- report/guard.xml
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine guard" tests="1" failures="0"><testcase classname="spine guard" name="no errors" /></testsuite>
+--- report/lamp-behaviors.xml
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine behaviors" tests="1" failures="0"><testcase classname="spine behaviors" name="no errors" /></testsuite>
+--- report/lamp-check.xml
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+--- report/lamp-conform.xml
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
+--- report/lamp-stale.xml
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine stale" tests="1" failures="0"><testcase classname="spine stale" name="no errors" /></testsuite>
+=== own: ./verify with VERIFY_BASE=no-such-commit
+exit 2
+--- stdout
+|
+--- stderr
+| verify: cannot diff against no-such-commit: fatal: ambiguous argument 'no-such-commit...HEAD': unknown revision or path not in the working tree.
+| Use '--' to separate paths from revisions, like this:
+| 'git <command> [<revision>...] -- [<file>...]'
+|
+=== own: ./verify with VERIFY_REPORTS=$TMP/reports
+exit 0
+--- stdout
+| skip  guard (VERIFY_BASE not set)
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| ok    lamp: code conforms to spine
+| ok    content checks
+| skip  mutants killed (fast mode; --full runs them)
+| -- all steps passed
+|
+--- stderr
+|
+--- report/lamp-behaviors.xml
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine behaviors" tests="1" failures="0"><testcase classname="spine behaviors" name="no errors" /></testsuite>
+--- report/lamp-check.xml
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+--- report/lamp-conform.xml
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
+--- report/lamp-stale.xml
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine stale" tests="1" failures="0"><testcase classname="spine stale" name="no errors" /></testsuite>
+=== own: ./verify with VERIFY_VERBOSE=1
+exit 0
+--- stdout
+| skip  guard (VERIFY_BASE not set)
+| ok    lamp: spine is sound
+|       -- 0 errors, 0 findings
+| ok    lamp: behaviors match spine
+|       info    behaviors          spec/lamp/behaviors: 2 behavior files checked
+|       -- 0 errors, 1 findings
+| ok    lamp: checks cite current spine
+|       info    uncovered          dark/drop: no check cites this transition; conformance still exercises it
+|       info    uncovered          dark/press: no check cites this transition; conformance still exercises it
+|       info    uncovered          lit/drop: no check cites this transition; conformance still exercises it
+|       info    uncovered          lit/press: no check cites this transition; conformance still exercises it
+|       -- 0 errors, 4 findings
+| ok    lamp: code conforms to spine
+|       info    coverage           15 sequences up to 4 steps: 6 of 6 state/event/variable cases exercised
+|       -- 0 errors, 1 findings
+| ok    content checks
+|       -- 0 errors, 1 checks run
+| skip  mutants killed (fast mode; --full runs them)
+| -- all steps passed
+|
+--- stderr
+|

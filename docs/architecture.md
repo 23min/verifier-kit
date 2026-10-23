@@ -292,6 +292,17 @@ between machines written as `$ROOT` and `$TMP`. `go -C tools test ./internal/spi
 writes the record again; its diff is what a reviewer reads. The record was written while the
 Go `spine` still matched `tools/spine.py` on every input, before that retired (#44).
 
+`go test` also holds the record of `./verify` (`tools/internal/verify/record_test.go`, #68).
+It copies `verify` and `tools/` into fixture projects, as a project does, and runs `./verify`
+in them as its callers do. Between them the fixtures reach every path through it: misuse, a
+failed build, which roots run, the guard, every skip, each piece in each form, passing and
+failing, each missing or doubled piece, each `bad-command`, and how Python is found. Each run
+must give exactly what `tools/internal/verify/testdata/record/` holds: its exit code, standard
+output, standard error and every JUnit report, with the test's temporary folder written as
+`$TMP` and Bash's line numbers as `line N`. Every run is in the C locale. The fixtures need no
+Elixir. `go -C tools test ./internal/verify/ -update` writes the record again. It is what the
+change to commands (#69) and the Go `verify` (#70) are checked against.
+
 ## Per machine, per root and repo-wide
 
 | Part | Scope today | How it finds its inputs |
