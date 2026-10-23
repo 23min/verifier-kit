@@ -117,7 +117,10 @@ flowchart TD
 - Open, for that pull request: how a command line reaches the helpers. In a project the toolkit
   sits at its root, so a line can say
   `python3 tools/adapter_shim.py conformance/adapter_notes.py`; in this repo an example sits two
-  folders below `tools/`, and a `.cmd` line holds no variables.
+  folders below `tools/`, and a `.cmd` line holds no variables. (Decided in #69, on 2026-10-23:
+  `./verify` puts its `tools/` first on the `PATH` of the commands it runs, for any root that
+  isn't its own folder too, so a line names a helper alone:
+  `env PYTHONPATH=src adapter_shim.py conformance/adapter_notes.py`.)
 
 ## Alternatives considered
 

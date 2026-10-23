@@ -1,7 +1,9 @@
 # 0005. `./verify` runs adapters, content checks and mutation given as commands
 
 - Status: accepted; decision 6 extended by `0006-retire-spine-py.md` (a Python mutation script
-  gets `VERIFY_SPINE` too)
+  gets `VERIFY_SPINE` too); decision 5, the end of decision 6 and the alternative of moving the
+  Python examples to commands reversed by `0007-no-language-built-in.md` (every piece is a
+  command)
 - Date: 2026-10-17
 - Issue: #35
 
@@ -30,11 +32,14 @@ ADR 0003's decision 8 left discovering a command until there was an adapter that
 5. **The Python names keep working** beside `.cmd` files, and a piece given both ways is a new
    error, `ambiguous-piece`, not a silent choice (OQ5). For content checks, "both" means
    `checks/run.cmd` and any `test_*.py` file under `checks/`; for mutation, a `.py` and a
-   `.cmd` of the same name.
+   `.cmd` of the same name. (Reversed on 2026-10-23: every piece is a command, and
+   `ambiguous-piece` is retired; see `0007-no-language-built-in.md`.)
 6. **Each command runs from its root,** with `./verify`'s environment plus `VERIFY_SPINE`, the
    command line that runs the toolkit's `spine`, with absolute paths and quoted by shell rules
    (OQ6). `conform` also runs from the root for a `.cmd` adapter, so the adapter's line resolves
-   there. `PYTHONPATH` is set for the Python pieces only.
+   there. `PYTHONPATH` is set for the Python pieces only. (Reversed on 2026-10-23: there are no
+   Python pieces; `./verify` puts its `tools/` first on each command's `PATH` and sets nothing
+   for any language; see `0007-no-language-built-in.md`.)
 7. **The messages only grow.** `no-adapter` and `no-mutation` now name the `.cmd` form too, by
    adding to the text `demo/faults.sh` expects rather than changing it.
 
@@ -57,6 +62,7 @@ ADR 0003's decision 8 left discovering a command until there was an adapter that
 - **One file per root naming the three commands.** One place to look, but one more format, and
   a piece's command no longer sits where its Python form would.
 - **Moving the Python examples to commands too,** so there is one rule. It would change the
-  notes example, which is the acceptance fixture, for no gain in what is checked.
+  notes example, which is the acceptance fixture, for no gain in what is checked. (Chosen on
+  2026-10-23, in `0007-no-language-built-in.md`.)
 - **Parsing a check command's output** to count checks and name failures. It would need a
   format every test runner can produce; the exit status is the one thing they all share.
