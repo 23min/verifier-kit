@@ -469,22 +469,21 @@ exit 2
 exit 2
 --- stdout
 |
-=== in tools/internal/spine/testdata: spine conform --adapter a
-exit 2
---- stdout
-|
-=== in tools/internal/spine/testdata: spine conform --adapter adapters/door.py seeds/spine.yaml --depth 1
+=== in tools/internal/spine/testdata: spine conform --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" seeds/spine.yaml --depth 1
 exit 0
 --- stdout
 | info    coverage           5 sequences up to 1 steps: 4 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
+=== in tools/internal/spine/testdata: spine conform --adapter-cmd a
+exit 2
+--- stdout
+|
 === in tools/internal/spine/testdata: spine conform --he
 exit 0
 --- stdout
 | usage: spine conform [-h] [--format {text,json}] [--junit FILE]
-|                      (--adapter ADAPTER | --adapter-cmd COMMAND)
-|                      [--depth DEPTH]
+|                      --adapter-cmd COMMAND [--depth DEPTH]
 |                      spec
 |
 | positional arguments:
@@ -494,7 +493,6 @@ exit 0
 |   -h, --help            show this help message and exit
 |   --format {text,json}
 |   --junit FILE          also write a JUnit XML report
-|   --adapter ADAPTER     Python file defining new(), apply(), observe()
 |   --adapter-cmd COMMAND
 |                         a program speaking the adapter protocol; split like a
 |                         shell would, run without one
@@ -504,8 +502,7 @@ exit 0
 exit 0
 --- stdout
 | usage: spine conform [-h] [--format {text,json}] [--junit FILE]
-|                      (--adapter ADAPTER | --adapter-cmd COMMAND)
-|                      [--depth DEPTH]
+|                      --adapter-cmd COMMAND [--depth DEPTH]
 |                      spec
 |
 | positional arguments:
@@ -515,7 +512,6 @@ exit 0
 |   -h, --help            show this help message and exit
 |   --format {text,json}
 |   --junit FILE          also write a JUnit XML report
-|   --adapter ADAPTER     Python file defining new(), apply(), observe()
 |   --adapter-cmd COMMAND
 |                         a program speaking the adapter protocol; split like a
 |                         shell would, run without one
@@ -525,8 +521,7 @@ exit 0
 exit 0
 --- stdout
 | usage: spine conform [-h] [--format {text,json}] [--junit FILE]
-|                      (--adapter ADAPTER | --adapter-cmd COMMAND)
-|                      [--depth DEPTH]
+|                      --adapter-cmd COMMAND [--depth DEPTH]
 |                      spec
 |
 | positional arguments:
@@ -536,7 +531,6 @@ exit 0
 |   -h, --help            show this help message and exit
 |   --format {text,json}
 |   --junit FILE          also write a JUnit XML report
-|   --adapter ADAPTER     Python file defining new(), apply(), observe()
 |   --adapter-cmd COMMAND
 |                         a program speaking the adapter protocol; split like a
 |                         shell would, run without one
@@ -546,32 +540,23 @@ exit 0
 exit 2
 --- stdout
 |
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml "--adapter-cmd=python3 ../../../adapter_shim.py adapters/door.py" --depth=1
+exit 0
+--- stdout
+| info    coverage           5 sequences up to 1 steps: 4 of 8 state/event/variable cases exercised
+| -- 0 errors, 1 findings
+|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --ad x
-exit 2
---- stdout
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter
-exit 2
---- stdout
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter a --adapter-cmd b
-exit 2
---- stdout
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door.py --adapter adapters/door_start.py --depth 1
 exit 1
 --- stdout
-| error   diverges           start: spine starts in closed, code starts in open
-| info    coverage           1 sequences up to 1 steps: 0 of 8 state/event/variable cases exercised
-| -- 1 errors, 2 findings
+| error   adapter-failed     x: cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'x'
+| -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door.py --depth x
-exit 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter nosuchprogram
+exit 1
 --- stdout
-|
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter adapters/door.py extra
-exit 2
---- stdout
+| error   adapter-failed     nosuchprogram: cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'nosuchprogram'
+| -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-c true
 exit 1
@@ -579,15 +564,24 @@ exit 1
 | error   adapter-failed     true: exited with status 0 before replying to new
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd b --adapter a
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd
 exit 2
 --- stdout
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter=adapters/door.py --depth=1
-exit 0
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_start.py" --depth 1
+exit 1
 --- stdout
-| info    coverage           5 sequences up to 1 steps: 4 of 8 state/event/variable cases exercised
-| -- 0 errors, 1 findings
+| error   diverges           start: spine starts in closed, code starts in open
+| info    coverage           1 sequences up to 1 steps: 0 of 8 state/event/variable cases exercised
+| -- 1 errors, 2 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --depth x
+exit 2
+--- stdout
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" extra
+exit 2
+--- stdout
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --depth 1
 exit 2

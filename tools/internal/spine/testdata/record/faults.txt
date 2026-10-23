@@ -128,7 +128,7 @@ exit 0
 --- stdout
 | -- 0 errors, 0 findings
 |
-=== in $TMP/faults: spine conform $ROOT/examples/notes/spec/notes/spine.yaml --adapter $ROOT/examples/notes/conformance/adapter_notes.py with PYTHONPATH=$TMP/faults/1/src:$ROOT/examples/notes/conformance
+=== in $TMP/faults: spine conform $ROOT/examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/1/src
 exit 1
 --- stdout
 | error   diverges           draft/trash role=owner: after trash(role=owner): spine expects rejected in draft, code gave ok in trashed
@@ -137,22 +137,13 @@ exit 1
 | info    coverage           1426 sequences up to 4 steps: 45 of 45 state/event/variable cases exercised
 | -- 3 errors, 4 findings
 |
-=== in $TMP/faults: spine conform $ROOT/examples/notes/spec/notes/spine.yaml --adapter $ROOT/examples/notes/conformance/adapter_notes.py with PYTHONPATH=$TMP/faults/9/src:$ROOT/examples/notes/conformance
+=== in $TMP/faults: spine conform $ROOT/examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/9/src
 exit 1
 --- stdout
-| error   adapter-failed     $ROOT/examples/notes/conformance/adapter_notes.py: new() raised ModuleNotFoundError: No module named 'no_such_module'
+| error   adapter-failed     python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py: new() raised ModuleNotFoundError: No module named 'no_such_module'
 | -- 1 errors, 1 findings
 |
-=== in $TMP/faults: spine conform $ROOT/examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/1/src:$ROOT/examples/notes/conformance
-exit 1
---- stdout
-| error   diverges           draft/trash role=owner: after trash(role=owner): spine expects rejected in draft, code gave ok in trashed
-| error   diverges           trashed/edit role=owner: after publish(role=owner) -> trash(role=owner) -> edit(role=owner): spine expects rejected in trashed, code gave ok in trashed
-| error   diverges           trashed/edit role=editor: after publish(role=owner) -> trash(role=owner) -> edit(role=editor): spine expects rejected in trashed, code gave ok in trashed
-| info    coverage           1426 sequences up to 4 steps: 45 of 45 state/event/variable cases exercised
-| -- 3 errors, 4 findings
-|
-=== in $TMP/faults: spine conform --format json --junit REPORT $ROOT/examples/notes/spec/notes/spine.yaml --adapter $ROOT/examples/notes/conformance/adapter_notes.py with PYTHONPATH=$TMP/faults/1/src:$ROOT/examples/notes/conformance
+=== in $TMP/faults: spine conform --format json --junit REPORT $ROOT/examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/1/src
 exit 1
 --- stdout
 | {
@@ -189,7 +180,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="3" failures="3"><testcase classname="spine conform" name="diverges draft/trash role=owner"><failure message="after trash(role=owner): spine expects rejected in draft, code gave ok in trashed">after trash(role=owner): spine expects rejected in draft, code gave ok in trashed</failure></testcase><testcase classname="spine conform" name="diverges trashed/edit role=owner"><failure message="after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=owner): spine expects rejected in trashed, code gave ok in trashed">after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=owner): spine expects rejected in trashed, code gave ok in trashed</failure></testcase><testcase classname="spine conform" name="diverges trashed/edit role=editor"><failure message="after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=editor): spine expects rejected in trashed, code gave ok in trashed">after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=editor): spine expects rejected in trashed, code gave ok in trashed</failure></testcase></testsuite>
-=== in $TMP/faults: spine conform --format json --junit REPORT $ROOT/examples/notes/spec/notes/spine.yaml --adapter $ROOT/examples/notes/conformance/adapter_notes.py with PYTHONPATH=$TMP/faults/9/src:$ROOT/examples/notes/conformance
+=== in $TMP/faults: spine conform --format json --junit REPORT $ROOT/examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/9/src
 exit 1
 --- stdout
 | {
@@ -199,7 +190,7 @@ exit 1
 |     {
 |       "code": "adapter-failed",
 |       "severity": "error",
-|       "where": "$ROOT/examples/notes/conformance/adapter_notes.py",
+|       "where": "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py",
 |       "message": "new() raised ModuleNotFoundError: No module named 'no_such_module'"
 |     }
 |   ]
@@ -207,45 +198,8 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed $ROOT/examples/notes/conformance/adapter_notes.py"><failure message="new() raised ModuleNotFoundError: No module named 'no_such_module'">new() raised ModuleNotFoundError: No module named 'no_such_module'</failure></testcase></testsuite>
-=== in $TMP/faults: spine conform --format json --junit REPORT $ROOT/examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/1/src:$ROOT/examples/notes/conformance
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "conform",
-|   "findings": [
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "draft/trash role=owner",
-|       "message": "after trash(role=owner): spine expects rejected in draft, code gave ok in trashed"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "trashed/edit role=owner",
-|       "message": "after publish(role=owner) -> trash(role=owner) -> edit(role=owner): spine expects rejected in trashed, code gave ok in trashed"
-|     },
-|     {
-|       "code": "diverges",
-|       "severity": "error",
-|       "where": "trashed/edit role=editor",
-|       "message": "after publish(role=owner) -> trash(role=owner) -> edit(role=editor): spine expects rejected in trashed, code gave ok in trashed"
-|     },
-|     {
-|       "code": "coverage",
-|       "severity": "info",
-|       "where": "1426 sequences up to 4 steps",
-|       "message": "45 of 45 state/event/variable cases exercised"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="3" failures="3"><testcase classname="spine conform" name="diverges draft/trash role=owner"><failure message="after trash(role=owner): spine expects rejected in draft, code gave ok in trashed">after trash(role=owner): spine expects rejected in draft, code gave ok in trashed</failure></testcase><testcase classname="spine conform" name="diverges trashed/edit role=owner"><failure message="after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=owner): spine expects rejected in trashed, code gave ok in trashed">after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=owner): spine expects rejected in trashed, code gave ok in trashed</failure></testcase><testcase classname="spine conform" name="diverges trashed/edit role=editor"><failure message="after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=editor): spine expects rejected in trashed, code gave ok in trashed">after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=editor): spine expects rejected in trashed, code gave ok in trashed</failure></testcase></testsuite>
-=== in $TMP/faults: spine conform --format json --junit REPORT 2/spine.yaml --adapter $ROOT/examples/notes/conformance/adapter_notes.py with PYTHONPATH=$TMP/faults/2/src:$ROOT/examples/notes/conformance
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py"><failure message="new() raised ModuleNotFoundError: No module named 'no_such_module'">new() raised ModuleNotFoundError: No module named 'no_such_module'</failure></testcase></testsuite>
+=== in $TMP/faults: spine conform --format json --junit REPORT 2/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/2/src
 exit 1
 --- stdout
 | {
@@ -270,7 +224,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges trashed/restore role=editor"><failure message="after publish(role=owner) -&gt; trash(role=owner) -&gt; restore(role=editor): spine expects ok in active, code gave rejected in trashed">after publish(role=owner) -&gt; trash(role=owner) -&gt; restore(role=editor): spine expects ok in active, code gave rejected in trashed</failure></testcase></testsuite>
-=== in $TMP/faults: spine conform 2/spine.yaml --adapter $ROOT/examples/notes/conformance/adapter_notes.py with PYTHONPATH=$TMP/faults/2/src:$ROOT/examples/notes/conformance
+=== in $TMP/faults: spine conform 2/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/2/src
 exit 1
 --- stdout
 | error   diverges           trashed/restore role=editor: after publish(role=owner) -> trash(role=owner) -> restore(role=editor): spine expects ok in active, code gave rejected in trashed
