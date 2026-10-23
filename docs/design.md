@@ -152,8 +152,9 @@ decision tables hang on transitions, sequence rules and the spine judge the same
 
 `new()`, `apply()`, `observe()`; translates, never decides; owned by the oracle side; observes
 real side effects. An adapter runs as a program speaking the same three operations as JSON
-lines over stdin and stdout (`docs/adr/0003-adapter-protocol.md`); a Python file is served that
-way by `tools/adapter_shim.py` (`docs/adr/0004-go-spine.md`), and an adapter in any other
+lines over stdin and stdout (`docs/adr/0003-adapter-protocol.md`), named by a command line in
+`conformance/adapter_<machine>.cmd` (`docs/adr/0007-no-language-built-in.md`). A Python file is
+served that way by `tools/adapter_shim.py`, which its line calls; an adapter in any other
 language is its own program. Details in `docs/reference/tool-contract.md`.
 
 ### Checking the checker

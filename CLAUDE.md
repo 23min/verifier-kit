@@ -60,12 +60,12 @@ go -C tools test ./internal/spine/ -update    # writes spine's record again; rev
 go -C tools test ./internal/verify/ -update   # writes ./verify's record again; review its diff
 ```
 
-Setup needs Python 3; PyYAML and the `git` program for the ref_sync example's checks; Elixir
-1.18 or later for the elixir_job example's; and Go 1.27, which `./verify` and `demo/faults.sh`
-build `spine` with. The
-devcontainer image has all five; don't create a `.venv` there
-(the repo is shared with the host). Elsewhere: `uv venv && uv pip install -r requirements.txt`;
-`./verify` and `demo/faults.sh` use `.venv` automatically when it exists.
+Setup needs Python 3 as `python3` on `PATH`; PyYAML and the `git` program for the ref_sync
+example's checks; Elixir 1.18 or later for the elixir_job example's; and Go 1.27, which
+`./verify` and `demo/faults.sh` build `spine` with. The devcontainer image has all five; don't
+create a `.venv` there (the repo is shared with the host). Elsewhere:
+`uv venv && uv pip install -r requirements.txt`, then `source .venv/bin/activate`, so that the
+examples' command lines find its `python3`; `./verify` picks no interpreter itself.
 `demo/live-builder.sh` starts a real Claude Code session and costs money; run it only when asked.
 
 ## Handoffs

@@ -1,9 +1,10 @@
 # Example: elixir_job
 
 One background job with retries, as Oban runs them, written in Elixir. Where notes and ref_sync
-are Python, this example shows the toolkit checking a project in another language: its adapter,
-content checks and mutation are `.cmd` files, each holding one command line that `./verify` runs
-from this folder (`docs/adr/0005-verify-commands.md`). The chapter (`spec/job/chapter.md`) gives
+are Python, this example shows the toolkit checking a project in another language. Its adapter,
+content checks and mutation are `.cmd` files, as every example's are, each holding one command
+line that `./verify` runs from this folder (`docs/adr/0007-no-language-built-in.md`); its lines
+run Elixir where theirs call the Python helpers in `tools/`. The chapter (`spec/job/chapter.md`) gives
 the rules, J1 and J2, and the scenarios J01-J07. The work is tracked in issue #35.
 
 ## What it shows

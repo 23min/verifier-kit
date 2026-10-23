@@ -6,7 +6,7 @@
 #   demo/faults.sh 3        run scenario 3 only
 #
 # Exit 0 when every scenario behaves as expected, 1 otherwise. CI runs this on every push.
-# Needs python3 with PyYAML (or a .venv), Go, git, and elixir for scenarios 11-14.
+# Needs python3 with PyYAML, Go, git, and elixir for scenarios 11-14.
 set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SCRATCH="$(mktemp -d)"
@@ -19,12 +19,6 @@ FAILS=0
 RAN=0
 OUT=""
 CODE=0
-
-if [ -n "${PYTHON:-}" ]; then PY="$PYTHON"
-elif [ -x "$ROOT/.venv/bin/python" ]; then PY="$ROOT/.venv/bin/python"
-else PY=python3
-fi
-export PYTHON="$PY"   # ./verify inside the scratch copy uses the same interpreter
 
 fresh() {                       # a clean copy of the repo to break
   rm -rf "$W"
@@ -81,7 +75,7 @@ fi
 
 if scenario 3 "A YAML slip: a rule written with 'on:' instead of 'event:'" \
    "spine check refuses the file and says why ('on' is read as true in YAML 1.1)"; then
-  "$PY" - "$W/examples/notes/spec/notes/spine.yaml" <<'EOF'
+  python3 - "$W/examples/notes/spec/notes/spine.yaml" <<'EOF'
 import sys
 p = sys.argv[1]
 s = open(p).read()
@@ -131,31 +125,25 @@ fi
 
 if scenario 8 "The adapter, the content checks and the mutation script are removed" \
    "each missing piece is an error; nothing is skipped silently"; then
-  mv "$W/examples/notes/conformance/adapter_notes.py" "$W/examples/notes/conformance/adapter_notes.py.off"
-  rm "$W/examples/notes/checks/notes/test_content.py"
+  rm "$W/examples/notes/conformance/adapter_notes.cmd" "$W/examples/notes/checks/run.cmd"
   rm -r "$W/examples/notes/mutation"
   show ./verify --full
-  expect 1 "no-adapter         notes: examples/notes/conformance/adapter_notes.py not found" \
-    "no-checks          examples/notes/checks: no test_* functions found" \
-    "no-mutation        examples/notes/mutation: no examples/notes/mutation/mutate_*.py"
+  expect 1 "no-adapter         notes: examples/notes/conformance/adapter_notes.cmd not found" \
+    "no-checks          examples/notes/checks: no examples/notes/checks/run.cmd" \
+    "no-mutation        examples/notes/mutation: no examples/notes/mutation/mutate_*.cmd"
 fi
 
 if scenario 9 "The service cannot be imported: it imports a module that does not exist" \
    "the adapter and the content checks each report it as a finding, not a traceback"; then
   echo "import no_such_module" >> "$W/examples/notes/src/notes_app.py"
   show ./verify examples/notes
-  expect 1 "adapter-failed     examples/notes/conformance/adapter_notes.py: new() raised ModuleNotFoundError: No module named 'no_such_module'" \
-    "check-unloadable   examples/notes/checks/notes/test_content.py: cannot be imported: ModuleNotFoundError"
+  expect 1 "adapter-failed     env PYTHONPATH=src adapter_shim.py conformance/adapter_notes.py: new() raised ModuleNotFoundError: No module named 'no_such_module'" \
+    "check-unloadable   checks/notes/test_content.py: cannot be imported: ModuleNotFoundError"
 fi
 
-if scenario 10 "The service as first written, through the adapter protocol" \
-   "spine conform --adapter-cmd, through the shim, finds the same two bugs as scenario 1"; then
-  cp "$W/examples/notes/demo/notes_app_as_written.py" "$W/examples/notes/src/notes_app.py"
-  show env PYTHONPATH=examples/notes/src:examples/notes/conformance "$SPINE" conform \
-    examples/notes/spec/notes/spine.yaml \
-    --adapter-cmd "$(printf %q "$PY") tools/adapter_shim.py examples/notes/conformance/adapter_notes.py"
-  expect 1 "diverges           draft/trash role=owner" "diverges           trashed/edit role=owner"
-fi
+# Scenario 10 ran notes as first written through the adapter protocol; since #69 notes' adapter
+# is a command line, so scenario 1 does that. Its number stays unused, so that earlier citations
+# of the scenarios after it stay right.
 
 # Scenarios 11-13 seed faults in the elixir_job example, whose pieces are .cmd commands.
 JOB="examples/elixir_job/src/job.ex"
@@ -212,10 +200,10 @@ if scenario 15 "The agent's Stop hook on a machine without python3, nor a sessio
   done
   for attempt in 1 2; do
     echo "    -- attempt $attempt"
-    show env -u PYTHON -u CLAUDE_CODE_SESSION_ID PATH="$NOPY" CLAUDE_PROJECT_DIR="$W" VERIFY_MAX_ATTEMPTS=1 \
+    show env -u CLAUDE_CODE_SESSION_ID PATH="$NOPY" CLAUDE_PROJECT_DIR="$W" VERIFY_MAX_ATTEMPTS=1 \
       bash -c 'echo "{}" | integrations/claude-code/hooks/stop-verify.sh'
     expect 0
-    show "$PY" -c "$READ_REPLY" "$OUT"
+    show python3 -c "$READ_REPLY" "$OUT"
     if [ "$attempt" = 1 ]; then
       expect 0 "decision: block" "FAIL  content checks" "every session shares this count"
     else
@@ -237,7 +225,7 @@ exit 1
 EOF
   show env CLAUDE_PROJECT_DIR="$W" CLAUDE_CODE_SESSION_ID=demo \
     bash -c 'echo "{}" | integrations/claude-code/hooks/stop-verify.sh'
-  show "$PY" -c 'import json, sys
+  show python3 -c 'import json, sys
 want = [b"FAIL  \"quotes\", a backslash \\ and \\n as text",
         b"      error   a tab\t, a bell\a, an escape \x1b[31m, a unit separator \x1f, a carriage return \r here",
         b"      warning caf\xc3\xa9, \xe2\x98\x83, and a byte that is not UTF-8: \xff",
@@ -252,7 +240,7 @@ if scenario 17 "The agent's Stop hook when the project folder it is given doesn'
    "a block saying ./verify did not run, rather than letting the builder stop"; then
   show env CLAUDE_PROJECT_DIR="$W/gone" CLAUDE_CODE_SESSION_ID=demo \
     bash -c 'echo "{}" | integrations/claude-code/hooks/stop-verify.sh'
-  show "$PY" -c "$READ_REPLY" "$OUT"
+  show python3 -c "$READ_REPLY" "$OUT"
   expect 0 "decision: block" "cannot enter the project folder" "so ./verify did not run"
 fi
 

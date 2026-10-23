@@ -18,9 +18,6 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 W="$(mktemp -d)/project"
 MODEL="${MODEL:-sonnet}"
-if [ -z "${PYTHON:-}" ] && [ -x "$ROOT/.venv/bin/python" ]; then
-  export PYTHON="$ROOT/.venv/bin/python"   # ./verify in the scratch project uses the same interpreter
-fi
 
 mkdir -p "$W/.claude"
 cp -r "$ROOT/examples/notes/." "$W/"

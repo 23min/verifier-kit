@@ -13,11 +13,11 @@
 # and a missing piece (no spine, no adapter, no content checks, no mutation script under
 # --full) is an error.
 #
-# A piece is a Python file, or, for code in any language, a .cmd file holding one command
-# line: conformance/adapter_<machine>.cmd, checks/run.cmd, mutation/mutate_<name>.cmd. A
-# command runs from its root, without a shell, with VERIFY_SPINE set to the command line that
-# runs spine; checks and mutation pass when it exits 0. A piece given both ways is an error.
-# A Python mutation script gets VERIFY_SPINE too.
+# Every piece is a .cmd file holding one command line, in any language:
+# conformance/adapter_<machine>.cmd, checks/run.cmd, mutation/mutate_<name>.cmd. A command runs
+# from its root, without a shell, with tools/ first on its PATH, so a line can name a helper
+# such as adapter_shim.py or run_checks.py, and with VERIFY_SPINE set to the command line that
+# runs spine; checks and mutation pass when it exits 0.
 #
 # spine is the Go one in tools/, which every run builds into tools/bin/spine with Go; Go's
 # build cache makes that quick when nothing changed. Without Go, every step fails.
@@ -27,8 +27,6 @@
 #   VERIFY_BRANCH   branch name the guard maps to a role (default: current git branch)
 #   VERIFY_REPORTS  folder for JUnit reports from the spine steps
 #   VERIFY_VERBOSE  1 prints every step's output, not only failures
-#   PYTHON          interpreter (default: .venv/bin/python when present, else python3), also
-#                   the one spine serves a Python adapter with
 #
 # Exit 0 when everything passes, 1 when any step fails, 2 when the script is misused.
 set -uo pipefail
@@ -36,16 +34,12 @@ CALLER="$PWD"
 cd "$(dirname "$0")" || exit 2
 HERE="$(pwd -P)"
 
-if [ -n "${PYTHON:-}" ]; then PY="$PYTHON"
-elif [ -x .venv/bin/python ]; then PY=.venv/bin/python
-else PY=python3
-fi
 FULL=0
 ROOT=""
 for arg in "$@"; do
   case "$arg" in
     --full) FULL=1 ;;
-    -h|--help) sed -n '2,33p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '2,31p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     -*) echo "verify: unknown argument $arg" >&2; exit 2 ;;
     *)
       if [ -n "$ROOT" ]; then echo "verify: only one ROOT, got $ROOT and $arg" >&2; exit 2; fi
@@ -53,14 +47,8 @@ for arg in "$@"; do
   esac
 done
 
-# A .cmd piece runs from its root, so it gets the interpreter and spine by absolute path.
-case "$PY" in
-  */*) PYABS="$(cd "$(dirname "$PY")" && pwd -P)/$(basename "$PY")" ;;
-  *) PYABS="$PY" ;;
-esac
-export PYTHON="$PYABS"   # spine serves a Python adapter with it
 SPINE="$HERE/tools/bin/spine"
-SPINE_LINE="$("$PY" -c 'import shlex, sys; print(shlex.join(sys.argv[1:]))' "$SPINE")"
+SPINE_LINE="$(python3 -c 'import shlex, sys; print(shlex.join(sys.argv[1:]))' "$SPINE")"
 REPORTS="${VERIFY_REPORTS:-}"
 case "$REPORTS" in ''|/*) ;; *) REPORTS="$HERE/$REPORTS" ;; esac
 
@@ -104,13 +92,13 @@ junit() {  # junit STEP : extra arguments for a JUnit report, when reports are w
 
 spine() { "$SPINE" "$@"; }
 
-# in_root DIR COMMAND... : run COMMAND from DIR, with VERIFY_SPINE set.
-in_root() { local d="$1"; shift; ( cd "$d" && VERIFY_SPINE="$SPINE_LINE" "$@" ); }
+# in_root DIR COMMAND... : run COMMAND from DIR, with tools/ first on PATH and VERIFY_SPINE set.
+in_root() { local d="$1"; shift; ( cd "$d" && PATH="$HERE/tools:$PATH" VERIFY_SPINE="$SPINE_LINE" "$@" ); }
 
 # A .cmd file, read the way spine conform --adapter-cmd reads its command: one line, split by
 # shell quoting rules, run without a shell. "line FILE SHOWN" prints the line; "exec FILE SHOWN"
 # runs it in place of this process. Either prints a bad-command error line and exits 1 when the
-# file holds no single command line.
+# file holds no single command line, and "exec" does when its program can't be started.
 CMD_PY='
 import os, shlex, sys
 mode, path, shown = sys.argv[1:4]
@@ -142,8 +130,7 @@ sys.stdout.flush()
 try:
     os.execvp(words[0], words)
 except OSError as exc:
-    print("%s: cannot run %s: %s" % (shown, words[0], exc.strerror))
-    sys.exit(1)
+    bad("cannot run %s: %s" % (words[0], exc.strerror))
 '
 
 # prefix ABSOLUTE_PATH : what goes in front of spec/, checks/ ... for that root: nothing for
@@ -194,7 +181,7 @@ fi
 # verify_root PREFIX : every step for one root; PREFIX is empty or ends in a slash.
 verify_root() {
   local p="$1" jp="${1//\//-}" dir="${1:-.}" spec m machines=0 mutate mutants=0 name
-  local adapter line pychecks
+  local adapter line
   label="${p:+${p%/}: }"
   [ -n "$p" ] && printf '== %s\n' "${p%/}"
 
@@ -226,22 +213,15 @@ verify_root() {
 
     adapter="${p}conformance/adapter_$m"
     mapfile -t extra < <(junit "$jp$m-conform")
-    if [ -f "$adapter.py" ] && [ -f "$adapter.cmd" ]; then
-      missing "$m: code conforms to spine" ambiguous-piece "$m" \
-          "both $adapter.py and $adapter.cmd; keep one"
-    elif [ -f "$adapter.py" ]; then
-      run "$m: code conforms to spine" env PYTHONPATH="${p}src:${p}conformance" \
-          "$SPINE" conform "$spec" --adapter "$adapter.py" "${extra[@]}"
-    elif [ -f "$adapter.cmd" ]; then
-      if line="$(in_root "$dir" "$PYABS" -c "$CMD_PY" line "conformance/adapter_$m.cmd" "$adapter.cmd")"; then
+    if [ -f "$adapter.cmd" ]; then
+      if line="$(in_root "$dir" python3 -c "$CMD_PY" line "conformance/adapter_$m.cmd" "$adapter.cmd")"; then
         run "$m: code conforms to spine" in_root "$dir" "$SPINE" \
             conform "spec/$m/spine.yaml" --adapter-cmd "$line" "${extra[@]}"
       else
         broken "$m: code conforms to spine" "$line"
       fi
     else
-      missing "$m: code conforms to spine" no-adapter "$m" \
-          "$adapter.py not found, nor adapter_$m.cmd"
+      missing "$m: code conforms to spine" no-adapter "$m" "$adapter.cmd not found"
     fi
   done
   if [ "$machines" = 0 ]; then
@@ -249,41 +229,22 @@ verify_root() {
   fi
 
   # ---- content checks: what the spine cannot see -----------------------------------
-  # --require-checks: finding none (a missing checks/ folder included) is a no-checks error.
-  pychecks=""
-  [ -d "${p}checks" ] && pychecks="$(find "${p}checks" -name 'test_*.py' -print -quit)"
-  if [ -f "${p}checks/run.cmd" ] && [ -n "$pychecks" ]; then
-    missing "content checks" ambiguous-piece "${p}checks" \
-        "both ${p}checks/run.cmd and Python checks such as $pychecks; keep one"
-  elif [ -f "${p}checks/run.cmd" ]; then
-    run "content checks" in_root "$dir" "$PYABS" -c "$CMD_PY" exec checks/run.cmd "${p}checks/run.cmd"
+  if [ -f "${p}checks/run.cmd" ]; then
+    run "content checks" in_root "$dir" python3 -c "$CMD_PY" exec checks/run.cmd "${p}checks/run.cmd"
   else
-    run "content checks" env PYTHONPATH="${p}src" "$PY" tools/run_checks.py "${p}checks" --require-checks
+    missing "content checks" no-checks "${p}checks" "no ${p}checks/run.cmd"
   fi
 
   # ---- check the checker ------------------------------------------------------------
   if [ "$FULL" = 1 ]; then
-    for mutate in "${p}"mutation/mutate_*.py "${p}"mutation/mutate_*.cmd; do
+    for mutate in "${p}"mutation/mutate_*.cmd; do
       [ -e "$mutate" ] || continue
       mutants=$((mutants + 1))
-      name="$(basename "${mutate%.*}")"
-      case "$mutate" in
-        *.py)
-          if [ -f "${mutate%.py}.cmd" ]; then
-            missing "mutants killed ($name)" ambiguous-piece "${p}mutation" \
-                "both $mutate and ${mutate%.py}.cmd; keep one"
-          else
-            run "mutants killed ($name)" env VERIFY_SPINE="$SPINE_LINE" "$PY" "$mutate"
-          fi ;;
-        *)  # a .cmd beside a .py of the same name was reported with the .py
-          [ -f "${mutate%.cmd}.py" ] && continue
-          run "mutants killed ($name)" in_root "$dir" "$PYABS" -c "$CMD_PY" exec \
-              "mutation/$name.cmd" "$mutate" ;;
-      esac
+      name="$(basename "$mutate" .cmd)"
+      run "mutants killed ($name)" in_root "$dir" python3 -c "$CMD_PY" exec "mutation/$name.cmd" "$mutate"
     done
     if [ "$mutants" = 0 ]; then
-      missing "mutants killed" no-mutation "${p}mutation" \
-          "no ${p}mutation/mutate_*.py or mutate_*.cmd"
+      missing "mutants killed" no-mutation "${p}mutation" "no ${p}mutation/mutate_*.cmd"
     fi
   else
     skip "mutants killed" "fast mode; --full runs them"

@@ -11,5 +11,4 @@ exit 0
 | -- all steps passed
 |
 --- stderr
-| python from .venv
 |

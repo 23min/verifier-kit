@@ -2,15 +2,6 @@
 exit 1
 --- stdout
 | skip  guard (VERIFY_BASE not set)
-| == examples/ambiguous
-| ok    lamp: spine is sound
-| ok    lamp: behaviors match spine
-| ok    lamp: checks cite current spine
-| FAIL  lamp: code conforms to spine
-|       error   ambiguous-piece    lamp: both examples/ambiguous/conformance/adapter_lamp.py and examples/ambiguous/conformance/adapter_lamp.cmd; keep one
-| FAIL  content checks
-|       error   ambiguous-piece    examples/ambiguous/checks: both examples/ambiguous/checks/run.cmd and Python checks such as examples/ambiguous/checks/lamp/test_lamp.py; keep one
-| skip  mutants killed (fast mode; --full runs them)
 | == examples/badcommands
 | ok    empty: spine is sound
 | skip  empty: behaviors match spine (no examples/badcommands/spec/empty/behaviors/)
@@ -33,7 +24,7 @@ exit 1
 | FAIL  unsplit: code conforms to spine
 |       error   bad-command        examples/badcommands/conformance/adapter_unsplit.cmd: cannot be split: No closing quotation
 | FAIL  content checks
-|       examples/badcommands/checks/run.cmd: cannot run no-such-program: No such file or directory
+|       error   bad-command        examples/badcommands/checks/run.cmd: cannot run no-such-program: No such file or directory
 | skip  mutants killed (fast mode; --full runs them)
 | == examples/commands
 | ok    lamp: spine is sound
@@ -46,8 +37,7 @@ exit 1
 | FAIL  spines found
 |       error   no-machines        examples/empty/spec: no examples/empty/spec/*/spine.yaml
 | FAIL  content checks
-|       error   no-checks          examples/empty/checks: no test_* functions found
-|       -- 1 errors, 0 checks run
+|       error   no-checks          examples/empty/checks: no examples/empty/checks/run.cmd
 | skip  mutants killed (fast mode; --full runs them)
 | == examples/failing
 | ok    lamp: spine is sound
@@ -57,8 +47,8 @@ exit 1
 |       error   diverges           lit/press : after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 2 findings
 | FAIL  content checks
-|       error   check-failed       examples/failing/checks/lamp/test_lamp.py::test_a_second_press_darkens_it: AssertionError: lit
-|       error   check-unloadable   examples/failing/checks/lamp/test_unloadable.py: cannot be imported: ModuleNotFoundError: No module named 'no_such_module'
+|       error   check-failed       checks/lamp/test_lamp.py::test_a_second_press_darkens_it: AssertionError: lit
+|       error   check-unloadable   checks/lamp/test_unloadable.py: cannot be imported: ModuleNotFoundError: No module named 'no_such_module'
 |       -- 2 errors, 2 checks run
 | skip  mutants killed (fast mode; --full runs them)
 | == examples/failingcommands
@@ -76,10 +66,9 @@ exit 1
 | skip  lamp: behaviors match spine (no examples/missing/spec/lamp/behaviors/)
 | skip  lamp: checks cite current spine (no examples/missing/checks/lamp/)
 | FAIL  lamp: code conforms to spine
-|       error   no-adapter         lamp: examples/missing/conformance/adapter_lamp.py not found, nor adapter_lamp.cmd
+|       error   no-adapter         lamp: examples/missing/conformance/adapter_lamp.cmd not found
 | FAIL  content checks
-|       error   no-checks          examples/missing/checks: no test_* functions found
-|       -- 1 errors, 0 checks run
+|       error   no-checks          examples/missing/checks: no examples/missing/checks/run.cmd
 | skip  mutants killed (fast mode; --full runs them)
 | == examples/python
 | ok    lamp: spine is sound
@@ -88,6 +77,15 @@ exit 1
 | ok    lamp: code conforms to spine
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
+| == examples/pythonnames
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| FAIL  lamp: code conforms to spine
+|       error   no-adapter         lamp: examples/pythonnames/conformance/adapter_lamp.cmd not found
+| FAIL  content checks
+|       error   no-checks          examples/pythonnames/checks: no examples/pythonnames/checks/run.cmd
+| skip  mutants killed (fast mode; --full runs them)
 | == examples/unsound
 | FAIL  lamp: spine is sound
 |       error   undecided-cell     broken/drop: nothing says what "drop" does in "broken"
@@ -95,7 +93,7 @@ exit 1
 | skip  lamp: other steps need a sound spine
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
-| -- 16 step(s) failed: examples/ambiguous: lamp: code conforms to spine, examples/ambiguous: content checks, examples/badcommands: empty: code conforms to spine, examples/badcommands: twolines: code conforms to spine, examples/badcommands: unreadable: code conforms to spine, examples/badcommands: unsplit: code conforms to spine, examples/badcommands: content checks, examples/empty: spines found, examples/empty: content checks, examples/failing: lamp: code conforms to spine, examples/failing: content checks, examples/failingcommands: lamp: code conforms to spine, examples/failingcommands: content checks, examples/missing: lamp: code conforms to spine, examples/missing: content checks, examples/unsound: lamp: spine is sound
+| -- 16 step(s) failed: examples/badcommands: empty: code conforms to spine, examples/badcommands: twolines: code conforms to spine, examples/badcommands: unreadable: code conforms to spine, examples/badcommands: unsplit: code conforms to spine, examples/badcommands: content checks, examples/empty: spines found, examples/empty: content checks, examples/failing: lamp: code conforms to spine, examples/failing: content checks, examples/failingcommands: lamp: code conforms to spine, examples/failingcommands: content checks, examples/missing: lamp: code conforms to spine, examples/missing: content checks, examples/pythonnames: lamp: code conforms to spine, examples/pythonnames: content checks, examples/unsound: lamp: spine is sound
 |
 --- stderr
 |
@@ -125,16 +123,6 @@ exit 2
 exit 1
 --- stdout
 | skip  guard (VERIFY_BASE not set)
-| == examples/ambiguous
-| ok    lamp: spine is sound
-| ok    lamp: behaviors match spine
-| ok    lamp: checks cite current spine
-| FAIL  lamp: code conforms to spine
-|       error   ambiguous-piece    lamp: both examples/ambiguous/conformance/adapter_lamp.py and examples/ambiguous/conformance/adapter_lamp.cmd; keep one
-| FAIL  content checks
-|       error   ambiguous-piece    examples/ambiguous/checks: both examples/ambiguous/checks/run.cmd and Python checks such as examples/ambiguous/checks/lamp/test_lamp.py; keep one
-| FAIL  mutants killed (mutate_lamp)
-|       error   ambiguous-piece    examples/ambiguous/mutation: both examples/ambiguous/mutation/mutate_lamp.py and examples/ambiguous/mutation/mutate_lamp.cmd; keep one
 | == examples/badcommands
 | ok    empty: spine is sound
 | skip  empty: behaviors match spine (no examples/badcommands/spec/empty/behaviors/)
@@ -157,9 +145,9 @@ exit 1
 | FAIL  unsplit: code conforms to spine
 |       error   bad-command        examples/badcommands/conformance/adapter_unsplit.cmd: cannot be split: No closing quotation
 | FAIL  content checks
-|       examples/badcommands/checks/run.cmd: cannot run no-such-program: No such file or directory
+|       error   bad-command        examples/badcommands/checks/run.cmd: cannot run no-such-program: No such file or directory
 | FAIL  mutants killed (mutate_one)
-|       examples/badcommands/mutation/mutate_one.cmd: cannot run no-such-program: No such file or directory
+|       error   bad-command        examples/badcommands/mutation/mutate_one.cmd: cannot run no-such-program: No such file or directory
 | == examples/commands
 | ok    lamp: spine is sound
 | skip  lamp: behaviors match spine (no examples/commands/spec/lamp/behaviors/)
@@ -171,10 +159,9 @@ exit 1
 | FAIL  spines found
 |       error   no-machines        examples/empty/spec: no examples/empty/spec/*/spine.yaml
 | FAIL  content checks
-|       error   no-checks          examples/empty/checks: no test_* functions found
-|       -- 1 errors, 0 checks run
+|       error   no-checks          examples/empty/checks: no examples/empty/checks/run.cmd
 | FAIL  mutants killed
-|       error   no-mutation        examples/empty/mutation: no examples/empty/mutation/mutate_*.py or mutate_*.cmd
+|       error   no-mutation        examples/empty/mutation: no examples/empty/mutation/mutate_*.cmd
 | == examples/failing
 | ok    lamp: spine is sound
 | ok    lamp: behaviors match spine
@@ -183,8 +170,8 @@ exit 1
 |       error   diverges           lit/press : after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 2 findings
 | FAIL  content checks
-|       error   check-failed       examples/failing/checks/lamp/test_lamp.py::test_a_second_press_darkens_it: AssertionError: lit
-|       error   check-unloadable   examples/failing/checks/lamp/test_unloadable.py: cannot be imported: ModuleNotFoundError: No module named 'no_such_module'
+|       error   check-failed       checks/lamp/test_lamp.py::test_a_second_press_darkens_it: AssertionError: lit
+|       error   check-unloadable   checks/lamp/test_unloadable.py: cannot be imported: ModuleNotFoundError: No module named 'no_such_module'
 |       -- 2 errors, 2 checks run
 | FAIL  mutants killed (mutate_lamp)
 |       error   mutant-survived    lamp: a second press leaves it lit
@@ -205,12 +192,11 @@ exit 1
 | skip  lamp: behaviors match spine (no examples/missing/spec/lamp/behaviors/)
 | skip  lamp: checks cite current spine (no examples/missing/checks/lamp/)
 | FAIL  lamp: code conforms to spine
-|       error   no-adapter         lamp: examples/missing/conformance/adapter_lamp.py not found, nor adapter_lamp.cmd
+|       error   no-adapter         lamp: examples/missing/conformance/adapter_lamp.cmd not found
 | FAIL  content checks
-|       error   no-checks          examples/missing/checks: no test_* functions found
-|       -- 1 errors, 0 checks run
+|       error   no-checks          examples/missing/checks: no examples/missing/checks/run.cmd
 | FAIL  mutants killed
-|       error   no-mutation        examples/missing/mutation: no examples/missing/mutation/mutate_*.py or mutate_*.cmd
+|       error   no-mutation        examples/missing/mutation: no examples/missing/mutation/mutate_*.cmd
 | == examples/python
 | ok    lamp: spine is sound
 | ok    lamp: behaviors match spine
@@ -218,6 +204,16 @@ exit 1
 | ok    lamp: code conforms to spine
 | ok    content checks
 | ok    mutants killed (mutate_lamp)
+| == examples/pythonnames
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| FAIL  lamp: code conforms to spine
+|       error   no-adapter         lamp: examples/pythonnames/conformance/adapter_lamp.cmd not found
+| FAIL  content checks
+|       error   no-checks          examples/pythonnames/checks: no examples/pythonnames/checks/run.cmd
+| FAIL  mutants killed
+|       error   no-mutation        examples/pythonnames/mutation: no examples/pythonnames/mutation/mutate_*.cmd
 | == examples/unsound
 | FAIL  lamp: spine is sound
 |       error   undecided-cell     broken/drop: nothing says what "drop" does in "broken"
@@ -225,8 +221,8 @@ exit 1
 | skip  lamp: other steps need a sound spine
 | ok    content checks
 | FAIL  mutants killed
-|       error   no-mutation        examples/unsound/mutation: no examples/unsound/mutation/mutate_*.py or mutate_*.cmd
-| -- 23 step(s) failed: examples/ambiguous: lamp: code conforms to spine, examples/ambiguous: content checks, examples/ambiguous: mutants killed (mutate_lamp), examples/badcommands: empty: code conforms to spine, examples/badcommands: twolines: code conforms to spine, examples/badcommands: unreadable: code conforms to spine, examples/badcommands: unsplit: code conforms to spine, examples/badcommands: content checks, examples/badcommands: mutants killed (mutate_one), examples/empty: spines found, examples/empty: content checks, examples/empty: mutants killed, examples/failing: lamp: code conforms to spine, examples/failing: content checks, examples/failing: mutants killed (mutate_lamp), examples/failingcommands: lamp: code conforms to spine, examples/failingcommands: content checks, examples/failingcommands: mutants killed (mutate_lamp), examples/missing: lamp: code conforms to spine, examples/missing: content checks, examples/missing: mutants killed, examples/unsound: lamp: spine is sound, examples/unsound: mutants killed
+|       error   no-mutation        examples/unsound/mutation: no examples/unsound/mutation/mutate_*.cmd
+| -- 23 step(s) failed: examples/badcommands: empty: code conforms to spine, examples/badcommands: twolines: code conforms to spine, examples/badcommands: unreadable: code conforms to spine, examples/badcommands: unsplit: code conforms to spine, examples/badcommands: content checks, examples/badcommands: mutants killed (mutate_one), examples/empty: spines found, examples/empty: content checks, examples/empty: mutants killed, examples/failing: lamp: code conforms to spine, examples/failing: content checks, examples/failing: mutants killed (mutate_lamp), examples/failingcommands: lamp: code conforms to spine, examples/failingcommands: content checks, examples/failingcommands: mutants killed (mutate_lamp), examples/missing: lamp: code conforms to spine, examples/missing: content checks, examples/missing: mutants killed, examples/pythonnames: lamp: code conforms to spine, examples/pythonnames: content checks, examples/pythonnames: mutants killed, examples/unsound: lamp: spine is sound, examples/unsound: mutants killed
 |
 --- stderr
 |
@@ -247,11 +243,11 @@ exit 0
 | and a missing piece (no spine, no adapter, no content checks, no mutation script under
 | --full) is an error.
 |
-| A piece is a Python file, or, for code in any language, a .cmd file holding one command
-| line: conformance/adapter_<machine>.cmd, checks/run.cmd, mutation/mutate_<name>.cmd. A
-| command runs from its root, without a shell, with VERIFY_SPINE set to the command line that
-| runs spine; checks and mutation pass when it exits 0. A piece given both ways is an error.
-| A Python mutation script gets VERIFY_SPINE too.
+| Every piece is a .cmd file holding one command line, in any language:
+| conformance/adapter_<machine>.cmd, checks/run.cmd, mutation/mutate_<name>.cmd. A command runs
+| from its root, without a shell, with tools/ first on its PATH, so a line can name a helper
+| such as adapter_shim.py or run_checks.py, and with VERIFY_SPINE set to the command line that
+| runs spine; checks and mutation pass when it exits 0.
 |
 | spine is the Go one in tools/, which every run builds into tools/bin/spine with Go; Go's
 | build cache makes that quick when nothing changed. Without Go, every step fails.
@@ -261,8 +257,6 @@ exit 0
 |   VERIFY_BRANCH   branch name the guard maps to a role (default: current git branch)
 |   VERIFY_REPORTS  folder for JUnit reports from the spine steps
 |   VERIFY_VERBOSE  1 prints every step's output, not only failures
-|   PYTHON          interpreter (default: .venv/bin/python when present, else python3), also
-|                   the one spine serves a Python adapter with
 |
 | Exit 0 when everything passes, 1 when any step fails, 2 when the script is misused.
 |
@@ -280,24 +274,6 @@ exit 0
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
 | -- all steps passed
-|
---- stderr
-|
-=== examples: ./verify examples/ambiguous --full
-exit 1
---- stdout
-| skip  guard (VERIFY_BASE not set)
-| == examples/ambiguous
-| ok    lamp: spine is sound
-| ok    lamp: behaviors match spine
-| ok    lamp: checks cite current spine
-| FAIL  lamp: code conforms to spine
-|       error   ambiguous-piece    lamp: both examples/ambiguous/conformance/adapter_lamp.py and examples/ambiguous/conformance/adapter_lamp.cmd; keep one
-| FAIL  content checks
-|       error   ambiguous-piece    examples/ambiguous/checks: both examples/ambiguous/checks/run.cmd and Python checks such as examples/ambiguous/checks/lamp/test_lamp.py; keep one
-| FAIL  mutants killed (mutate_lamp)
-|       error   ambiguous-piece    examples/ambiguous/mutation: both examples/ambiguous/mutation/mutate_lamp.py and examples/ambiguous/mutation/mutate_lamp.cmd; keep one
-| -- 3 step(s) failed: examples/ambiguous: lamp: code conforms to spine, examples/ambiguous: content checks, examples/ambiguous: mutants killed (mutate_lamp)
 |
 --- stderr
 |
@@ -327,9 +303,9 @@ exit 1
 | FAIL  unsplit: code conforms to spine
 |       error   bad-command        examples/badcommands/conformance/adapter_unsplit.cmd: cannot be split: No closing quotation
 | FAIL  content checks
-|       examples/badcommands/checks/run.cmd: cannot run no-such-program: No such file or directory
+|       error   bad-command        examples/badcommands/checks/run.cmd: cannot run no-such-program: No such file or directory
 | FAIL  mutants killed (mutate_one)
-|       examples/badcommands/mutation/mutate_one.cmd: cannot run no-such-program: No such file or directory
+|       error   bad-command        examples/badcommands/mutation/mutate_one.cmd: cannot run no-such-program: No such file or directory
 | -- 6 step(s) failed: examples/badcommands: empty: code conforms to spine, examples/badcommands: twolines: code conforms to spine, examples/badcommands: unreadable: code conforms to spine, examples/badcommands: unsplit: code conforms to spine, examples/badcommands: content checks, examples/badcommands: mutants killed (mutate_one)
 |
 --- stderr
@@ -357,10 +333,9 @@ exit 1
 | FAIL  spines found
 |       error   no-machines        examples/empty/spec: no examples/empty/spec/*/spine.yaml
 | FAIL  content checks
-|       error   no-checks          examples/empty/checks: no test_* functions found
-|       -- 1 errors, 0 checks run
+|       error   no-checks          examples/empty/checks: no examples/empty/checks/run.cmd
 | FAIL  mutants killed
-|       error   no-mutation        examples/empty/mutation: no examples/empty/mutation/mutate_*.py or mutate_*.cmd
+|       error   no-mutation        examples/empty/mutation: no examples/empty/mutation/mutate_*.cmd
 | -- 3 step(s) failed: examples/empty: spines found, examples/empty: content checks, examples/empty: mutants killed
 |
 --- stderr
@@ -377,8 +352,8 @@ exit 1
 |       error   diverges           lit/press : after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 2 findings
 | FAIL  content checks
-|       error   check-failed       examples/failing/checks/lamp/test_lamp.py::test_a_second_press_darkens_it: AssertionError: lit
-|       error   check-unloadable   examples/failing/checks/lamp/test_unloadable.py: cannot be imported: ModuleNotFoundError: No module named 'no_such_module'
+|       error   check-failed       checks/lamp/test_lamp.py::test_a_second_press_darkens_it: AssertionError: lit
+|       error   check-unloadable   checks/lamp/test_unloadable.py: cannot be imported: ModuleNotFoundError: No module named 'no_such_module'
 |       -- 2 errors, 2 checks run
 | FAIL  mutants killed (mutate_lamp)
 |       error   mutant-survived    lamp: a second press leaves it lit
@@ -415,12 +390,11 @@ exit 1
 | skip  lamp: behaviors match spine (no examples/missing/spec/lamp/behaviors/)
 | skip  lamp: checks cite current spine (no examples/missing/checks/lamp/)
 | FAIL  lamp: code conforms to spine
-|       error   no-adapter         lamp: examples/missing/conformance/adapter_lamp.py not found, nor adapter_lamp.cmd
+|       error   no-adapter         lamp: examples/missing/conformance/adapter_lamp.cmd not found
 | FAIL  content checks
-|       error   no-checks          examples/missing/checks: no test_* functions found
-|       -- 1 errors, 0 checks run
+|       error   no-checks          examples/missing/checks: no examples/missing/checks/run.cmd
 | FAIL  mutants killed
-|       error   no-mutation        examples/missing/mutation: no examples/missing/mutation/mutate_*.py or mutate_*.cmd
+|       error   no-mutation        examples/missing/mutation: no examples/missing/mutation/mutate_*.cmd
 | -- 3 step(s) failed: examples/missing: lamp: code conforms to spine, examples/missing: content checks, examples/missing: mutants killed
 |
 --- stderr
@@ -489,6 +463,24 @@ exit 0
 --- report/examples-python-lamp-stale.xml
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine stale" tests="1" failures="0"><testcase classname="spine stale" name="no errors" /></testsuite>
+=== examples: ./verify examples/pythonnames --full
+exit 1
+--- stdout
+| skip  guard (VERIFY_BASE not set)
+| == examples/pythonnames
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| FAIL  lamp: code conforms to spine
+|       error   no-adapter         lamp: examples/pythonnames/conformance/adapter_lamp.cmd not found
+| FAIL  content checks
+|       error   no-checks          examples/pythonnames/checks: no examples/pythonnames/checks/run.cmd
+| FAIL  mutants killed
+|       error   no-mutation        examples/pythonnames/mutation: no examples/pythonnames/mutation/mutate_*.cmd
+| -- 3 step(s) failed: examples/pythonnames: lamp: code conforms to spine, examples/pythonnames: content checks, examples/pythonnames: mutants killed
+|
+--- stderr
+|
 === examples: ./verify examples/unsound --full
 exit 1
 --- stdout
@@ -500,7 +492,7 @@ exit 1
 | skip  lamp: other steps need a sound spine
 | ok    content checks
 | FAIL  mutants killed
-|       error   no-mutation        examples/unsound/mutation: no examples/unsound/mutation/mutate_*.py or mutate_*.cmd
+|       error   no-mutation        examples/unsound/mutation: no examples/unsound/mutation/mutate_*.cmd
 | -- 2 step(s) failed: examples/unsound: lamp: spine is sound, examples/unsound: mutants killed
 |
 --- stderr

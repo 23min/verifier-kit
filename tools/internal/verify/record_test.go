@@ -113,8 +113,17 @@ def test_a_press_lights_it():
     assert lamp.state == "lit"
 `
 
-// pythonLamp is a root with every piece given as Python by name.
+// pythonLamp is a root in Python, each piece a command line that calls a helper in tools/.
 func pythonLamp(stuck bool) files {
+	f := pythonNames(stuck)
+	f["conformance/adapter_lamp.cmd"] = "env PYTHONPATH=src adapter_shim.py conformance/adapter_lamp.py\n"
+	f["checks/run.cmd"] = "env PYTHONPATH=src run_checks.py checks --require-checks\n"
+	f["mutation/mutate_lamp.cmd"] = "python3 mutation/mutate_lamp.py\n"
+	return f
+}
+
+// pythonNames is a root in Python with no command lines: the pieces only by their Python names.
+func pythonNames(stuck bool) files {
 	return files{
 		"spec/lamp/spine.yaml":                    lampSpine,
 		"spec/lamp/behaviors/valid/press.yaml":    "steps: [\"press\"]\nexpect: lit\n",
@@ -126,7 +135,7 @@ func pythonLamp(stuck bool) files {
 	}
 }
 
-// commandLamp is a root with every piece given as a command, two folders below tools/.
+// commandLamp is a root whose lines name their programs by path, two folders below tools/.
 func commandLamp() files {
 	return files{
 		"spec/lamp/spine.yaml":         lampSpine,
@@ -150,11 +159,6 @@ func examplesProject() files {
 	failingCommands["checks/run.cmd"] = "sh -c \"echo 1 of 2 checks failed; exit 1\"\n"
 	failingCommands["mutation/mutate_lamp.cmd"] = "sh -c \"echo 1 mutant survived; exit 1\"\n"
 
-	ambiguous := pythonLamp(false)
-	ambiguous["conformance/adapter_lamp.cmd"] = "python3 ../../tools/adapter_shim.py conformance/adapter_lamp.py\n"
-	ambiguous["checks/run.cmd"] = "sh -c \"exit 0\"\n"
-	ambiguous["mutation/mutate_lamp.cmd"] = "sh -c \"exit 0\"\n"
-
 	badCommands := files{
 		"checks/run.cmd":          "no-such-program --checks\n",
 		"mutation/mutate_one.cmd": "no-such-program --mutants\n",
@@ -174,7 +178,7 @@ func examplesProject() files {
 		with("examples/commands", commandLamp()).
 		with("examples/failing", failing).
 		with("examples/failingcommands", failingCommands).
-		with("examples/ambiguous", ambiguous).
+		with("examples/pythonnames", pythonNames(false)).
 		with("examples/badcommands", badCommands).
 		with("examples/missing", files{"spec/lamp/spine.yaml": lampSpine}).
 		with("examples/empty", files{"README.md": "Nothing here.\n"}).
@@ -195,7 +199,8 @@ roles:
     allow: ["*"]
 `
 
-// pythonWrapper is a Python that says which way ./verify found it, on standard error.
+// pythonWrapper is a Python that says, on standard error, that it ran, and which way it was
+// given; ./verify reads neither PYTHON nor .venv (#69), so the record shows neither runs.
 func pythonWrapper(found string) string {
 	return "#!/bin/sh\necho \"python from " + found + "\" >&2\nexec python3 \"$@\"\n"
 }
@@ -227,7 +232,7 @@ func projects(tmp string) []project {
 			r("examples/commands", "--full"),
 			r("examples/failing", "--full"),
 			r("examples/failingcommands", "--full"),
-			r("examples/ambiguous", "--full"),
+			r("examples/pythonnames", "--full"),
 			r("examples/badcommands", "--full"),
 			r("examples/missing", "--full"),
 			r("examples/empty", "--full"),
@@ -454,7 +459,7 @@ func TestRecord(t *testing.T) {
 		tmp = real // ./verify prints the folders it resolves
 	}
 	// Bash names the line of ./verify an error came from, which any edit moves: written "line N".
-	bashLine := regexp.MustCompile(`(?m)^(\./verify|\.\./verify): line [0-9]+: `)
+	bashLine := regexp.MustCompile(`(\./verify|\.\./verify): line [0-9]+: `)
 	normal := func(s string) string {
 		s = strings.ReplaceAll(strings.ReplaceAll(s, tmp, "$TMP"), repo, "$ROOT")
 		return bashLine.ReplaceAllString(s, "$1: line N: ")
