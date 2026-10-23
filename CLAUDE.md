@@ -54,9 +54,10 @@ demo/faults.sh 4     # one scenario
 go -C tools build -o bin/spine ./cmd/spine   # spine, into tools/bin/spine; ./verify does this too
 tools/bin/spine --help
 go -C tools vet ./...
-go -C tools test ./...   # runs spine on every test input; any difference from the record
-                         # (tools/internal/spine/testdata/record/) fails
-go -C tools test ./internal/spine/ -update   # writes the record again from the Go spine; review its diff
+go -C tools test ./...   # runs spine on every test input, and ./verify on its fixtures; any
+                         # difference from their records (tools/internal/*/testdata/record/) fails
+go -C tools test ./internal/spine/ -update    # writes spine's record again; review its diff
+go -C tools test ./internal/verify/ -update   # writes ./verify's record again; review its diff
 ```
 
 Setup needs Python 3; PyYAML and the `git` program for the ref_sync example's checks; Elixir

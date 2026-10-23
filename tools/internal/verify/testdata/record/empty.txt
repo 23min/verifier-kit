@@ -1,0 +1,23 @@
+=== empty: ./verify
+exit 1
+--- stdout
+| skip  guard (VERIFY_BASE not set)
+| FAIL  spines found
+|       error   no-machines        spec: no spec/*/spine.yaml
+| FAIL  content checks
+|       error   no-checks          checks: no test_* functions found
+|       -- 1 errors, 0 checks run
+| skip  mutants killed (fast mode; --full runs them)
+| -- 2 step(s) failed: spines found, content checks
+|
+--- stderr
+|
+=== empty: ./verify with PATH without go
+exit 1
+--- stdout
+| FAIL  spine built
+|       go not found: ./verify builds spine from tools/ with Go
+| -- 1 step(s) failed: spine built
+|
+--- stderr
+|
