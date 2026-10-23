@@ -286,11 +286,11 @@ among them the repo's spines, readings, behaviors, checks, adapters and policy a
 scenarios 1 to 4, 9 and 10 seed. Between them they give every finding code the contract lists.
 
 Each run must give exactly what the record holds (`tools/internal/spine/testdata/record/`,
-written by `record_test.go` beside it): its exit code and output, and in JSON runs the JUnit
-report, with the paths that differ between machines written as `$ROOT` and `$TMP`.
-`go -C tools test ./internal/spine/ -update` writes the record again; its diff is what a
-reviewer reads. The record was written while the Go `spine` still matched `tools/spine.py` on
-every input, before that retired (#44).
+written by `record_test.go` beside it, in the format `tools/internal/record` reads and writes):
+its exit code and output, and in JSON runs the JUnit report, with the paths that differ
+between machines written as `$ROOT` and `$TMP`. `go -C tools test ./internal/spine/ -update`
+writes the record again; its diff is what a reviewer reads. The record was written while the
+Go `spine` still matched `tools/spine.py` on every input, before that retired (#44).
 
 ## Per machine, per root and repo-wide
 
