@@ -14,9 +14,9 @@ exit 1
 === empty: ./verify with PATH without go
 exit 1
 --- stdout
-| FAIL  spine built
-|       go not found: ./verify builds spine from tools/ with Go
-| -- 1 step(s) failed: spine built
+| FAIL  spine and verify built
+|       go not found: ./verify builds spine and verify from tools/ with Go
+| -- 1 step(s) failed: spine and verify built
 |
 --- stderr
 |

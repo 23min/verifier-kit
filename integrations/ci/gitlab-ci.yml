@@ -6,7 +6,7 @@
 # Premium or Ultimate; on Free, the path guard in ./verify is the substitute, and it is
 # only as strong as who may push to which branch names (protect spec/* and build/* too).
 verify:
-  image: golang:1.27               # ./verify builds spine from tools/ with Go
+  image: golang:1.27               # ./verify builds spine and verify from tools/ with Go
   variables:
     GIT_DEPTH: "0"                  # full history, so the guard can diff against the base
   before_script:

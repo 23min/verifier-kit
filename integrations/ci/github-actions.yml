@@ -31,7 +31,7 @@ jobs:
 
       - run: pip install pyyaml
 
-      - uses: actions/setup-go@v7       # ./verify builds spine from tools/
+      - uses: actions/setup-go@v7       # ./verify builds spine and verify from tools/
         with:
           go-version-file: tools/go.mod
           cache-dependency-path: tools/go.sum

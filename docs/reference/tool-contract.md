@@ -189,9 +189,11 @@ relative ROOT is taken from the caller's working directory. Without ROOT, the ro
 `examples/*/` folder in turn (sorted) when the folder `verify` is in has no `spec/` but has
 `examples/*/`; otherwise the root is that folder itself.
 
-First it builds the toolkit's `spine`: `go -C tools build -trimpath -o bin/spine ./cmd/spine`,
-next to `verify`. Every step below runs that binary. When the build fails, or Go is missing,
-it prints `FAIL  spine built` with the reason and exits 1 before any other step.
+`./verify` is a short Bash script. First it builds the toolkit's `spine` and `verify`, from the
+`tools/` next to it: `go -C tools build -trimpath -o bin/ ./cmd/spine ./cmd/verify`. Every step
+below runs that `spine`. When the build fails, or Go is missing, it prints
+`FAIL  spine and verify built` with the reason and exits 1 before any other step. Otherwise it
+runs `tools/bin/verify` with its arguments, which does the rest.
 
 Runs, per `spec/<machine>/spine.yaml`: `check`, then `behaviors` over `spec/<machine>/behaviors`,
 `stale` over `checks/<machine>`, and `conform` with the machine's adapter. Then the content

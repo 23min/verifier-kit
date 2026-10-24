@@ -17,7 +17,7 @@ exit 1
 | skip  unreadable: behaviors match spine (no examples/badcommands/spec/unreadable/behaviors/)
 | skip  unreadable: checks cite current spine (no examples/badcommands/checks/unreadable/)
 | FAIL  unreadable: code conforms to spine
-|       error   bad-command        examples/badcommands/conformance/adapter_unreadable.cmd: cannot be read: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte
+|       error   bad-command        examples/badcommands/conformance/adapter_unreadable.cmd: cannot be read: not UTF-8
 | ok    unsplit: spine is sound
 | skip  unsplit: behaviors match spine (no examples/badcommands/spec/unsplit/behaviors/)
 | skip  unsplit: checks cite current spine (no examples/badcommands/checks/unsplit/)
@@ -138,7 +138,7 @@ exit 1
 | skip  unreadable: behaviors match spine (no examples/badcommands/spec/unreadable/behaviors/)
 | skip  unreadable: checks cite current spine (no examples/badcommands/checks/unreadable/)
 | FAIL  unreadable: code conforms to spine
-|       error   bad-command        examples/badcommands/conformance/adapter_unreadable.cmd: cannot be read: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte
+|       error   bad-command        examples/badcommands/conformance/adapter_unreadable.cmd: cannot be read: not UTF-8
 | ok    unsplit: spine is sound
 | skip  unsplit: behaviors match spine (no examples/badcommands/spec/unsplit/behaviors/)
 | skip  unsplit: checks cite current spine (no examples/badcommands/checks/unsplit/)
@@ -229,7 +229,7 @@ exit 1
 === examples: ./verify --help
 exit 0
 --- stdout
-| One entry point for every gate: CI, git hooks and agent hooks all call this script and
+| One entry point for every gate: CI, git hooks and agent hooks all call ./verify and
 | nothing else, so they cannot drift apart.
 |
 |   ./verify [ROOT]          fast checks (seconds): spine soundness, behaviors, stale checks,
@@ -249,8 +249,8 @@ exit 0
 | such as adapter_shim.py or run_checks.py, and with VERIFY_SPINE set to the command line that
 | runs spine; checks and mutation pass when it exits 0.
 |
-| spine is the Go one in tools/, which every run builds into tools/bin/spine with Go; Go's
-| build cache makes that quick when nothing changed. Without Go, every step fails.
+| Every run builds spine and verify from tools/ into tools/bin/ with Go; Go's build cache makes
+| that quick when nothing changed. Without Go, nothing runs.
 |
 | Environment:
 |   VERIFY_BASE     commit to diff against; turns on the path guard (CI sets this)
@@ -258,7 +258,7 @@ exit 0
 |   VERIFY_REPORTS  folder for JUnit reports from the spine steps
 |   VERIFY_VERBOSE  1 prints every step's output, not only failures
 |
-| Exit 0 when everything passes, 1 when any step fails, 2 when the script is misused.
+| Exit 0 when everything passes, 1 when any step fails, 2 when ./verify is misused.
 |
 --- stderr
 |
@@ -296,7 +296,7 @@ exit 1
 | skip  unreadable: behaviors match spine (no examples/badcommands/spec/unreadable/behaviors/)
 | skip  unreadable: checks cite current spine (no examples/badcommands/checks/unreadable/)
 | FAIL  unreadable: code conforms to spine
-|       error   bad-command        examples/badcommands/conformance/adapter_unreadable.cmd: cannot be read: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte
+|       error   bad-command        examples/badcommands/conformance/adapter_unreadable.cmd: cannot be read: not UTF-8
 | ok    unsplit: spine is sound
 | skip  unsplit: behaviors match spine (no examples/badcommands/spec/unsplit/behaviors/)
 | skip  unsplit: checks cite current spine (no examples/badcommands/checks/unsplit/)

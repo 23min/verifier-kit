@@ -21,7 +21,8 @@ flowchart LR
     faults["demo/faults.sh"]
     person["a person"]
   end
-  verify["./verify<br/>finds the pieces by folder name"]
+  entry["./verify, Bash<br/>builds spine and verify, then runs verify"]
+  verify["tools/bin/verify, built from tools/ with Go<br/>finds the pieces by folder name, runs the steps"]
   subgraph tools["Tools: files in, findings out"]
     spine["tools/bin/spine, built from tools/ with Go<br/>check, behaviors, stale, conform, guard"]
     rc["tools/run_checks.py"]
@@ -33,11 +34,12 @@ flowchart LR
     code["the code, per root<br/>src/"]
     policy["policy.yaml"]
   end
-  stop -->|"./verify, fast checks"| verify
-  pre -->|"./verify"| verify
-  ci -->|"./verify --full"| verify
-  faults -->|"./verify, on a broken copy"| verify
-  person --> verify
+  stop -->|"./verify, fast checks"| entry
+  pre -->|"./verify"| entry
+  ci -->|"./verify --full"| entry
+  faults -->|"./verify, on a broken copy"| entry
+  person --> entry
+  entry -->|"the same arguments"| verify
   verify --> spine
   verify -->|"a Python root's checks/run.cmd"| rc
   spine -->|"conform, a Python root's adapter line"| shim
@@ -55,15 +57,15 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-  start(["./verify [ROOT] [--full]"]) --> roots{"ROOT given?"}
-  roots -- yes --> one["that folder"]
+  start(["./verify [ROOT] [--full]"]) --> build
+  build["go -C tools build: tools/bin/spine and tools/bin/verify<br/>without Go, FAIL spine and verify built, exit 1"] --> roots
+  roots{"ROOT given?"} -- yes --> one["that folder"]
   roots -- no --> has{"spec/ here, or<br/>no examples/*/?"}
   has -- yes --> here["this folder"]
   has -- no --> each["every examples/*/, sorted"]
-  one --> build
-  here --> build
-  each --> build
-  build["go -C tools build: tools/bin/spine<br/>without Go, FAIL spine built, exit 1"] --> g
+  one --> g
+  here --> g
+  each --> g
   g{"VERIFY_BASE set?"} -- yes --> guard["spine guard policy.yaml<br/>files changed since VERIFY_BASE<br/>once, whatever the roots"]
   g -- no --> skipg["skip guard"]
   guard --> rootloop
@@ -89,8 +91,16 @@ without a shell, with the `tools/` next to `verify` first on `PATH`, so that a l
 helper such as `adapter_shim.py` or `run_checks.py` alone, and with `VERIFY_SPINE` set to the
 command line that runs `spine`; checks and mutation pass when it exits 0. `./verify` sets
 nothing for any language: a Python line puts `src/` on the import path itself, with
-`env PYTHONPATH=src`. `spine` is the Go one, which `./verify` builds into `tools/bin/spine`
-before anything else.
+`env PYTHONPATH=src`.
+
+`./verify` is a short Bash script. Before anything else it builds `spine` and `verify` into
+`tools/bin/` with Go, then runs `verify` with its arguments, and `verify` does all of the above
+(`tools/cmd/verify/`, `tools/internal/verify/`). Its decisions are pure functions, in
+`plan.go`: reading the arguments, planning each root's steps from what the root holds, and what
+each step prints. `verify.go` reads the files and starts the programs around them, and decides
+nothing (`docs/adr/0007-no-language-built-in.md`, decision 1). `verify` runs `spine` only as a
+program. The two share what both need: `tools/internal/shlex`, which splits a command line, and
+`tools/internal/program`, which starts one and words the system's errors.
 
 A step that cannot run because a piece is missing is an error, not a skip, reported per root:
 no spine at all (`no-machines`), no adapter for a machine (`no-adapter`), no `checks/run.cmd`
@@ -299,10 +309,12 @@ failed build, which roots run, the guard, every skip, each piece as a command li
 failing, each missing piece, each `bad-command`, a root that gives its pieces only by Python
 file names, and `PYTHON` and `.venv`, which it ignores. Each run must give exactly what
 `tools/internal/verify/testdata/record/` holds: its exit code, standard output, standard error
-and every JUnit report, with the test's temporary folder written as `$TMP` and Bash's line
-numbers as `line N`. Every run is in the C locale. The fixtures need no Elixir.
-`go -C tools test ./internal/verify/ -update` writes the record again. It is what the change to
-commands (#69) and the Go `verify` (#70) are checked against.
+and every JUnit report, with the test's temporary folder written as `$TMP`. Every run is in the
+C locale. The fixtures need no Elixir.
+`go -C tools test ./internal/verify/ -update` writes the record again. It was written from the
+Bash `./verify`, and is what the change to commands (#69) and the Go `verify` (#70) were checked
+against. Beside it, `plan_test.go` tests each of `verify`'s decisions without starting a
+program.
 
 ## Per machine, per root and repo-wide
 
