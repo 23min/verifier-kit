@@ -78,7 +78,7 @@ policy.yaml                      which branch role may change which paths
 examples/<name>/                 one worked example each, laid out like a project (below)
 demo/                            the toolkit's demos on the notes example: faults.sh, live-builder.sh
 integrations/                    CI, agent and git hook files, to copy when you want them
-docs/                            design (normative), architecture, decisions (adr/), reference
+docs/                            design (normative), architecture, decisions (adr/), reference, proposals (research/)
 .github/workflows/verify.yml     this repo's own CI: go vet, go test, ./verify --full, demo/faults.sh
 ```
 
