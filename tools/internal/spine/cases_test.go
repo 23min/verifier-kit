@@ -28,6 +28,7 @@ import (
 	"testing"
 
 	"github.com/23min/verifier-kit/tools/internal/record"
+	"github.com/23min/verifier-kit/tools/internal/shlex"
 )
 
 var (
@@ -672,7 +673,7 @@ func faultCases(t *testing.T, dir string) []spineCase {
 	writeFile(t, filepath.Join(dir, "2", "src", "notes_app.py"), string(service))
 	writeFile(t, filepath.Join(dir, "9", "src", "notes_app.py"), string(service)+"import no_such_module\n")
 	spineFile, adapter := filepath.Join(notes, "spec", "notes", "spine.yaml"), filepath.Join(notes, "conformance", "adapter_notes.py")
-	line := "python3 " + shellQuote(filepath.Join(repoRoot, "tools", "adapter_shim.py")) + " " + shellQuote(adapter)
+	line := "python3 " + shlex.Quote(filepath.Join(repoRoot, "tools", "adapter_shim.py")) + " " + shlex.Quote(adapter)
 	conform := func(name, src, spine string) {
 		env := []string{"PYTHONPATH=" + filepath.Join(dir, src, "src")}
 		out = append(out, spineCase{name: name, dir: dir, args: []string{"conform", spine, "--adapter-cmd", line}, env: env, mode: full})
@@ -681,14 +682,6 @@ func faultCases(t *testing.T, dir string) []spineCase {
 	conform("fault 2 conform", "2", "2/spine.yaml")
 	conform("fault 9 conform", "9", spineFile)
 	return out
-}
-
-// shellQuote is shlex.quote(s): s as one word of a command line.
-func shellQuote(s string) string {
-	if s != "" && strings.Trim(s, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_@%+=:,./-") == "" {
-		return s
-	}
-	return "'" + strings.ReplaceAll(s, "'", `'"'"'`) + "'"
 }
 
 // contractCodes is every finding code the tool contract lists for the commands the port has.
