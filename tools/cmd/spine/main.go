@@ -1,4 +1,4 @@
-// Command spine is the Go port of tools/spine.py: mechanical checks for state-machine specs.
+// Command spine checks state-machine specs mechanically: files in, findings out.
 // See docs/reference/tool-contract.md.
 package main
 
