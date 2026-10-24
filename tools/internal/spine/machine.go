@@ -9,6 +9,8 @@ import (
 	"slices"
 	"sort"
 	"strings"
+
+	"github.com/23min/verifier-kit/tools/internal/program"
 )
 
 // ---------- the machine, as in tools/spine.py ----------
@@ -505,7 +507,7 @@ func stale(s *Spec, checksDir string) Findings {
 		}
 		data, err := os.ReadFile(path)
 		if err != nil {
-			out.Add("spec-unreadable", path, "cannot be read: "+strerror(err))
+			out.Add("spec-unreadable", path, "cannot be read: "+program.Strerror(err))
 			continue
 		}
 		text := strings.ToValidUTF8(string(data), "�")

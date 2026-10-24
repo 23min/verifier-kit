@@ -12,10 +12,11 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"syscall"
 	"unicode/utf8"
 
 	yaml "go.yaml.in/yaml/v4"
+
+	"github.com/23min/verifier-kit/tools/internal/program"
 )
 
 // readYAML is read_yaml in tools/spine.py: the file's YAML as PyYAML's safe_load reads it. A file
@@ -23,7 +24,7 @@ import (
 func readYAML(path string, out *Findings) (*Value, bool) {
 	data, err := os.ReadFile(pyPath(path)) // Python reads Path(path): "x.yaml/" is x.yaml
 	if err != nil {
-		out.Add("spec-unreadable", path, "cannot be read: "+strerror(err))
+		out.Add("spec-unreadable", path, "cannot be read: "+program.Strerror(err))
 		return nil, false
 	}
 	if off := firstInvalidUTF8(data); off >= 0 {
@@ -36,17 +37,6 @@ func readYAML(path string, out *Findings) (*Value, bool) {
 		return nil, false
 	}
 	return v, true
-}
-
-// strerror is the C library's text for an errno, which Python's OSError.strerror carries;
-// Go's own texts are the same in lower case.
-func strerror(err error) string {
-	var errno syscall.Errno
-	if errors.As(err, &errno) {
-		s := errno.Error()
-		return strings.ToUpper(s[:1]) + s[1:]
-	}
-	return err.Error()
 }
 
 // firstInvalidUTF8 is the offset Python's UnicodeDecodeError.start reports, or -1.

@@ -12,6 +12,9 @@ import (
 	"strings"
 	"syscall"
 	"unicode/utf8"
+
+	"github.com/23min/verifier-kit/tools/internal/program"
+	"github.com/23min/verifier-kit/tools/internal/shlex"
 )
 
 // ---------- conform ----------
@@ -50,7 +53,7 @@ var replies = map[string][2]string{
 // startAdapter starts the program, its argv split from command.
 func startAdapter(command string) (*commandAdapter, error) {
 	a := &commandAdapter{}
-	argv, err := shlexSplit(command)
+	argv, err := shlex.Split(command)
 	if err != nil {
 		return nil, &adapterFailed{"cannot be started: ValueError: " + err.Error()}
 	}
@@ -77,47 +80,14 @@ func startAdapter(command string) (*commandAdapter, error) {
 	return a, nil
 }
 
-// startProgram is subprocess.Popen(argv): a name without a slash is looked for in each
-// directory of PATH, as Python does, and the first error other than "not found" is the one
-// reported, as Python's OSError reports it.
+// startProgram is subprocess.Popen(argv), with Python's OSError as the error.
 func startProgram(argv []string, files []*os.File) (*os.Process, error) {
-	candidates := []string{argv[0]}
-	if !strings.Contains(argv[0], "/") {
-		path, ok := os.LookupEnv("PATH")
-		if !ok {
-			path = "/bin:/usr/bin"
-		}
-		candidates = nil
-		for _, dir := range strings.Split(path, ":") {
-			switch {
-			case dir == "":
-				candidates = append(candidates, argv[0])
-			case strings.HasSuffix(dir, "/"):
-				candidates = append(candidates, dir+argv[0])
-			default:
-				candidates = append(candidates, dir+"/"+argv[0])
-			}
-		}
+	proc, err := program.Start(argv, &os.ProcAttr{Files: files})
+	var errno syscall.Errno
+	if errors.As(err, &errno) {
+		return nil, fmt.Errorf("%s: [Errno %d] %s: %s", pyOSErrorClass(errno), int(errno), program.Strerror(errno), pyRepr(argv[0]))
 	}
-	var saved, last syscall.Errno
-	for _, c := range candidates {
-		proc, err := os.StartProcess(c, argv, &os.ProcAttr{Files: files})
-		if err == nil {
-			return proc, nil
-		}
-		var errno syscall.Errno
-		if !errors.As(err, &errno) {
-			return nil, err
-		}
-		last = errno
-		if errno != syscall.ENOENT && errno != syscall.ENOTDIR && saved == 0 {
-			saved = errno
-		}
-	}
-	if saved != 0 {
-		last = saved
-	}
-	return nil, fmt.Errorf("%s: [Errno %d] %s: %s", pyOSErrorClass(last), int(last), strerror(last), pyRepr(argv[0]))
+	return proc, err
 }
 
 // pyOSErrorClass is the OSError subclass Python raises for an errno.
@@ -291,86 +261,6 @@ func invalidLength(b []byte) int {
 // pyRStrip is str.rstrip() with no arguments.
 func pyRStrip(s string) string {
 	return strings.TrimRightFunc(s, pyIsSpace)
-}
-
-// ---------- shlex.split ----------
-
-// shlexSplit is shlex.split(s): POSIX rules, no comments. Its special characters are ASCII, so
-// it reads bytes, and a byte that isn't UTF-8 reaches the program as it was given.
-func shlexSplit(s string) ([]string, error) {
-	const whitespace, quotes = " \t\r\n", `'"`
-	pos := 0
-	var out []string
-	for {
-		var token []byte
-		state, escapedState, quoted, any := rune(' '), rune('a'), false, false
-	read:
-		for {
-			var next rune = -1
-			if pos < len(s) {
-				next = rune(s[pos])
-				pos++
-			}
-			switch {
-			case state == ' ':
-				switch {
-				case next < 0:
-					break read
-				case strings.ContainsRune(whitespace, next):
-					if any || quoted {
-						break read
-					}
-				case next == '\\':
-					escapedState, state = 'a', '\\'
-				case strings.ContainsRune(quotes, next):
-					state = next
-				default:
-					token = append(token, byte(next))
-					any, state = true, 'a'
-				}
-			case state == '\'' || state == '"':
-				quoted = true
-				switch {
-				case next < 0:
-					return nil, errors.New("No closing quotation")
-				case next == state:
-					state = 'a'
-				case next == '\\' && state == '"':
-					escapedState, state = state, '\\'
-				default:
-					token = append(token, byte(next))
-					any = true
-				}
-			case state == '\\':
-				if next < 0 {
-					return nil, errors.New("No escaped character")
-				}
-				if (escapedState == '\'' || escapedState == '"') && next != state && next != escapedState {
-					token = append(token, byte(state))
-				}
-				token = append(token, byte(next))
-				any, state = true, escapedState
-			default: // 'a', inside a word
-				switch {
-				case next < 0:
-					break read
-				case strings.ContainsRune(whitespace, next):
-					break read
-				case strings.ContainsRune(quotes, next):
-					state = next
-				case next == '\\':
-					escapedState, state = 'a', '\\'
-				default:
-					token = append(token, byte(next))
-					any = true
-				}
-			}
-		}
-		if !any && !quoted {
-			return out, nil
-		}
-		out = append(out, string(token))
-	}
 }
 
 // ---------- JSON as json.loads reads it ----------
