@@ -1,15 +1,15 @@
 package verify
 
-// The record of ./verify (#68): what the Bash ./verify gives on fixture projects that between
-// them reach every path through it, kept in testdata/record/ as the reference that #69 changes
-// and #70's Go verify must match. Each fixture is a project laid out like one that uses the
-// toolkit: verify and tools/ copied in beside its own folders. For each run the record holds the
-// exit code, standard output, standard error and every JUnit report the run wrote, with the
-// test's temporary folder written as $TMP.
+// The record of ./verify (#68): what ./verify gives on fixture projects that between them reach
+// every path through it, kept in testdata/record/ as the reference. It was written from the Bash
+// ./verify; the Go verify that replaced it (#70) gives the same, except where #69 and #70 say.
+// Each fixture is a project laid out like one that uses the toolkit: verify and tools/ copied in
+// beside its own folders. For each run the record holds the exit code, standard output, standard
+// error and every JUnit report the run wrote, with the test's temporary folder written as $TMP.
 //
-// ./verify runs as its callers run it, so the test needs what ./verify needs: Bash, Go,
-// Python 3 and git. The fixtures need no Elixir. Every run is in the C locale, so that the
-// programs it starts write their messages alike on every machine.
+// ./verify runs as its callers run it, so the test needs what ./verify needs, Bash, Go and git,
+// and Python 3 for the fixtures' commands. The fixtures need no Elixir. Every run is in the C
+// locale, so that the programs it starts write their messages alike on every machine.
 //
 // `go -C tools test ./internal/verify/ -update` writes the record again from ./verify.
 // Review the diff before committing it: the record is the only reference.
@@ -22,7 +22,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"regexp"
 	"sort"
 	"strings"
 	"testing"
@@ -380,7 +379,7 @@ func environment() []string {
 
 func execute(t *testing.T, dir string, r run, tmp string) record.Entry {
 	t.Helper()
-	cmd := exec.Command(command(r), r.args...)
+	cmd := exec.Command(invocation(r), r.args...)
 	cmd.Dir = filepath.Join(dir, r.from)
 	cmd.Env = append(environment(), r.env...)
 	if r.without != "" {
@@ -417,8 +416,8 @@ func reports(t *testing.T, dir string, e *record.Entry) {
 	}
 }
 
-// command is how the run names ./verify, from the folder it is started from.
-func command(r run) string {
+// invocation is how the run names ./verify, from the folder it is started from.
+func invocation(r run) string {
 	if r.from == "" {
 		return "./verify"
 	}
@@ -432,7 +431,7 @@ func key(project string, r run, normal func(string) string) string {
 	if r.from != "" {
 		parts = append(parts, "in", r.from+":")
 	}
-	parts = append(parts, command(r))
+	parts = append(parts, invocation(r))
 	for _, a := range r.args {
 		parts = append(parts, record.Word(normal(a)))
 	}
@@ -458,11 +457,8 @@ func TestRecord(t *testing.T) {
 	if real, err := filepath.EvalSymlinks(tmp); err == nil {
 		tmp = real // ./verify prints the folders it resolves
 	}
-	// Bash names the line of ./verify an error came from, which any edit moves: written "line N".
-	bashLine := regexp.MustCompile(`(\./verify|\.\./verify): line [0-9]+: `)
 	normal := func(s string) string {
-		s = strings.ReplaceAll(strings.ReplaceAll(s, tmp, "$TMP"), repo, "$ROOT")
-		return bashLine.ReplaceAllString(s, "$1: line N: ")
+		return strings.ReplaceAll(strings.ReplaceAll(s, tmp, "$TMP"), repo, "$ROOT")
 	}
 	rec := record.Load(t, filepath.Join("testdata", "record"), *update, "./verify", "go -C tools test ./internal/verify/ -update")
 

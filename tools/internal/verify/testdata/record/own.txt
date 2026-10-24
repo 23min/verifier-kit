@@ -34,15 +34,15 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | FAIL  lamp: code conforms to spine
-|q "      "
+|       /usr/bin/env: 'python3': No such file or directory
+|       error   adapter-failed     env PYTHONPATH=src adapter_shim.py conformance/adapter_lamp.py: exited with status 127 before replying to new
+|       -- 1 errors, 1 findings
 | FAIL  content checks
-|       ./verify: line N: python3: command not found
+|       /usr/bin/env: 'python3': No such file or directory
 | skip  mutants killed (fast mode; --full runs them)
 | -- 2 step(s) failed: lamp: code conforms to spine, content checks
 |
 --- stderr
-| ./verify: line N: python3: command not found
-| ./verify: line N: python3: command not found
 |
 === own: ./verify with PYTHON=$TMP/wrapper/python
 exit 0

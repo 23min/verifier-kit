@@ -219,7 +219,7 @@ growth; "still true" stamps later contradicted by an audit.
 | Part | Status |
 |---|---|
 | Spine format, `check`, `diff`, `hash`, `stale`, `behaviors`, `trace`, `conform`, `guard` | built, in Go (`tools/`); `./verify` builds it on every run |
-| `./verify`, gate examples for GitHub, GitLab, Claude Code, git hooks, code owners | built; GitLab example not yet run |
+| `./verify`, gate examples for GitHub, GitLab, Claude Code, git hooks, code owners | built, in Go (`tools/`) behind a short Bash script; GitLab example not yet run |
 | Mutation (hand-picked), seeded faults | built |
 | Builder loop with Stop hook | run live with Claude Code |
 | `interpret` | designed |

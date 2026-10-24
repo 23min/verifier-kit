@@ -26,7 +26,7 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
 - **Tools stay standalone:** files in, findings out. No network, no model calls (the planned
   `interpret` tool is the one exception), no knowledge of who calls them, no aiwf or other
   workflow tool. Python standard library plus PyYAML unless an issue says otherwise; the Go
-  `spine` (`tools/cmd/spine/`, `tools/internal/spine/`) uses the Go standard library plus
+  `spine` and `verify` (`tools/cmd/`, `tools/internal/`) use the Go standard library plus
   `go.yaml.in/yaml/v4`.
 - **Docs move with code.** A change to a tool updates `docs/reference/` in the same commit;
   `docs/design.md` changes with the code it describes.
@@ -51,7 +51,7 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
 ./verify examples/notes --full   # one example only
 demo/faults.sh       # acceptance test: every seeded fault must be caught; exits 1 otherwise
 demo/faults.sh 4     # one scenario
-go -C tools build -o bin/spine ./cmd/spine   # spine, into tools/bin/spine; ./verify does this too
+go -C tools build -o bin/ ./cmd/spine ./cmd/verify   # both, into tools/bin/; ./verify does this too
 tools/bin/spine --help
 go -C tools vet ./...
 go -C tools test ./...   # runs spine on every test input, and ./verify on its fixtures; any
@@ -60,9 +60,10 @@ go -C tools test ./internal/spine/ -update    # writes spine's record again; rev
 go -C tools test ./internal/verify/ -update   # writes ./verify's record again; review its diff
 ```
 
-Setup needs Python 3 as `python3` on `PATH`; PyYAML and the `git` program for the ref_sync
-example's checks; Elixir 1.18 or later for the elixir_job example's; and Go 1.27, which
-`./verify` and `demo/faults.sh` build `spine` with. The devcontainer image has all five; don't
+`./verify` needs Go 1.27, Bash and the `git` program; it builds `spine` and `verify` with Go,
+as `demo/faults.sh` builds `spine`. A project needs Python only for the pieces it writes in
+Python. This repo's examples need Python 3 as `python3` on `PATH`, with PyYAML for ref_sync's
+checks, and Elixir 1.18 or later for elixir_job's. The devcontainer image has all of them; don't
 create a `.venv` there (the repo is shared with the host). Elsewhere:
 `uv venv && uv pip install -r requirements.txt`, then `source .venv/bin/activate`, so that the
 examples' command lines find its `python3`; `./verify` picks no interpreter itself.

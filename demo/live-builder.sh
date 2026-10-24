@@ -11,7 +11,7 @@
 # integrations/claude-code runs ./verify when the builder tries to finish and sends it back
 # with the failing case. Your working copy is never touched.
 #
-# Needs the claude CLI, logged in, and Go, which ./verify builds spine with. Costs one short
+# Needs the claude CLI, logged in, and Go, which ./verify builds spine and verify with. Costs one short
 # agent session (about $0.25 with Sonnet when we tried it). The scratch copy is kept so you
 # can inspect it.
 set -euo pipefail

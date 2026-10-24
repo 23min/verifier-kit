@@ -38,8 +38,9 @@ demo/live-builder.sh        # optional: a real Claude Code builder session again
 
 `spine` is written in Go, so that checking a spine needs neither Python nor PyYAML
 ([`docs/adr/0004-go-spine.md`](docs/adr/0004-go-spine.md),
-[`docs/adr/0006-retire-spine-py.md`](docs/adr/0006-retire-spine-py.md)). `./verify` builds it on
-every run, into `tools/bin/spine`, so it needs Go 1.27. By hand:
+[`docs/adr/0006-retire-spine-py.md`](docs/adr/0006-retire-spine-py.md)). So is `verify`, which
+does what `./verify` does; `./verify` is a short Bash script that builds both on every run, into
+`tools/bin/`, and runs `verify`, so it needs Go 1.27, Bash and `git`, and no Python. By hand:
 
 ```sh
 go -C tools build -o bin/spine ./cmd/spine                 # into tools/bin/, which git ignores
@@ -70,8 +71,8 @@ local Python.
 ## Layout and who owns what
 
 ```
-verify                           the single entry point
-tools/cmd/, tools/internal/      spine, in Go, and the tests of spine and ./verify (no knowledge of any CI or agent)
+verify                           the single entry point: builds spine and verify, then runs verify
+tools/cmd/, tools/internal/      spine and verify, in Go, and their tests (no knowledge of any CI or agent)
 tools/run_checks.py              runs Python content checks; a Python project's checks/run.cmd calls it
 tools/adapter_shim.py            serves a Python adapter over the adapter protocol; an adapter line calls it
 policy.yaml                      which branch role may change which paths
