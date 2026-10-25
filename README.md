@@ -93,7 +93,7 @@ spec/notes/behaviors/            example runs: valid/ must be allowed, invalid/ 
 checks/notes/                    content checks the spine cannot see; each cites a spine cell
 conformance/adapter_notes.py     translates spine events into calls on the service
 conformance/adapter_notes.cmd    the line that runs it: env PYTHONPATH=src adapter_shim.py conformance/adapter_notes.py
-checks/run.cmd                   the line that runs the checks: env PYTHONPATH=src run_checks.py checks --require-checks
+checks/run.cmd                   the line that runs the checks: env PYTHONPATH=src run_checks.py checks
 mutation/mutants.yaml            deliberate bugs the oracle must catch: name, file, find, replace   person
 src/notes_app.py                 the service                                        builder
 demo/notes_app_as_written.py     the service as first written (two bugs)

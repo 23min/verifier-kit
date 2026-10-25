@@ -116,7 +116,7 @@ def test_a_press_lights_it():
 func pythonLamp(stuck bool) files {
 	f := pythonNames(stuck)
 	f["conformance/adapter_lamp.cmd"] = "env PYTHONPATH=src adapter_shim.py conformance/adapter_lamp.py\n"
-	f["checks/run.cmd"] = "env PYTHONPATH=src run_checks.py checks --require-checks\n"
+	f["checks/run.cmd"] = "env PYTHONPATH=src run_checks.py checks\n"
 	f["mutation/mutants.yaml"] = lampMutants
 	delete(f, "mutation/mutate_lamp.py") // a Python name, which pythonNames shows alone
 	return f
