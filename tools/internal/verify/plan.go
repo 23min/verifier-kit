@@ -136,7 +136,12 @@ type group struct {
 
 // finding is an error line as the tools print it, without the indent.
 func finding(code, where, message string) string {
-	return fmt.Sprintf("%-7s %-18s %s: %s", "error", code, where, message)
+	return line("error", code, where, message)
+}
+
+// line is a finding line of any severity, as the tools print it, without the indent.
+func line(severity, code, where, message string) string {
+	return fmt.Sprintf("%-7s %-18s %s: %s", severity, code, where, message)
 }
 
 // guardStep runs guard over the changed files, given as git diff --name-only printed them.
