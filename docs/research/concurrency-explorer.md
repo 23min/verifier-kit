@@ -1,6 +1,6 @@
 # A shared explorer for concurrency
 
-- Status: proposal, not decided
+- Status: proposal, not decided; waits for a second example that explores concurrency (#61 D8)
 - Date: 2026-10-24, against `main` at `8ea3870`
 - To adopt: #61's D8 decides when; then an issue the owner approves, since it adds a tool and
   a protocol to the contract
