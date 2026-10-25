@@ -105,12 +105,10 @@ after: alice fetches [e-alice: prepared] -> bob fetches [e-bob: prepared]
 
 ## The mutants
 
-`mutation/mutants.yaml` lists six small edits to `src/ref_sync_client.py`. `./verify --full`
-makes each in a copy of the example and runs conformance and the content checks on it, as for
-every example; it first runs them on the client as it is, and stops with `oracle-fails` if they
-don't pass there, since every mutant would then look caught. Each mutant's line names the first
-problem found. The checks that fail are those this example's own mutation script listed before
-#58 moved the mutants to data; the checks haven't changed since.
+`mutation/mutants.yaml` lists six small edits to `src/ref_sync_client.py`, which
+`./verify --full` makes and judges (`docs/reference/tool-contract.md`); each mutant's line names
+the first problem found. The checks that fail are those this example's own mutation script
+listed before #58 moved the mutants to data; the checks haven't changed since.
 
 | Mutant | First problem found | Checks that fail |
 |---|---|---|

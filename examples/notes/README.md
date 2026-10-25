@@ -53,10 +53,8 @@ demo/notes_app_as_written.py     the service as first written, with two bugs
 
 ## The mutants
 
-`mutation/mutants.yaml` lists five small edits to `src/notes_app.py`. `./verify --full` makes
-each in a copy of the example and runs conformance and the content checks on it, as for every
-example; it first runs them on the service as it is, and stops with `oracle-fails` if they
-don't pass there, since every mutant would then look caught (`docs/reference/tool-contract.md`).
+`mutation/mutants.yaml` lists five small edits to `src/notes_app.py`, which `./verify --full`
+makes and judges (`docs/reference/tool-contract.md`).
 
 | Mutant | Caught by |
 |---|---|
