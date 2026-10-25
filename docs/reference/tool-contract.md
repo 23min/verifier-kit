@@ -264,7 +264,7 @@ the oracle doesn't catch:
 |---|---|---|---|
 | `no-machines` | error | `./verify` | no `spec/*/spine.yaml` at all, including an `examples/*/` folder without `spec/` |
 | `no-adapter` | error | `./verify` | a machine has no `conformance/adapter_<machine>.cmd` |
-| `no-checks` | error | `./verify`; `run_checks.py --require-checks` | from `./verify`: no `checks/run.cmd`; from `run_checks.py` with the flag: no `test_*` functions under the folder, which may be missing |
+| `no-checks` | error | `./verify`; `run_checks.py` | from `./verify`: no `checks/run.cmd`; from `run_checks.py`: no `test_*` functions under the folder, which may be missing |
 | `no-mutation` | error | `./verify --full` | no `mutation/mutants.yaml` and no `mutation/mutate_*.cmd` |
 | `bad-command` | error | `./verify` | a `.cmd` file can't be read, is empty, holds more than one line, or can't be split; or a checks or mutation command's program can't be started |
 | `bad-mutants` | error | `./verify --full` | `mutation/mutants.yaml` can't be read, isn't YAML, isn't a list of mutants or holds none; or a mutant lacks `name`, `file`, `find` or `replace`, holds another field or a value that isn't text, has an empty `name` or `find`, a `file` outside `src/`, or another mutant's name |
@@ -279,9 +279,9 @@ one form per piece it can't arise (#69). It is never reused.
 `tools/run_checks.py` follows the same exit codes and line format.
 `run_checks.py` reports `check-failed` (error) for a `test_*` function that raised, with the
 exception's last line, and `check-unloadable` (error) for a `test_*.py` file it can't import,
-then runs the other files.
-Without `--require-checks`, `run_checks.py` passes on zero checks. A Python example's
-`checks/run.cmd` passes the flag: `env PYTHONPATH=src run_checks.py checks --require-checks`.
+then runs the other files, and `no-checks` when it finds no checks at all, as a checks command
+must. It takes one argument, the folder, `checks` when none is given; a Python example's
+`checks/run.cmd` is `env PYTHONPATH=src run_checks.py checks`.
 
 ## Known gaps
 
