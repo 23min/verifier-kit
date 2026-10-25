@@ -1,10 +1,10 @@
 # Example: elixir_job
 
 One background job with retries, as Oban runs them, written in Elixir. Where notes and ref_sync
-are Python, this example shows the toolkit checking a project in another language. Its adapter,
-content checks and mutation are `.cmd` files, as every example's are, each holding one command
-line that `./verify` runs from this folder (`docs/adr/0007-no-language-built-in.md`); its lines
-run Elixir where theirs call the Python helpers in `tools/`. The chapter (`spec/job/chapter.md`) gives
+are Python, this example shows the toolkit checking a project in another language. Its adapter
+and content checks are `.cmd` files, as every example's are, each holding one command line that
+`./verify` runs from this folder (`docs/adr/0007-no-language-built-in.md`); its lines run Elixir
+where theirs call the Python helpers in `tools/`. Its mutants are data, as every example's are. The chapter (`spec/job/chapter.md`) gives
 the rules, J1 and J2, and the scenarios J01-J07. The work is tracked in issue #35.
 
 ## What it shows
@@ -43,7 +43,7 @@ spec/job/behaviors/                valid/ must be allowed, invalid/ refused     
 conformance/adapter_job.exs, .cmd  the adapter; its header is the whole contract with src/    person
 checks/run.exs, run.cmd            runs the checks; exits 0 pass, 1 a check failed, 2 none ran person
 checks/job/job_test.exs            J01-J07, and J1 and J2 in every reachable job              person
-mutation/mutate_job.exs, .cmd      five deliberate bugs the oracle must catch                 person
+mutation/mutants.yaml              five deliberate bugs the oracle must catch                 person
 src/job.ex                         the lifecycle and the job                                  builder
 ```
 
@@ -57,17 +57,18 @@ src/job.ex                         the lifecycle and the job                    
 
 ## The mutants
 
-`mutate_job.exs` makes one small edit at a time to `src/job.ex`, in a copy of the example, and
-runs the same two commands `./verify` runs on it. It first runs them on the job as it is, and
-stops if they don't pass there, since a broken command would make every mutant look caught.
+`mutation/mutants.yaml` lists five small edits to `src/job.ex`. `./verify --full` makes each in
+a copy of the example and runs conformance and the content checks on it, as for every example;
+it first runs them on the job as it is, and stops with `oracle-fails` if they don't pass there,
+since every mutant would then look caught (`docs/reference/tool-contract.md`).
 
 | Mutant | Caught by |
 |---|---|
-| a last failure is retried | conformance, checks |
-| cancel is refused while running | conformance, checks |
-| one attempt too many | checks |
-| start does not count an attempt | checks |
-| a running attempt counts as the next | checks |
+| a last failure is retried | job: code conforms to spine, content checks |
+| cancel is refused while running | job: code conforms to spine, content checks |
+| one attempt too many | content checks |
+| start does not count an attempt | content checks |
+| a running attempt counts as the next | content checks |
 
 The last three break the job's counting, not its lifecycle, so `conform` passes on them; with
 the content checks deleted they survive, as `demo/faults.sh` scenario 13 shows.

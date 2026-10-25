@@ -32,7 +32,7 @@ From the repo root:
 ./verify examples/ref_sync          # fast checks, including the explorer and the Git checks
 ./verify examples/ref_sync --full   # also the six mutants
 VERIFY_VERBOSE=1 ./verify examples/ref_sync   # also the explorer's bounds and world counts
-python3 examples/ref_sync/mutation/mutate_ref_sync.py   # the mutants, with what caught each
+VERIFY_VERBOSE=1 ./verify examples/ref_sync --full   # also each mutant's first problem found
 ```
 
 It needs the `git` program besides Python 3 and PyYAML. The client uses it to publish, and the
@@ -55,8 +55,7 @@ checks/ref_sync/explore.py           breadth-first search over moves; knows noth
 checks/ref_sync/world.py             the simulated remote, faults, crashes, S1-S5 and S7      person
 checks/ref_sync/test_protocol.py     scenarios C01-C08                                        person
 checks/ref_sync/test_git_ref.py      C09-C11 and S6 against real Git                          person
-mutation/mutate_ref_sync.py          six deliberate bugs the oracle must catch                person
-mutation/mutate_ref_sync.cmd         the line that runs it                                    person
+mutation/mutants.yaml                six deliberate bugs the oracle must catch                person
 src/ref_sync_client.py               the lifecycle, the client and its Git remote             builder
 ```
 
@@ -106,9 +105,12 @@ after: alice fetches [e-alice: prepared] -> bob fetches [e-bob: prepared]
 
 ## The mutants
 
-`mutate_ref_sync.py` makes one small edit at a time to `src/ref_sync_client.py` and runs
-conformance and the content checks against it. It first runs them on the client as it is, and
-stops with `oracle-fails` if they don't pass there, since every mutant would then look caught.
+`mutation/mutants.yaml` lists six small edits to `src/ref_sync_client.py`. `./verify --full`
+makes each in a copy of the example and runs conformance and the content checks on it, as for
+every example; it first runs them on the client as it is, and stops with `oracle-fails` if they
+don't pass there, since every mutant would then look caught. Each mutant's line names the first
+problem found. The checks that fail are those this example's own mutation script listed before
+#58 moved the mutants to data; the checks haven't changed since.
 
 | Mutant | First problem found | Checks that fail |
 |---|---|---|

@@ -1,0 +1,27 @@
+# The mutants ./verify --full makes in a copy of this example: each one edit to src/ that the
+# oracle must catch. `find` must occur exactly once in `file` (docs/reference/tool-contract.md).
+
+- name: 'editors may restore'
+  file: src/notes_app.py
+  find: 'raise PermissionDenied("only the owner can restore")'
+  replace: 'pass'
+
+- name: 'drafts may be trashed'
+  file: src/notes_app.py
+  find: 'raise InvalidState("only published notes can be trashed")'
+  replace: 'pass'
+
+- name: 'active notes may be deleted forever'
+  file: src/notes_app.py
+  find: 'raise InvalidState("only notes in the trash can be deleted")'
+  replace: 'pass'
+
+- name: 'trashed notes may be published'
+  file: src/notes_app.py
+  find: 'raise InvalidState("cannot publish a trashed note")'
+  replace: 'pass'
+
+- name: 'edits are stored in upper case'
+  file: src/notes_app.py
+  find: 'note.text = text'
+  replace: 'note.text = text.upper()'

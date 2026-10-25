@@ -102,9 +102,19 @@ if scenario 5 "Two readings of the chapter disagree (interpretation loop, not a 
   expect 1 "case-disagrees     draft/trash: role=owner" "case-disagrees     trashed/restore: role=editor"
 fi
 
-if scenario 6 "Checking the checker: the content checks are deleted" \
-   "the mutant that upper-cases text survives, because only the content checks could see it"; then
-  rm "$W/examples/notes/checks/notes/test_content.py"
+if scenario 6 "Checking the checker: the content checks pass but never look at the text" \
+   "the mutant that upper-cases text survives, because only a check of the text could see it"; then
+  cat > "$W/examples/notes/checks/notes/test_content.py" <<'EOF'
+from notes_app import NotesService
+
+
+# covers: draft/edit@4a79e65e9c2b
+def test_editor_can_edit_a_draft():
+    svc = NotesService()
+    note = svc.create("olivia")
+    svc.share(note, "olivia", "eddie")
+    svc.edit(note, "eddie", "Draft by Eddie")
+EOF
   show ./verify --full
   expect 1 "mutant-survived    edits are stored in upper case"
 fi
@@ -123,14 +133,14 @@ if scenario 7 "The agent's Stop hook on a failing tree" \
   expect 0 '"systemMessage"' "attempt cap (1) is reached"
 fi
 
-if scenario 8 "The adapter, the content checks and the mutation script are removed" \
+if scenario 8 "The adapter, the content checks and the mutants are removed" \
    "each missing piece is an error; nothing is skipped silently"; then
   rm "$W/examples/notes/conformance/adapter_notes.cmd" "$W/examples/notes/checks/run.cmd"
   rm -r "$W/examples/notes/mutation"
   show ./verify --full
   expect 1 "no-adapter         notes: examples/notes/conformance/adapter_notes.cmd not found" \
     "no-checks          examples/notes/checks: no examples/notes/checks/run.cmd" \
-    "no-mutation        examples/notes/mutation: no examples/notes/mutation/mutate_*.cmd"
+    "no-mutation        examples/notes/mutation: no examples/notes/mutation/mutants.yaml or mutate_*.cmd"
 fi
 
 if scenario 9 "The service cannot be imported: it imports a module that does not exist" \
@@ -162,23 +172,25 @@ if scenario 12 "Elixir: the job counts one attempt too many" \
   expect 1 "ok    job: code conforms to spine" "FAIL  content checks" "test J03: maximum 3"
 fi
 
-if scenario 13 "Elixir: checking the checker, the content checks are deleted" \
-   "a counting mutant survives, since conform alone cannot see it"; then
-  rm "$W/examples/elixir_job/checks/job/job_test.exs"
+if scenario 13 "Elixir: checking the checker, the checks that count attempts are deleted" \
+   "a counting mutant survives, since conform and the checks left cannot see it"; then
+  # J03, J04 and the walk over every reachable job: the checks that reach a job's last attempt
+  sed -i.bak -e '/^  test "J03: /,/^  end$/d' -e '/^  test "J04: /,/^  end$/d' \
+    -e '/^  for max <- 1..4 do$/,/^  end$/d' "$W/examples/elixir_job/checks/job/job_test.exs"
   show ./verify examples/elixir_job --full
-  expect 1 "no checks ran from checks/job/" "mutant-survived    one attempt too many"
+  expect 1 "ok    content checks" "mutant-survived    one attempt too many"
 fi
 
 if scenario 14 "Checking the checker: every example's code already fails its oracle" \
-   "each mutation script stops with oracle-fails, rather than counting every mutant as caught"; then
+   "each example's mutants stop at oracle-fails, rather than every mutant counting as caught"; then
   cp "$W/examples/notes/demo/notes_app_as_written.py" "$W/examples/notes/src/notes_app.py"
   sed -i.bak 's/self.remote.push(parent, files, force=False)/self.remote.push(parent, files, force=True)/' \
     "$W/examples/ref_sync/src/ref_sync_client.py"
   sed -i.bak 's/def transition(:running, :fail, :last), do: {:ok, :discarded}/def transition(:running, :fail, :last), do: {:ok, :retrying}/' "$W/$JOB"
   show ./verify --full
-  expect 1 "oracle-fails       on src/notes_app.py as it is: conformance did not pass" \
-    "oracle-fails       on src/ref_sync_client.py as it is: checks did not pass" \
-    "oracle-fails       on the job as it is"
+  expect 1 "oracle-fails       examples/notes/mutation/mutants.yaml: on the code as it is, notes: code conforms to spine failed" \
+    "oracle-fails       examples/ref_sync/mutation/mutants.yaml: on the code as it is, content checks failed" \
+    "oracle-fails       examples/elixir_job/mutation/mutants.yaml: on the code as it is, job: code conforms to spine, content checks failed"
 fi
 
 # The Stop hook's reply, read as JSON, as Claude Code reads it.

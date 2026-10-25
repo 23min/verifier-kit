@@ -117,9 +117,23 @@ func pythonLamp(stuck bool) files {
 	f := pythonNames(stuck)
 	f["conformance/adapter_lamp.cmd"] = "env PYTHONPATH=src adapter_shim.py conformance/adapter_lamp.py\n"
 	f["checks/run.cmd"] = "env PYTHONPATH=src run_checks.py checks --require-checks\n"
-	f["mutation/mutate_lamp.cmd"] = "python3 mutation/mutate_lamp.py\n"
+	f["mutation/mutants.yaml"] = lampMutants
+	delete(f, "mutation/mutate_lamp.py") // a Python name, which pythonNames shows alone
 	return f
 }
+
+// lampMutants are two mutants conform catches.
+const lampMutants = `# Each one edit to src/ that the oracle must catch.
+- name: a second press leaves it lit
+  file: src/lamp.py
+  find: '"lit" if self.state == "dark" else "dark"'
+  replace: '"lit"'
+
+- name: a dropped lamp still works
+  file: src/lamp.py
+  find: 'self.state = "broken"'
+  replace: pass
+`
 
 // pythonNames is a root in Python with no command lines: the pieces only by their Python names.
 func pythonNames(stuck bool) files {
@@ -151,7 +165,6 @@ func examplesProject() files {
 	failing := pythonLamp(true)
 	failing["checks/lamp/test_lamp.py"] = lampCheck + "\n\ndef test_a_second_press_darkens_it():\n    lamp = Lamp()\n    lamp.press()\n    lamp.press()\n    assert lamp.state == \"dark\", lamp.state\n"
 	failing["checks/lamp/test_unloadable.py"] = "import no_such_module\n"
-	failing["mutation/mutate_lamp.py"] = "print(\"error   mutant-survived    lamp: a second press leaves it lit\")\nprint(\"-- 1 errors, 1 mutants\")\nraise SystemExit(1)\n"
 
 	failingCommands := commandLamp()
 	failingCommands["src/lamp.py"] = lampCode(true)
@@ -172,8 +185,66 @@ func examplesProject() files {
 		badCommands["conformance/adapter_"+m+".cmd"] = line
 	}
 
+	// a mutant that survives, three that are stale, and a mutation command beside them
+	mutants := pythonLamp(false)
+	mutants["mutation/mutants.yaml"] = lampMutants + `
+- name: a comment is added
+  file: src/lamp.py
+  find: 'def __init__(self):'
+  replace: 'def __init__(self):  # mutated'
+
+- name: a text that is gone
+  file: src/lamp.py
+  find: no such text
+  replace: x
+
+- name: a text found twice
+  file: src/lamp.py
+  find: raise ValueError("broken")
+  replace: pass
+
+- name: a file that is gone
+  file: src/gone.py
+  find: x
+  replace: y
+`
+	mutants["mutation/mutate_tool.cmd"] = "sh -c \"echo -- 0 errors, 3 mutants\"\n"
+
+	badMutants := pythonLamp(false)
+	badMutants["mutation/mutants.yaml"] = `- name: no file
+  find: x
+  replace: y
+- name: outside src
+  file: spec/lamp/spine.yaml
+  find: x
+  replace: y
+- name: outside src
+  file: src/../spine.yaml
+  find: x
+  replace: y
+- name: empty find
+  file: src/lamp.py
+  find: ''
+  replace: y
+- name: [not, text]
+  file: src/lamp.py
+  find: x
+  replace: y
+  extra: 1
+- just a line
+- name: fine but not run
+  file: src/lamp.py
+  find: def press(self)
+  replace: def press(self, x=1)
+`
+	emptyMutants := pythonLamp(false)
+	emptyMutants["mutation/mutants.yaml"] = "# none yet\n"
+
 	return files{}.
 		with("examples/python", pythonLamp(false)).
+		with("examples/mutants", mutants).
+		with("examples/badmutants", badMutants).
+		with("examples/emptymutants", emptyMutants).
 		with("examples/commands", commandLamp()).
 		with("examples/failing", failing).
 		with("examples/failingcommands", failingCommands).
@@ -236,9 +307,12 @@ func projects(tmp string) []project {
 			r("examples/missing", "--full"),
 			r("examples/empty", "--full"),
 			r("examples/unsound", "--full"),
+			r("examples/mutants", "--full"), r("examples/badmutants", "--full"),
+			r("examples/emptymutants", "--full"),
 			r("../outside"), r(filepath.Join(tmp, "outside"), "--full"),
 			{from: "examples", args: []string{"python"}},
 			withEnv("VERIFY_REPORTS=reports", "examples/python"),
+			withEnv("VERIFY_VERBOSE=1", "examples/python", "--full"),
 			r("--help"), r("--bogus"), r("examples/python", "examples/commands"), r("no-such-folder"),
 		}},
 		{name: "own", files: pythonLamp(false).with("", files{"policy.yaml": ownPolicy}), git: true, runs: []run{

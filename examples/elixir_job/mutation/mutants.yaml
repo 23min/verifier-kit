@@ -1,0 +1,27 @@
+# The mutants ./verify --full makes in a copy of this example: each one edit to src/ that the
+# oracle must catch. `find` must occur exactly once in `file` (docs/reference/tool-contract.md).
+
+- name: 'a last failure is retried'
+  file: src/job.ex
+  find: 'def transition(:running, :fail, :last), do: {:ok, :discarded}'
+  replace: 'def transition(:running, :fail, :last), do: {:ok, :retrying}'
+
+- name: 'cancel is refused while running'
+  file: src/job.ex
+  find: 'when state in [:queued, :running, :retrying]'
+  replace: 'when state in [:queued, :retrying]'
+
+- name: 'one attempt too many'
+  file: src/job.ex
+  find: 'if current == job.max_attempts'
+  replace: 'if current > job.max_attempts'
+
+- name: 'start does not count an attempt'
+  file: src/job.ex
+  find: 'attempts = if event == :start, do: job.attempts + 1, else: job.attempts'
+  replace: 'attempts = job.attempts'
+
+- name: 'a running attempt counts as the next'
+  file: src/job.ex
+  find: 'current = if job.state in [:queued, :retrying], do: job.attempts + 1, else: job.attempts'
+  replace: 'current = job.attempts + 1'

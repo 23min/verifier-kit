@@ -29,14 +29,19 @@ ROOT is a folder laid out like a project: spec/, checks/, conformance/, src/, mu
 Without ROOT: this folder when it has spec/, otherwise every examples/*/ in turn.
 
 Nothing is skipped silently: a step that does not run prints a skip line with the reason,
-and a missing piece (no spine, no adapter, no content checks, no mutation script under
---full) is an error.
+and a missing piece (no spine, no adapter, no content checks, no mutants under --full) is an
+error.
 
-Every piece is a .cmd file holding one command line, in any language:
-conformance/adapter_<machine>.cmd, checks/run.cmd, mutation/mutate_<name>.cmd. A command runs
-from its root, without a shell, with tools/ first on its PATH, so a line can name a helper
-such as adapter_shim.py or run_checks.py, and with VERIFY_SPINE set to the command line that
-runs spine; checks and mutation pass when it exits 0.
+The adapter and the content checks are .cmd files holding one command line, in any language:
+conformance/adapter_<machine>.cmd, checks/run.cmd. A command runs from its root, without a
+shell, with tools/ first on its PATH, so a line can name a helper such as adapter_shim.py or
+run_checks.py, and with VERIFY_SPINE set to the command line that runs spine; checks pass
+when it exits 0.
+
+The mutants are mutation/mutants.yaml, a list of edits to src/, each a name, file, find and
+replace. With --full, each mutant is made in a copy of the root, and the oracle must catch it:
+conform or the content checks must fail there, though they pass on the code as it is. A
+mutation tool's command, mutation/mutate_<name>.cmd, runs as well, and passes when it exits 0.
 
 Every run builds spine and verify from tools/ into tools/bin/ with Go; Go's build cache makes
 that quick when nothing changed. Without Go, nothing runs.
@@ -153,8 +158,11 @@ func newShell(stdout io.Writer) (*shell, error) {
 // do runs one step, prints it, and says whether it passed.
 func (sh *shell) do(s step, label string) bool {
 	var o outcome
-	if s.cmd != nil {
+	switch {
+	case s.cmd != nil:
 		o = sh.run(s.cmd)
+	case s.mutate != nil:
+		o = sh.mutate(s.mutate)
 	}
 	for _, l := range verdict(s, o, sh.verbose) {
 		fmt.Fprintln(sh.stdout, l)
@@ -172,6 +180,11 @@ func (sh *shell) run(c *command) outcome {
 	if c.dir != "" {
 		dir = sh.path(c.dir)
 	}
+	return sh.runFrom(c, dir)
+}
+
+// runFrom runs a command from dir, wherever its plan says it runs from.
+func (sh *shell) runFrom(c *command, dir string) outcome {
 	var env []string
 	if c.inRoot {
 		env = sh.rootEnv
@@ -245,6 +258,127 @@ func (sh *shell) path(p string) string {
 	return filepath.Join(sh.here, p)
 }
 
+// mutate runs the oracle on the code as it is, then on each mutant, each time in a copy of the
+// root, and gives the lines under the step: oracle-fails alone when the code as it is fails,
+// otherwise a line per mutant, then the tally.
+func (sh *shell) mutate(m *mutation) outcome {
+	root := sh.path(m.prefix)
+	asIs, err := sh.inCopy(root, "", "", m.oracle)
+	if err != nil {
+		return outcome{out: "cannot make a copy of " + root + ": " + program.Strerror(err)}
+	}
+	if line := oracleFails(m.shown, asIs); line != "" {
+		return outcome{out: line + "\n" + tally(1, 0) + "\n"}
+	}
+	var lines []string
+	errors := 0
+	for _, mu := range m.mutants {
+		var mutated, why string
+		source, err := os.ReadFile(filepath.Join(root, mu.file))
+		if err != nil {
+			why = mu.file + " cannot be read: " + program.Strerror(err)
+		} else {
+			mutated, why = apply(string(source), mu)
+		}
+		if why != "" {
+			lines = append(lines, staleLine(mu.name, why))
+			errors++
+			continue
+		}
+		runs, err := sh.inCopy(root, mu.file, mutated, m.oracle)
+		if err != nil {
+			return outcome{out: "cannot make a copy of " + root + ": " + program.Strerror(err)}
+		}
+		line, isError := verdictOf(mu.name, runs)
+		lines = append(lines, line)
+		if isError {
+			errors++
+		}
+	}
+	lines = append(lines, tally(errors, len(m.mutants)))
+	return outcome{ok: errors == 0, out: strings.Join(lines, "\n") + "\n"}
+}
+
+// inCopy runs the oracle's steps in a new copy of the root's folders that the steps read, with
+// file, when given, holding text; the copy is removed after. Output names the root, not the copy.
+func (sh *shell) inCopy(root, file, text string, oracle []step) ([]ran, error) {
+	dir, err := os.MkdirTemp("", "verify-mutant-")
+	if err != nil {
+		return nil, err
+	}
+	defer os.RemoveAll(dir)
+	for _, f := range copied {
+		if exists(filepath.Join(root, f)) {
+			if err := copyTree(filepath.Join(root, f), filepath.Join(dir, f)); err != nil {
+				return nil, err
+			}
+		}
+	}
+	if file != "" {
+		info, err := os.Stat(filepath.Join(root, file))
+		if err != nil {
+			return nil, err
+		}
+		if err := os.WriteFile(filepath.Join(dir, file), []byte(text), info.Mode().Perm()); err != nil {
+			return nil, err
+		}
+	}
+	real, err := filepath.EvalSymlinks(dir)
+	if err != nil {
+		return nil, err
+	}
+	var runs []ran
+	for _, s := range oracle {
+		r := ran{name: s.name, failed: true}
+		switch {
+		case s.lines != nil:
+			r.out = strings.Join(s.lines, "\n")
+		default:
+			o := sh.runFrom(s.cmd, dir)
+			r.failed, r.out = !o.ok, o.out
+			if o.startErr != "" {
+				r.failed, r.out = true, startFailure(s.cmd, o.startErr)
+			}
+		}
+		r.out = strings.ReplaceAll(strings.ReplaceAll(r.out, real, root), dir, root)
+		runs = append(runs, r)
+	}
+	return runs, nil
+}
+
+// copyTree copies the folder from to the new folder to: folders, files with their modes, and
+// links as links.
+func copyTree(from, to string) error {
+	return filepath.WalkDir(from, func(p string, d os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		rel, _ := filepath.Rel(from, p)
+		target := filepath.Join(to, rel)
+		info, err := d.Info()
+		if err != nil {
+			return err
+		}
+		switch {
+		case d.IsDir():
+			return os.MkdirAll(target, info.Mode().Perm())
+		case info.Mode()&os.ModeSymlink != 0:
+			link, err := os.Readlink(p)
+			if err != nil {
+				return err
+			}
+			return os.Symlink(link, target)
+		case info.Mode().IsRegular():
+			data, err := os.ReadFile(p)
+			if err != nil {
+				return err
+			}
+			return os.WriteFile(target, data, info.Mode().Perm())
+		}
+		return nil
+	})
+}
+
 // facts reads what the root at prefix p holds.
 func (sh *shell) facts(p string) rootFacts {
 	r := rootFacts{prefix: p}
@@ -259,30 +393,33 @@ func (sh *shell) facts(p string) rootFacts {
 			checks:    isDir(filepath.Join(root, "checks", m)),
 		}
 		if f := filepath.Join(root, "conformance", "adapter_"+m+".cmd"); isFile(f) {
-			mf.adapter = readCmd(f, p+"conformance/adapter_"+m+".cmd")
+			mf.adapter = readPiece(f, p+"conformance/adapter_"+m+".cmd")
 		}
 		r.machines = append(r.machines, mf)
 	}
 	if f := filepath.Join(root, "checks", "run.cmd"); isFile(f) {
-		r.checks = readCmd(f, p+"checks/run.cmd")
+		r.checks = readPiece(f, p+"checks/run.cmd")
+	}
+	if f := filepath.Join(root, "mutation", "mutants.yaml"); exists(f) {
+		r.mutants = readPiece(f, p+"mutation/mutants.yaml")
 	}
 	entries, _ := os.ReadDir(filepath.Join(root, "mutation"))
 	for _, e := range entries {
 		name := e.Name()
 		f := filepath.Join(root, "mutation", name)
 		if strings.HasPrefix(name, "mutate_") && strings.HasSuffix(name, ".cmd") && len(name) >= len("mutate_.cmd") && exists(f) {
-			r.mutations = append(r.mutations, *readCmd(f, p+"mutation/"+name))
+			r.mutations = append(r.mutations, *readPiece(f, p+"mutation/"+name))
 		}
 	}
 	return r
 }
 
-func readCmd(path, shown string) *cmdFile {
+func readPiece(path, shown string) *pieceFile {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		err = fmt.Errorf("%s", program.Strerror(err))
 	}
-	return &cmdFile{shown: shown, data: data, err: err}
+	return &pieceFile{shown: shown, data: data, err: err}
 }
 
 // folder is the root given, from the working directory, as an absolute path with no links in

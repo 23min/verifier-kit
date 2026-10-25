@@ -67,8 +67,9 @@ func roots(hasSpec bool, examples []string) []string {
 	return out
 }
 
-// cmdFile is a .cmd file as read: its content, or why it couldn't be read.
-type cmdFile struct {
+// pieceFile is a piece's file as read, a .cmd file or mutants.yaml: its content, or why it
+// couldn't be read.
+type pieceFile struct {
 	shown string // its path as lines name it, the root's prefix in front
 	data  []byte
 	err   error
@@ -77,17 +78,18 @@ type cmdFile struct {
 // machineFacts is what a root holds for one spec/<machine>/spine.yaml.
 type machineFacts struct {
 	name      string
-	behaviors bool     // spec/<machine>/behaviors/ is a folder
-	checks    bool     // checks/<machine>/ is a folder
-	adapter   *cmdFile // conformance/adapter_<machine>.cmd, or nil when there is none
+	behaviors bool       // spec/<machine>/behaviors/ is a folder
+	checks    bool       // checks/<machine>/ is a folder
+	adapter   *pieceFile // conformance/adapter_<machine>.cmd, or nil when there is none
 }
 
 // rootFacts is what a root holds, as far as its steps depend on it.
 type rootFacts struct {
 	prefix    string
 	machines  []machineFacts
-	checks    *cmdFile  // checks/run.cmd, or nil when there is none
-	mutations []cmdFile // every mutation/mutate_*.cmd, by name
+	checks    *pieceFile  // checks/run.cmd, or nil when there is none
+	mutants   *pieceFile  // mutation/mutants.yaml, or nil when there is none
+	mutations []pieceFile // every mutation/mutate_*.cmd, by name
 }
 
 // config is what every root's steps share.
@@ -114,13 +116,15 @@ type command struct {
 	shown  string // the .cmd file the command came from, or empty for spine
 }
 
-// step is one line of the run, and the lines under it. Exactly one of skip, lines and cmd is
-// set: a step that doesn't run, a step that fails without running, or a program to run.
+// step is one line of the run, and the lines under it. Exactly one of skip, lines, cmd and
+// mutate is set: a step that doesn't run, a step that fails without running, a program to run,
+// or the mutants in mutants.yaml to make and judge.
 type step struct {
-	name  string
-	skip  string
-	lines []string
-	cmd   *command
+	name   string
+	skip   string
+	lines  []string
+	cmd    *command
+	mutate *mutation
 }
 
 // group is steps run in turn. When the first fails and unsound is set, the rest don't run and
@@ -169,18 +173,7 @@ func planRoot(r rootFacts, c config) []group {
 			stale.name = m.name + ": checks cite current spine"
 		}
 
-		conform := step{name: m.name + ": code conforms to spine"}
-		switch {
-		case m.adapter == nil:
-			conform.lines = []string{finding("no-adapter", m.name, p+"conformance/adapter_"+m.name+".cmd not found")}
-		default:
-			if line, _, bad := commandLine(*m.adapter); bad != "" {
-				conform.lines = []string{bad}
-			} else {
-				argv := append([]string{c.spine, "conform", "spec/" + m.name + "/spine.yaml", "--adapter-cmd", line}, c.junit(jp+m.name+"-conform")...)
-				conform.cmd = &command{argv: argv, dir: p, inRoot: true}
-			}
-		}
+		conform := conformStep(m, p, c.spine, c.junit(jp+m.name+"-conform"))
 		g.steps = append(g.steps, behaviors, stale, conform)
 		out = append(out, g)
 	}
@@ -188,18 +181,17 @@ func planRoot(r rootFacts, c config) []group {
 		out = append(out, group{steps: []step{{name: "spines found", lines: []string{finding("no-machines", p+"spec", "no "+p+"spec/*/spine.yaml")}}}})
 	}
 
-	checks := step{name: "content checks", lines: []string{finding("no-checks", p+"checks", "no "+p+"checks/run.cmd")}}
-	if r.checks != nil {
-		checks = rootCommand("content checks", *r.checks, p)
-	}
-	out = append(out, group{steps: []step{checks}})
+	out = append(out, group{steps: []step{checksStep(r.checks, p)}})
 
 	switch {
 	case !c.full:
 		out = append(out, group{steps: []step{{name: "mutants killed", skip: "fast mode; --full runs them"}}})
-	case len(r.mutations) == 0:
-		out = append(out, group{steps: []step{{name: "mutants killed", lines: []string{finding("no-mutation", p+"mutation", "no "+p+"mutation/mutate_*.cmd")}}}})
+	case r.mutants == nil && len(r.mutations) == 0:
+		out = append(out, group{steps: []step{{name: "mutants killed", lines: []string{finding("no-mutation", p+"mutation", "no "+p+"mutation/mutants.yaml or mutate_*.cmd")}}}})
 	default:
+		if r.mutants != nil {
+			out = append(out, group{steps: []step{mutantsStep(r, c.spine)}})
+		}
 		for _, f := range r.mutations {
 			name := strings.TrimSuffix(path.Base(f.shown), ".cmd")
 			out = append(out, group{steps: []step{rootCommand("mutants killed ("+name+")", f, p)}})
@@ -208,8 +200,51 @@ func planRoot(r rootFacts, c config) []group {
 	return out
 }
 
+// conformStep runs conform on a machine with its adapter's line, from the root at prefix p.
+func conformStep(m machineFacts, p, spine string, junit []string) step {
+	s := step{name: m.name + ": code conforms to spine"}
+	switch {
+	case m.adapter == nil:
+		s.lines = []string{finding("no-adapter", m.name, p+"conformance/adapter_"+m.name+".cmd not found")}
+	default:
+		if line, _, bad := commandLine(*m.adapter); bad != "" {
+			s.lines = []string{bad}
+		} else {
+			argv := append([]string{spine, "conform", "spec/" + m.name + "/spine.yaml", "--adapter-cmd", line}, junit...)
+			s.cmd = &command{argv: argv, dir: p, inRoot: true}
+		}
+	}
+	return s
+}
+
+// checksStep runs the content checks, from the root at prefix p.
+func checksStep(f *pieceFile, p string) step {
+	if f == nil {
+		return step{name: "content checks", lines: []string{finding("no-checks", p+"checks", "no "+p+"checks/run.cmd")}}
+	}
+	return rootCommand("content checks", *f, p)
+}
+
+// mutantsStep makes and judges the mutants in mutants.yaml. Each copy runs the steps that read
+// src/, the machines' conform and the content checks, without JUnit reports.
+func mutantsStep(r rootFacts, spine string) step {
+	s := step{name: "mutants killed (mutants.yaml)"}
+	mutants, problems := readMutants(*r.mutants)
+	if problems != nil {
+		s.lines = problems
+		return s
+	}
+	var oracle []step
+	for _, m := range r.machines {
+		oracle = append(oracle, conformStep(m, r.prefix, spine, nil))
+	}
+	oracle = append(oracle, checksStep(r.checks, r.prefix))
+	s.mutate = &mutation{prefix: r.prefix, shown: r.mutants.shown, mutants: mutants, oracle: oracle}
+	return s
+}
+
 // rootCommand is a step that runs a .cmd file's command from the root.
-func rootCommand(name string, f cmdFile, p string) step {
+func rootCommand(name string, f pieceFile, p string) step {
 	_, words, bad := commandLine(f)
 	if bad != "" {
 		return step{name: name, lines: []string{bad}}
@@ -220,7 +255,7 @@ func rootCommand(name string, f cmdFile, p string) step {
 // commandLine reads a .cmd file as spine conform reads --adapter-cmd: one line, with one line
 // ending after it at most, split by shell quoting rules. bad is the bad-command error line when
 // the file holds no single command line.
-func commandLine(f cmdFile) (line string, words []string, bad string) {
+func commandLine(f pieceFile) (line string, words []string, bad string) {
 	badCommand := func(why string) (string, []string, string) {
 		return "", nil, finding("bad-command", f.shown, why)
 	}
@@ -263,10 +298,8 @@ func verdict(s step, o outcome, verbose bool) []string {
 		return []string{"skip  " + s.name + " (" + s.skip + ")"}
 	case s.lines != nil:
 		return failed(s.name, s.lines)
-	case o.startErr != "" && s.cmd.shown != "":
-		return failed(s.name, []string{finding("bad-command", s.cmd.shown, "cannot run "+s.cmd.argv[0]+": "+o.startErr)})
 	case o.startErr != "":
-		return failed(s.name, []string{o.startErr})
+		return failed(s.name, []string{startFailure(s.cmd, o.startErr)})
 	}
 	head := "ok    " + s.name
 	if !o.ok {
@@ -282,6 +315,15 @@ func verdict(s step, o outcome, verbose bool) []string {
 		out = append(out, "      "+l)
 	}
 	return out
+}
+
+// startFailure is the line for a command that couldn't be started: bad-command for a root's
+// command, the system's reason for spine.
+func startFailure(c *command, why string) string {
+	if c.shown == "" {
+		return why
+	}
+	return finding("bad-command", c.shown, "cannot run "+c.argv[0]+": "+why)
 }
 
 func failed(name string, lines []string) []string {

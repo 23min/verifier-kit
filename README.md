@@ -16,8 +16,8 @@ and roles; it doubles as the toolkit's acceptance test. The second,
 workflow events to one Git ref, checked through every interleaving of their steps, lost
 replies and crashes up to a bound, and against real Git. The third,
 [`examples/elixir_job/`](examples/elixir_job/README.md), is a background job with retries,
-written in Elixir: its adapter, content checks and mutation are commands, so it shows the
-toolkit checking a project in another language.
+written in Elixir: its adapter and content checks are commands, as every example's are, so it
+shows the toolkit checking a project in another language.
 
 The design is in [`docs/design.md`](docs/design.md); the exact tool contract and spine format
 are in [`docs/reference/`](docs/reference/). Rules for agents working here are in
@@ -94,18 +94,20 @@ checks/notes/                    content checks the spine cannot see; each cites
 conformance/adapter_notes.py     translates spine events into calls on the service
 conformance/adapter_notes.cmd    the line that runs it: env PYTHONPATH=src adapter_shim.py conformance/adapter_notes.py
 checks/run.cmd                   the line that runs the checks: env PYTHONPATH=src run_checks.py checks --require-checks
-mutation/mutate_notes.py         deliberate bugs the oracle must catch
-mutation/mutate_notes.cmd        the line that runs it: python3 mutation/mutate_notes.py
+mutation/mutants.yaml            deliberate bugs the oracle must catch: name, file, find, replace   person
 src/notes_app.py                 the service                                        builder
 demo/notes_app_as_written.py     the service as first written (two bugs)
 README.md                        what the example shows and how to run it
 ```
 
 A project that uses the toolkit has the same folders at its own root, next to `verify` and
-`tools/`. In any language, the adapter, the content checks and each mutation script are `.cmd`
-files, each holding one command line that `./verify` runs from the root, with `tools/` first on
-`PATH` (`docs/adr/0007-no-language-built-in.md`). A Python project's lines call the helpers in
-`tools/` and put `src/` on Python's import path themselves, as notes' do.
+`tools/`. In any language, the adapter and the content checks are `.cmd` files, each holding one
+command line that `./verify` runs from the root, with `tools/` first on `PATH`
+(`docs/adr/0007-no-language-built-in.md`). A Python project's lines call the helpers in `tools/`
+and put `src/` on Python's import path themselves, as notes' do. The mutants are data,
+`mutation/mutants.yaml`, which `./verify --full` makes one at a time in a copy of the root (#58);
+a project with a mutation tool gives its command as `mutation/mutate_<name>.cmd` instead, or as
+well.
 
 ## The three loops
 
@@ -130,11 +132,11 @@ files, each holding one command line that `./verify` runs from the root, with `t
 | checks cite current spine | `spine stale` | content checks that cite a spine cell, or the whole spine, which has since changed | checks that never cite anything (listed as info) |
 | code conforms to spine | `spine conform`, with the command in `adapter_<machine>.cmd` | any state/event/role case where the code allows, refuses or ends up somewhere other than the spine says, with the shortest sequence that shows it | anything beyond 4 steps; data the adapter does not observe |
 | content checks | the command in `checks/run.cmd` | wrong text, values, formats | whatever no check asserts |
-| mutants killed (`--full`) | the command in each `mutation/mutate_*.cmd` | an oracle too weak to notice a planted bug | bugs unlike the planted ones |
+| mutants killed (`--full`) | each mutant in `mutation/mutants.yaml`, on a copy, through conform and the content checks; and the command in each `mutation/mutate_*.cmd` | an oracle too weak to notice a planted bug | bugs unlike the planted ones |
 
 Nothing is skipped silently. A step that does not run prints `skip` with the reason (no
 `VERIFY_BASE`, no behaviors folder, no `--full`, or a spine that is not sound), and a missing
-piece is an error: no spine at all, no adapter, no content checks, or no mutation script under
+piece is an error: no spine at all, no adapter, no content checks, or no mutants under
 `--full`. So is a `.cmd` file that holds no single command line, or whose program can't be
 started. Output is one line per step, with error lines only for failing steps.
 `VERIFY_REPORTS=dir` writes JUnit XML for the spine steps; `spine ... --format json` gives
@@ -214,8 +216,8 @@ current hashes.
 
 An example is a folder `examples/<name>/` with the layout above and a `README.md`. Plain
 `./verify` picks it up; `./verify examples/<name>` runs it alone. Each example needs at least
-one content check and, for `--full`, one mutation script; a missing piece is an error for that
-example only.
+one content check and, for `--full`, one mutant; a missing piece is an error for that example
+only.
 
 Within an example (or a project), everything is keyed by folder name, so for a machine called
 `invoice`: `spec/invoice/spine.yaml`, optional `spec/invoice/behaviors/{valid,invalid}/`,
@@ -223,8 +225,8 @@ Within an example (or a project), everything is keyed by folder name, so for a m
 the adapter protocol (`docs/reference/tool-contract.md`). In Python that program is the shim on
 a file with three functions, `new()`, `apply()` and `observe()`:
 `env PYTHONPATH=src adapter_shim.py conformance/adapter_invoice.py`. `./verify` picks them up,
-and fails with `no-adapter` until the line exists. The content checks and mutation are commands
-too: `checks/run.cmd` and `mutation/mutate_*.cmd`.
+and fails with `no-adapter` until the line exists. The content checks are a command too,
+`checks/run.cmd`, and the mutants are a list, `mutation/mutants.yaml`.
 
 ## Limits
 

@@ -28,8 +28,8 @@ flowchart LR
     rc["tools/run_checks.py"]
     shim["tools/adapter_shim.py<br/>a Python adapter over JSON lines"]
   end
-  mut["{root}/mutation/mutate_*.cmd"]
   subgraph files["Files in the repo"]
+    mut["the mutants, per root<br/>mutation/mutants.yaml"]
     oracle["the oracle, per root<br/>spec/, checks/, conformance/"]
     code["the code, per root<br/>src/"]
     policy["policy.yaml"]
@@ -43,9 +43,7 @@ flowchart LR
   verify --> spine
   verify -->|"a Python root's checks/run.cmd"| rc
   spine -->|"conform, a Python root's adapter line"| shim
-  verify -->|"--full only"| mut
-  mut -->|"runs as subprocesses"| spine
-  mut --> rc
+  verify -->|"--full: each mutant in a copy, then spine conform and the checks there"| mut
   spine --> oracle
   spine --> code
   spine --> policy
@@ -79,14 +77,15 @@ flowchart TD
     end
     loop --> content["content checks: the line in<br/>{root}/checks/run.cmd, from {root}"]
     content --> f{"--full?"}
-    f -- yes --> mut["the line in every<br/>{root}/mutation/mutate_*.cmd, from {root}"]
+    f -- yes --> mut["each mutant in {root}/mutation/mutants.yaml,<br/>in a copy: conform and the content checks;<br/>and the line in every mutate_*.cmd"]
     f -- no --> skipmut["skip mutation"]
   end
   rootloop --> sum["one summary line; exit 0 or 1"]
 ```
 
-Each adapter, the content checks and each mutation script is a `.cmd` file holding one command
-line, in any language (`docs/adr/0007-no-language-built-in.md`). A command runs from its root,
+Each adapter and the content checks are a `.cmd` file holding one command line, in any
+language (`docs/adr/0007-no-language-built-in.md`), and so is a mutation tool's command,
+`mutation/mutate_<name>.cmd`. A command runs from its root,
 without a shell, with the `tools/` next to `verify` first on `PATH`, so that a line can name a
 helper such as `adapter_shim.py` or `run_checks.py` alone, and with `VERIFY_SPINE` set to the
 command line that runs `spine`; checks and mutation pass when it exits 0. `./verify` sets
@@ -104,7 +103,7 @@ program. The two share what both need: `tools/internal/shlex`, which splits a co
 
 A step that cannot run because a piece is missing is an error, not a skip, reported per root:
 no spine at all (`no-machines`), no adapter for a machine (`no-adapter`), no `checks/run.cmd`
-(`no-checks`), or no mutation command under `--full` (`no-mutation`). So is a `.cmd` file that
+(`no-checks`), or no mutants under `--full` (`no-mutation`). So is a `.cmd` file that
 holds no single command line, or whose program can't be started (`bad-command`). A root other than the repo
 itself starts with a `== <root>` line.
 
@@ -123,7 +122,7 @@ flowchart LR
   adapter["conformance/adapter_notes.py<br/>new, apply, observe"]
   app["src/notes_app.py<br/>the service"]
   checks["checks/notes/test_content.py"]
-  mutate["mutation/mutate_notes.py"]
+  mutate["mutation/mutants.yaml<br/>five edits"]
   chapter -->|"read by two interpreters"| readings
   readings -->|"spine diff; a person ratifies"| spineY
   behav -->|"spine behaviors replays them"| spineY
@@ -131,7 +130,7 @@ flowchart LR
   adapter -->|"imports and calls"| app
   checks -->|"imports"| app
   checks -.->|"cite cells as covers: state/event@hash"| spineY
-  mutate -->|"an edited copy shadows it"| app
+  mutate -->|"verify makes each in a copy"| app
 ```
 
 Who may change what, from `policy.yaml` (enforced by `spine guard` when `VERIFY_BASE` is set):
@@ -163,7 +162,7 @@ flowchart LR
   world["checks/ref_sync/world.py<br/>simulated remote, faults, S1-S5, S7"]
   gitc["checks/ref_sync/test_git_ref.py<br/>C09-C11, S6"]
   git[("git program<br/>throwaway repositories")]
-  mutate["mutation/mutate_ref_sync.py"]
+  mutate["mutation/mutants.yaml<br/>six edits"]
   chapter -->|"read by two interpreters"| readings
   readings -->|"spine diff; a person ratifies"| spineY
   behav -->|"spine behaviors replays them"| spineY
@@ -177,7 +176,7 @@ flowchart LR
   gitc -->|"publishes with GitRemote"| client
   gitc --> git
   client -->|"GitRemote runs"| git
-  mutate -->|"an edited copy shadows it"| client
+  mutate -->|"verify makes each in a copy"| client
 ```
 
 The explorer is generic: `explore.py` knows nothing of Git, and `world.py` holds the moves, the
@@ -186,8 +185,8 @@ checks fail.
 
 ## The elixir_job example
 
-In `examples/elixir_job/`; the paths below are relative to it. It is in Elixir, so its adapter,
-content checks and mutation are `.cmd` files, each holding one command line that `./verify`
+In `examples/elixir_job/`; the paths below are relative to it. It is in Elixir; its adapter and
+content checks are `.cmd` files, each holding one command line that `./verify`
 runs from this folder. Every command loads `src/**/*.ex` with `elixir -pr`; there is no Mix
 project. The spine is one job's lifecycle, which `spine conform` checks through the job's pure
 `Job.Lifecycle.transition/3`, taking `attempts` as given; the content checks drive `Job`
@@ -202,55 +201,56 @@ flowchart LR
   adapter["conformance/adapter_job.exs<br/>adapter protocol, via adapter_job.cmd"]
   job["src/job.ex<br/>Job.Lifecycle, Job"]
   checks["checks/job/job_test.exs<br/>ExUnit, via checks/run.cmd"]
-  mutate["mutation/mutate_job.exs<br/>via mutate_job.cmd"]
+  mutate["mutation/mutants.yaml<br/>five edits"]
   chapter -->|"read by two interpreters"| readings
   readings -->|"spine diff; a person ratifies"| spineY
   behav -->|"spine behaviors replays them"| spineY
   spineY -->|"spine conform: every sequence up to 4 events"| adapter
   adapter -->|"calls Job.Lifecycle.transition/3"| job
   checks -->|"J01-J07, J1 and J2 in every reachable job"| job
-  mutate -->|"an edited copy, then conform and the checks"| job
+  mutate -->|"verify makes each in a copy"| job
 ```
 
 ## Checking the checker
 
-`./verify --full` runs each example's mutation script. `examples/notes/mutation/mutate_notes.py`
-breaks the service on purpose and expects the oracle to notice. It runs from the example's
-folder, finds `tools/` above it, and runs `conform` through `VERIFY_SPINE`.
-`examples/ref_sync/mutation/mutate_ref_sync.py` works the
-same way with six edits to `src/ref_sync_client.py`, and names every check that failed.
-`examples/elixir_job/mutation/mutate_job.exs` makes five edits to `src/job.ex`, each in a copy
-of the example, and runs `conform` through `VERIFY_SPINE` and the command in `checks/run.cmd`
-there. Each script first runs the oracle on the code as it is, and stops with `oracle-fails`
-unless conformance passes and the checks pass or find none, because an oracle that already
-fails would count every mutant as caught.
+`./verify --full` makes each example's mutants, listed in `mutation/mutants.yaml`, each one edit
+to a file under `src/` (#58). For each root it runs the steps that read `src/`, each machine's
+`conform` and the content checks, first on the code as it is and then on each mutant, every
+time in a new temporary copy of the root's `spec/`, `conformance/`, `checks/` and `src/`. If a
+step fails on the code as it is, it reports `oracle-fails` and makes no mutant, because an
+oracle that already fails would count every mutant as caught. A mutant is killed when any step
+exits other than 0, survives when all pass, and is stale when its text isn't in its file exactly
+once. This is `verify`'s own code, in every language alike (`mutants.go` for the decisions,
+`verify.go` for the copies); a project with a mutation tool gives its command as
+`mutation/mutate_<name>.cmd`, which runs as a step of its own.
 
 ```mermaid
 sequenceDiagram
-  participant M as mutate_notes.py
-  participant T as temp folder
-  participant C as spine conform (notes)
-  participant R as run_checks.py checks
-  M->>C: run on src/notes_app.py as it is, PYTHONPATH=src:conformance
-  M->>R: run over the example's checks/, same PYTHONPATH
-  Note over M: oracle-fails, and no mutant, unless both exit 0
-  loop each of 5 hand-picked edits to src/notes_app.py
-    M->>T: write notes_app.py with one edit
-    M->>C: run with PYTHONPATH=temp:src:conformance
-    M->>R: run over the example's checks/, same PYTHONPATH
-    Note over M: killed if either exits 1
+  participant V as verify
+  participant T as temp copy
+  participant C as spine conform, per machine
+  participant R as checks/run.cmd
+  V->>T: copy spec/, conformance/, checks/ and src/
+  V->>C: run from the copy
+  V->>R: run from the copy
+  Note over V: oracle-fails, and no mutant, unless every step exits 0
+  loop each mutant in mutation/mutants.yaml
+    V->>T: a new copy, with the mutant's one edit to src/
+    V->>C: run from the copy
+    V->>R: run from the copy
+    Note over V: killed if any step exits other than 0
   end
-  Note over M: exits 1 if any mutant survived
+  Note over V: the step fails if any mutant survived or is stale
 ```
 
 ## Acceptance: `demo/faults.sh` and CI
 
 `demo/faults.sh` is the toolkit's own acceptance test. Each scenario makes a fresh copy of the
 repo (without `.git`) in a temp folder, seeds one fault, runs a command there, and checks the
-exit code and the lines it must print. Scenarios 0 to 10 seed faults in the notes example, and
+exit code and the lines it must print. Scenarios 0 to 9 seed faults in the notes example, and
 `./verify` in the copy checks every example, so ref_sync's and elixir_job's checks run in each of
 them too. Scenarios 11 to 13 seed faults in elixir_job and check it alone. Scenario 14 breaks
-the code of all three examples, so that each mutation script finds its oracle failing.
+the code of all three examples, so that each example's mutants stop at `oracle-fails`.
 Scenarios 15 to 17 run the Stop hook and read its reply as JSON, as Claude Code does: on a
 machine without `python3`, on failing lines that hold characters JSON must escape, and with a
 project folder that doesn't exist.
@@ -273,15 +273,15 @@ flowchart LR
 | 3 | `on:` instead of `event:` in the notes spine | `./verify` | `yaml-boolean-key`, and the notes steps skipped |
 | 4 | a `build/*` branch edits the notes spine | `VERIFY_BASE=main ./verify` | `path-denied examples/notes/spec/notes/spine.yaml` |
 | 5 | none (two readings) | `spine diff` on the notes readings | two `case-disagrees` lines |
-| 6 | notes content checks deleted | `./verify --full` | `mutant-survived` for the upper-case mutant |
+| 6 | notes content checks replaced by one that never looks at the text | `./verify --full` | `mutant-survived` for the upper-case mutant |
 | 7 | the service as first written | the Stop hook, twice | a block, then the attempt-cap warning |
-| 8 | the notes adapter, content checks and mutation removed | `./verify --full` | `no-adapter`, `no-checks`, `no-mutation` |
+| 8 | the notes adapter, content checks and mutants removed | `./verify --full` | `no-adapter`, `no-checks`, `no-mutation` |
 | 9 | the notes service imports a module that doesn't exist | `./verify examples/notes` | `adapter-failed`, `check-unloadable` |
 | 10 | unused since #69, when notes' adapter became a command line: scenario 1 runs it through the adapter protocol | | |
 | 11 | the job retries after its last attempt fails | `./verify examples/elixir_job` | `diverges running/fail attempts=last` |
 | 12 | the job counts one attempt too many | `./verify examples/elixir_job` | conformance `ok`, content checks `FAIL` with J03 |
-| 13 | elixir_job's content checks deleted | `./verify examples/elixir_job --full` | `no checks ran`, and `mutant-survived` for a counting mutant |
-| 14 | the code of all three examples, as in scenarios 1 and 11 and ref_sync's first mutant | `./verify --full` | `oracle-fails` from each mutation script |
+| 13 | elixir_job's checks that count attempts deleted (J03, J04 and every reachable job) | `./verify examples/elixir_job --full` | content checks `ok`, and `mutant-survived` for a counting mutant |
+| 14 | the code of all three examples, as in scenarios 1 and 11 and ref_sync's first mutant | `./verify --full` | `oracle-fails` for each example's mutants |
 | 15 | no `python3` on the PATH, and no session id | the Stop hook, twice | a block with the failing lines, then the attempt-cap warning, each saying every session shares the count |
 | 16 | `./verify` prints failing lines with quotes, backslashes, control characters and a byte that isn't UTF-8 | the Stop hook | a block whose failing lines are exactly those |
 | 17 | the project folder given to the Stop hook doesn't exist | the Stop hook | a block saying `./verify` did not run |
@@ -322,7 +322,7 @@ program.
 |---|---|---|
 | `spine check`, `behaviors`, `stale`, `conform` | per machine | `{root}/spec/{m}/`, `{root}/checks/{m}/`, `{root}/conformance/adapter_{m}.cmd` |
 | content checks | per root: one run over all of `{root}/checks/` | `{root}/checks/run.cmd` |
-| mutation | per root: every `{root}/mutation/mutate_*.cmd` under `--full` | file name pattern; each script runs all of its root's `checks/` |
+| mutation | per root, under `--full`: `{root}/mutation/mutants.yaml`, and every `{root}/mutation/mutate_*.cmd` | the file's name, and a file name pattern; each mutant runs every machine's `conform` and all of `checks/`, in a copy |
 | `src/` | per root: loaded by the commands | module name (`notes_app`, `ref_sync_client`), with `src/` on `PYTHONPATH` from the line; elixir_job's commands load `src/**/*.ex` |
 | path guard | repo-wide | `policy.yaml` patterns over `examples/*/` and the toolkit's folders |
 | deny rules, CODEOWNERS (`integrations/`) | a project's root | folder patterns for a project with `spec/` at its root |

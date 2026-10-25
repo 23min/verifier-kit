@@ -227,7 +227,8 @@ growth; "still true" stamps later contradicted by an audit.
 | Docs checks, doc reader | designed |
 | Source link, review diff, surface check | designed |
 | Migration tables, dispute channel, `status` command | designed |
-| Adapter protocol for other languages, with a Python shim; `./verify` runs adapters, checks and mutation as commands | built |
+| Adapter protocol for other languages, with a Python shim; `./verify` runs adapters and checks as commands | built |
+| Mutation as data: `mutation/mutants.yaml`, each mutant made by `verify` in a copy (#58) | built |
 | SARIF | designed |
 | Production replay | later |
 

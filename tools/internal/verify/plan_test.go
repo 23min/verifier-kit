@@ -5,6 +5,7 @@ package verify
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -73,7 +74,7 @@ func TestCommandLine(t *testing.T) {
 		{data: "\xff\n", bad: bad("cannot be read: not UTF-8")},
 		{err: errors.New("Permission denied"), bad: bad("cannot be read: Permission denied")},
 	} {
-		line, words, b := commandLine(cmdFile{shown: "r/x.cmd", data: []byte(c.data), err: c.err})
+		line, words, b := commandLine(pieceFile{shown: "r/x.cmd", data: []byte(c.data), err: c.err})
 		if line != c.line || !reflect.DeepEqual(words, c.words) || b != c.bad {
 			t.Errorf("commandLine(%q) = %q, %q, %q; want %q, %q, %q", c.data, line, words, b, c.line, c.words, c.bad)
 		}
@@ -85,10 +86,10 @@ func TestPlanRoot(t *testing.T) {
 	r := rootFacts{
 		prefix: "examples/x/",
 		machines: []machineFacts{
-			{name: "lamp", behaviors: true, adapter: &cmdFile{shown: "examples/x/conformance/adapter_lamp.cmd", data: []byte("adapt 'a b'\n")}},
+			{name: "lamp", behaviors: true, adapter: &pieceFile{shown: "examples/x/conformance/adapter_lamp.cmd", data: []byte("adapt 'a b'\n")}},
 			{name: "door", checks: true},
 		},
-		mutations: []cmdFile{{shown: "examples/x/mutation/mutate_one.cmd", data: []byte("mutate\n")}},
+		mutations: []pieceFile{{shown: "examples/x/mutation/mutate_one.cmd", data: []byte("mutate\n")}},
 	}
 	want := []string{
 		"unless sound: lamp: other steps need a sound spine",
@@ -108,11 +109,11 @@ func TestPlanRoot(t *testing.T) {
 		t.Errorf("planRoot gave\n%s\nwant\n%s", strings.Join(got, "\n"), strings.Join(want, "\n"))
 	}
 
-	none := rootFacts{checks: &cmdFile{shown: "checks/run.cmd", data: []byte("run\n")}}
+	none := rootFacts{checks: &pieceFile{shown: "checks/run.cmd", data: []byte("run\n")}}
 	want = []string{
 		"spines found: fails error   no-machines        spec: no spec/*/spine.yaml",
 		"content checks: in : run",
-		"mutants killed: fails error   no-mutation        mutation: no mutation/mutate_*.cmd",
+		"mutants killed: fails error   no-mutation        mutation: no mutation/mutants.yaml or mutate_*.cmd",
 	}
 	if got := describe(planRoot(none, config{spine: "/s", full: true})); !reflect.DeepEqual(got, want) {
 		t.Errorf("planRoot without machines gave\n%s\nwant\n%s", strings.Join(got, "\n"), strings.Join(want, "\n"))
@@ -141,6 +142,8 @@ func describe(groups []group) []string {
 				out = append(out, s.name+": skip "+s.skip)
 			case s.lines != nil:
 				out = append(out, s.name+": fails "+strings.Join(s.lines, " | "))
+			case s.mutate != nil:
+				out = append(out, s.name+": "+fmt.Sprint(len(s.mutate.mutants))+" mutants of "+s.mutate.shown+", each through "+strings.Join(describe([]group{{steps: s.mutate.oracle}}), " | "))
 			case s.cmd.inRoot:
 				out = append(out, s.name+": in "+s.cmd.dir+": "+strings.Join(s.cmd.argv, " "))
 			default:
@@ -208,4 +211,90 @@ func errText(err error) string {
 		return ""
 	}
 	return err.Error()
+}
+
+func TestPlanMutants(t *testing.T) {
+	adapter := &pieceFile{shown: "x/conformance/adapter_lamp.cmd", data: []byte("adapt\n")}
+	r := rootFacts{
+		prefix:    "x/",
+		machines:  []machineFacts{{name: "lamp", adapter: adapter}, {name: "door"}},
+		checks:    &pieceFile{shown: "x/checks/run.cmd", data: []byte("run\n")},
+		mutants:   &pieceFile{shown: "x/mutation/mutants.yaml", data: []byte("- {name: m, file: src/a.py, find: a, replace: b}\n")},
+		mutations: []pieceFile{{shown: "x/mutation/mutate_tool.cmd", data: []byte("tool\n")}},
+	}
+	got := describe(planRoot(r, config{spine: "/s", reports: "/reports", full: true}))
+	want := []string{
+		"mutants killed (mutants.yaml): 1 mutants of x/mutation/mutants.yaml, each through " +
+			"lamp: code conforms to spine: in x/: /s conform spec/lamp/spine.yaml --adapter-cmd adapt | " +
+			"door: code conforms to spine: fails error   no-adapter         door: x/conformance/adapter_door.cmd not found | " +
+			"content checks: in x/: run",
+		"mutants killed (mutate_tool): in x/: tool",
+	}
+	if tail := got[len(got)-2:]; !reflect.DeepEqual(tail, want) {
+		t.Errorf("planRoot with both forms gave\n%s\nwant\n%s", strings.Join(tail, "\n"), strings.Join(want, "\n"))
+	}
+	r.mutants.data = []byte("[]\n")
+	if got := describe(planRoot(r, config{spine: "/s", full: true})); got[len(got)-2] != "mutants killed (mutants.yaml): fails error   bad-mutants        x/mutation/mutants.yaml: holds no mutants" {
+		t.Errorf("planRoot with an empty list gave %q", got[len(got)-2])
+	}
+}
+
+func TestReadMutants(t *testing.T) {
+	bad := func(why string) string { return finding("bad-mutants", "m.yaml", why) }
+	for _, c := range []struct {
+		data     string
+		err      error
+		mutants  []mutant
+		problems []string
+	}{
+		{data: "- name: a\n  file: src/./x.py\n  find: |-\n    one\n      two\n  replace: \"\"\n",
+			mutants: []mutant{{name: "a", file: "src/x.py", find: "one\n  two", replace: ""}}},
+		{err: errors.New("Is a directory"), problems: []string{bad("cannot be read: Is a directory")}},
+		{data: "", problems: []string{bad("holds no mutants")}},
+		{data: "# nothing yet\n", problems: []string{bad("holds no mutants")}},
+		{data: "~\n", problems: []string{bad("holds no mutants")}},
+		{data: "[]\n", problems: []string{bad("holds no mutants")}},
+		{data: "name: a\n", problems: []string{bad("is not a list of mutants")}},
+		{data: "- [\n", problems: []string{bad("is not YAML: go-yaml load error in parser (while parsing a flow node) at L2.C1: did not find expected node content")}},
+		{data: "- {name: a, name: b, file: src/x, find: x, replace: y}\n", problems: []string{bad("mutant 1 (a): name is given twice")}},
+		{data: "- {name: a, file: /src/x, find: 1, replace: y}\n", problems: []string{bad("mutant 1 (a): find is not text"), bad("mutant 1 (a): file /src/x is not under src/")}},
+		{data: "- {name: '', file: src/x, find: x}\n", problems: []string{bad("mutant 1: no replace"), bad("mutant 1: name is empty")}},
+	} {
+		mutants, problems := readMutants(pieceFile{shown: "m.yaml", data: []byte(c.data), err: c.err})
+		if !reflect.DeepEqual(mutants, c.mutants) || !reflect.DeepEqual(problems, c.problems) {
+			t.Errorf("readMutants(%q) = %q, %q; want %q, %q", c.data, mutants, problems, c.mutants, c.problems)
+		}
+	}
+}
+
+func TestMutantVerdicts(t *testing.T) {
+	m := mutant{name: "m", file: "src/a.py", find: "x = 1", replace: "x = 2"}
+	if got, why := apply("a\nx = 1\nb", m); got != "a\nx = 2\nb" || why != "" {
+		t.Errorf("apply gave %q, %q", got, why)
+	}
+	if _, why := apply("x = 1; x = 1", m); why != "its find text occurs 2 times in src/a.py, not once" {
+		t.Errorf("apply on two gave %q", why)
+	}
+
+	passed := ran{name: "content checks", out: "error   not shown\n"}
+	conform := ran{name: "lamp: code conforms to spine", failed: true, out: "info    coverage   x\n\nerror   diverges           lit/press : no\n"}
+	checks := ran{name: "content checks", failed: true, out: "error   check-failed   y\n"}
+	if line := oracleFails("m.yaml", []ran{passed}); line != "" {
+		t.Errorf("oracleFails on passing steps gave %q", line)
+	}
+	if line := oracleFails("m.yaml", []ran{conform, checks}); line != finding("oracle-fails", "m.yaml", "on the code as it is, lamp: code conforms to spine, content checks failed; first: error diverges lit/press : no") {
+		t.Errorf("oracleFails gave %q", line)
+	}
+	if line, isError := verdictOf("m", []ran{passed}); isError != true || line != "error   mutant-survived    m: no part of the oracle noticed" {
+		t.Errorf("verdictOf a survivor gave %q, %v", line, isError)
+	}
+	if line, isError := verdictOf("m", []ran{conform, checks}); isError || line != "info    mutant-killed      m: caught by lamp: code conforms to spine, content checks; first: error diverges lit/press : no" {
+		t.Errorf("verdictOf a killed mutant gave %q, %v", line, isError)
+	}
+	if line, _ := verdictOf("m", []ran{{name: "s", failed: true, out: "info    only\nRunning ExUnit with seed: 1\n  1) test x\n"}}); line != "info    mutant-killed      m: caught by s" {
+		t.Errorf("verdictOf with no problem line gave %q", line)
+	}
+	if staleLine("m", "gone") != finding("mutant-stale", "m", "gone") || tally(1, 2) != "-- 1 errors, 2 mutants" {
+		t.Errorf("staleLine or tally gave %q, %q", staleLine("m", "gone"), tally(1, 2))
+	}
 }
