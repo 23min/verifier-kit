@@ -85,12 +85,8 @@ flowchart TD
 
 Each adapter and the content checks are a `.cmd` file holding one command line, in any
 language (`docs/adr/0007-no-language-built-in.md`), and so is a mutation tool's command,
-`mutation/mutate_<name>.cmd`. A command runs from its root,
-without a shell, with the `tools/` next to `verify` first on `PATH`, so that a line can name a
-helper such as `adapter_shim.py` or `run_checks.py` alone, and with `VERIFY_SPINE` set to the
-command line that runs `spine`; checks and mutation pass when it exits 0. `./verify` sets
-nothing for any language: a Python line puts `src/` on the import path itself, with
-`env PYTHONPATH=src`.
+`mutation/mutate_<name>.cmd`. How `./verify` runs them, and what it gives them, is in the
+contract's section on `./verify` (`docs/reference/tool-contract.md`).
 
 `./verify` is a short Bash script. Before anything else it builds `spine` and `verify` into
 `tools/bin/` with Go, then runs `verify` with its arguments, and `verify` does all of the above
@@ -308,8 +304,8 @@ Go `spine` still matched `tools/spine.py` on every input, before that retired (#
 It copies `verify` and `tools/` into fixture projects, as a project does, and runs `./verify`
 in them as its callers do. Between them the fixtures reach every path through it: misuse, a
 failed build, which roots run, the guard, every skip, each piece as a command line, passing and
-failing, each missing piece, each `bad-command`, a root that gives its pieces only by Python
-file names, and `PYTHON` and `.venv`, which it ignores. Each run must give exactly what
+failing, each missing piece, each `bad-command`, and a root that gives its pieces only by
+Python file names. Each run must give exactly what
 `tools/internal/verify/testdata/record/` holds: its exit code, standard output, standard error
 and every JUnit report, with the test's temporary folder written as `$TMP`. Every run is in the
 C locale. The fixtures need no Elixir.

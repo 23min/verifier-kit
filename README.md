@@ -103,8 +103,8 @@ README.md                        what the example shows and how to run it
 
 A project that uses the toolkit has the same folders at its own root, next to `verify` and
 `tools/`. In any language, the adapter and the content checks are `.cmd` files, each holding one
-command line that `./verify` runs from the root, with `tools/` first on `PATH`
-(`docs/adr/0007-no-language-built-in.md`). A Python project's lines call the helpers in `tools/`
+command line that `./verify` runs (`docs/reference/tool-contract.md`,
+`docs/adr/0007-no-language-built-in.md`). A Python project's lines call the helpers in `tools/`
 and put `src/` on Python's import path themselves, as notes' do. The mutants are data,
 `mutation/mutants.yaml`, which `./verify --full` makes one at a time in a copy of the root (#58);
 a project with a mutation tool gives its command as `mutation/mutate_<name>.cmd` instead, or as
