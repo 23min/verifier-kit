@@ -197,14 +197,14 @@ runs `tools/bin/verify` with its arguments, which does the rest.
 
 Runs, per `spec/<machine>/spine.yaml`: `check`, then `behaviors` over `spec/<machine>/behaviors`,
 `stale` over `checks/<machine>`, and `conform` with the machine's adapter. Then the content
-checks, and with `--full` every mutation command. Each of these three pieces is a command, in
-any language:
+checks, and with `--full` the mutants. The adapter and the content checks are commands, in any
+language; the mutants are data, or a mutation tool's command:
 
 | Piece | File | Run |
 |---|---|---|
 | the adapter, per machine | `conformance/adapter_<machine>.cmd` | its line given to `conform --adapter-cmd`, with `conform` run from the root |
 | the content checks | `checks/run.cmd` | from the root |
-| mutation, under `--full` | each `mutation/mutate_<name>.cmd` | from the root |
+| mutation, under `--full` | `mutation/mutants.yaml`, and each `mutation/mutate_<name>.cmd` | the list by `verify`, below; each command from the root |
 
 A `.cmd` file holds one command line, read as `--adapter-cmd` reads one: split by shell quoting
 rules and run without a shell. One line ending, `\n` or `\r\n`, may follow it. A file that can't
@@ -217,10 +217,35 @@ The command runs from the root, with `./verify`'s environment, with the `tools/`
 line puts `src/` on the import path itself, for example
 `env PYTHONPATH=src adapter_shim.py conformance/adapter_notes.py`, and finds Python on `PATH`.
 A content-check command passes when it exits 0, which must mean that at least one check
-ran and every one passed: a command that finds no checks must fail. A mutation command passes
-when it exits 0, which must mean that at least one mutant ran and every one was caught; it runs
-the oracle on each mutant itself, through `VERIFY_SPINE`. Either one's output is shown when it
-fails. With `VERIFY_BASE` set it
+ran and every one passed: a command that finds no checks must fail. A mutation command, for a
+mutation tool, passes when it exits 0, which must mean that at least one mutant ran and every one
+was caught; it runs the oracle on each mutant itself, through `VERIFY_SPINE`. Either one's output
+is shown when it fails.
+
+`mutation/mutants.yaml` is a YAML list of mutants, each a mapping of exactly four texts: `name`,
+which no other mutant in the list has; `file`, a path under `src/`; `find`, which must occur in
+that file exactly once; and `replace`, which takes its place:
+
+```yaml
+- name: edits are stored in upper case
+  file: src/notes_app.py
+  find: 'note.text = text'
+  replace: 'note.text = text.upper()'
+```
+
+Under `--full`, `verify` runs the steps that read `src/`, each machine's `conform` and the
+content checks, without JUnit reports, on the code as it is and then on each mutant: each time
+in a new temporary copy of the root's `spec/`, `conformance/`, `checks/` and `src/`, with the one
+edit made, removed after. If any of them fails on the code as it is, the step reports
+`oracle-fails` and no mutant runs. A mutant is killed when any of them exits other than 0, and
+survives when all pass; it is stale when its `find` doesn't occur exactly once in its `file`,
+or the file can't be read. The step, `mutants killed (mutants.yaml)`, passes when every mutant
+is killed. Under it is a line per mutant, then `-- <errors> errors, <mutants> mutants`; output
+from a copy names the root's folder, not the copy. A list that isn't one of such mappings, or
+holds no mutants, is `bad-mutants`, a line per problem, and no mutant runs. A root may hold the
+list and commands both; each runs as its own step.
+
+With `VERIFY_BASE` set it
 first runs `guard` over the diff, once, with the `policy.yaml` next to `verify`, whatever the
 roots are. Output is one `ok`, `FAIL` or `skip` line per step, with error lines under failing
 steps, and a final `--` summary line. A root other than the folder `verify` is in starts with a
@@ -232,15 +257,21 @@ than one ROOT, or a ROOT that is not a folder, is a usage error.
 Every step that does not run prints `skip  <step> (<reason>)`: the guard without `VERIFY_BASE`,
 behaviors without `spec/<machine>/behaviors/`, `stale` without `checks/<machine>/`, mutation
 without `--full`, and (in one line) a machine's remaining steps when its spine is not sound. A
-missing piece, or one given wrongly, is an error instead, reported per root:
+missing piece, or one given wrongly, is an error instead, reported per root, and so is a mutant
+the oracle doesn't catch:
 
 | Code | Severity | From | Meaning |
 |---|---|---|---|
 | `no-machines` | error | `./verify` | no `spec/*/spine.yaml` at all, including an `examples/*/` folder without `spec/` |
 | `no-adapter` | error | `./verify` | a machine has no `conformance/adapter_<machine>.cmd` |
 | `no-checks` | error | `./verify`; `run_checks.py --require-checks` | from `./verify`: no `checks/run.cmd`; from `run_checks.py` with the flag: no `test_*` functions under the folder, which may be missing |
-| `no-mutation` | error | `./verify --full` | no `mutation/mutate_*.cmd` |
+| `no-mutation` | error | `./verify --full` | no `mutation/mutants.yaml` and no `mutation/mutate_*.cmd` |
 | `bad-command` | error | `./verify` | a `.cmd` file can't be read, is empty, holds more than one line, or can't be split; or a checks or mutation command's program can't be started |
+| `bad-mutants` | error | `./verify --full` | `mutation/mutants.yaml` can't be read, isn't YAML, isn't a list of mutants or holds none; or a mutant lacks `name`, `file`, `find` or `replace`, holds another field or a value that isn't text, has an empty `name` or `find`, a `file` outside `src/`, or another mutant's name |
+| `oracle-fails` | error | `./verify --full` | a step that reads `src/` fails on the code as it is, so no mutant runs; names those steps and the first problem found |
+| `mutant-killed` | info | `./verify --full` | a step failed on the mutant; names those steps and the first problem found: the first `error` line in this format that a failing step printed, if any |
+| `mutant-survived` | error | `./verify --full` | every step passed on the mutant |
+| `mutant-stale` | error | `./verify --full` | the mutant's `find` doesn't occur exactly once in its `file`, or the file can't be read |
 
 `ambiguous-piece`, for a piece given both as a Python file and as a command, is retired: with
 one form per piece it can't arise (#69). It is never reused.
@@ -249,9 +280,8 @@ one form per piece it can't arise (#69). It is never reused.
 `run_checks.py` reports `check-failed` (error) for a `test_*` function that raised, with the
 exception's last line, and `check-unloadable` (error) for a `test_*.py` file it can't import,
 then runs the other files.
-Without `--require-checks`, `run_checks.py` passes on zero checks, so that a mutation script,
-which counts a failing run as a caught mutant, is not fooled by an empty folder. A Python
-example's `checks/run.cmd` passes the flag: `env PYTHONPATH=src run_checks.py checks --require-checks`.
+Without `--require-checks`, `run_checks.py` passes on zero checks. A Python example's
+`checks/run.cmd` passes the flag: `env PYTHONPATH=src run_checks.py checks --require-checks`.
 
 ## Known gaps
 

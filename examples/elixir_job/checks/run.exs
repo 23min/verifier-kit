@@ -1,6 +1,5 @@
 # Runs the content checks in checks/job/ with ExUnit. Exits 0 only when at least one check ran
-# and every check passed, 1 when a check failed, and 2 when no check ran, so that the mutation
-# script, which counts exit 1 as a caught mutant, is not fooled by an empty folder.
+# and every check passed, 1 when a check failed, and 2 when no check ran.
 ExUnit.start(autorun: false)
 
 __DIR__

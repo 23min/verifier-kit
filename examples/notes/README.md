@@ -34,8 +34,7 @@ checks/notes/test_content.py     content checks                                 
 checks/run.cmd                   the line that runs them, through run_checks.py     person
 conformance/adapter_notes.py     translates spine events into service calls         person
 conformance/adapter_notes.cmd    the line that runs it, through adapter_shim.py     person
-mutation/mutate_notes.py         deliberate bugs the oracle must catch              person
-mutation/mutate_notes.cmd        the line that runs it                              person
+mutation/mutants.yaml            deliberate bugs the oracle must catch              person
 src/notes_app.py                 the service                                        builder
 demo/notes_app_as_written.py     the service as first written, with two bugs
 ```

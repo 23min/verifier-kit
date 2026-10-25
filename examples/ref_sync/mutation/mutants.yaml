@@ -1,0 +1,32 @@
+# The mutants ./verify --full makes in a copy of this example: each one edit to src/ that the
+# oracle must catch. `find` must occur exactly once in `file` (docs/reference/tool-contract.md).
+
+- name: 'the client forces its push'
+  file: src/ref_sync_client.py
+  find: 'self.remote.push(parent, files, force=False)'
+  replace: 'self.remote.push(parent, files, force=True)'
+
+- name: 'event IDs are not deduplicated'
+  file: src/ref_sync_client.py
+  find: 'if event_path in files:'
+  replace: 'if False:'
+
+- name: 'a push without an answer counts as confirmed'
+  file: src/ref_sync_client.py
+  find: 'event = "response_lost"'
+  replace: 'event = "accepted"'
+
+- name: 'a retry does not check the expected version again'
+  file: src/ref_sync_client.py
+  find: 'if entity["version"] != intent["expected_version"]:'
+  replace: 'if False:'
+
+- name: 'the event is published without its entity change'
+  file: src/ref_sync_client.py
+  find: 'candidate[entity_path] = json.dumps({'
+  replace: 'json.dumps({'
+
+- name: 'the journal drops an operation while its push is under way'
+  file: src/ref_sync_client.py
+  find: 'parent, files = self.candidate'
+  replace: "parent, files = self.candidate\n            del self.journal[record[\"intent\"][\"event_id\"]]"
