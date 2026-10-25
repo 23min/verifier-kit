@@ -180,38 +180,14 @@ The agent never chose to run the oracle; the hook did. In a separate run, an att
 edit `spec/notes/spine.yaml` with the Edit tool was refused by the deny rule. Agent runs
 vary from run to run; the checks do not.
 
-## The spine format (excerpt)
+## The spine format
 
-```yaml
-machine: note
-vars:
-  role: [owner, editor, viewer]       # every variable has a small, finite set of values
-states:
-  draft:   {kind: policy}             # fact: true of the world; policy: a business choice;
-  trashed: {kind: design}             # design: our own choice, the easiest to change
-  purged:  {kind: fact, terminal: true}
-initial: draft
-events: [publish, edit, trash, restore, purge]
-rules:                                # from + event + optional when -> exactly one outcome
-  - {from: draft, event: publish, when: "role == 'owner'", to: active}
-  - {from: draft, event: publish, when: "role != 'owner'", reject: true}
-  - {from: draft, event: edit, when: "role != 'viewer'", stay: true}   # allowed, same state
-  - {from: active, event: restore, when: "role == 'owner'", ignore: true}  # no-op, not an error
-examples:
-  - name: owner trashes and restores
-    steps: ["publish role=owner", "trash role=owner", "restore role=owner"]
-    expect: active
-```
-
-Conditions use a tiny language (declared variables, literals, `==`, `!=`, `in`, `not in`,
-`and`, `or`, `not`), so every case can be enumerated. `spine check` requires exactly one
-rule for every state, event and variable combination. Every name and value is text: quote
-anything YAML would read as something else, such as `"yes"`, `"012"` or `"2026-10-14"`.
-
-A content check cites the cell it depends on with a comment like
-`# covers: trashed/restore@95f9c8204e9f`, or, when it depends on the whole machine, the spine
-with `# covers: spine@<hash>`; `spine hash examples/notes/spec/notes/spine.yaml` prints the
-current hashes.
+A spine is one state machine in YAML: its states, each a fact, a policy or a design choice; its
+events; a few variables, each with a small, finite set of values; and exactly one rule for every
+state, event and combination of values, so that every case can be enumerated.
+[`docs/reference/spine-format.md`](docs/reference/spine-format.md) defines the format, the
+conditions a rule may use, and how a content check cites a cell or the whole spine;
+`spine hash <spine.yaml>` prints the hashes it cites.
 
 ## Adding an example or a machine
 
