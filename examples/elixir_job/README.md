@@ -41,7 +41,7 @@ spec/job/readings/                 two readings, with the prompt and their model
 spec/job/spine.yaml                the ratified lifecycle of one job                          person
 spec/job/behaviors/                valid/ must be allowed, invalid/ refused                   person
 conformance/adapter_job.exs, .cmd  the adapter; its header is the whole contract with src/    person
-checks/run.exs, run.cmd            runs the checks; exits 0 pass, 1 a check failed, 2 none ran person
+checks/run.exs, run.cmd            runs the checks; reports as tools/run_checks.py does     person
 checks/job/job_test.exs            J01-J07, and J1 and J2 in every reachable job              person
 mutation/mutants.yaml              five deliberate bugs the oracle must catch                 person
 src/job.ex                         the lifecycle and the job                                  builder
@@ -70,8 +70,9 @@ since every mutant would then look caught (`docs/reference/tool-contract.md`).
 | start does not count an attempt | content checks |
 | a running attempt counts as the next | content checks |
 
-The last three break the job's counting, not its lifecycle, so `conform` passes on them; with
-the content checks deleted they survive, as `demo/faults.sh` scenario 13 shows.
+The last three break the job's counting, not its lifecycle, so `conform` passes on them. With
+the checks that reach a job's last attempt deleted (J03, J04 and every reachable job), "one
+attempt too many" survives, as `demo/faults.sh` scenario 13 shows.
 
 ## Not verified
 

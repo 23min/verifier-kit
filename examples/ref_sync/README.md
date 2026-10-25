@@ -126,23 +126,19 @@ deduplication mutant is caught as S2 only in C06, where Bob's commit rewrites th
 Alice's event. Elsewhere the version check stops it first: a replayed intent ends conflicted
 rather than published twice.
 
-## Assumed of Git, and not checked
-
-From chapter section 5, the simulated remote and the client rely on these; only the first is
-checked against real Git, and only for one push at a time:
-
-- the remote refuses a push without force that is not a fast-forward, and applies each update
-  of the ref atomically;
-- nobody force-pushes to the workflow ref or deletes it, and published commits stay reachable;
-- a fetch returns the remote's current tip;
-- connections fail and replies get lost, but work again after a while;
-- the journal survives a crash (here it is a dict the caller keeps; durable storage is not
-  part of the example);
-- the Git host accepts a custom ref. C12 is documented, not run: the fallback is a protected
-  branch with its own root, such as `refs/heads/workflow-state`, chosen on purpose.
-
 ## Not verified
 
+- **Git, as assumed.** From chapter section 5, the simulated remote and the client rely on these;
+  only the first is checked against real Git, and only for one push at a time:
+  - the remote refuses a push without force that is not a fast-forward, and applies each update
+    of the ref atomically;
+  - nobody force-pushes to the workflow ref or deletes it, and published commits stay reachable;
+  - a fetch returns the remote's current tip;
+  - connections fail and replies get lost, but work again after a while;
+  - the journal survives a crash (here it is a dict the caller keeps; durable storage is not
+    part of the example);
+  - the Git host accepts a custom ref. C12 is documented, not run: the fallback is a protected
+    branch with its own root, such as `refs/heads/workflow-state`, chosen on purpose.
 - **The shell against the spine.** `conform` checks `transition()` only. That the client
   turns each fetch and push into the right event, and records every state change in its
   journal, is checked through the invariants and outcomes, not step by step.
@@ -154,31 +150,3 @@ checked against real Git, and only for one push at a time:
   found); the bound stays at one so `./verify` stays fast.
 - **Liveness.** Nothing promises that every operation is eventually published.
 - Authorization, malicious clients and anything about a hosted Git service (chapter section 6).
-
-## Measured
-
-In the devcontainer (16 CPUs, Python 3.12.3, git 2.51.1), median of three runs:
-
-| Command | Time |
-|---|---|
-| `./verify examples/ref_sync` | 1.9 s |
-| `./verify examples/ref_sync --full` | 8.2 s |
-| `./verify` (both examples) | 2.4 s |
-| `./verify --full` | 9.7 s |
-| `demo/faults.sh` | 42 s |
-
-`demo/faults.sh` takes 5.6 s on `main` without this example. It runs `./verify` on a copy of
-the whole repo in every scenario, so each one also runs ref-sync's checks, and the three
-`--full` scenarios its mutants, though every seeded fault is in the notes example.
-
-## Future work
-
-- A host that refuses custom refs: the fallback branch of C12, and checking which hosts allow
-  protecting a custom ref.
-- Trust in the server: a remote or a client that does not follow the rules.
-- Authorization: who may publish which events, and permissions revoked mid-operation.
-- Binding code changes to the workflow state that authorized them.
-- Compaction and retention of the workflow ref's history.
-- A comparison with a database built for this, such as Dolt.
-- The explorer's search loop, `explore.py`, is meant to be taken over by a deterministic
-  simulator.

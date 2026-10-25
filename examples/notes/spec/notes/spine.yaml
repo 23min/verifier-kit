@@ -1,9 +1,9 @@
-# Ratified spine for chapter 4 ("Trash"), after you answered the questions the diff raised:
-#   - only published notes can be trashed
-#   - only the owner restores and purges
-#   - viewers cannot edit
+# The lifecycle of one note (chapter.md, section 2). Built on 2026-10-25 from readings/ and the
+# owner's answers in #60: the spine as first ratified, which decides each of the 15 cases the
+# readings disagree on. Its answers: only published notes can be trashed; only the owner restores
+# and purges; viewers cannot edit. Ratified by the reviewed merge of this file.
 machine: note
-section: chapter-4-trash
+section: trash
 vars:
   role: [owner, editor, viewer]
 states:
@@ -41,10 +41,3 @@ rules:
   - {from: trashed, event: restore, when: "role != 'owner'", reject: true}
   - {from: trashed, event: purge, when: "role == 'owner'", to: purged}
   - {from: trashed, event: purge, when: "role != 'owner'", reject: true}
-examples:
-  - name: owner trashes and restores
-    steps: ["publish role=owner", "trash role=owner", "restore role=owner"]
-    expect: active
-  - name: drafts cannot be trashed
-    steps: ["trash role=owner"]
-    expect: rejected
