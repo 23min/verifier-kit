@@ -77,10 +77,11 @@ tools/run_checks.py              runs Python content checks; a Python project's 
 tools/adapter_shim.py            serves a Python adapter over the adapter protocol; an adapter line calls it
 policy.yaml                      which branch role may change which paths
 examples/<name>/                 one worked example each, laid out like a project (below)
+examples/README.md               what every example has, checked by go -C examples test ./...
 demo/                            the toolkit's demos on the notes example: faults.sh, live-builder.sh
 integrations/                    CI, agent and git hook files, to copy when you want them
 docs/                            design (normative), architecture, decisions (adr/), reference, proposals (research/)
-.github/workflows/verify.yml     this repo's own CI: go vet, go test, ./verify --full, demo/faults.sh
+.github/workflows/verify.yml     this repo's own CI: go vet, both go tests, ./verify --full, demo/faults.sh
 ```
 
 Inside an example, for instance `examples/notes/`:

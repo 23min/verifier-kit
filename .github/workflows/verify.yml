@@ -1,6 +1,6 @@
 # The toolkit's own gate: the sample oracle must hold (./verify --full), every seeded fault
-# must be caught (demo/faults.sh), and the Go spine and ./verify must give what their records
-# hold (go test).
+# must be caught (demo/faults.sh), the Go spine and ./verify must give what their records hold
+# (go test), and the examples must follow their conventions (go -C examples test).
 # Make the "verify" job a required check on main.
 name: verify
 
@@ -30,7 +30,7 @@ jobs:
           go-version-file: tools/go.mod
           cache-dependency-path: tools/go.sum
 
-      # The elixir_job example's adapter, checks and mutation run with elixir (1.18+ for JSON).
+      # The elixir_job example's adapter and checks run with elixir (1.18+ for JSON).
       # No problem matchers: the ExUnit failures demo/faults.sh plants would each become a
       # failure annotation on a passing run (#52).
       - uses: erlef/setup-beam@v1
@@ -43,6 +43,9 @@ jobs:
 
       - name: spine and ./verify against their records
         run: go -C tools test ./...
+
+      - name: the examples' conventions
+        run: go -C examples test ./...
 
       - name: verify
         shell: bash
