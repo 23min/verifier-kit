@@ -286,8 +286,10 @@ flowchart LR
 | 16 | `./verify` prints failing lines with quotes, backslashes, control characters and a byte that isn't UTF-8 | the Stop hook | a block whose failing lines are exactly those |
 | 17 | the project folder given to the Stop hook doesn't exist | the Stop hook | a block saying `./verify` did not run |
 
-This repo's CI (`.github/workflows/verify.yml`) runs `go vet` and `go test`, then
-`./verify --full`, then `demo/faults.sh`, on every pull request and push to `main`. It does
+This repo's CI (`.github/workflows/verify.yml`) runs `go vet` and `go test` in `tools/`, then
+`go test` in `examples/`, which checks the conventions every example follows
+(`examples/README.md`), then `./verify --full`, then `demo/faults.sh`, on every pull request and
+push to `main`. It does
 not set `VERIFY_BASE`, so the path guard runs here only inside scenario 4.
 
 `go test` holds the cases test (`tools/internal/spine/cases_test.go`). It runs the Go `spine`

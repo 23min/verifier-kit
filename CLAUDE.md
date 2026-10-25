@@ -9,9 +9,10 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
 
 ## Rules
 
-- **Before you finish any change,** `./verify --full`, `demo/faults.sh`, `go -C tools vet ./...` and
-  `go -C tools test ./...` all pass, as they must in CI. Show their last lines. Don't call something done
-  because it looks right; show the command and its output.
+- **Before you finish any change,** `./verify --full`, `demo/faults.sh`, `go -C tools vet ./...`,
+  `go -C tools test ./...` and `go -C examples test ./...` all pass, as they must in CI. Show
+  their last lines. Don't call something done because it looks right; show the command and its
+  output.
 - **The notes example is the acceptance fixture.** Don't edit `examples/notes/` (its spec,
   checks, conformance adapter, `src/notes_app.py`, mutation and demo) or `demo/` to make a
   failure go away. If a tool change needs the fixture to change, stop and say why.
@@ -32,7 +33,7 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
   `docs/design.md` changes with the code it describes.
 - **Keep it clean.** A change leaves no second copy of anything, no code or file that nothing
   uses, and no description that disagrees with the code. Each pull request says, besides the
-  four commands:
+  five commands:
   - which documents it changed, and the search that found every place the changed fact is told;
   - that `go run golang.org/x/tools/cmd/deadcode@v0.52.0 -test ./...`, run in `tools/`, reports
     nothing (a check run by hand, not a dependency of the toolkit);
@@ -58,6 +59,7 @@ go -C tools test ./...   # runs spine on every test input, and ./verify on its f
                          # difference from their records (tools/internal/*/testdata/record/) fails
 go -C tools test ./internal/spine/ -update    # writes spine's record again; review its diff
 go -C tools test ./internal/verify/ -update   # writes ./verify's record again; review its diff
+go -C examples test ./...  # the examples' conventions (examples/README.md)
 ```
 
 `./verify` needs Go 1.27, Bash and the `git` program; it builds `spine` and `verify` with Go,
