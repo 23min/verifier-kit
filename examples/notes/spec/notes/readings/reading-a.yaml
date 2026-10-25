@@ -1,44 +1,70 @@
-# Interpreter A's reading of chapter 4 ("Trash")
+# Reading A of the notes chapter, by claude-sonnet-5-5, 2026-10-25. Made from (git hash-object):
+# chapter.md ddec45c1553d01e47dd065b49ab9a3813d4dc563, readings/prompt.md 8081d971e53a2f39ec5ebdbaf3ca9b3b31163aef,
+# docs/reference/spine-format.md a37044e7abc004c196b58476de38010f83251e14. The reader was given the filled-in
+# prompt as one file to read, because the tool layer rewrites escapes typed into a prompt. The reply below is
+# unedited, apart from the Markdown code fence around it.
 machine: note
-section: chapter-4-trash
 vars:
-  role: [owner, editor, viewer]
+  roles: [owner, editor, viewer]
 states:
-  draft:   {kind: policy}
-  active:  {kind: policy}
-  trashed: {kind: design}
-  purged:  {kind: fact, terminal: true}
+  draft: {kind: policy}
+  active: {kind: policy}
+  trashed: {kind: policy}
+  purged: {kind: fact, terminal: true}
 initial: draft
 events: [publish, edit, trash, restore, purge]
 rules:
-  - {from: draft, event: publish, when: "role == 'owner'", to: active}
-  - {from: draft, event: publish, when: "role != 'owner'", reject: true}
-  - {from: draft, event: edit, when: "role != 'viewer'", stay: true}
-  - {from: draft, event: edit, when: "role == 'viewer'", reject: true}
-  - {from: draft, event: trash, when: "role == 'owner'", to: trashed}
-  - {from: draft, event: trash, when: "role != 'owner'", reject: true}
-  - {from: draft, event: restore, ignore: true}
-  - {from: draft, event: purge, reject: true}
+  # draft, publish
+  - {from: draft, event: publish, when: "roles == 'owner'", to: active}
+  # undecided: whether an editor can publish a draft
+  - {from: draft, event: publish, when: "roles == 'viewer'", reject: true}
+  # draft, edit
+  # undecided: whether an owner can edit a draft, and what state results
+  # undecided: what state an editor's edit of a draft leaves it in
+  - {from: draft, event: edit, when: "roles == 'viewer'", reject: true}
+  # draft, trash
+  # undecided: whether an owner can trash a draft, and where it goes
+  # undecided: whether an editor can trash a draft
+  - {from: draft, event: trash, when: "roles == 'viewer'", reject: true}
+  # draft, restore
+  # undecided: what restore does to a draft for an owner or editor
+  - {from: draft, event: restore, when: "roles == 'viewer'", reject: true}
+  # draft, purge
+  # undecided: what purge does to a draft for an owner or editor
+  - {from: draft, event: purge, when: "roles == 'viewer'", reject: true}
 
-  - {from: active, event: publish, ignore: true}
-  - {from: active, event: edit, when: "role == 'owner'", stay: true}
-  - {from: active, event: edit, when: "role == 'editor'", stay: true}
-  - {from: active, event: trash, when: "role == 'owner'", to: trashed}
-  - {from: active, event: trash, when: "role != 'owner'", reject: true}
-  - {from: active, event: restore, ignore: true}
-  - {from: active, event: purge, reject: true}
+  # active, publish
+  # undecided: what publish does to an already active note for an owner or editor
+  - {from: active, event: publish, when: "roles == 'viewer'", reject: true}
+  # active, edit
+  # undecided: whether an owner can edit an active note
+  - {from: active, event: edit, when: "roles == 'editor'", stay: true}
+  - {from: active, event: edit, when: "roles == 'viewer'", reject: true}
+  # active, trash
+  - {from: active, event: trash, when: "roles == 'owner'", to: trashed}
+  # undecided: whether an editor can trash an active note
+  - {from: active, event: trash, when: "roles == 'viewer'", reject: true}
+  # active, restore
+  # undecided: what restore does to an active note for an owner or editor
+  - {from: active, event: restore, when: "roles == 'viewer'", reject: true}
+  # active, purge
+  # undecided: what purge does to an active note for an owner or editor
+  - {from: active, event: purge, when: "roles == 'viewer'", reject: true}
 
-  - {from: trashed, event: publish, reject: true}
-  - {from: trashed, event: edit, reject: true}
-  - {from: trashed, event: trash, ignore: true}
-  - {from: trashed, event: restore, when: "role == 'owner'", to: active}
-  - {from: trashed, event: restore, when: "role != 'owner'", reject: true}
-  - {from: trashed, event: purge, when: "role == 'owner'", to: purged}
-  - {from: trashed, event: purge, when: "role != 'owner'", reject: true}
-examples:
-  - name: owner trashes and restores
-    steps: ["publish role=owner", "trash role=owner", "restore role=owner"]
-    expect: active
-  - name: viewer cannot trash
-    steps: ["publish role=owner", "trash role=viewer"]
-    expect: rejected
+  # trashed, publish
+  # undecided: what publish does to a trashed note for an owner or editor
+  - {from: trashed, event: publish, when: "roles == 'viewer'", reject: true}
+  # trashed, edit
+  # undecided: whether an owner or editor can edit a trashed note
+  - {from: trashed, event: edit, when: "roles == 'viewer'", reject: true}
+  # trashed, trash
+  # undecided: what trash does to an already trashed note for an owner or editor
+  - {from: trashed, event: trash, when: "roles == 'viewer'", reject: true}
+  # trashed, restore
+  - {from: trashed, event: restore, when: "roles == 'owner'", to: active}
+  # undecided: whether an editor can restore a trashed note
+  - {from: trashed, event: restore, when: "roles == 'viewer'", reject: true}
+  # trashed, purge
+  - {from: trashed, event: purge, when: "roles == 'owner'", to: purged}
+  # undecided: whether an editor can empty the trash
+  - {from: trashed, event: purge, when: "roles == 'viewer'", reject: true}

@@ -1,44 +1,43 @@
-# Interpreter B's reading of chapter 4 ("Trash")
+# Reading B of the notes chapter, by claude-haiku-5-5, 2026-10-25. Made from (git hash-object):
+# chapter.md ddec45c1553d01e47dd065b49ab9a3813d4dc563, readings/prompt.md 8081d971e53a2f39ec5ebdbaf3ca9b3b31163aef,
+# docs/reference/spine-format.md a37044e7abc004c196b58476de38010f83251e14. The reader was given the filled-in
+# prompt as one file to read, because the tool layer rewrites escapes typed into a prompt. The reply below is
+# unedited.
 machine: note
-section: chapter-4-trash
 vars:
-  role: [owner, editor, viewer]
+  roles: [owner, editor, viewer]
 states:
   draft:   {kind: policy}
   active:  {kind: policy}
-  trashed: {kind: design}
+  trashed: {kind: policy}
   purged:  {kind: fact, terminal: true}
 initial: draft
 events: [publish, edit, trash, restore, purge]
 rules:
-  - {from: draft, event: publish, when: "role == 'owner'", to: active}
-  - {from: draft, event: publish, when: "role != 'owner'", reject: true}
-  - {from: draft, event: edit, when: "role != 'viewer'", stay: true}
-  - {from: draft, event: edit, when: "role == 'viewer'", reject: true}
-  - {from: draft, event: trash, reject: true}
-  - {from: draft, event: restore, ignore: true}
-  - {from: draft, event: purge, reject: true}
-
-  - {from: active, event: publish, ignore: true}
-  - {from: active, event: edit, when: "role != 'viewer'", stay: true}
-  - {from: active, event: edit, when: "role == 'viewer'", reject: true}
-  - {from: active, event: trash, when: "role == 'owner'", to: trashed}
-  - {from: active, event: trash, when: "role != 'owner'", reject: true}
-  - {from: active, event: restore, ignore: true}
-  - {from: active, event: purge, reject: true}
-
-  - {from: trashed, event: publish, reject: true}
-  - {from: trashed, event: edit, reject: true}
-  - {from: trashed, event: trash, ignore: true}
-  - {from: trashed, event: restore, when: "role != 'viewer'", to: active}
-  - {from: trashed, event: restore, when: "role == 'viewer'", reject: true}
-  - {from: trashed, event: purge, when: "role == 'owner'", to: purged}
-  - {from: trashed, event: purge, when: "role != 'viewer'", reject: true}
-  - {from: trashed, event: purge, when: "role == 'viewer'", reject: true}
-examples:
-  - name: owner trashes and restores
-    steps: ["publish role=owner", "trash role=owner", "restore role=owner"]
-    expect: active
-  - name: viewer cannot trash
-    steps: ["publish role=owner", "trash role=viewer"]
-    expect: rejected
+  # draft
+  - {from: draft, event: publish, when: "roles == 'owner'", to: active}
+  # undecided: draft + publish, roles editor and viewer: the chapter has the owner publish and does not say whether anyone else may
+  # undecided: draft + edit, roles owner: the chapter says editors change content and viewers only read, and does not say what owners may do
+  - {from: draft, event: edit, when: "roles == 'editor'", stay: true}
+  - {from: draft, event: edit, when: "roles == 'viewer'", reject: true}
+  - {from: draft, event: trash, when: "roles == 'owner'", to: trashed}
+  # undecided: draft + trash, roles editor and viewer: the chapter gives owners the trash and says nothing about other roles
+  # undecided: draft + restore: the chapter says only that a trashed note can be restored, not from which state or by whom
+  # undecided: draft + purge: the chapter says notes are purged from the trash and does not say whether a draft can be purged directly
+  # active
+  # undecided: active + publish: the chapter does not say what publishing an already published note does
+  # undecided: active + edit, roles owner: the chapter says editors change content and viewers only read, and does not say what owners may do
+  - {from: active, event: edit, when: "roles == 'editor'", stay: true}
+  - {from: active, event: edit, when: "roles == 'viewer'", reject: true}
+  - {from: active, event: trash, when: "roles == 'owner'", to: trashed}
+  # undecided: active + trash, roles editor and viewer: the chapter gives owners the trash and says nothing about other roles
+  # undecided: active + restore: a note in the active state is not in the trash, and the chapter does not say what restore does here
+  # undecided: active + purge: the chapter says notes are purged from the trash and does not say whether an active note can be purged
+  # trashed
+  # undecided: trashed + publish: the chapter does not say whether a trashed note can be published
+  # undecided: trashed + edit, roles owner and editor: the chapter does not say whether a trashed note's content can change
+  - {from: trashed, event: edit, when: "roles == 'viewer'", reject: true}
+  # undecided: trashed + trash: the chapter does not say whether a note already in the trash can be trashed again
+  # undecided: trashed + restore: the chapter says a trashed note can be restored, not by whom, and the scenario gives active only for a note published before the trash; the lifecycle cannot tell a trashed draft from a trashed published note
+  - {from: trashed, event: purge, when: "roles == 'owner'", to: purged}
+  # undecided: trashed + purge, roles editor and viewer: the chapter has the owner empty the trash and says nothing about other roles

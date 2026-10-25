@@ -99,7 +99,7 @@ fi
 if scenario 5 "Two readings of the chapter disagree (interpretation loop, not a gate)" \
    "spine diff lists each disagreement with a witness: the question to put to the spec author"; then
   show "$SPINE" diff examples/notes/spec/notes/readings/reading-a.yaml examples/notes/spec/notes/readings/reading-b.yaml
-  expect 1 "case-disagrees     draft/trash: role=owner" "case-disagrees     trashed/restore: role=editor"
+  expect 1 "case-disagrees     draft/trash: roles=owner" "case-disagrees     trashed/restore: roles=owner"
 fi
 
 if scenario 6 "Checking the checker: the content checks pass but never look at the text" \

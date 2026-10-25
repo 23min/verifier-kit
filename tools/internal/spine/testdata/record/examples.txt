@@ -119,15 +119,159 @@ exit 1
 |     {
 |       "code": "missing-case",
 |       "severity": "error",
+|       "where": "draft/publish",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "draft/edit",
+|       "message": "no rule covers roles=owner"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "draft/edit",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "draft/trash",
+|       "message": "no rule covers roles=owner"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "draft/trash",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "draft/restore",
+|       "message": "no rule covers roles=owner"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "draft/restore",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "draft/purge",
+|       "message": "no rule covers roles=owner"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "draft/purge",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "active/publish",
+|       "message": "no rule covers roles=owner"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "active/publish",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
 |       "where": "active/edit",
-|       "message": "no rule covers role=viewer"
+|       "message": "no rule covers roles=owner"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "active/trash",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "active/restore",
+|       "message": "no rule covers roles=owner"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "active/restore",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "active/purge",
+|       "message": "no rule covers roles=owner"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "active/purge",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "trashed/publish",
+|       "message": "no rule covers roles=owner"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "trashed/publish",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "trashed/edit",
+|       "message": "no rule covers roles=owner"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "trashed/edit",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "trashed/trash",
+|       "message": "no rule covers roles=owner"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "trashed/trash",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "trashed/restore",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "trashed/purge",
+|       "message": "no rule covers roles=editor"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="missing-case active/edit"><failure message="no rule covers role=viewer">no rule covers role=viewer</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="25" failures="25"><testcase classname="spine check" name="missing-case draft/publish"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case draft/edit"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case draft/edit"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case draft/trash"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case draft/trash"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case draft/restore"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case draft/restore"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case draft/purge"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case draft/purge"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case active/publish"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case active/publish"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case active/edit"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case active/trash"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case active/restore"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case active/restore"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case active/purge"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case active/purge"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case trashed/publish"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case trashed/publish"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case trashed/edit"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case trashed/edit"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case trashed/trash"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case trashed/trash"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case trashed/restore"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case trashed/purge"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase></testsuite>
 === in .: spine check --format json --junit REPORT examples/notes/spec/notes/readings/reading-b.yaml
 exit 1
 --- stdout
@@ -136,17 +280,131 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "overlap",
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "draft/publish",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "draft/publish",
+|       "message": "no rule covers roles=viewer"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "draft/edit",
+|       "message": "no rule covers roles=owner"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "draft/trash",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "draft/trash",
+|       "message": "no rule covers roles=viewer"
+|     },
+|     {
+|       "code": "undecided-cell",
+|       "severity": "error",
+|       "where": "draft/restore",
+|       "message": "nothing says what \"restore\" does in \"draft\""
+|     },
+|     {
+|       "code": "undecided-cell",
+|       "severity": "error",
+|       "where": "draft/purge",
+|       "message": "nothing says what \"purge\" does in \"draft\""
+|     },
+|     {
+|       "code": "undecided-cell",
+|       "severity": "error",
+|       "where": "active/publish",
+|       "message": "nothing says what \"publish\" does in \"active\""
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "active/edit",
+|       "message": "no rule covers roles=owner"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "active/trash",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "active/trash",
+|       "message": "no rule covers roles=viewer"
+|     },
+|     {
+|       "code": "undecided-cell",
+|       "severity": "error",
+|       "where": "active/restore",
+|       "message": "nothing says what \"restore\" does in \"active\""
+|     },
+|     {
+|       "code": "undecided-cell",
+|       "severity": "error",
+|       "where": "active/purge",
+|       "message": "nothing says what \"purge\" does in \"active\""
+|     },
+|     {
+|       "code": "undecided-cell",
+|       "severity": "error",
+|       "where": "trashed/publish",
+|       "message": "nothing says what \"publish\" does in \"trashed\""
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "trashed/edit",
+|       "message": "no rule covers roles=owner"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "trashed/edit",
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "undecided-cell",
+|       "severity": "error",
+|       "where": "trashed/trash",
+|       "message": "nothing says what \"trash\" does in \"trashed\""
+|     },
+|     {
+|       "code": "undecided-cell",
+|       "severity": "error",
+|       "where": "trashed/restore",
+|       "message": "nothing says what \"restore\" does in \"trashed\""
+|     },
+|     {
+|       "code": "missing-case",
 |       "severity": "error",
 |       "where": "trashed/purge",
-|       "message": "role=owner matches conflicting rules: reject and -> purged"
+|       "message": "no rule covers roles=editor"
+|     },
+|     {
+|       "code": "missing-case",
+|       "severity": "error",
+|       "where": "trashed/purge",
+|       "message": "no rule covers roles=viewer"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="overlap trashed/purge"><failure message="role=owner matches conflicting rules: reject and -&gt; purged">role=owner matches conflicting rules: reject and -&gt; purged</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="20" failures="20"><testcase classname="spine check" name="missing-case draft/publish"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case draft/publish"><failure message="no rule covers roles=viewer">no rule covers roles=viewer</failure></testcase><testcase classname="spine check" name="missing-case draft/edit"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case draft/trash"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case draft/trash"><failure message="no rule covers roles=viewer">no rule covers roles=viewer</failure></testcase><testcase classname="spine check" name="undecided-cell draft/restore"><failure message="nothing says what &quot;restore&quot; does in &quot;draft&quot;">nothing says what "restore" does in "draft"</failure></testcase><testcase classname="spine check" name="undecided-cell draft/purge"><failure message="nothing says what &quot;purge&quot; does in &quot;draft&quot;">nothing says what "purge" does in "draft"</failure></testcase><testcase classname="spine check" name="undecided-cell active/publish"><failure message="nothing says what &quot;publish&quot; does in &quot;active&quot;">nothing says what "publish" does in "active"</failure></testcase><testcase classname="spine check" name="missing-case active/edit"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case active/trash"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case active/trash"><failure message="no rule covers roles=viewer">no rule covers roles=viewer</failure></testcase><testcase classname="spine check" name="undecided-cell active/restore"><failure message="nothing says what &quot;restore&quot; does in &quot;active&quot;">nothing says what "restore" does in "active"</failure></testcase><testcase classname="spine check" name="undecided-cell active/purge"><failure message="nothing says what &quot;purge&quot; does in &quot;active&quot;">nothing says what "purge" does in "active"</failure></testcase><testcase classname="spine check" name="undecided-cell trashed/publish"><failure message="nothing says what &quot;publish&quot; does in &quot;trashed&quot;">nothing says what "publish" does in "trashed"</failure></testcase><testcase classname="spine check" name="missing-case trashed/edit"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case trashed/edit"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="undecided-cell trashed/trash"><failure message="nothing says what &quot;trash&quot; does in &quot;trashed&quot;">nothing says what "trash" does in "trashed"</failure></testcase><testcase classname="spine check" name="undecided-cell trashed/restore"><failure message="nothing says what &quot;restore&quot; does in &quot;trashed&quot;">nothing says what "restore" does in "trashed"</failure></testcase><testcase classname="spine check" name="missing-case trashed/purge"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case trashed/purge"><failure message="no rule covers roles=viewer">no rule covers roles=viewer</failure></testcase></testsuite>
 === in .: spine check --format json --junit REPORT examples/notes/spec/notes/spine.yaml
 exit 0
 --- stdout
@@ -292,14 +550,57 @@ exit 0
 === in .: spine check examples/notes/spec/notes/readings/reading-a.yaml
 exit 1
 --- stdout
-| error   missing-case       active/edit: no rule covers role=viewer
-| -- 1 errors, 1 findings
+| error   missing-case       draft/publish: no rule covers roles=editor
+| error   missing-case       draft/edit: no rule covers roles=owner
+| error   missing-case       draft/edit: no rule covers roles=editor
+| error   missing-case       draft/trash: no rule covers roles=owner
+| error   missing-case       draft/trash: no rule covers roles=editor
+| error   missing-case       draft/restore: no rule covers roles=owner
+| error   missing-case       draft/restore: no rule covers roles=editor
+| error   missing-case       draft/purge: no rule covers roles=owner
+| error   missing-case       draft/purge: no rule covers roles=editor
+| error   missing-case       active/publish: no rule covers roles=owner
+| error   missing-case       active/publish: no rule covers roles=editor
+| error   missing-case       active/edit: no rule covers roles=owner
+| error   missing-case       active/trash: no rule covers roles=editor
+| error   missing-case       active/restore: no rule covers roles=owner
+| error   missing-case       active/restore: no rule covers roles=editor
+| error   missing-case       active/purge: no rule covers roles=owner
+| error   missing-case       active/purge: no rule covers roles=editor
+| error   missing-case       trashed/publish: no rule covers roles=owner
+| error   missing-case       trashed/publish: no rule covers roles=editor
+| error   missing-case       trashed/edit: no rule covers roles=owner
+| error   missing-case       trashed/edit: no rule covers roles=editor
+| error   missing-case       trashed/trash: no rule covers roles=owner
+| error   missing-case       trashed/trash: no rule covers roles=editor
+| error   missing-case       trashed/restore: no rule covers roles=editor
+| error   missing-case       trashed/purge: no rule covers roles=editor
+| -- 25 errors, 25 findings
 |
 === in .: spine check examples/notes/spec/notes/readings/reading-b.yaml
 exit 1
 --- stdout
-| error   overlap            trashed/purge: role=owner matches conflicting rules: reject and -> purged
-| -- 1 errors, 1 findings
+| error   missing-case       draft/publish: no rule covers roles=editor
+| error   missing-case       draft/publish: no rule covers roles=viewer
+| error   missing-case       draft/edit: no rule covers roles=owner
+| error   missing-case       draft/trash: no rule covers roles=editor
+| error   missing-case       draft/trash: no rule covers roles=viewer
+| error   undecided-cell     draft/restore: nothing says what "restore" does in "draft"
+| error   undecided-cell     draft/purge: nothing says what "purge" does in "draft"
+| error   undecided-cell     active/publish: nothing says what "publish" does in "active"
+| error   missing-case       active/edit: no rule covers roles=owner
+| error   missing-case       active/trash: no rule covers roles=editor
+| error   missing-case       active/trash: no rule covers roles=viewer
+| error   undecided-cell     active/restore: nothing says what "restore" does in "active"
+| error   undecided-cell     active/purge: nothing says what "purge" does in "active"
+| error   undecided-cell     trashed/publish: nothing says what "publish" does in "trashed"
+| error   missing-case       trashed/edit: no rule covers roles=owner
+| error   missing-case       trashed/edit: no rule covers roles=editor
+| error   undecided-cell     trashed/trash: nothing says what "trash" does in "trashed"
+| error   undecided-cell     trashed/restore: nothing says what "restore" does in "trashed"
+| error   missing-case       trashed/purge: no rule covers roles=editor
+| error   missing-case       trashed/purge: no rule covers roles=viewer
+| -- 20 errors, 20 findings
 |
 === in .: spine check examples/notes/spec/notes/spine.yaml
 exit 0
@@ -539,57 +840,189 @@ exit 1
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
-|       "where": "active/edit",
-|       "message": "role=viewer: A says nothing (no rule matches), B says reject"
+|       "where": "active/publish",
+|       "message": "roles=viewer: A says reject, B says nothing (no rule matches)"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "active/trash",
+|       "message": "roles=viewer: A says reject, B says nothing (no rule matches)"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "active/restore",
+|       "message": "roles=viewer: A says reject, B says nothing (no rule matches)"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "active/purge",
+|       "message": "roles=viewer: A says reject, B says nothing (no rule matches)"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "draft/publish",
+|       "message": "roles=viewer: A says reject, B says nothing (no rule matches)"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "draft/edit",
+|       "message": "roles=editor: A says nothing (no rule matches), B says stay"
 |     },
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "draft/trash",
-|       "message": "role=owner: A says -> trashed, B says reject"
+|       "message": "roles=owner: A says nothing (no rule matches), B says -> trashed"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "draft/trash",
+|       "message": "roles=viewer: A says reject, B says nothing (no rule matches)"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "draft/restore",
+|       "message": "roles=viewer: A says reject, B says nothing (no rule matches)"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "draft/purge",
+|       "message": "roles=viewer: A says reject, B says nothing (no rule matches)"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "trashed/publish",
+|       "message": "roles=viewer: A says reject, B says nothing (no rule matches)"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "trashed/trash",
+|       "message": "roles=viewer: A says reject, B says nothing (no rule matches)"
 |     },
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "trashed/restore",
-|       "message": "role=editor: A says reject, B says -> active"
+|       "message": "roles=owner: A says -> active, B says nothing (no rule matches)"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "trashed/restore",
+|       "message": "roles=viewer: A says reject, B says nothing (no rule matches)"
 |     },
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "trashed/purge",
-|       "message": "role=owner: A says -> purged, B says reject and -> purged"
+|       "message": "roles=viewer: A says reject, B says nothing (no rule matches)"
 |     },
 |     {
 |       "code": "behavior-differs",
 |       "severity": "error",
-|       "where": "trash(role=owner)",
-|       "message": "A ends trashed, B ends rejected"
+|       "where": "publish(roles=viewer)",
+|       "message": "A ends rejected, B ends undefined"
 |     },
 |     {
 |       "code": "behavior-differs",
 |       "severity": "error",
-|       "where": "publish(role=owner) -> edit(role=viewer)",
-|       "message": "A ends undefined, B ends rejected"
+|       "where": "edit(roles=editor)",
+|       "message": "A ends undefined, B ends draft"
 |     },
 |     {
 |       "code": "behavior-differs",
 |       "severity": "error",
-|       "where": "publish(role=owner) -> trash(role=owner) -> restore(role=editor)",
-|       "message": "A ends rejected, B ends active"
+|       "where": "trash(roles=owner)",
+|       "message": "A ends undefined, B ends trashed"
 |     },
 |     {
 |       "code": "behavior-differs",
 |       "severity": "error",
-|       "where": "publish(role=owner) -> trash(role=owner) -> purge(role=owner)",
-|       "message": "A ends purged, B ends undefined"
+|       "where": "trash(roles=viewer)",
+|       "message": "A ends rejected, B ends undefined"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "restore(roles=viewer)",
+|       "message": "A ends rejected, B ends undefined"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "purge(roles=viewer)",
+|       "message": "A ends rejected, B ends undefined"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> publish(roles=viewer)",
+|       "message": "A ends rejected, B ends undefined"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> trash(roles=viewer)",
+|       "message": "A ends rejected, B ends undefined"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> restore(roles=viewer)",
+|       "message": "A ends rejected, B ends undefined"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> purge(roles=viewer)",
+|       "message": "A ends rejected, B ends undefined"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> trash(roles=owner) -> publish(roles=viewer)",
+|       "message": "A ends rejected, B ends undefined"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> trash(roles=owner) -> trash(roles=viewer)",
+|       "message": "A ends rejected, B ends undefined"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> trash(roles=owner) -> restore(roles=owner)",
+|       "message": "A ends active, B ends undefined"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> trash(roles=owner) -> restore(roles=viewer)",
+|       "message": "A ends rejected, B ends undefined"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> trash(roles=owner) -> purge(roles=viewer)",
+|       "message": "A ends rejected, B ends undefined"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine diff" tests="8" failures="8"><testcase classname="spine diff" name="case-disagrees active/edit"><failure message="role=viewer: A says nothing (no rule matches), B says reject">role=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/trash"><failure message="role=owner: A says -&gt; trashed, B says reject">role=owner: A says -&gt; trashed, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/restore"><failure message="role=editor: A says reject, B says -&gt; active">role=editor: A says reject, B says -&gt; active</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/purge"><failure message="role=owner: A says -&gt; purged, B says reject and -&gt; purged">role=owner: A says -&gt; purged, B says reject and -&gt; purged</failure></testcase><testcase classname="spine diff" name="behavior-differs trash(role=owner)"><failure message="A ends trashed, B ends rejected">A ends trashed, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; edit(role=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; trash(role=owner) -&gt; restore(role=editor)"><failure message="A ends rejected, B ends active">A ends rejected, B ends active</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; trash(role=owner) -&gt; purge(role=owner)"><failure message="A ends purged, B ends undefined">A ends purged, B ends undefined</failure></testcase></testsuite>
+| <testsuite name="spine diff" tests="30" failures="30"><testcase classname="spine diff" name="case-disagrees active/publish"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees active/trash"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees active/restore"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees active/purge"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/publish"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/edit"><failure message="roles=editor: A says nothing (no rule matches), B says stay">roles=editor: A says nothing (no rule matches), B says stay</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/trash"><failure message="roles=owner: A says nothing (no rule matches), B says -&gt; trashed">roles=owner: A says nothing (no rule matches), B says -&gt; trashed</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/trash"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/restore"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/purge"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/publish"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/trash"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/restore"><failure message="roles=owner: A says -&gt; active, B says nothing (no rule matches)">roles=owner: A says -&gt; active, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/restore"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/purge"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs edit(roles=editor)"><failure message="A ends undefined, B ends draft">A ends undefined, B ends draft</failure></testcase><testcase classname="spine diff" name="behavior-differs trash(roles=owner)"><failure message="A ends undefined, B ends trashed">A ends undefined, B ends trashed</failure></testcase><testcase classname="spine diff" name="behavior-differs trash(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs restore(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs purge(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; publish(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; restore(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; purge(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; publish(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; trash(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; restore(roles=owner)"><failure message="A ends active, B ends undefined">A ends active, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; restore(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; purge(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/notes/spec/notes/readings/reading-a.yaml examples/notes/spec/notes/spine.yaml
 exit 1
 --- stdout
@@ -598,131 +1031,17 @@ exit 1
 |   "command": "diff",
 |   "findings": [
 |     {
-|       "code": "case-disagrees",
+|       "code": "vars-differ",
 |       "severity": "error",
-|       "where": "active/publish",
-|       "message": "role=editor: A says ignore, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "active/publish",
-|       "message": "role=viewer: A says ignore, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "active/edit",
-|       "message": "role=viewer: A says nothing (no rule matches), B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "active/restore",
-|       "message": "role=editor: A says ignore, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "active/restore",
-|       "message": "role=viewer: A says ignore, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "draft/trash",
-|       "message": "role=owner: A says -> trashed, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "draft/restore",
-|       "message": "role=editor: A says ignore, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "draft/restore",
-|       "message": "role=viewer: A says ignore, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "trashed/trash",
-|       "message": "role=editor: A says ignore, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "trashed/trash",
-|       "message": "role=viewer: A says ignore, B says reject"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "trash(role=owner)",
-|       "message": "A ends trashed, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "restore(role=editor)",
-|       "message": "A ends draft, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "restore(role=viewer)",
-|       "message": "A ends draft, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> publish(role=editor)",
-|       "message": "A ends active, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> publish(role=viewer)",
-|       "message": "A ends active, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> edit(role=viewer)",
-|       "message": "A ends undefined, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> restore(role=editor)",
-|       "message": "A ends active, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> restore(role=viewer)",
-|       "message": "A ends active, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> trash(role=owner) -> trash(role=editor)",
-|       "message": "A ends trashed, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> trash(role=owner) -> trash(role=viewer)",
-|       "message": "A ends trashed, B ends rejected"
+|       "where": "vars",
+|       "message": "A and B declare different variables; case comparison skipped"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine diff" tests="20" failures="20"><testcase classname="spine diff" name="case-disagrees active/publish"><failure message="role=editor: A says ignore, B says reject">role=editor: A says ignore, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees active/publish"><failure message="role=viewer: A says ignore, B says reject">role=viewer: A says ignore, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees active/edit"><failure message="role=viewer: A says nothing (no rule matches), B says reject">role=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees active/restore"><failure message="role=editor: A says ignore, B says reject">role=editor: A says ignore, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees active/restore"><failure message="role=viewer: A says ignore, B says reject">role=viewer: A says ignore, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/trash"><failure message="role=owner: A says -&gt; trashed, B says reject">role=owner: A says -&gt; trashed, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/restore"><failure message="role=editor: A says ignore, B says reject">role=editor: A says ignore, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/restore"><failure message="role=viewer: A says ignore, B says reject">role=viewer: A says ignore, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/trash"><failure message="role=editor: A says ignore, B says reject">role=editor: A says ignore, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/trash"><failure message="role=viewer: A says ignore, B says reject">role=viewer: A says ignore, B says reject</failure></testcase><testcase classname="spine diff" name="behavior-differs trash(role=owner)"><failure message="A ends trashed, B ends rejected">A ends trashed, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs restore(role=editor)"><failure message="A ends draft, B ends rejected">A ends draft, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs restore(role=viewer)"><failure message="A ends draft, B ends rejected">A ends draft, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; publish(role=editor)"><failure message="A ends active, B ends rejected">A ends active, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; publish(role=viewer)"><failure message="A ends active, B ends rejected">A ends active, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; edit(role=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; restore(role=editor)"><failure message="A ends active, B ends rejected">A ends active, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; restore(role=viewer)"><failure message="A ends active, B ends rejected">A ends active, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; trash(role=owner) -&gt; trash(role=editor)"><failure message="A ends trashed, B ends rejected">A ends trashed, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; trash(role=owner) -&gt; trash(role=viewer)"><failure message="A ends trashed, B ends rejected">A ends trashed, B ends rejected</failure></testcase></testsuite>
+| <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="vars-differ vars"><failure message="A and B declare different variables; case comparison skipped">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/notes/spec/notes/readings/reading-b.yaml examples/notes/spec/notes/readings/reading-a.yaml
 exit 1
 --- stdout
@@ -733,57 +1052,189 @@ exit 1
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
-|       "where": "active/edit",
-|       "message": "role=viewer: A says reject, B says nothing (no rule matches)"
+|       "where": "active/publish",
+|       "message": "roles=viewer: A says nothing (no rule matches), B says reject"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "active/trash",
+|       "message": "roles=viewer: A says nothing (no rule matches), B says reject"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "active/restore",
+|       "message": "roles=viewer: A says nothing (no rule matches), B says reject"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "active/purge",
+|       "message": "roles=viewer: A says nothing (no rule matches), B says reject"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "draft/publish",
+|       "message": "roles=viewer: A says nothing (no rule matches), B says reject"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "draft/edit",
+|       "message": "roles=editor: A says stay, B says nothing (no rule matches)"
 |     },
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "draft/trash",
-|       "message": "role=owner: A says reject, B says -> trashed"
+|       "message": "roles=owner: A says -> trashed, B says nothing (no rule matches)"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "draft/trash",
+|       "message": "roles=viewer: A says nothing (no rule matches), B says reject"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "draft/restore",
+|       "message": "roles=viewer: A says nothing (no rule matches), B says reject"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "draft/purge",
+|       "message": "roles=viewer: A says nothing (no rule matches), B says reject"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "trashed/publish",
+|       "message": "roles=viewer: A says nothing (no rule matches), B says reject"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "trashed/trash",
+|       "message": "roles=viewer: A says nothing (no rule matches), B says reject"
 |     },
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "trashed/restore",
-|       "message": "role=editor: A says -> active, B says reject"
+|       "message": "roles=owner: A says nothing (no rule matches), B says -> active"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "trashed/restore",
+|       "message": "roles=viewer: A says nothing (no rule matches), B says reject"
 |     },
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "trashed/purge",
-|       "message": "role=owner: A says reject and -> purged, B says -> purged"
+|       "message": "roles=viewer: A says nothing (no rule matches), B says reject"
 |     },
 |     {
 |       "code": "behavior-differs",
 |       "severity": "error",
-|       "where": "trash(role=owner)",
-|       "message": "A ends rejected, B ends trashed"
+|       "where": "publish(roles=viewer)",
+|       "message": "A ends undefined, B ends rejected"
 |     },
 |     {
 |       "code": "behavior-differs",
 |       "severity": "error",
-|       "where": "publish(role=owner) -> edit(role=viewer)",
-|       "message": "A ends rejected, B ends undefined"
+|       "where": "edit(roles=editor)",
+|       "message": "A ends draft, B ends undefined"
 |     },
 |     {
 |       "code": "behavior-differs",
 |       "severity": "error",
-|       "where": "publish(role=owner) -> trash(role=owner) -> restore(role=editor)",
-|       "message": "A ends active, B ends rejected"
+|       "where": "trash(roles=owner)",
+|       "message": "A ends trashed, B ends undefined"
 |     },
 |     {
 |       "code": "behavior-differs",
 |       "severity": "error",
-|       "where": "publish(role=owner) -> trash(role=owner) -> purge(role=owner)",
-|       "message": "A ends undefined, B ends purged"
+|       "where": "trash(roles=viewer)",
+|       "message": "A ends undefined, B ends rejected"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "restore(roles=viewer)",
+|       "message": "A ends undefined, B ends rejected"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "purge(roles=viewer)",
+|       "message": "A ends undefined, B ends rejected"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> publish(roles=viewer)",
+|       "message": "A ends undefined, B ends rejected"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> trash(roles=viewer)",
+|       "message": "A ends undefined, B ends rejected"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> restore(roles=viewer)",
+|       "message": "A ends undefined, B ends rejected"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> purge(roles=viewer)",
+|       "message": "A ends undefined, B ends rejected"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> trash(roles=owner) -> publish(roles=viewer)",
+|       "message": "A ends undefined, B ends rejected"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> trash(roles=owner) -> trash(roles=viewer)",
+|       "message": "A ends undefined, B ends rejected"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> trash(roles=owner) -> restore(roles=owner)",
+|       "message": "A ends undefined, B ends active"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> trash(roles=owner) -> restore(roles=viewer)",
+|       "message": "A ends undefined, B ends rejected"
+|     },
+|     {
+|       "code": "behavior-differs",
+|       "severity": "error",
+|       "where": "publish(roles=owner) -> trash(roles=owner) -> purge(roles=viewer)",
+|       "message": "A ends undefined, B ends rejected"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine diff" tests="8" failures="8"><testcase classname="spine diff" name="case-disagrees active/edit"><failure message="role=viewer: A says reject, B says nothing (no rule matches)">role=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/trash"><failure message="role=owner: A says reject, B says -&gt; trashed">role=owner: A says reject, B says -&gt; trashed</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/restore"><failure message="role=editor: A says -&gt; active, B says reject">role=editor: A says -&gt; active, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/purge"><failure message="role=owner: A says reject and -&gt; purged, B says -&gt; purged">role=owner: A says reject and -&gt; purged, B says -&gt; purged</failure></testcase><testcase classname="spine diff" name="behavior-differs trash(role=owner)"><failure message="A ends rejected, B ends trashed">A ends rejected, B ends trashed</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; edit(role=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; trash(role=owner) -&gt; restore(role=editor)"><failure message="A ends active, B ends rejected">A ends active, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; trash(role=owner) -&gt; purge(role=owner)"><failure message="A ends undefined, B ends purged">A ends undefined, B ends purged</failure></testcase></testsuite>
+| <testsuite name="spine diff" tests="30" failures="30"><testcase classname="spine diff" name="case-disagrees active/publish"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees active/trash"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees active/restore"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees active/purge"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/publish"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/edit"><failure message="roles=editor: A says stay, B says nothing (no rule matches)">roles=editor: A says stay, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/trash"><failure message="roles=owner: A says -&gt; trashed, B says nothing (no rule matches)">roles=owner: A says -&gt; trashed, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/trash"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/restore"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/purge"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/publish"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/trash"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/restore"><failure message="roles=owner: A says nothing (no rule matches), B says -&gt; active">roles=owner: A says nothing (no rule matches), B says -&gt; active</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/restore"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/purge"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs edit(roles=editor)"><failure message="A ends draft, B ends undefined">A ends draft, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs trash(roles=owner)"><failure message="A ends trashed, B ends undefined">A ends trashed, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs trash(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs restore(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs purge(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; publish(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; restore(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; purge(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; publish(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; trash(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; restore(roles=owner)"><failure message="A ends undefined, B ends active">A ends undefined, B ends active</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; restore(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; purge(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/notes/spec/notes/readings/reading-b.yaml examples/notes/spec/notes/readings/reading-b.yaml
 exit 0
 --- stdout
@@ -804,131 +1255,17 @@ exit 1
 |   "command": "diff",
 |   "findings": [
 |     {
-|       "code": "case-disagrees",
+|       "code": "vars-differ",
 |       "severity": "error",
-|       "where": "active/publish",
-|       "message": "role=editor: A says ignore, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "active/publish",
-|       "message": "role=viewer: A says ignore, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "active/restore",
-|       "message": "role=editor: A says ignore, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "active/restore",
-|       "message": "role=viewer: A says ignore, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "draft/restore",
-|       "message": "role=editor: A says ignore, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "draft/restore",
-|       "message": "role=viewer: A says ignore, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "trashed/trash",
-|       "message": "role=editor: A says ignore, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "trashed/trash",
-|       "message": "role=viewer: A says ignore, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "trashed/restore",
-|       "message": "role=editor: A says -> active, B says reject"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "trashed/purge",
-|       "message": "role=owner: A says reject and -> purged, B says -> purged"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "restore(role=editor)",
-|       "message": "A ends draft, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "restore(role=viewer)",
-|       "message": "A ends draft, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> publish(role=editor)",
-|       "message": "A ends active, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> publish(role=viewer)",
-|       "message": "A ends active, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> restore(role=editor)",
-|       "message": "A ends active, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> restore(role=viewer)",
-|       "message": "A ends active, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> trash(role=owner) -> trash(role=editor)",
-|       "message": "A ends trashed, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> trash(role=owner) -> trash(role=viewer)",
-|       "message": "A ends trashed, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> trash(role=owner) -> restore(role=editor)",
-|       "message": "A ends active, B ends rejected"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> trash(role=owner) -> purge(role=owner)",
-|       "message": "A ends undefined, B ends purged"
+|       "where": "vars",
+|       "message": "A and B declare different variables; case comparison skipped"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine diff" tests="20" failures="20"><testcase classname="spine diff" name="case-disagrees active/publish"><failure message="role=editor: A says ignore, B says reject">role=editor: A says ignore, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees active/publish"><failure message="role=viewer: A says ignore, B says reject">role=viewer: A says ignore, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees active/restore"><failure message="role=editor: A says ignore, B says reject">role=editor: A says ignore, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees active/restore"><failure message="role=viewer: A says ignore, B says reject">role=viewer: A says ignore, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/restore"><failure message="role=editor: A says ignore, B says reject">role=editor: A says ignore, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/restore"><failure message="role=viewer: A says ignore, B says reject">role=viewer: A says ignore, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/trash"><failure message="role=editor: A says ignore, B says reject">role=editor: A says ignore, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/trash"><failure message="role=viewer: A says ignore, B says reject">role=viewer: A says ignore, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/restore"><failure message="role=editor: A says -&gt; active, B says reject">role=editor: A says -&gt; active, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/purge"><failure message="role=owner: A says reject and -&gt; purged, B says -&gt; purged">role=owner: A says reject and -&gt; purged, B says -&gt; purged</failure></testcase><testcase classname="spine diff" name="behavior-differs restore(role=editor)"><failure message="A ends draft, B ends rejected">A ends draft, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs restore(role=viewer)"><failure message="A ends draft, B ends rejected">A ends draft, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; publish(role=editor)"><failure message="A ends active, B ends rejected">A ends active, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; publish(role=viewer)"><failure message="A ends active, B ends rejected">A ends active, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; restore(role=editor)"><failure message="A ends active, B ends rejected">A ends active, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; restore(role=viewer)"><failure message="A ends active, B ends rejected">A ends active, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; trash(role=owner) -&gt; trash(role=editor)"><failure message="A ends trashed, B ends rejected">A ends trashed, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; trash(role=owner) -&gt; trash(role=viewer)"><failure message="A ends trashed, B ends rejected">A ends trashed, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; trash(role=owner) -&gt; restore(role=editor)"><failure message="A ends active, B ends rejected">A ends active, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; trash(role=owner) -&gt; purge(role=owner)"><failure message="A ends undefined, B ends purged">A ends undefined, B ends purged</failure></testcase></testsuite>
+| <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="vars-differ vars"><failure message="A and B declare different variables; case comparison skipped">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/notes/spec/notes/spine.yaml examples/notes/spec/notes/readings/reading-a.yaml
 exit 1
 --- stdout
@@ -937,131 +1274,17 @@ exit 1
 |   "command": "diff",
 |   "findings": [
 |     {
-|       "code": "case-disagrees",
+|       "code": "vars-differ",
 |       "severity": "error",
-|       "where": "active/publish",
-|       "message": "role=editor: A says reject, B says ignore"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "active/publish",
-|       "message": "role=viewer: A says reject, B says ignore"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "active/edit",
-|       "message": "role=viewer: A says reject, B says nothing (no rule matches)"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "active/restore",
-|       "message": "role=editor: A says reject, B says ignore"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "active/restore",
-|       "message": "role=viewer: A says reject, B says ignore"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "draft/trash",
-|       "message": "role=owner: A says reject, B says -> trashed"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "draft/restore",
-|       "message": "role=editor: A says reject, B says ignore"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "draft/restore",
-|       "message": "role=viewer: A says reject, B says ignore"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "trashed/trash",
-|       "message": "role=editor: A says reject, B says ignore"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "trashed/trash",
-|       "message": "role=viewer: A says reject, B says ignore"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "trash(role=owner)",
-|       "message": "A ends rejected, B ends trashed"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "restore(role=editor)",
-|       "message": "A ends rejected, B ends draft"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "restore(role=viewer)",
-|       "message": "A ends rejected, B ends draft"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> publish(role=editor)",
-|       "message": "A ends rejected, B ends active"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> publish(role=viewer)",
-|       "message": "A ends rejected, B ends active"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> edit(role=viewer)",
-|       "message": "A ends rejected, B ends undefined"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> restore(role=editor)",
-|       "message": "A ends rejected, B ends active"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> restore(role=viewer)",
-|       "message": "A ends rejected, B ends active"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> trash(role=owner) -> trash(role=editor)",
-|       "message": "A ends rejected, B ends trashed"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> trash(role=owner) -> trash(role=viewer)",
-|       "message": "A ends rejected, B ends trashed"
+|       "where": "vars",
+|       "message": "A and B declare different variables; case comparison skipped"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine diff" tests="20" failures="20"><testcase classname="spine diff" name="case-disagrees active/publish"><failure message="role=editor: A says reject, B says ignore">role=editor: A says reject, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees active/publish"><failure message="role=viewer: A says reject, B says ignore">role=viewer: A says reject, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees active/edit"><failure message="role=viewer: A says reject, B says nothing (no rule matches)">role=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees active/restore"><failure message="role=editor: A says reject, B says ignore">role=editor: A says reject, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees active/restore"><failure message="role=viewer: A says reject, B says ignore">role=viewer: A says reject, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/trash"><failure message="role=owner: A says reject, B says -&gt; trashed">role=owner: A says reject, B says -&gt; trashed</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/restore"><failure message="role=editor: A says reject, B says ignore">role=editor: A says reject, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/restore"><failure message="role=viewer: A says reject, B says ignore">role=viewer: A says reject, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/trash"><failure message="role=editor: A says reject, B says ignore">role=editor: A says reject, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/trash"><failure message="role=viewer: A says reject, B says ignore">role=viewer: A says reject, B says ignore</failure></testcase><testcase classname="spine diff" name="behavior-differs trash(role=owner)"><failure message="A ends rejected, B ends trashed">A ends rejected, B ends trashed</failure></testcase><testcase classname="spine diff" name="behavior-differs restore(role=editor)"><failure message="A ends rejected, B ends draft">A ends rejected, B ends draft</failure></testcase><testcase classname="spine diff" name="behavior-differs restore(role=viewer)"><failure message="A ends rejected, B ends draft">A ends rejected, B ends draft</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; publish(role=editor)"><failure message="A ends rejected, B ends active">A ends rejected, B ends active</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; publish(role=viewer)"><failure message="A ends rejected, B ends active">A ends rejected, B ends active</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; edit(role=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; restore(role=editor)"><failure message="A ends rejected, B ends active">A ends rejected, B ends active</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; restore(role=viewer)"><failure message="A ends rejected, B ends active">A ends rejected, B ends active</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; trash(role=owner) -&gt; trash(role=editor)"><failure message="A ends rejected, B ends trashed">A ends rejected, B ends trashed</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; trash(role=owner) -&gt; trash(role=viewer)"><failure message="A ends rejected, B ends trashed">A ends rejected, B ends trashed</failure></testcase></testsuite>
+| <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="vars-differ vars"><failure message="A and B declare different variables; case comparison skipped">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/notes/spec/notes/spine.yaml examples/notes/spec/notes/readings/reading-b.yaml
 exit 1
 --- stdout
@@ -1070,131 +1293,17 @@ exit 1
 |   "command": "diff",
 |   "findings": [
 |     {
-|       "code": "case-disagrees",
+|       "code": "vars-differ",
 |       "severity": "error",
-|       "where": "active/publish",
-|       "message": "role=editor: A says reject, B says ignore"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "active/publish",
-|       "message": "role=viewer: A says reject, B says ignore"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "active/restore",
-|       "message": "role=editor: A says reject, B says ignore"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "active/restore",
-|       "message": "role=viewer: A says reject, B says ignore"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "draft/restore",
-|       "message": "role=editor: A says reject, B says ignore"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "draft/restore",
-|       "message": "role=viewer: A says reject, B says ignore"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "trashed/trash",
-|       "message": "role=editor: A says reject, B says ignore"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "trashed/trash",
-|       "message": "role=viewer: A says reject, B says ignore"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "trashed/restore",
-|       "message": "role=editor: A says reject, B says -> active"
-|     },
-|     {
-|       "code": "case-disagrees",
-|       "severity": "error",
-|       "where": "trashed/purge",
-|       "message": "role=owner: A says -> purged, B says reject and -> purged"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "restore(role=editor)",
-|       "message": "A ends rejected, B ends draft"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "restore(role=viewer)",
-|       "message": "A ends rejected, B ends draft"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> publish(role=editor)",
-|       "message": "A ends rejected, B ends active"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> publish(role=viewer)",
-|       "message": "A ends rejected, B ends active"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> restore(role=editor)",
-|       "message": "A ends rejected, B ends active"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> restore(role=viewer)",
-|       "message": "A ends rejected, B ends active"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> trash(role=owner) -> trash(role=editor)",
-|       "message": "A ends rejected, B ends trashed"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> trash(role=owner) -> trash(role=viewer)",
-|       "message": "A ends rejected, B ends trashed"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> trash(role=owner) -> restore(role=editor)",
-|       "message": "A ends rejected, B ends active"
-|     },
-|     {
-|       "code": "behavior-differs",
-|       "severity": "error",
-|       "where": "publish(role=owner) -> trash(role=owner) -> purge(role=owner)",
-|       "message": "A ends purged, B ends undefined"
+|       "where": "vars",
+|       "message": "A and B declare different variables; case comparison skipped"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine diff" tests="20" failures="20"><testcase classname="spine diff" name="case-disagrees active/publish"><failure message="role=editor: A says reject, B says ignore">role=editor: A says reject, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees active/publish"><failure message="role=viewer: A says reject, B says ignore">role=viewer: A says reject, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees active/restore"><failure message="role=editor: A says reject, B says ignore">role=editor: A says reject, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees active/restore"><failure message="role=viewer: A says reject, B says ignore">role=viewer: A says reject, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/restore"><failure message="role=editor: A says reject, B says ignore">role=editor: A says reject, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/restore"><failure message="role=viewer: A says reject, B says ignore">role=viewer: A says reject, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/trash"><failure message="role=editor: A says reject, B says ignore">role=editor: A says reject, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/trash"><failure message="role=viewer: A says reject, B says ignore">role=viewer: A says reject, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/restore"><failure message="role=editor: A says reject, B says -&gt; active">role=editor: A says reject, B says -&gt; active</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/purge"><failure message="role=owner: A says -&gt; purged, B says reject and -&gt; purged">role=owner: A says -&gt; purged, B says reject and -&gt; purged</failure></testcase><testcase classname="spine diff" name="behavior-differs restore(role=editor)"><failure message="A ends rejected, B ends draft">A ends rejected, B ends draft</failure></testcase><testcase classname="spine diff" name="behavior-differs restore(role=viewer)"><failure message="A ends rejected, B ends draft">A ends rejected, B ends draft</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; publish(role=editor)"><failure message="A ends rejected, B ends active">A ends rejected, B ends active</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; publish(role=viewer)"><failure message="A ends rejected, B ends active">A ends rejected, B ends active</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; restore(role=editor)"><failure message="A ends rejected, B ends active">A ends rejected, B ends active</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; restore(role=viewer)"><failure message="A ends rejected, B ends active">A ends rejected, B ends active</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; trash(role=owner) -&gt; trash(role=editor)"><failure message="A ends rejected, B ends trashed">A ends rejected, B ends trashed</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; trash(role=owner) -&gt; trash(role=viewer)"><failure message="A ends rejected, B ends trashed">A ends rejected, B ends trashed</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; trash(role=owner) -&gt; restore(role=editor)"><failure message="A ends rejected, B ends active">A ends rejected, B ends active</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(role=owner) -&gt; trash(role=owner) -&gt; purge(role=owner)"><failure message="A ends purged, B ends undefined">A ends purged, B ends undefined</failure></testcase></testsuite>
+| <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="vars-differ vars"><failure message="A and B declare different variables; case comparison skipped">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/notes/spec/notes/spine.yaml examples/notes/spec/notes/spine.yaml
 exit 0
 --- stdout
@@ -2165,53 +2274,78 @@ exit 0
 === in .: spine diff examples/notes/spec/notes/readings/reading-a.yaml examples/notes/spec/notes/readings/reading-b.yaml
 exit 1
 --- stdout
-| error   case-disagrees     active/edit: role=viewer: A says nothing (no rule matches), B says reject
-| error   case-disagrees     draft/trash: role=owner: A says -> trashed, B says reject
-| error   case-disagrees     trashed/restore: role=editor: A says reject, B says -> active
-| error   case-disagrees     trashed/purge: role=owner: A says -> purged, B says reject and -> purged
-| error   behavior-differs   trash(role=owner): A ends trashed, B ends rejected
-| error   behavior-differs   publish(role=owner) -> edit(role=viewer): A ends undefined, B ends rejected
-| error   behavior-differs   publish(role=owner) -> trash(role=owner) -> restore(role=editor): A ends rejected, B ends active
-| error   behavior-differs   publish(role=owner) -> trash(role=owner) -> purge(role=owner): A ends purged, B ends undefined
-| -- 8 errors, 8 findings
+| error   case-disagrees     active/publish: roles=viewer: A says reject, B says nothing (no rule matches)
+| error   case-disagrees     active/trash: roles=viewer: A says reject, B says nothing (no rule matches)
+| error   case-disagrees     active/restore: roles=viewer: A says reject, B says nothing (no rule matches)
+| error   case-disagrees     active/purge: roles=viewer: A says reject, B says nothing (no rule matches)
+| error   case-disagrees     draft/publish: roles=viewer: A says reject, B says nothing (no rule matches)
+| error   case-disagrees     draft/edit: roles=editor: A says nothing (no rule matches), B says stay
+| error   case-disagrees     draft/trash: roles=owner: A says nothing (no rule matches), B says -> trashed
+| error   case-disagrees     draft/trash: roles=viewer: A says reject, B says nothing (no rule matches)
+| error   case-disagrees     draft/restore: roles=viewer: A says reject, B says nothing (no rule matches)
+| error   case-disagrees     draft/purge: roles=viewer: A says reject, B says nothing (no rule matches)
+| error   case-disagrees     trashed/publish: roles=viewer: A says reject, B says nothing (no rule matches)
+| error   case-disagrees     trashed/trash: roles=viewer: A says reject, B says nothing (no rule matches)
+| error   case-disagrees     trashed/restore: roles=owner: A says -> active, B says nothing (no rule matches)
+| error   case-disagrees     trashed/restore: roles=viewer: A says reject, B says nothing (no rule matches)
+| error   case-disagrees     trashed/purge: roles=viewer: A says reject, B says nothing (no rule matches)
+| error   behavior-differs   publish(roles=viewer): A ends rejected, B ends undefined
+| error   behavior-differs   edit(roles=editor): A ends undefined, B ends draft
+| error   behavior-differs   trash(roles=owner): A ends undefined, B ends trashed
+| error   behavior-differs   trash(roles=viewer): A ends rejected, B ends undefined
+| error   behavior-differs   restore(roles=viewer): A ends rejected, B ends undefined
+| error   behavior-differs   purge(roles=viewer): A ends rejected, B ends undefined
+| error   behavior-differs   publish(roles=owner) -> publish(roles=viewer): A ends rejected, B ends undefined
+| error   behavior-differs   publish(roles=owner) -> trash(roles=viewer): A ends rejected, B ends undefined
+| error   behavior-differs   publish(roles=owner) -> restore(roles=viewer): A ends rejected, B ends undefined
+| error   behavior-differs   publish(roles=owner) -> purge(roles=viewer): A ends rejected, B ends undefined
+| error   behavior-differs   publish(roles=owner) -> trash(roles=owner) -> publish(roles=viewer): A ends rejected, B ends undefined
+| error   behavior-differs   publish(roles=owner) -> trash(roles=owner) -> trash(roles=viewer): A ends rejected, B ends undefined
+| error   behavior-differs   publish(roles=owner) -> trash(roles=owner) -> restore(roles=owner): A ends active, B ends undefined
+| error   behavior-differs   publish(roles=owner) -> trash(roles=owner) -> restore(roles=viewer): A ends rejected, B ends undefined
+| error   behavior-differs   publish(roles=owner) -> trash(roles=owner) -> purge(roles=viewer): A ends rejected, B ends undefined
+| -- 30 errors, 30 findings
 |
 === in .: spine diff examples/notes/spec/notes/readings/reading-a.yaml examples/notes/spec/notes/spine.yaml
 exit 1
 --- stdout
-| error   case-disagrees     active/publish: role=editor: A says ignore, B says reject
-| error   case-disagrees     active/publish: role=viewer: A says ignore, B says reject
-| error   case-disagrees     active/edit: role=viewer: A says nothing (no rule matches), B says reject
-| error   case-disagrees     active/restore: role=editor: A says ignore, B says reject
-| error   case-disagrees     active/restore: role=viewer: A says ignore, B says reject
-| error   case-disagrees     draft/trash: role=owner: A says -> trashed, B says reject
-| error   case-disagrees     draft/restore: role=editor: A says ignore, B says reject
-| error   case-disagrees     draft/restore: role=viewer: A says ignore, B says reject
-| error   case-disagrees     trashed/trash: role=editor: A says ignore, B says reject
-| error   case-disagrees     trashed/trash: role=viewer: A says ignore, B says reject
-| error   behavior-differs   trash(role=owner): A ends trashed, B ends rejected
-| error   behavior-differs   restore(role=editor): A ends draft, B ends rejected
-| error   behavior-differs   restore(role=viewer): A ends draft, B ends rejected
-| error   behavior-differs   publish(role=owner) -> publish(role=editor): A ends active, B ends rejected
-| error   behavior-differs   publish(role=owner) -> publish(role=viewer): A ends active, B ends rejected
-| error   behavior-differs   publish(role=owner) -> edit(role=viewer): A ends undefined, B ends rejected
-| error   behavior-differs   publish(role=owner) -> restore(role=editor): A ends active, B ends rejected
-| error   behavior-differs   publish(role=owner) -> restore(role=viewer): A ends active, B ends rejected
-| error   behavior-differs   publish(role=owner) -> trash(role=owner) -> trash(role=editor): A ends trashed, B ends rejected
-| error   behavior-differs   publish(role=owner) -> trash(role=owner) -> trash(role=viewer): A ends trashed, B ends rejected
-| -- 20 errors, 20 findings
+| error   vars-differ        vars: A and B declare different variables; case comparison skipped
+| -- 1 errors, 1 findings
 |
 === in .: spine diff examples/notes/spec/notes/readings/reading-b.yaml examples/notes/spec/notes/readings/reading-a.yaml
 exit 1
 --- stdout
-| error   case-disagrees     active/edit: role=viewer: A says reject, B says nothing (no rule matches)
-| error   case-disagrees     draft/trash: role=owner: A says reject, B says -> trashed
-| error   case-disagrees     trashed/restore: role=editor: A says -> active, B says reject
-| error   case-disagrees     trashed/purge: role=owner: A says reject and -> purged, B says -> purged
-| error   behavior-differs   trash(role=owner): A ends rejected, B ends trashed
-| error   behavior-differs   publish(role=owner) -> edit(role=viewer): A ends rejected, B ends undefined
-| error   behavior-differs   publish(role=owner) -> trash(role=owner) -> restore(role=editor): A ends active, B ends rejected
-| error   behavior-differs   publish(role=owner) -> trash(role=owner) -> purge(role=owner): A ends undefined, B ends purged
-| -- 8 errors, 8 findings
+| error   case-disagrees     active/publish: roles=viewer: A says nothing (no rule matches), B says reject
+| error   case-disagrees     active/trash: roles=viewer: A says nothing (no rule matches), B says reject
+| error   case-disagrees     active/restore: roles=viewer: A says nothing (no rule matches), B says reject
+| error   case-disagrees     active/purge: roles=viewer: A says nothing (no rule matches), B says reject
+| error   case-disagrees     draft/publish: roles=viewer: A says nothing (no rule matches), B says reject
+| error   case-disagrees     draft/edit: roles=editor: A says stay, B says nothing (no rule matches)
+| error   case-disagrees     draft/trash: roles=owner: A says -> trashed, B says nothing (no rule matches)
+| error   case-disagrees     draft/trash: roles=viewer: A says nothing (no rule matches), B says reject
+| error   case-disagrees     draft/restore: roles=viewer: A says nothing (no rule matches), B says reject
+| error   case-disagrees     draft/purge: roles=viewer: A says nothing (no rule matches), B says reject
+| error   case-disagrees     trashed/publish: roles=viewer: A says nothing (no rule matches), B says reject
+| error   case-disagrees     trashed/trash: roles=viewer: A says nothing (no rule matches), B says reject
+| error   case-disagrees     trashed/restore: roles=owner: A says nothing (no rule matches), B says -> active
+| error   case-disagrees     trashed/restore: roles=viewer: A says nothing (no rule matches), B says reject
+| error   case-disagrees     trashed/purge: roles=viewer: A says nothing (no rule matches), B says reject
+| error   behavior-differs   publish(roles=viewer): A ends undefined, B ends rejected
+| error   behavior-differs   edit(roles=editor): A ends draft, B ends undefined
+| error   behavior-differs   trash(roles=owner): A ends trashed, B ends undefined
+| error   behavior-differs   trash(roles=viewer): A ends undefined, B ends rejected
+| error   behavior-differs   restore(roles=viewer): A ends undefined, B ends rejected
+| error   behavior-differs   purge(roles=viewer): A ends undefined, B ends rejected
+| error   behavior-differs   publish(roles=owner) -> publish(roles=viewer): A ends undefined, B ends rejected
+| error   behavior-differs   publish(roles=owner) -> trash(roles=viewer): A ends undefined, B ends rejected
+| error   behavior-differs   publish(roles=owner) -> restore(roles=viewer): A ends undefined, B ends rejected
+| error   behavior-differs   publish(roles=owner) -> purge(roles=viewer): A ends undefined, B ends rejected
+| error   behavior-differs   publish(roles=owner) -> trash(roles=owner) -> publish(roles=viewer): A ends undefined, B ends rejected
+| error   behavior-differs   publish(roles=owner) -> trash(roles=owner) -> trash(roles=viewer): A ends undefined, B ends rejected
+| error   behavior-differs   publish(roles=owner) -> trash(roles=owner) -> restore(roles=owner): A ends undefined, B ends active
+| error   behavior-differs   publish(roles=owner) -> trash(roles=owner) -> restore(roles=viewer): A ends undefined, B ends rejected
+| error   behavior-differs   publish(roles=owner) -> trash(roles=owner) -> purge(roles=viewer): A ends undefined, B ends rejected
+| -- 30 errors, 30 findings
 |
 === in .: spine diff examples/notes/spec/notes/readings/reading-b.yaml examples/notes/spec/notes/readings/reading-b.yaml
 exit 0
@@ -2221,77 +2355,20 @@ exit 0
 === in .: spine diff examples/notes/spec/notes/readings/reading-b.yaml examples/notes/spec/notes/spine.yaml
 exit 1
 --- stdout
-| error   case-disagrees     active/publish: role=editor: A says ignore, B says reject
-| error   case-disagrees     active/publish: role=viewer: A says ignore, B says reject
-| error   case-disagrees     active/restore: role=editor: A says ignore, B says reject
-| error   case-disagrees     active/restore: role=viewer: A says ignore, B says reject
-| error   case-disagrees     draft/restore: role=editor: A says ignore, B says reject
-| error   case-disagrees     draft/restore: role=viewer: A says ignore, B says reject
-| error   case-disagrees     trashed/trash: role=editor: A says ignore, B says reject
-| error   case-disagrees     trashed/trash: role=viewer: A says ignore, B says reject
-| error   case-disagrees     trashed/restore: role=editor: A says -> active, B says reject
-| error   case-disagrees     trashed/purge: role=owner: A says reject and -> purged, B says -> purged
-| error   behavior-differs   restore(role=editor): A ends draft, B ends rejected
-| error   behavior-differs   restore(role=viewer): A ends draft, B ends rejected
-| error   behavior-differs   publish(role=owner) -> publish(role=editor): A ends active, B ends rejected
-| error   behavior-differs   publish(role=owner) -> publish(role=viewer): A ends active, B ends rejected
-| error   behavior-differs   publish(role=owner) -> restore(role=editor): A ends active, B ends rejected
-| error   behavior-differs   publish(role=owner) -> restore(role=viewer): A ends active, B ends rejected
-| error   behavior-differs   publish(role=owner) -> trash(role=owner) -> trash(role=editor): A ends trashed, B ends rejected
-| error   behavior-differs   publish(role=owner) -> trash(role=owner) -> trash(role=viewer): A ends trashed, B ends rejected
-| error   behavior-differs   publish(role=owner) -> trash(role=owner) -> restore(role=editor): A ends active, B ends rejected
-| error   behavior-differs   publish(role=owner) -> trash(role=owner) -> purge(role=owner): A ends undefined, B ends purged
-| -- 20 errors, 20 findings
+| error   vars-differ        vars: A and B declare different variables; case comparison skipped
+| -- 1 errors, 1 findings
 |
 === in .: spine diff examples/notes/spec/notes/spine.yaml examples/notes/spec/notes/readings/reading-a.yaml
 exit 1
 --- stdout
-| error   case-disagrees     active/publish: role=editor: A says reject, B says ignore
-| error   case-disagrees     active/publish: role=viewer: A says reject, B says ignore
-| error   case-disagrees     active/edit: role=viewer: A says reject, B says nothing (no rule matches)
-| error   case-disagrees     active/restore: role=editor: A says reject, B says ignore
-| error   case-disagrees     active/restore: role=viewer: A says reject, B says ignore
-| error   case-disagrees     draft/trash: role=owner: A says reject, B says -> trashed
-| error   case-disagrees     draft/restore: role=editor: A says reject, B says ignore
-| error   case-disagrees     draft/restore: role=viewer: A says reject, B says ignore
-| error   case-disagrees     trashed/trash: role=editor: A says reject, B says ignore
-| error   case-disagrees     trashed/trash: role=viewer: A says reject, B says ignore
-| error   behavior-differs   trash(role=owner): A ends rejected, B ends trashed
-| error   behavior-differs   restore(role=editor): A ends rejected, B ends draft
-| error   behavior-differs   restore(role=viewer): A ends rejected, B ends draft
-| error   behavior-differs   publish(role=owner) -> publish(role=editor): A ends rejected, B ends active
-| error   behavior-differs   publish(role=owner) -> publish(role=viewer): A ends rejected, B ends active
-| error   behavior-differs   publish(role=owner) -> edit(role=viewer): A ends rejected, B ends undefined
-| error   behavior-differs   publish(role=owner) -> restore(role=editor): A ends rejected, B ends active
-| error   behavior-differs   publish(role=owner) -> restore(role=viewer): A ends rejected, B ends active
-| error   behavior-differs   publish(role=owner) -> trash(role=owner) -> trash(role=editor): A ends rejected, B ends trashed
-| error   behavior-differs   publish(role=owner) -> trash(role=owner) -> trash(role=viewer): A ends rejected, B ends trashed
-| -- 20 errors, 20 findings
+| error   vars-differ        vars: A and B declare different variables; case comparison skipped
+| -- 1 errors, 1 findings
 |
 === in .: spine diff examples/notes/spec/notes/spine.yaml examples/notes/spec/notes/readings/reading-b.yaml
 exit 1
 --- stdout
-| error   case-disagrees     active/publish: role=editor: A says reject, B says ignore
-| error   case-disagrees     active/publish: role=viewer: A says reject, B says ignore
-| error   case-disagrees     active/restore: role=editor: A says reject, B says ignore
-| error   case-disagrees     active/restore: role=viewer: A says reject, B says ignore
-| error   case-disagrees     draft/restore: role=editor: A says reject, B says ignore
-| error   case-disagrees     draft/restore: role=viewer: A says reject, B says ignore
-| error   case-disagrees     trashed/trash: role=editor: A says reject, B says ignore
-| error   case-disagrees     trashed/trash: role=viewer: A says reject, B says ignore
-| error   case-disagrees     trashed/restore: role=editor: A says reject, B says -> active
-| error   case-disagrees     trashed/purge: role=owner: A says -> purged, B says reject and -> purged
-| error   behavior-differs   restore(role=editor): A ends rejected, B ends draft
-| error   behavior-differs   restore(role=viewer): A ends rejected, B ends draft
-| error   behavior-differs   publish(role=owner) -> publish(role=editor): A ends rejected, B ends active
-| error   behavior-differs   publish(role=owner) -> publish(role=viewer): A ends rejected, B ends active
-| error   behavior-differs   publish(role=owner) -> restore(role=editor): A ends rejected, B ends active
-| error   behavior-differs   publish(role=owner) -> restore(role=viewer): A ends rejected, B ends active
-| error   behavior-differs   publish(role=owner) -> trash(role=owner) -> trash(role=editor): A ends rejected, B ends trashed
-| error   behavior-differs   publish(role=owner) -> trash(role=owner) -> trash(role=viewer): A ends rejected, B ends trashed
-| error   behavior-differs   publish(role=owner) -> trash(role=owner) -> restore(role=editor): A ends rejected, B ends active
-| error   behavior-differs   publish(role=owner) -> trash(role=owner) -> purge(role=owner): A ends purged, B ends undefined
-| -- 20 errors, 20 findings
+| error   vars-differ        vars: A and B declare different variables; case comparison skipped
+| -- 1 errors, 1 findings
 |
 === in .: spine diff examples/notes/spec/notes/spine.yaml examples/notes/spec/notes/spine.yaml
 exit 0
@@ -2637,42 +2714,34 @@ exit 0
 === in .: spine hash examples/notes/spec/notes/readings/reading-a.yaml
 exit 0
 --- stdout
-| spine@bd4857a0c271
-| draft/publish@0566b0558560
-| draft/edit@4a79e65e9c2b
-| draft/trash@3d2fd08161b0
-| draft/restore@a454f3f05bfe
-| draft/purge@3314e7f5982c
-| active/publish@f65f6ac951a0
-| active/edit@0f3eb8746b83
-| active/trash@0e90133cc582
-| active/restore@6f0ac092a9fa
-| active/purge@2eb4c3d26553
-| trashed/publish@409136c45451
-| trashed/edit@c0b49d1ab686
-| trashed/trash@1376c16e6ba3
-| trashed/restore@95f9c8204e9f
-| trashed/purge@7177564a6068
+| spine@2b733b8d8364
+| draft/publish@86f6e63ca98d
+| draft/edit@01c5e5d56e32
+| draft/trash@92fba0e21965
+| draft/restore@fec6c1b4b7b6
+| draft/purge@fb60a518a934
+| active/publish@72f238bd688b
+| active/edit@e8a126570c01
+| active/trash@c8491b85790a
+| active/restore@7d7a44329afc
+| active/purge@321cab2662ed
+| trashed/publish@9ab0349d879d
+| trashed/edit@e98adbb97364
+| trashed/trash@f79ddf91f8da
+| trashed/restore@9ddce03bb15f
+| trashed/purge@b9f0deddae22
 |
 === in .: spine hash examples/notes/spec/notes/readings/reading-b.yaml
 exit 0
 --- stdout
-| spine@b10dfd3551ce
-| draft/publish@0566b0558560
-| draft/edit@4a79e65e9c2b
-| draft/trash@29a34ca30b21
-| draft/restore@a454f3f05bfe
-| draft/purge@3314e7f5982c
-| active/publish@f65f6ac951a0
-| active/edit@a6899d5a7722
-| active/trash@0e90133cc582
-| active/restore@6f0ac092a9fa
-| active/purge@2eb4c3d26553
-| trashed/publish@409136c45451
-| trashed/edit@c0b49d1ab686
-| trashed/trash@1376c16e6ba3
-| trashed/restore@c63b97c8691c
-| trashed/purge@d8142b5a9fb5
+| spine@88655c06c382
+| draft/publish@33c6e8e9e311
+| draft/edit@b84e99442296
+| draft/trash@e4b1c8d2e9e6
+| active/edit@e8a126570c01
+| active/trash@6ff8cc1dfc5a
+| trashed/edit@e98adbb97364
+| trashed/purge@6cc874a7708b
 |
 === in .: spine hash examples/notes/spec/notes/spine.yaml
 exit 0
