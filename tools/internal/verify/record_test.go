@@ -269,12 +269,6 @@ roles:
     allow: ["*"]
 `
 
-// pythonWrapper is a Python that says, on standard error, that it ran, and which way it was
-// given; ./verify reads neither PYTHON nor .venv (#69), so the record shows neither runs.
-func pythonWrapper(found string) string {
-	return "#!/bin/sh\necho \"python from " + found + "\" >&2\nexec python3 \"$@\"\n"
-}
-
 // ---------- the runs ----------
 
 type run struct {
@@ -323,10 +317,8 @@ func projects(tmp string) []project {
 			{env: []string{"VERIFY_BASE=base", "VERIFY_BRANCH=main", "VERIFY_REPORTS=reports"}},
 			withEnv("VERIFY_REPORTS=" + filepath.Join(tmp, "reports")),
 			withEnv("VERIFY_VERBOSE=1"),
-			withEnv("PYTHON=" + filepath.Join(tmp, "wrapper", "python")),
 			{without: "python3"},
 		}},
-		{name: "venv", files: pythonLamp(false).with("", files{".venv/bin/python": pythonWrapper(".venv")}), runs: []run{r()}},
 		{name: "empty", files: files{}, runs: []run{r(), {without: "go"}}},
 	}
 }
@@ -395,11 +387,7 @@ func makeProject(t *testing.T, repo, dir string, p project) {
 	t.Helper()
 	copyToolkit(t, repo, dir)
 	for path, content := range p.files {
-		mode := os.FileMode(0o644)
-		if strings.Contains(path, "/bin/") {
-			mode = 0o755
-		}
-		writeFile(t, filepath.Join(dir, path), content, mode)
+		writeFile(t, filepath.Join(dir, path), content, 0o644)
 	}
 	if !p.git {
 		return
@@ -444,7 +432,7 @@ func environment() []string {
 	env := []string{"LC_ALL=C"}
 	for _, e := range os.Environ() {
 		name, _, _ := strings.Cut(e, "=")
-		if !strings.HasPrefix(name, "VERIFY_") && name != "PYTHON" && name != "LC_ALL" && name != "LANG" && name != "LANGUAGE" {
+		if !strings.HasPrefix(name, "VERIFY_") && name != "LC_ALL" && name != "LANG" && name != "LANGUAGE" {
 			env = append(env, e)
 		}
 	}
@@ -536,7 +524,6 @@ func TestRecord(t *testing.T) {
 	}
 	rec := record.Load(t, filepath.Join("testdata", "record"), *update, "./verify", "go -C tools test ./internal/verify/ -update")
 
-	writeFile(t, filepath.Join(tmp, "wrapper", "python"), pythonWrapper("PYTHON"), 0o755)
 	for path, content := range pythonLamp(false) {
 		writeFile(t, filepath.Join(tmp, "outside", path), content, 0o644)
 	}

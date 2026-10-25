@@ -170,9 +170,9 @@ func oracleFails(shown string, runs []ran) string {
 func verdictOf(name string, runs []ran) (string, bool) {
 	names, first := caught(runs)
 	if names == nil {
-		return fmt.Sprintf("%-7s %-18s %s: %s", "error", "mutant-survived", name, "no part of the oracle noticed"), true
+		return finding("mutant-survived", name, "no part of the oracle noticed"), true
 	}
-	return withFirst(fmt.Sprintf("%-7s %-18s %s: caught by %s", "info", "mutant-killed", name, strings.Join(names, ", ")), first), false
+	return withFirst(line("info", "mutant-killed", name, "caught by "+strings.Join(names, ", ")), first), false
 }
 
 // staleLine is the line for a mutant that can't be made.
