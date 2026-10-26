@@ -130,7 +130,7 @@ well.
 | guard (when `VERIFY_BASE` is set) | `spine guard` | a role changing paths it does not own | anything about behavior |
 | spine is sound | `spine check` | unknown keys, YAML slips (`on:` read as `true`), cases no rule covers, overlapping rules, unreachable states, failing worked examples | a spine that is complete but wrong |
 | behaviors match spine | `spine behaviors` | the spine drifting from the example runs you agreed on | |
-| checks cite current spine | `spine stale` | content checks that cite a spine cell, or the whole spine, which has since changed | checks that never cite anything (listed as info) |
+| checks cite current spine | `spine stale` | content checks that cite a spine cell, or the whole spine, which has since changed, and citations written wrongly | checks that never cite anything (listed as info) |
 | code conforms to spine | `spine conform`, with the command in `adapter_<machine>.cmd` | any state/event/role case where the code allows, refuses or ends up somewhere other than the spine says, with the shortest sequence that shows it | anything beyond 4 steps; data the adapter does not observe |
 | content checks | the command in `checks/run.cmd` | wrong text, values, formats | whatever no check asserts |
 | mutants killed (`--full`) | each mutant in `mutation/mutants.yaml`, on a copy, through conform and the content checks; and the command in each `mutation/mutate_*.cmd` | an oracle too weak to notice a planted bug | bugs unlike the planted ones |

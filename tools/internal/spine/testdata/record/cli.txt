@@ -1209,10 +1209,10 @@ exit 1
 |       "message": "covers closed/fly, which the spec no longer defines"
 |     },
 |     {
-|       "code": "stale-check",
+|       "code": "bad-citation",
 |       "severity": "error",
-|       "where": "checks/door/test_door.py",
-|       "message": "covers closed/open@26, but that cell now hashes to 26ccaba33ea0: re-ratify, then update the check"
+|       "where": "checks/door/test_door.py:4",
+|       "message": "\"covers:closed/open@26CCABA33EA0\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
 |     },
 |     {
 |       "code": "uncovered",
