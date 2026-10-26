@@ -67,16 +67,23 @@ one rule must match. `check` reports `undecided-cell`, `missing-case` and `overl
 
 ## Conditions
 
-`when` is a small expression over declared variables only:
+`when` is a condition over the declared variables, whose values are all text:
 
-- literals (strings, numbers) and lists of literals;
-- `==`, `!=`, `in`, `not in`;
-- `and`, `or`, `not`.
+- `==` and `!=` compare a variable or a text with a variable or a text: `who == 'member'`,
+  `borrower != owner`.
+- `in` and `not in` have a variable or a text on the left. On the right is a list of one or more
+  texts, `who in ['member', 'librarian']`, or a variable or a text, which tests for a substring:
+  `'lib' in who`.
+- `not`, `and` and `or` join comparisons, `not` binding tightest and `or` loosest; parentheses
+  group them.
+- A text is in single or double quotes and holds any character but its own quote and a
+  backslash. A variable is named as declared, in letters, marks, digits and `_`, starting with a
+  letter or `_`; `and`, `or`, `not` and `in` are not names.
+- Spaces, tabs and line breaks may go before, between and after the parts.
 
-Anything else (calls, attributes, arithmetic, undeclared names) is a `bad-condition`, and so is
-an `in` that can't be evaluated: its right side must be a list, or text or a variable with text
-or a variable on its left (`'lib' in who` tests for a substring). Numeric rules ("over 1,000")
-are split into named ranges at the thresholds the chapter gives, so the cases stay enumerable.
+Anything else, such as a number, a variable alone, a list beside `==` or an undeclared name, is
+a `bad-condition`. Numeric rules ("over 1,000") are split into named ranges at the thresholds the
+chapter gives, so the cases stay enumerable.
 
 ## Text only
 
