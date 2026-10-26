@@ -516,7 +516,7 @@ func anyBool(v *Value) bool {
 	return false
 }
 
-// checkWhen is compile_condition's check of a rule's when.
+// checkWhen checks that a rule's when is text in the condition language.
 func checkWhen(when *Value, varNames map[string]bool) error {
 	if !isText(when) {
 		return errors.New("condition must be text")

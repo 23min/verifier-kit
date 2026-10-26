@@ -446,7 +446,8 @@ func writeFile(t *testing.T, path, text string) {
 	}
 }
 
-// conditions is the calibration set, every pairing of a few operands, and random token runs.
+// conditions is conditions.json, inside the language and just outside it; every pairing of a few
+// operands; and random token runs.
 func conditions(t *testing.T, td string) []string {
 	var out []string
 	data, err := os.ReadFile(filepath.Join(td, "conditions.json"))

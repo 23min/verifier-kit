@@ -1,0 +1,15 @@
+# Conditions name variables in letters other than ASCII's, and with a combining mark (नाम); check
+# finds nothing.
+machine: m
+vars:
+  rôle: [a, b]
+  名前: [x]
+  नाम: [y]
+states:
+  s: {}
+  t: {terminal: true}
+initial: s
+events: [e]
+rules:
+  - {from: s, event: e, when: "rôle == 'a' and 名前 == 'x' and नाम == 'y'", to: t}
+  - {from: s, event: e, when: "rôle != 'a'", reject: true}

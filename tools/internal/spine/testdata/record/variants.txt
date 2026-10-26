@@ -10831,14 +10831,14 @@ exit 1
 |       "code": "bad-condition",
 |       "severity": "error",
 |       "where": "rules[1]",
-|       "message": "cannot parse condition ''"
+|       "message": "cannot parse condition '': it ends too soon"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-condition rules[1]"><failure message="cannot parse condition ''">cannot parse condition ''</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-condition rules[1]"><failure message="cannot parse condition '': it ends too soon">cannot parse condition '': it ends too soon</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0305.yaml
 exit 1
 --- stdout
@@ -10850,14 +10850,14 @@ exit 1
 |       "code": "bad-condition",
 |       "severity": "error",
 |       "where": "rules[1]",
-|       "message": "cannot parse condition 'x y'"
+|       "message": "cannot parse condition 'x y': unexpected \"y\" at character 3"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-condition rules[1]"><failure message="cannot parse condition 'x y'">cannot parse condition 'x y'</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-condition rules[1]"><failure message="cannot parse condition 'x y': unexpected &quot;y&quot; at character 3">cannot parse condition 'x y': unexpected "y" at character 3</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0306.yaml
 exit 1
 --- stdout
@@ -12163,14 +12163,14 @@ exit 1
 |       "code": "bad-condition",
 |       "severity": "error",
 |       "where": "rules[2]",
-|       "message": "cannot parse condition ''"
+|       "message": "cannot parse condition '': it ends too soon"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-condition rules[2]"><failure message="cannot parse condition ''">cannot parse condition ''</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-condition rules[2]"><failure message="cannot parse condition '': it ends too soon">cannot parse condition '': it ends too soon</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0371.yaml
 exit 1
 --- stdout
@@ -12182,14 +12182,14 @@ exit 1
 |       "code": "bad-condition",
 |       "severity": "error",
 |       "where": "rules[2]",
-|       "message": "cannot parse condition 'x y'"
+|       "message": "cannot parse condition 'x y': unexpected \"y\" at character 3"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-condition rules[2]"><failure message="cannot parse condition 'x y'">cannot parse condition 'x y'</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-condition rules[2]"><failure message="cannot parse condition 'x y': unexpected &quot;y&quot; at character 3">cannot parse condition 'x y': unexpected "y" at character 3</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0372.yaml
 exit 1
 --- stdout

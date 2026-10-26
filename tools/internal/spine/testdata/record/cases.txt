@@ -676,6 +676,18 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable spines/missing.yaml"><failure message="cannot be read: No such file or directory">cannot be read: No such file or directory</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/when-names.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine check seeds/policy.yaml
 exit 1
 --- stdout
@@ -699,6 +711,11 @@ exit 1
 --- stdout
 | error   spec-unreadable    spines/missing.yaml: cannot be read: No such file or directory
 | -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine check spines/when-names.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
 |
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/plain-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/lamp.py"
 exit 1

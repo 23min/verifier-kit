@@ -44,6 +44,7 @@
 ["guard", "seeds/spine.yaml", "--branch", "build/x", "a"]
 ["guard", "policies/key-twice.yaml", "--branch", "build/x", "src/a.py", "src/secret.py", "spec/b.yaml"]
 ["check", "spines/missing.yaml"]
+["check", "spines/when-names.yaml"]
 ["check", "spines"]
 ["check", ""]
 ["check", "seeds/policy.yaml"]
