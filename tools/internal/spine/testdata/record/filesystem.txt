@@ -179,30 +179,33 @@ exit 1
 --- stdout
 | error   stale-check        c/../c/b/x.py: covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check
 | error   stale-check        c/../c/b-c/x.py: covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check
+|q "error   bad-citation       c/../c/latin1.py:1: \"covers: x\ufffd/y@1\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
 | error   stale-check        c/../c/linked-file.py: covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check
 | error   spec-unreadable    c/../c/locked.py: cannot be read: Permission denied
 | info    uncovered          closed/remove: no check cites this transition; conformance still exercises it
-| -- 4 errors, 5 findings
+| -- 5 errors, 6 findings
 |
 === in $TMP/fs: spine stale $ROOT/tools/internal/spine/testdata/seeds/spine.yaml c
 exit 1
 --- stdout
 | error   stale-check        c/b/x.py: covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check
 | error   stale-check        c/b-c/x.py: covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check
+|q "error   bad-citation       c/latin1.py:1: \"covers: x\ufffd/y@1\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
 | error   stale-check        c/linked-file.py: covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check
 | error   spec-unreadable    c/locked.py: cannot be read: Permission denied
 | info    uncovered          closed/remove: no check cites this transition; conformance still exercises it
-| -- 4 errors, 5 findings
+| -- 5 errors, 6 findings
 |
 === in $TMP/fs: spine stale $ROOT/tools/internal/spine/testdata/seeds/spine.yaml c/
 exit 1
 --- stdout
 | error   stale-check        c/b/x.py: covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check
 | error   stale-check        c/b-c/x.py: covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check
+|q "error   bad-citation       c/latin1.py:1: \"covers: x\ufffd/y@1\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
 | error   stale-check        c/linked-file.py: covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check
 | error   spec-unreadable    c/locked.py: cannot be read: Permission denied
 | info    uncovered          closed/remove: no check cites this transition; conformance still exercises it
-| -- 4 errors, 5 findings
+| -- 5 errors, 6 findings
 |
 === in $TMP/fs: spine stale $ROOT/tools/internal/spine/testdata/seeds/spine.yaml c/a.py
 exit 0
@@ -231,6 +234,12 @@ exit 1
 |       "message": "covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check"
 |     },
 |     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "c/../c/latin1.py:1",
+|       "message": "\"covers: x\ufffd/y@1\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
 |       "code": "stale-check",
 |       "severity": "error",
 |       "where": "c/../c/linked-file.py",
@@ -253,7 +262,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine stale" tests="4" failures="4"><testcase classname="spine stale" name="stale-check c/../c/b/x.py"><failure message="covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check c/../c/b-c/x.py"><failure message="covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check c/../c/linked-file.py"><failure message="covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="spec-unreadable c/../c/locked.py"><failure message="cannot be read: Permission denied">cannot be read: Permission denied</failure></testcase></testsuite>
+|q "<testsuite name=\"spine stale\" tests=\"5\" failures=\"5\"><testcase classname=\"spine stale\" name=\"stale-check c/../c/b/x.py\"><failure message=\"covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check\">covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname=\"spine stale\" name=\"stale-check c/../c/b-c/x.py\"><failure message=\"covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check\">covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname=\"spine stale\" name=\"bad-citation c/../c/latin1.py:1\"><failure message=\"&quot;covers: x\ufffd/y@1&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase\">\"covers: x\ufffd/y@1\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname=\"spine stale\" name=\"stale-check c/../c/linked-file.py\"><failure message=\"covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check\">covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname=\"spine stale\" name=\"spec-unreadable c/../c/locked.py\"><failure message=\"cannot be read: Permission denied\">cannot be read: Permission denied</failure></testcase></testsuite>"
 === in $TMP/fs: spine stale --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml c
 exit 1
 --- stdout
@@ -274,6 +283,12 @@ exit 1
 |       "message": "covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check"
 |     },
 |     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "c/latin1.py:1",
+|       "message": "\"covers: x\ufffd/y@1\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
 |       "code": "stale-check",
 |       "severity": "error",
 |       "where": "c/linked-file.py",
@@ -296,7 +311,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine stale" tests="4" failures="4"><testcase classname="spine stale" name="stale-check c/b/x.py"><failure message="covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check c/b-c/x.py"><failure message="covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check c/linked-file.py"><failure message="covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="spec-unreadable c/locked.py"><failure message="cannot be read: Permission denied">cannot be read: Permission denied</failure></testcase></testsuite>
+|q "<testsuite name=\"spine stale\" tests=\"5\" failures=\"5\"><testcase classname=\"spine stale\" name=\"stale-check c/b/x.py\"><failure message=\"covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check\">covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname=\"spine stale\" name=\"stale-check c/b-c/x.py\"><failure message=\"covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check\">covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname=\"spine stale\" name=\"bad-citation c/latin1.py:1\"><failure message=\"&quot;covers: x\ufffd/y@1&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase\">\"covers: x\ufffd/y@1\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname=\"spine stale\" name=\"stale-check c/linked-file.py\"><failure message=\"covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check\">covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname=\"spine stale\" name=\"spec-unreadable c/locked.py\"><failure message=\"cannot be read: Permission denied\">cannot be read: Permission denied</failure></testcase></testsuite>"
 === in $TMP/fs: spine stale --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml c/
 exit 1
 --- stdout
@@ -317,6 +332,12 @@ exit 1
 |       "message": "covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check"
 |     },
 |     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "c/latin1.py:1",
+|       "message": "\"covers: x\ufffd/y@1\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
 |       "code": "stale-check",
 |       "severity": "error",
 |       "where": "c/linked-file.py",
@@ -339,7 +360,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine stale" tests="4" failures="4"><testcase classname="spine stale" name="stale-check c/b/x.py"><failure message="covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check c/b-c/x.py"><failure message="covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check c/linked-file.py"><failure message="covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="spec-unreadable c/locked.py"><failure message="cannot be read: Permission denied">cannot be read: Permission denied</failure></testcase></testsuite>
+|q "<testsuite name=\"spine stale\" tests=\"5\" failures=\"5\"><testcase classname=\"spine stale\" name=\"stale-check c/b/x.py\"><failure message=\"covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check\">covers open/open@000000000002, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname=\"spine stale\" name=\"stale-check c/b-c/x.py\"><failure message=\"covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check\">covers open/open@000000000001, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname=\"spine stale\" name=\"bad-citation c/latin1.py:1\"><failure message=\"&quot;covers: x\ufffd/y@1&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase\">\"covers: x\ufffd/y@1\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname=\"spine stale\" name=\"stale-check c/linked-file.py\"><failure message=\"covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check\">covers open/open@000000000003, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname=\"spine stale\" name=\"spec-unreadable c/locked.py\"><failure message=\"cannot be read: Permission denied\">cannot be read: Permission denied</failure></testcase></testsuite>"
 === in $TMP/fs: spine stale --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml c/a.py
 exit 0
 --- stdout

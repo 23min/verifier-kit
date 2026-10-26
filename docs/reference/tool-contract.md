@@ -51,7 +51,7 @@ are part of the contract: new codes may be added, existing codes are never renam
 | `check` | `SPEC` | Validates the file, then: every state, event and variable combination has exactly one rule; every state is reachable; terminal states have no exits; worked examples replay to their expected end |
 | `diff` | `A B [--depth N]` | Compares two spines case by case, then by behavior over every sequence up to N events (default 4), reporting the shortest witness for each difference |
 | `hash` | `SPEC` | Prints the whole spine's hash, `spine@hash`, then one content hash per state/event cell: `state/event@hash`. Text only: `--format` and `--junit` are usage errors |
-| `stale` | `SPEC CHECKS_DIR` | Finds `covers: state/event@hash` and `covers: spine@hash` citations in files under `CHECKS_DIR` and reports stale, orphaned and uncovered cells. A check that cites the current whole spine counts every transition as cited |
+| `stale` | `SPEC CHECKS_DIR` | Finds `covers: state/event@hash` and `covers: spine@hash` citations in files under `CHECKS_DIR` and reports stale, orphaned and uncovered cells, and text meant as a citation that isn't one. A check that cites the current whole spine counts every transition as cited |
 | `behaviors` | `SPEC DIR` | Replays every file in `DIR/valid/` (must be allowed) and `DIR/invalid/` (must be refused) |
 | `trace` | `SPEC FILE` | Replays one behavior file; for callers that run a validator once per fixture |
 | `conform` | `SPEC --adapter-cmd COMMAND [--depth N]` | Runs every event sequence up to N steps (default 4) against the spine and against the code through the adapter, and reports where they differ. The adapter is a program that speaks the adapter protocol (below); a Python adapter's command runs it through `tools/adapter_shim.py` |
@@ -94,6 +94,7 @@ takes a spine validates it first and stops with the validation findings if it is
 | `behavior-differs` | error | `diff` | a shortest event sequence on which the readings end differently |
 | `stale-check` | error | `stale` | a check cites a cell, or the whole spine, whose hash has changed |
 | `orphan-check` | error | `stale` | a check cites a cell that no longer exists |
+| `bad-citation` | error | `stale` | text meant as a citation that isn't one, such as `covers` without its colon (`spine-format.md`); `where` is the file and line |
 | `uncovered` | info | `stale` | a transition no check cites |
 | `behavior-refused` | error | `behaviors` | a file in `valid/` is refused |
 | `behavior-allowed` | error | `behaviors` | a file in `invalid/` is allowed |

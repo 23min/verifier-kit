@@ -5074,16 +5074,64 @@ exit 1
 |       "message": "covers closed/fly, which the spec no longer defines"
 |     },
 |     {
-|       "code": "stale-check",
+|       "code": "bad-citation",
 |       "severity": "error",
-|       "where": "checks/door/test_door.py",
-|       "message": "covers closed/open@26, but that cell now hashes to 26ccaba33ea0: re-ratify, then update the check"
+|       "where": "checks/door/test_door.py:4",
+|       "message": "\"covers:closed/open@26CCABA33EA0\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
 |     },
 |     {
-|       "code": "stale-check",
+|       "code": "bad-citation",
 |       "severity": "error",
-|       "where": "checks/spine-malformed/test_whole.py",
-|       "message": "covers spine@7, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check"
+|       "where": "checks/slips/test_slips.py:2",
+|       "message": "\"covers closed/open@26ccaba33ea0\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "checks/slips/test_slips.py:3",
+|       "message": "\"covers: closed/open @26ccaba33ea0\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "checks/slips/test_slips.py:4",
+|       "message": "\"cover: closed/open@26ccaba33ea0\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "checks/slips/test_slips.py:5",
+|       "message": "\"Covers: closed/open@26ccaba33ea0\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "checks/spine-malformed/test_whole.py:2",
+|       "message": "\"covers: spine@\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "checks/spine-malformed/test_whole.py:3",
+|       "message": "\"covers: spine@XYZ\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "checks/spine-malformed/test_whole.py:4",
+|       "message": "\"covers: spines@7ffd784dee4d\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "checks/spine-malformed/test_whole.py:5",
+|       "message": "\"covers: spine @7ffd784dee4d\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "checks/spine-malformed/test_whole.py:7",
+|       "message": "\"covers: spine@7FFD784DEE4D\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
 |     },
 |     {
 |       "code": "stale-check",
@@ -5096,7 +5144,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine stale" tests="8" failures="8"><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers café/über, which the spec no longer defines">covers café/über, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers a-b/c_d, which the spec no longer defines">covers a-b/c_d, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="stale-check checks/door/test_door.py"><failure message="covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers nowhere/open, which the spec no longer defines">covers nowhere/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/fly, which the spec no longer defines">covers closed/fly, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="stale-check checks/door/test_door.py"><failure message="covers closed/open@26, but that cell now hashes to 26ccaba33ea0: re-ratify, then update the check">covers closed/open@26, but that cell now hashes to 26ccaba33ea0: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check checks/spine-malformed/test_whole.py"><failure message="covers spine@7, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check">covers spine@7, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check checks/spine-old/test_whole.py"><failure message="covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check">covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check</failure></testcase></testsuite>
+| <testsuite name="spine stale" tests="16" failures="16"><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers café/über, which the spec no longer defines">covers café/über, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers a-b/c_d, which the spec no longer defines">covers a-b/c_d, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="stale-check checks/door/test_door.py"><failure message="covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers nowhere/open, which the spec no longer defines">covers nowhere/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/fly, which the spec no longer defines">covers closed/fly, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="bad-citation checks/door/test_door.py:4"><failure message="&quot;covers:closed/open@26CCABA33EA0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers:closed/open@26CCABA33EA0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/slips/test_slips.py:2"><failure message="&quot;covers closed/open@26ccaba33ea0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/slips/test_slips.py:3"><failure message="&quot;covers: closed/open @26ccaba33ea0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: closed/open @26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/slips/test_slips.py:4"><failure message="&quot;cover: closed/open@26ccaba33ea0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"cover: closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/slips/test_slips.py:5"><failure message="&quot;Covers: closed/open@26ccaba33ea0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"Covers: closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:2"><failure message="&quot;covers: spine@&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spine@" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:3"><failure message="&quot;covers: spine@XYZ&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spine@XYZ" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:4"><failure message="&quot;covers: spines@7ffd784dee4d&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spines@7ffd784dee4d" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:5"><failure message="&quot;covers: spine @7ffd784dee4d&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spine @7ffd784dee4d" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:7"><failure message="&quot;covers: spine@7FFD784DEE4D&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spine@7FFD784DEE4D" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="stale-check checks/spine-old/test_whole.py"><failure message="covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check">covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine stale --format json --junit REPORT seeds/spine.yaml checks/door
 exit 1
 --- stdout
@@ -5135,10 +5183,10 @@ exit 1
 |       "message": "covers closed/fly, which the spec no longer defines"
 |     },
 |     {
-|       "code": "stale-check",
+|       "code": "bad-citation",
 |       "severity": "error",
-|       "where": "checks/door/test_door.py",
-|       "message": "covers closed/open@26, but that cell now hashes to 26ccaba33ea0: re-ratify, then update the check"
+|       "where": "checks/door/test_door.py:4",
+|       "message": "\"covers:closed/open@26CCABA33EA0\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
 |     },
 |     {
 |       "code": "uncovered",
@@ -5151,7 +5199,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine stale" tests="6" failures="6"><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers café/über, which the spec no longer defines">covers café/über, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers a-b/c_d, which the spec no longer defines">covers a-b/c_d, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="stale-check checks/door/test_door.py"><failure message="covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers nowhere/open, which the spec no longer defines">covers nowhere/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/fly, which the spec no longer defines">covers closed/fly, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="stale-check checks/door/test_door.py"><failure message="covers closed/open@26, but that cell now hashes to 26ccaba33ea0: re-ratify, then update the check">covers closed/open@26, but that cell now hashes to 26ccaba33ea0: re-ratify, then update the check</failure></testcase></testsuite>
+| <testsuite name="spine stale" tests="6" failures="6"><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers café/über, which the spec no longer defines">covers café/über, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers a-b/c_d, which the spec no longer defines">covers a-b/c_d, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="stale-check checks/door/test_door.py"><failure message="covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers nowhere/open, which the spec no longer defines">covers nowhere/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/fly, which the spec no longer defines">covers closed/fly, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="bad-citation checks/door/test_door.py:4"><failure message="&quot;covers:closed/open@26CCABA33EA0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers:closed/open@26CCABA33EA0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine stale --format json --junit REPORT seeds/spine.yaml checks/none
 exit 0
 --- stdout
@@ -5177,6 +5225,49 @@ exit 0
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine stale" tests="1" failures="0"><testcase classname="spine stale" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine stale --format json --junit REPORT seeds/spine.yaml checks/slips
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "stale",
+|   "findings": [
+|     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "checks/slips/test_slips.py:2",
+|       "message": "\"covers closed/open@26ccaba33ea0\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "checks/slips/test_slips.py:3",
+|       "message": "\"covers: closed/open @26ccaba33ea0\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "checks/slips/test_slips.py:4",
+|       "message": "\"cover: closed/open@26ccaba33ea0\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "checks/slips/test_slips.py:5",
+|       "message": "\"Covers: closed/open@26ccaba33ea0\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "closed/remove",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine stale" tests="4" failures="4"><testcase classname="spine stale" name="bad-citation checks/slips/test_slips.py:2"><failure message="&quot;covers closed/open@26ccaba33ea0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/slips/test_slips.py:3"><failure message="&quot;covers: closed/open @26ccaba33ea0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: closed/open @26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/slips/test_slips.py:4"><failure message="&quot;cover: closed/open@26ccaba33ea0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"cover: closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/slips/test_slips.py:5"><failure message="&quot;Covers: closed/open@26ccaba33ea0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"Covers: closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine stale --format json --junit REPORT seeds/spine.yaml checks/spine-current
 exit 0
 --- stdout
@@ -5197,10 +5288,34 @@ exit 1
 |   "command": "stale",
 |   "findings": [
 |     {
-|       "code": "stale-check",
+|       "code": "bad-citation",
 |       "severity": "error",
-|       "where": "checks/spine-malformed/test_whole.py",
-|       "message": "covers spine@7, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check"
+|       "where": "checks/spine-malformed/test_whole.py:2",
+|       "message": "\"covers: spine@\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "checks/spine-malformed/test_whole.py:3",
+|       "message": "\"covers: spine@XYZ\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "checks/spine-malformed/test_whole.py:4",
+|       "message": "\"covers: spines@7ffd784dee4d\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "checks/spine-malformed/test_whole.py:5",
+|       "message": "\"covers: spine @7ffd784dee4d\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
+|     },
+|     {
+|       "code": "bad-citation",
+|       "severity": "error",
+|       "where": "checks/spine-malformed/test_whole.py:7",
+|       "message": "\"covers: spine@7FFD784DEE4D\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
 |     },
 |     {
 |       "code": "uncovered",
@@ -5219,7 +5334,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine stale" tests="1" failures="1"><testcase classname="spine stale" name="stale-check checks/spine-malformed/test_whole.py"><failure message="covers spine@7, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check">covers spine@7, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check</failure></testcase></testsuite>
+| <testsuite name="spine stale" tests="5" failures="5"><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:2"><failure message="&quot;covers: spine@&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spine@" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:3"><failure message="&quot;covers: spine@XYZ&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spine@XYZ" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:4"><failure message="&quot;covers: spines@7ffd784dee4d&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spines@7ffd784dee4d" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:5"><failure message="&quot;covers: spine @7ffd784dee4d&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spine @7ffd784dee4d" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:7"><failure message="&quot;covers: spine@7FFD784DEE4D&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spine@7FFD784DEE4D" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine stale --format json --junit REPORT seeds/spine.yaml checks/spine-old
 exit 1
 --- stdout
@@ -5307,10 +5422,10 @@ exit 1
 |       "message": "covers closed/fly, which the spec no longer defines"
 |     },
 |     {
-|       "code": "orphan-check",
+|       "code": "bad-citation",
 |       "severity": "error",
-|       "where": "checks/door/test_door.py",
-|       "message": "covers closed/open, which the spec no longer defines"
+|       "where": "checks/door/test_door.py:4",
+|       "message": "\"covers:closed/open@26CCABA33EA0\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
 |     },
 |     {
 |       "code": "uncovered",
@@ -5353,7 +5468,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine stale" tests="9" failures="9"><testcase classname="spine stale" name="orphan-check checks/door/.hidden.py"><failure message="covers open/remove, which the spec no longer defines">covers open/remove, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers closed/open, which the spec no longer defines">covers closed/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="stale-check checks/door/sub/test_more.txt"><failure message="covers café/über@1234, but that cell now hashes to 8be38720bae1: re-ratify, then update the check">covers café/über@1234, but that cell now hashes to 8be38720bae1: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers a-b/c_d, which the spec no longer defines">covers a-b/c_d, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/open, which the spec no longer defines">covers closed/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers open/open, which the spec no longer defines">covers open/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers nowhere/open, which the spec no longer defines">covers nowhere/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/fly, which the spec no longer defines">covers closed/fly, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/open, which the spec no longer defines">covers closed/open, which the spec no longer defines</failure></testcase></testsuite>
+| <testsuite name="spine stale" tests="9" failures="9"><testcase classname="spine stale" name="orphan-check checks/door/.hidden.py"><failure message="covers open/remove, which the spec no longer defines">covers open/remove, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers closed/open, which the spec no longer defines">covers closed/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="stale-check checks/door/sub/test_more.txt"><failure message="covers café/über@1234, but that cell now hashes to 8be38720bae1: re-ratify, then update the check">covers café/über@1234, but that cell now hashes to 8be38720bae1: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers a-b/c_d, which the spec no longer defines">covers a-b/c_d, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/open, which the spec no longer defines">covers closed/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers open/open, which the spec no longer defines">covers open/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers nowhere/open, which the spec no longer defines">covers nowhere/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/fly, which the spec no longer defines">covers closed/fly, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="bad-citation checks/door/test_door.py:4"><failure message="&quot;covers:closed/open@26CCABA33EA0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers:closed/open@26CCABA33EA0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine stale --format json --junit REPORT spines/unsound.yaml checks/door
 exit 1
 --- stdout
@@ -5410,10 +5525,10 @@ exit 1
 |       "message": "covers closed/fly, which the spec no longer defines"
 |     },
 |     {
-|       "code": "orphan-check",
+|       "code": "bad-citation",
 |       "severity": "error",
-|       "where": "checks/door/test_door.py",
-|       "message": "covers closed/open, which the spec no longer defines"
+|       "where": "checks/door/test_door.py:4",
+|       "message": "\"covers:closed/open@26CCABA33EA0\" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase"
 |     },
 |     {
 |       "code": "uncovered",
@@ -5444,7 +5559,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine stale" tests="9" failures="9"><testcase classname="spine stale" name="orphan-check checks/door/.hidden.py"><failure message="covers open/remove, which the spec no longer defines">covers open/remove, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers closed/open, which the spec no longer defines">covers closed/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers café/über, which the spec no longer defines">covers café/über, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers a-b/c_d, which the spec no longer defines">covers a-b/c_d, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/open, which the spec no longer defines">covers closed/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers open/open, which the spec no longer defines">covers open/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers nowhere/open, which the spec no longer defines">covers nowhere/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/fly, which the spec no longer defines">covers closed/fly, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/open, which the spec no longer defines">covers closed/open, which the spec no longer defines</failure></testcase></testsuite>
+| <testsuite name="spine stale" tests="9" failures="9"><testcase classname="spine stale" name="orphan-check checks/door/.hidden.py"><failure message="covers open/remove, which the spec no longer defines">covers open/remove, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers closed/open, which the spec no longer defines">covers closed/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers café/über, which the spec no longer defines">covers café/über, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers a-b/c_d, which the spec no longer defines">covers a-b/c_d, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/open, which the spec no longer defines">covers closed/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers open/open, which the spec no longer defines">covers open/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers nowhere/open, which the spec no longer defines">covers nowhere/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/fly, which the spec no longer defines">covers closed/fly, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="bad-citation checks/door/test_door.py:4"><failure message="&quot;covers:closed/open@26CCABA33EA0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers:closed/open@26CCABA33EA0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine stale seeds/spine.yaml checks
 exit 1
 --- stdout
@@ -5453,10 +5568,18 @@ exit 1
 | error   stale-check        checks/door/test_door.py: covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check
 | error   orphan-check       checks/door/test_door.py: covers nowhere/open, which the spec no longer defines
 | error   orphan-check       checks/door/test_door.py: covers closed/fly, which the spec no longer defines
-| error   stale-check        checks/door/test_door.py: covers closed/open@26, but that cell now hashes to 26ccaba33ea0: re-ratify, then update the check
-| error   stale-check        checks/spine-malformed/test_whole.py: covers spine@7, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check
+| error   bad-citation       checks/door/test_door.py:4: "covers:closed/open@26CCABA33EA0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| error   bad-citation       checks/slips/test_slips.py:2: "covers closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| error   bad-citation       checks/slips/test_slips.py:3: "covers: closed/open @26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| error   bad-citation       checks/slips/test_slips.py:4: "cover: closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| error   bad-citation       checks/slips/test_slips.py:5: "Covers: closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| error   bad-citation       checks/spine-malformed/test_whole.py:2: "covers: spine@" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| error   bad-citation       checks/spine-malformed/test_whole.py:3: "covers: spine@XYZ" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| error   bad-citation       checks/spine-malformed/test_whole.py:4: "covers: spines@7ffd784dee4d" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| error   bad-citation       checks/spine-malformed/test_whole.py:5: "covers: spine @7ffd784dee4d" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| error   bad-citation       checks/spine-malformed/test_whole.py:7: "covers: spine@7FFD784DEE4D" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
 | error   stale-check        checks/spine-old/test_whole.py: covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check
-| -- 8 errors, 8 findings
+| -- 16 errors, 16 findings
 |
 === in tools/internal/spine/testdata: spine stale seeds/spine.yaml checks/door
 exit 1
@@ -5466,7 +5589,7 @@ exit 1
 | error   stale-check        checks/door/test_door.py: covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check
 | error   orphan-check       checks/door/test_door.py: covers nowhere/open, which the spec no longer defines
 | error   orphan-check       checks/door/test_door.py: covers closed/fly, which the spec no longer defines
-| error   stale-check        checks/door/test_door.py: covers closed/open@26, but that cell now hashes to 26ccaba33ea0: re-ratify, then update the check
+| error   bad-citation       checks/door/test_door.py:4: "covers:closed/open@26CCABA33EA0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
 | info    uncovered          closed/remove: no check cites this transition; conformance still exercises it
 | -- 6 errors, 7 findings
 |
@@ -5477,6 +5600,16 @@ exit 0
 | info    uncovered          closed/remove: no check cites this transition; conformance still exercises it
 | -- 0 errors, 2 findings
 |
+=== in tools/internal/spine/testdata: spine stale seeds/spine.yaml checks/slips
+exit 1
+--- stdout
+| error   bad-citation       checks/slips/test_slips.py:2: "covers closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| error   bad-citation       checks/slips/test_slips.py:3: "covers: closed/open @26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| error   bad-citation       checks/slips/test_slips.py:4: "cover: closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| error   bad-citation       checks/slips/test_slips.py:5: "Covers: closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| info    uncovered          closed/remove: no check cites this transition; conformance still exercises it
+| -- 4 errors, 5 findings
+|
 === in tools/internal/spine/testdata: spine stale seeds/spine.yaml checks/spine-current
 exit 0
 --- stdout
@@ -5485,10 +5618,14 @@ exit 0
 === in tools/internal/spine/testdata: spine stale seeds/spine.yaml checks/spine-malformed
 exit 1
 --- stdout
-| error   stale-check        checks/spine-malformed/test_whole.py: covers spine@7, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check
+| error   bad-citation       checks/spine-malformed/test_whole.py:2: "covers: spine@" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| error   bad-citation       checks/spine-malformed/test_whole.py:3: "covers: spine@XYZ" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| error   bad-citation       checks/spine-malformed/test_whole.py:4: "covers: spines@7ffd784dee4d" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| error   bad-citation       checks/spine-malformed/test_whole.py:5: "covers: spine @7ffd784dee4d" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
+| error   bad-citation       checks/spine-malformed/test_whole.py:7: "covers: spine@7FFD784DEE4D" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
 | info    uncovered          closed/open: no check cites this transition; conformance still exercises it
 | info    uncovered          closed/remove: no check cites this transition; conformance still exercises it
-| -- 1 errors, 3 findings
+| -- 5 errors, 7 findings
 |
 === in tools/internal/spine/testdata: spine stale seeds/spine.yaml checks/spine-old
 exit 1
@@ -5509,7 +5646,7 @@ exit 1
 | error   orphan-check       checks/door/test_door.py: covers open/open, which the spec no longer defines
 | error   orphan-check       checks/door/test_door.py: covers nowhere/open, which the spec no longer defines
 | error   orphan-check       checks/door/test_door.py: covers closed/fly, which the spec no longer defines
-| error   orphan-check       checks/door/test_door.py: covers closed/open, which the spec no longer defines
+| error   bad-citation       checks/door/test_door.py:4: "covers:closed/open@26CCABA33EA0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
 | info    uncovered          back\slash/über: no check cites this transition; conformance still exercises it
 | info    uncovered          café/ev"q: no check cites this transition; conformance still exercises it
 | info    uncovered          café/über: no check cites this transition; conformance still exercises it
@@ -5529,7 +5666,7 @@ exit 1
 | error   orphan-check       checks/door/test_door.py: covers open/open, which the spec no longer defines
 | error   orphan-check       checks/door/test_door.py: covers nowhere/open, which the spec no longer defines
 | error   orphan-check       checks/door/test_door.py: covers closed/fly, which the spec no longer defines
-| error   orphan-check       checks/door/test_door.py: covers closed/open, which the spec no longer defines
+| error   bad-citation       checks/door/test_door.py:4: "covers:closed/open@26CCABA33EA0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase
 | info    uncovered          end/go: no check cites this transition; conformance still exercises it
 | info    uncovered          nowhere/go: no check cites this transition; conformance still exercises it
 | info    uncovered          s/go: no check cites this transition; conformance still exercises it

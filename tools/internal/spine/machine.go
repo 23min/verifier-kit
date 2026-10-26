@@ -492,11 +492,22 @@ func (s *Spec) spineHash() string {
 	return hex.EncodeToString(sum[:])[:12]
 }
 
-// covers is COVERS in tools/spine.py, with Python's Unicode \s and \w spelled out, and the
-// whole spine as `spine` where a cell would be (#59); a cell always has a slash.
-var covers = regexp.MustCompile(`covers:` + pySpaceClass + `*(?:([\p{L}\p{N}_-]+)/([\p{L}\p{N}_-]+)|(spine))@([0-9a-f]+)`)
+// meant is text meant as a citation (#64), on one line: the word cover or covers in any case, an
+// optional colon, at most one word, then @ and the word after it. citation is COVERS in
+// tools/spine.py, with Python's Unicode \s, less the line break, and \w spelled out, the whole
+// spine as `spine` where a cell would be (#59), and the hash ending where its word ends; whatever
+// meant finds that it isn't, is reported.
+var (
+	meant = regexp.MustCompile(`(?:^|[^\p{L}\p{N}_])((?i:covers?)(?:` + lineSpace + `*:` + lineSpace + `*` + word + `|` +
+		lineSpace + `+` + word + `|)` + lineSpace + `*@[\p{L}\p{N}_]*)`)
+	citation = regexp.MustCompile(`^covers:` + lineSpace + `*(?:([\p{L}\p{N}_-]+)/([\p{L}\p{N}_-]+)|(spine))@([0-9a-f]+)$`)
+)
 
-const pySpaceClass = `[\t\n\v\f\r\x1c-\x1f \x{85}\x{a0}\x{1680}\x{2000}-\x{200a}\x{2028}\x{2029}\x{202f}\x{205f}\x{3000}]`
+const (
+	lineSpaces = `\t\v\f\r\x1c-\x1f \x{85}\x{a0}\x{1680}\x{2000}-\x{200a}\x{2028}\x{2029}\x{202f}\x{205f}\x{3000}`
+	lineSpace  = `[` + lineSpaces + `]`
+	word       = `[^@\n` + lineSpaces + `]*`
+)
 
 func stale(s *Spec, checksDir string) Findings {
 	var out Findings
@@ -511,7 +522,14 @@ func stale(s *Spec, checksDir string) Findings {
 			continue
 		}
 		text := strings.ToValidUTF8(string(data), "�")
-		for _, m := range covers.FindAllStringSubmatch(text, -1) {
+		for _, at := range meant.FindAllStringSubmatchIndex(text, -1) {
+			m := citation.FindStringSubmatch(text[at[2]:at[3]])
+			if m == nil {
+				where := fmt.Sprintf("%s:%d", path, 1+strings.Count(text[:at[2]], "\n"))
+				out.Add("bad-citation", where, fmt.Sprintf(
+					"%q is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase", text[at[2]:at[3]]))
+				continue
+			}
 			if m[3] != "" {
 				if h := s.spineHash(); m[4] != h {
 					out.Add("stale-check", path, fmt.Sprintf(

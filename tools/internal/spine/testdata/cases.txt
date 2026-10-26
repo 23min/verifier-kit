@@ -27,6 +27,7 @@
 ["stale", "seeds/spine.yaml", "checks/spine-current"]
 ["stale", "seeds/spine.yaml", "checks/spine-old"]
 ["stale", "seeds/spine.yaml", "checks/spine-malformed"]
+["stale", "seeds/spine.yaml", "checks/slips"]
 ["stale", "spines/names.yaml", "checks/door"]
 ["stale", "spines/unsound.yaml", "checks/door"]
 ["guard", "policies/patterns.yaml", "--branch", "feature/1x", "src/a1.py", "src/d.py", "x.h", "docs/a/b", "lib/]x", "abc", "a-c", "qz", "r]s", "rxs", "t-x", "tb", "u-x", "[", "]x", "u!", "src/a/secret/b.py", "src/[a].py", "*"]

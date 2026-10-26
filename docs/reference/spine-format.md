@@ -141,3 +141,12 @@ state's kind, the worked examples, comments and the order anything is written in
 alone. `spine hash` prints it first, as `spine@<hash>`. When it changes, `spine stale` reports
 every check that cites the old one; while it is current, `stale` counts every transition as
 cited.
+
+A citation is written exactly so, on one line: `covers:`, optional spaces, the cell or `spine`,
+`@`, and the hash in lowercase hex, as `spine hash` prints it. Text on one line that is meant as
+one but isn't, which is the word `cover` or `covers` in any case, an optional colon, at most one
+word, then `@`, with spaces allowed between them, is reported as `bad-citation` with its file and
+line (#64): `covers on_loan/renew@3f2a9c41d07e` without its colon, a space before `@`, or a hash
+in capitals would otherwise tie the check to nothing. Text with no `@` on the line, such as
+`this test covers: edge cases`, is left alone, and so is a longer word, such as `coverage` or
+`recovers`.
