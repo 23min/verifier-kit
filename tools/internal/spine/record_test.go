@@ -85,7 +85,9 @@ func (c spineCase) recordRun(t *testing.T, args []string, r result, junit *strin
 		t.Fatalf("%s: no file in testdata/record/ for this case; add its prefix to recordFile", c.name)
 	}
 	got := record.Entry{Exit: r.exit, Sections: []record.Section{{Name: "stdout", Text: normal(r.stdout)}}}
-	if r.stderr != "" {
+	// A usage error's message, on stderr, is spine's own; an adapter's stderr is not recorded, as it
+	// varies with the version of the adapter's language.
+	if r.exit == 2 {
 		got.Sections = append(got.Sections, record.Section{Name: "stderr", Text: normal(r.stderr)})
 	}
 	if junit != nil {

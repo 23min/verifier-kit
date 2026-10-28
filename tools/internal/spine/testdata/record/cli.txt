@@ -326,9 +326,6 @@ exit 1
 --- stdout
 | -- 0 errors, 0 findings
 |
---- stderr
-| spine: cannot write the JUnit report: open : no such file or directory
-|
 === in tools/internal/spine/testdata: spine check -.5
 exit 2
 --- stdout

@@ -874,9 +874,6 @@ exit 0
 |   ]
 | }
 |
---- stderr
-| protocol.py ok started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
@@ -896,9 +893,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| adapter_shim:  cannot be imported: not a Python file
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py ''"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
@@ -917,9 +911,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| adapter_shim: adapters cannot be imported: not a Python file
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -1000,32 +991,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| apply open {'role': 'owner'}
-| printing to stdout goes to stderr through the shim
-| apply open {'role': 'guest'}
-| printing to stdout goes to stderr through the shim
-| apply remove {'role': 'owner'}
-| printing to stdout goes to stderr through the shim
-| apply remove {'role': 'guest'}
-| printing to stdout goes to stderr through the shim
-| apply open {'role': 'owner'}
-| printing to stdout goes to stderr through the shim
-| apply open {'role': 'owner'}
-| printing to stdout goes to stderr through the shim
-| apply open {'role': 'owner'}
-| printing to stdout goes to stderr through the shim
-| apply open {'role': 'guest'}
-| printing to stdout goes to stderr through the shim
-| apply open {'role': 'owner'}
-| printing to stdout goes to stderr through the shim
-| apply remove {'role': 'owner'}
-| printing to stdout goes to stderr through the shim
-| apply open {'role': 'owner'}
-| printing to stdout goes to stderr through the shim
-| apply remove {'role': 'guest'}
-| printing to stdout goes to stderr through the shim
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -1108,9 +1073,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| adapter_shim: adapters/door_import.py cannot be imported: ModuleNotFoundError: No module named 'no_such_module_for_spine'
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_import.py"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
@@ -1129,9 +1091,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| adapter_shim: adapters/door_missing.py does not define apply(), observe()
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -1189,27 +1148,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| Traceback (most recent call last):
-|   File "$ROOT/tools/internal/spine/testdata/../../../adapter_shim.py", line 81, in <module>
-|     sys.exit(main(sys.argv[1:]))
-|              ^^^^^^^^^^^^^^^^^^
-|   File "$ROOT/tools/internal/spine/testdata/../../../adapter_shim.py", line 75, in main
-|     out.write(json.dumps(answer) + "\n")
-|               ^^^^^^^^^^^^^^^^^^
-|   File "/usr/lib/python3.12/json/__init__.py", line 231, in dumps
-|     return _default_encoder.encode(obj)
-|            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-|   File "/usr/lib/python3.12/json/encoder.py", line 200, in encode
-|     chunks = self.iterencode(o, _one_shot=True)
-|              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-|   File "/usr/lib/python3.12/json/encoder.py", line 258, in iterencode
-|     return _iterencode(o, 0)
-|            ^^^^^^^^^^^^^^^^^
-|   File "/usr/lib/python3.12/json/encoder.py", line 180, in default
-|     raise TypeError(f'Object of type {o.__class__.__name__} '
-| TypeError: Object of type set is not JSON serializable
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -1341,9 +1279,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| adapter_shim: adapters/missing.py cannot be imported: FileNotFoundError: [Errno 2] No such file or directory: '$ROOT/tools/internal/spine/testdata/adapters/missing.py'
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/missing.py"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
@@ -1362,9 +1297,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| adapter_shim: adapters/not-python.txt cannot be imported: not a Python file
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -1385,9 +1317,6 @@ exit 0
 |   ]
 | }
 |
---- stderr
-| protocol.py ok started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
@@ -1406,9 +1335,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py: no mode o\k
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -1435,9 +1361,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py bad-utf8 started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 |q "<testsuite name=\"spine conform\" tests=\"1\" failures=\"1\"><testcase classname=\"spine conform\" name=\"diverges start\"><failure message=\"spine starts in closed, code starts in op\ufffd\ufffden\ufffd\ufffd\ufffd\ufffd\ufffd\">spine starts in closed, code starts in op\ufffd\ufffden\ufffd\ufffd\ufffd\ufffd\ufffd</failure></testcase></testsuite>"
@@ -1456,9 +1379,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py bad-utf8-outside started
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -1485,9 +1405,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py bigint started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave 123456789012345678901234567890 in open">after open(role=owner): spine expects ok in open, code gave 123456789012345678901234567890 in open</failure></testcase></testsuite>
@@ -1506,9 +1423,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py bom started
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -1529,9 +1443,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py control-char started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py control-char"><failure message="replied to observe with a line that is not JSON: '{&quot;state&quot;: &quot;a\tb&quot;}'">replied to observe with a line that is not JSON: '{"state": "a\tb"}'</failure></testcase></testsuite>
@@ -1550,9 +1461,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py cr-at-exit started
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -1573,9 +1481,6 @@ exit 0
 |   ]
 | }
 |
---- stderr
-| protocol.py cr-split started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
@@ -1595,9 +1500,6 @@ exit 0
 |   ]
 | }
 |
---- stderr
-| protocol.py crlf started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
@@ -1616,9 +1518,6 @@ exit 0
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py dup-keys started
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -1663,9 +1562,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py echo-apply started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="4" failures="4"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave crashed ({&quot;op&quot;: &quot;apply&quot;, &quot;event&quot;: &quot;open&quot;, &quot;env&quot;: {&quot;role&quot;: &quot;owner&quot;}}) in open">after open(role=owner): spine expects ok in open, code gave crashed ({"op": "apply", "event": "open", "env": {"role": "owner"}}) in open</failure></testcase><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave crashed ({&quot;op&quot;: &quot;apply&quot;, &quot;event&quot;: &quot;open&quot;, &quot;env&quot;: {&quot;role&quot;: &quot;guest&quot;}}) in closed">after open(role=guest): spine expects rejected in closed, code gave crashed ({"op": "apply", "event": "open", "env": {"role": "guest"}}) in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok in gone, code gave crashed ({&quot;op&quot;: &quot;apply&quot;, &quot;event&quot;: &quot;remove&quot;, &quot;env&quot;: {&quot;role&quot;: &quot;owner&quot;}}) in gone">after remove(role=owner): spine expects ok in gone, code gave crashed ({"op": "apply", "event": "remove", "env": {"role": "owner"}}) in gone</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave crashed ({&quot;op&quot;: &quot;apply&quot;, &quot;event&quot;: &quot;remove&quot;, &quot;env&quot;: {&quot;role&quot;: &quot;guest&quot;}}) in gone">after remove(role=guest): spine expects ok in gone, code gave crashed ({"op": "apply", "event": "remove", "env": {"role": "guest"}}) in gone</failure></testcase></testsuite>
@@ -1685,9 +1581,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py empty started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py empty"><failure message="replied to new with a line that is not JSON: ''">replied to new with a line that is not JSON: ''</failure></testcase></testsuite>
@@ -1706,9 +1599,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py error-and-more started
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -1735,9 +1625,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py error-apply started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave crashed (ValueError: no) in open">after open(role=owner): spine expects ok in open, code gave crashed (ValueError: no) in open</failure></testcase></testsuite>
@@ -1756,9 +1643,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py error-new started
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -1779,9 +1663,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py error-null started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py error-null"><failure message="observe() raised None">observe() raised None</failure></testcase></testsuite>
@@ -1800,9 +1681,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py error-observe started
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -1829,9 +1707,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py escapes started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges start"><failure message="spine starts in closed, code starts in é😀&#10;&#09;&quot;\/">spine starts in closed, code starts in é😀
@@ -1852,9 +1727,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py exit-3 started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py exit-3"><failure message="exited with status 3 before replying to new">exited with status 3 before replying to new</failure></testcase></testsuite>
@@ -1873,9 +1745,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py exit-after-new started
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -1902,9 +1771,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py float-exp started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave inf in open">after open(role=owner): spine expects ok in open, code gave inf in open</failure></testcase></testsuite>
@@ -1924,9 +1790,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py hugeint started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py hugeint"><failure message="replied to apply with a line that is not JSON: '{&quot;result&quot;: 77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777}'">replied to apply with a line that is not JSON: '{"result": 77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777}'</failure></testcase></testsuite>
@@ -1945,9 +1808,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py ideographic-space started
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -1974,9 +1834,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py infinity started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave -inf in closed">after open(role=guest): spine expects rejected in closed, code gave -inf in closed</failure></testcase></testsuite>
@@ -1996,9 +1853,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py list started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py list"><failure message="replied to new with [], not {&quot;ok&quot;: true} or {&quot;error&quot;: ...}">replied to new with [], not {"ok": true} or {"error": ...}</failure></testcase></testsuite>
@@ -2017,9 +1871,6 @@ exit 0
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py mixed-endings started
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -2046,9 +1897,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py nan started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave nan in open">after open(role=owner): spine expects ok in open, code gave nan in open</failure></testcase></testsuite>
@@ -2067,9 +1915,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py no-reply started
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -2090,9 +1935,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py: no mode nosuchmode
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py nosuchmode"><failure message="exited with status 2 before replying to new">exited with status 2 before replying to new</failure></testcase></testsuite>
@@ -2111,9 +1953,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py notjson started
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -2134,9 +1973,6 @@ exit 0
 |   ]
 | }
 |
---- stderr
-| protocol.py ok started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
@@ -2155,9 +1991,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py ok-1 started
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -2178,9 +2011,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py ok-false started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py ok-false"><failure message="replied to new with {&quot;ok&quot;: false}, not {&quot;ok&quot;: true} or {&quot;error&quot;: ...}">replied to new with {"ok": false}, not {"ok": true} or {"error": ...}</failure></testcase></testsuite>
@@ -2199,9 +2029,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py result-for-new started
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -2222,9 +2049,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py signal started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py signal"><failure message="exited with status -15 before replying to apply">exited with status -15 before replying to apply</failure></testcase></testsuite>
@@ -2243,9 +2067,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py string started
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -2266,9 +2087,6 @@ exit 1
 |   ]
 | }
 |
---- stderr
-| protocol.py trailing started
-|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py trailing"><failure message="replied to new with a line that is not JSON: '{&quot;ok&quot;: true} x'">replied to new with a line that is not JSON: '{"ok": true} x'</failure></testcase></testsuite>
@@ -2287,9 +2105,6 @@ exit 1
 |     }
 |   ]
 | }
-|
---- stderr
-| protocol.py two-keys started
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
@@ -2573,26 +2388,17 @@ exit 0
 | info    coverage           5 sequences up to 1 steps: 4 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
---- stderr
-| protocol.py ok started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py ''"
 exit 1
 --- stdout
 | error   adapter-failed     python3 ../../../adapter_shim.py '': exited with status 1 before replying to new
 | -- 1 errors, 1 findings
 |
---- stderr
-| adapter_shim:  cannot be imported: not a Python file
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters"
 exit 1
 --- stdout
 | error   adapter-failed     python3 ../../../adapter_shim.py adapters: exited with status 1 before replying to new
 | -- 1 errors, 1 findings
-|
---- stderr
-| adapter_shim: adapters cannot be imported: not a Python file
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py"
 exit 0
@@ -2612,32 +2418,6 @@ exit 1
 | error   diverges           open/remove role=guest: after open(role=owner) -> remove(role=guest): spine expects ok in open, code gave {'removed': [1, 2.5, None, True], 'calls': True} in gone
 | info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
 | -- 7 errors, 8 findings
-|
---- stderr
-| apply open {'role': 'owner'}
-| printing to stdout goes to stderr through the shim
-| apply open {'role': 'guest'}
-| printing to stdout goes to stderr through the shim
-| apply remove {'role': 'owner'}
-| printing to stdout goes to stderr through the shim
-| apply remove {'role': 'guest'}
-| printing to stdout goes to stderr through the shim
-| apply open {'role': 'owner'}
-| printing to stdout goes to stderr through the shim
-| apply open {'role': 'owner'}
-| printing to stdout goes to stderr through the shim
-| apply open {'role': 'owner'}
-| printing to stdout goes to stderr through the shim
-| apply open {'role': 'guest'}
-| printing to stdout goes to stderr through the shim
-| apply open {'role': 'owner'}
-| printing to stdout goes to stderr through the shim
-| apply remove {'role': 'owner'}
-| printing to stdout goes to stderr through the shim
-| apply open {'role': 'owner'}
-| printing to stdout goes to stderr through the shim
-| apply remove {'role': 'guest'}
-| printing to stdout goes to stderr through the shim
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_crash.py" --depth 2
 exit 1
@@ -2661,17 +2441,11 @@ exit 1
 | error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_import.py: exited with status 1 before replying to new
 | -- 1 errors, 1 findings
 |
---- stderr
-| adapter_shim: adapters/door_import.py cannot be imported: ModuleNotFoundError: No module named 'no_such_module_for_spine'
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_missing.py" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_missing.py: exited with status 1 before replying to new
 | -- 1 errors, 1 findings
-|
---- stderr
-| adapter_shim: adapters/door_missing.py does not define apply(), observe()
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_new_raises.py" --depth 2
 exit 1
@@ -2690,27 +2464,6 @@ exit 1
 --- stdout
 | error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_set.py: exited with status 1 before replying to observe
 | -- 1 errors, 1 findings
-|
---- stderr
-| Traceback (most recent call last):
-|   File "$ROOT/tools/internal/spine/testdata/../../../adapter_shim.py", line 81, in <module>
-|     sys.exit(main(sys.argv[1:]))
-|              ^^^^^^^^^^^^^^^^^^
-|   File "$ROOT/tools/internal/spine/testdata/../../../adapter_shim.py", line 75, in main
-|     out.write(json.dumps(answer) + "\n")
-|               ^^^^^^^^^^^^^^^^^^
-|   File "/usr/lib/python3.12/json/__init__.py", line 231, in dumps
-|     return _default_encoder.encode(obj)
-|            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-|   File "/usr/lib/python3.12/json/encoder.py", line 200, in encode
-|     chunks = self.iterencode(o, _one_shot=True)
-|              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-|   File "/usr/lib/python3.12/json/encoder.py", line 258, in iterencode
-|     return _iterencode(o, 0)
-|            ^^^^^^^^^^^^^^^^^
-|   File "/usr/lib/python3.12/json/encoder.py", line 180, in default
-|     raise TypeError(f'Object of type {o.__class__.__name__} '
-| TypeError: Object of type set is not JSON serializable
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_start.py" --depth 2
 exit 1
@@ -2745,17 +2498,11 @@ exit 1
 | error   adapter-failed     python3 ../../../adapter_shim.py adapters/missing.py: exited with status 1 before replying to new
 | -- 1 errors, 1 findings
 |
---- stderr
-| adapter_shim: adapters/missing.py cannot be imported: FileNotFoundError: [Errno 2] No such file or directory: '$ROOT/tools/internal/spine/testdata/adapters/missing.py'
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/not-python.txt"
 exit 1
 --- stdout
 | error   adapter-failed     python3 ../../../adapter_shim.py adapters/not-python.txt: exited with status 1 before replying to new
 | -- 1 errors, 1 findings
-|
---- stderr
-| adapter_shim: adapters/not-python.txt cannot be imported: not a Python file
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/proto\\col.py ok" --depth 1
 exit 0
@@ -2763,17 +2510,11 @@ exit 0
 | info    coverage           5 sequences up to 1 steps: 4 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
---- stderr
-| protocol.py ok started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py \"o\\k\"" --depth 1
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py "o\k": exited with status 2 before replying to new
 | -- 1 errors, 1 findings
-|
---- stderr
-| protocol.py: no mode o\k
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-utf8" --depth 2
 exit 1
@@ -2782,17 +2523,11 @@ exit 1
 | info    coverage           5 sequences up to 2 steps: 3 of 8 state/event/variable cases exercised
 | -- 1 errors, 2 findings
 |
---- stderr
-| protocol.py bad-utf8 started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-utf8-outside" --depth 2
 exit 1
 --- stdout
 |q "error   adapter-failed     python3 adapters/protocol.py bad-utf8-outside: replied to observe with a line that is not JSON: '{\"state\": \"closed\"}\ufffd'"
 | -- 1 errors, 1 findings
-|
---- stderr
-| protocol.py bad-utf8-outside started
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bigint" --depth 2
 exit 1
@@ -2801,17 +2536,11 @@ exit 1
 | info    coverage           5 sequences up to 2 steps: 4 of 8 state/event/variable cases exercised
 | -- 1 errors, 2 findings
 |
---- stderr
-| protocol.py bigint started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bom" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py bom: replied to new with a line that is not JSON: '\ufeff{"ok": true}'
 | -- 1 errors, 1 findings
-|
---- stderr
-| protocol.py bom started
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py control-char" --depth 2
 exit 1
@@ -2819,17 +2548,11 @@ exit 1
 | error   adapter-failed     python3 adapters/protocol.py control-char: replied to observe with a line that is not JSON: '{"state": "a\tb"}'
 | -- 1 errors, 1 findings
 |
---- stderr
-| protocol.py control-char started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py cr-at-exit" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py cr-at-exit: exited with status 0 before replying to observe
 | -- 1 errors, 1 findings
-|
---- stderr
-| protocol.py cr-at-exit started
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py cr-split" --depth 2
 exit 0
@@ -2837,26 +2560,17 @@ exit 0
 | info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
---- stderr
-| protocol.py cr-split started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py crlf" --depth 2
 exit 0
 --- stdout
 | info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
---- stderr
-| protocol.py crlf started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py dup-keys" --depth 2
 exit 0
 --- stdout
 | info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
-|
---- stderr
-| protocol.py dup-keys started
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py echo-apply" --depth 2
 exit 1
@@ -2868,26 +2582,17 @@ exit 1
 | info    coverage           5 sequences up to 2 steps: 4 of 8 state/event/variable cases exercised
 | -- 4 errors, 5 findings
 |
---- stderr
-| protocol.py echo-apply started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py empty" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py empty: replied to new with a line that is not JSON: ''
 | -- 1 errors, 1 findings
 |
---- stderr
-| protocol.py empty started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-and-more" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py error-and-more: replied to new with {"error": "boom", "ok": true}, not {"ok": true} or {"error": ...}
 | -- 1 errors, 1 findings
-|
---- stderr
-| protocol.py error-and-more started
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-apply" --depth 2
 exit 1
@@ -2896,17 +2601,11 @@ exit 1
 | info    coverage           5 sequences up to 2 steps: 4 of 8 state/event/variable cases exercised
 | -- 1 errors, 2 findings
 |
---- stderr
-| protocol.py error-apply started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-new" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py error-new: new() raised boom
 | -- 1 errors, 1 findings
-|
---- stderr
-| protocol.py error-new started
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-null" --depth 2
 exit 1
@@ -2914,17 +2613,11 @@ exit 1
 | error   adapter-failed     python3 adapters/protocol.py error-null: observe() raised None
 | -- 1 errors, 1 findings
 |
---- stderr
-| protocol.py error-null started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-observe" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py error-observe: observe() raised {'a': [1, 2.0, None, True], 'b': "it's"}
 | -- 1 errors, 1 findings
-|
---- stderr
-| protocol.py error-observe started
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py escapes" --depth 2
 exit 1
@@ -2934,26 +2627,17 @@ exit 1
 | info    coverage           5 sequences up to 2 steps: 3 of 8 state/event/variable cases exercised
 | -- 1 errors, 2 findings
 |
---- stderr
-| protocol.py escapes started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py exit-3" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py exit-3: exited with status 3 before replying to new
 | -- 1 errors, 1 findings
 |
---- stderr
-| protocol.py exit-3 started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py exit-after-new" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py exit-after-new: exited with status 0 before replying to observe
 | -- 1 errors, 1 findings
-|
---- stderr
-| protocol.py exit-after-new started
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py float-exp" --depth 2
 exit 1
@@ -2962,26 +2646,17 @@ exit 1
 | info    coverage           5 sequences up to 2 steps: 4 of 8 state/event/variable cases exercised
 | -- 1 errors, 2 findings
 |
---- stderr
-| protocol.py float-exp started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py hugeint" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py hugeint: replied to apply with a line that is not JSON: '{"result": 77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777}'
 | -- 1 errors, 1 findings
 |
---- stderr
-| protocol.py hugeint started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ideographic-space" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py ideographic-space: replied to new with a line that is not JSON: '{"ok": true}'
 | -- 1 errors, 1 findings
-|
---- stderr
-| protocol.py ideographic-space started
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py infinity" --depth 2
 exit 1
@@ -2990,26 +2665,17 @@ exit 1
 | info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
 | -- 1 errors, 2 findings
 |
---- stderr
-| protocol.py infinity started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py list" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py list: replied to new with [], not {"ok": true} or {"error": ...}
 | -- 1 errors, 1 findings
 |
---- stderr
-| protocol.py list started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py mixed-endings" --depth 2
 exit 0
 --- stdout
 | info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
-|
---- stderr
-| protocol.py mixed-endings started
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py nan" --depth 2
 exit 1
@@ -3018,17 +2684,11 @@ exit 1
 | info    coverage           5 sequences up to 2 steps: 4 of 8 state/event/variable cases exercised
 | -- 1 errors, 2 findings
 |
---- stderr
-| protocol.py nan started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py no-reply" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py no-reply: exited with status 0 before replying to observe
 | -- 1 errors, 1 findings
-|
---- stderr
-| protocol.py no-reply started
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py nosuchmode"
 exit 1
@@ -3036,17 +2696,11 @@ exit 1
 | error   adapter-failed     python3 adapters/protocol.py nosuchmode: exited with status 2 before replying to new
 | -- 1 errors, 1 findings
 |
---- stderr
-| protocol.py: no mode nosuchmode
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py notjson" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py notjson: replied to new with a line that is not JSON: 'hello'
 | -- 1 errors, 1 findings
-|
---- stderr
-| protocol.py notjson started
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok"
 exit 0
@@ -3054,17 +2708,11 @@ exit 0
 | info    coverage           89 sequences up to 4 steps: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
---- stderr
-| protocol.py ok started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-1" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py ok-1: replied to new with {"ok": 1}, not {"ok": true} or {"error": ...}
 | -- 1 errors, 1 findings
-|
---- stderr
-| protocol.py ok-1 started
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-false" --depth 2
 exit 1
@@ -3072,17 +2720,11 @@ exit 1
 | error   adapter-failed     python3 adapters/protocol.py ok-false: replied to new with {"ok": false}, not {"ok": true} or {"error": ...}
 | -- 1 errors, 1 findings
 |
---- stderr
-| protocol.py ok-false started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py result-for-new" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py result-for-new: replied to new with {"result": "ok"}, not {"ok": true} or {"error": ...}
 | -- 1 errors, 1 findings
-|
---- stderr
-| protocol.py result-for-new started
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py signal" --depth 2
 exit 1
@@ -3090,17 +2732,11 @@ exit 1
 | error   adapter-failed     python3 adapters/protocol.py signal: exited with status -15 before replying to apply
 | -- 1 errors, 1 findings
 |
---- stderr
-| protocol.py signal started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py string" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py string: replied to new with "ok", not {"ok": true} or {"error": ...}
 | -- 1 errors, 1 findings
-|
---- stderr
-| protocol.py string started
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py trailing" --depth 2
 exit 1
@@ -3108,17 +2744,11 @@ exit 1
 | error   adapter-failed     python3 adapters/protocol.py trailing: replied to new with a line that is not JSON: '{"ok": true} x'
 | -- 1 errors, 1 findings
 |
---- stderr
-| protocol.py trailing started
-|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py two-keys" --depth 2
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py two-keys: replied to new with {"ok": true, "extra": 1}, not {"ok": true} or {"error": ...}
 | -- 1 errors, 1 findings
-|
---- stderr
-| protocol.py two-keys started
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "trailing\\"
 exit 1
