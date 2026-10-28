@@ -1,5 +1,5 @@
-# Command lines run from testdata/ exactly as written: argparse's corners. Only forms on which
-# Python 3.12 and 3.13 agree; usage errors (exit 2) compare everything but stderr.
+# Command lines run from testdata/ exactly as written: each form the contract allows, and forms
+# just outside it. A usage error (exit 2) is recorded with its message on stderr.
 []
 ["--help"]
 ["-h"]
@@ -27,6 +27,8 @@
 ["check", "--", "seeds/spine.yaml"]
 ["check", "seeds/spine.yaml", "--"]
 ["check", "--", "--"]
+["check", "-"]
+["check", "--", "-h"]
 ["check", "-x", "seeds/spine.yaml"]
 ["check", "--bogus", "seeds/spine.yaml"]
 ["check", "--bogus=1", "seeds/spine.yaml"]
@@ -49,6 +51,12 @@
 ["behaviors", "--format", "json", "seeds/spine.yaml", "behaviors/door"]
 ["trace", "seeds/spine.yaml"]
 ["trace", "--help"]
+["stale", "--help"]
+["behaviors", "--help"]
+["conform", "seeds/spine.yaml", "--adapter-cmd", "--help"]
+["check", "seeds/spine.yaml", "--bogus", "-h"]
+["check", "seeds/spine.yaml", "--junit", "--format", "json"]
+["guard", "seeds/policy.yaml", "--branch=-x", "src/a.py"]
 ["guard", "--help"]
 ["guard", "seeds/policy.yaml", "--branch", "build/x", "src/a.py", "spec/b.yaml"]
 ["guard", "seeds/policy.yaml", "src/a.py", "--branch", "build/x", "spec/b.yaml"]
@@ -58,8 +66,8 @@
 ["guard", "--br=main", "seeds/policy.yaml", "src/a.py"]
 ["guard", "seeds/policy.yaml", "src/a.py"]
 ["guard", "seeds/policy.yaml", "--branch"]
-# Not here: files starting with "-" after --branch ("--branch b -- -x", "--branch b -1"). Python 3.13
-# and the Go spine take them as files; 3.12's argparse leaves them over, and spine.py refuses them.
+["guard", "seeds/policy.yaml", "--branch", "build/x", "--", "-x", "-1"]
+["guard", "seeds/policy.yaml", "--branch", "build/x", "-1"]
 ["guard", "seeds/policy.yaml", "--branch", "-1", "src/a.py"]
 ["guard", "seeds/policy.yaml", "--branch", "-x", "src/a.py"]
 ["guard", "seeds/policy.yaml", "--branch", "build/x", "src/a.py", "-v"]
@@ -88,6 +96,7 @@
 ["diff", "seeds/spine.yaml", "diff/door-b.yaml", "--depth", "\u30002\u3000"]
 ["diff", "seeds/spine.yaml", "diff/door-b.yaml", "--depth", "2\u0085"]
 ["diff", "seeds/spine.yaml", "diff/door-b.yaml", "--depth", "-2"]
+["diff", "seeds/spine.yaml", "diff/door-b.yaml", "--depth", "0"]
 ["diff", "seeds/spine.yaml", "diff/door-b.yaml", "--depth=-2"]
 ["diff", "seeds/spine.yaml", "diff/door-b.yaml", "--depth", "- 2"]
 ["diff", "seeds/spine.yaml", "diff/door-b.yaml", "--depth", "-\u0662"]

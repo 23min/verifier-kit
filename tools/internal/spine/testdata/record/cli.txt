@@ -2,65 +2,79 @@
 exit 2
 --- stdout
 |
+--- stderr
+| spine: name a command; spine --help lists them
+|
 === in tools/internal/spine/testdata: spine --format json check seeds/spine.yaml
 exit 2
 --- stdout
 |
+--- stderr
+| spine: unknown command "--format"; spine --help lists them
+|
 === in tools/internal/spine/testdata: spine --he
-exit 0
+exit 2
 --- stdout
-| usage: spine [-h] {check,hash,diff,stale,behaviors,trace,conform,guard} ...
 |
-| spine: mechanical checks for state-machine specs, and conformance of code to
-| them.
-|
-| positional arguments:
-|   {check,hash,diff,stale,behaviors,trace,conform,guard}
-|
-| options:
-|   -h, --help            show this help message and exit
+--- stderr
+| spine: unknown command "--he"; spine --help lists them
 |
 === in tools/internal/spine/testdata: spine --help
 exit 0
 --- stdout
-| usage: spine [-h] {check,hash,diff,stale,behaviors,trace,conform,guard} ...
+| usage: spine COMMAND ARGUMENTS [OPTIONS]
 |
-| spine: mechanical checks for state-machine specs, and conformance of code to
-| them.
+| Mechanical checks for state-machine specs, and conformance of code to them.
 |
-| positional arguments:
-|   {check,hash,diff,stale,behaviors,trace,conform,guard}
+| commands:
+|   spine check SPEC [--format text|json] [--junit FILE]
+|   spine hash SPEC
+|   spine diff A B [--format text|json] [--junit FILE] [--depth N]
+|   spine stale SPEC CHECKS_DIR [--format text|json] [--junit FILE]
+|   spine behaviors SPEC DIR [--format text|json] [--junit FILE]
+|   spine trace SPEC FILE [--format text|json] [--junit FILE]
+|   spine conform SPEC --adapter-cmd COMMAND [--format text|json] [--junit FILE] [--depth N]
+|   spine guard POLICY [FILES ...] --branch NAME [--format text|json] [--junit FILE]
 |
-| options:
-|   -h, --help            show this help message and exit
+| spine COMMAND --help describes one command.
 |
 === in tools/internal/spine/testdata: spine -h
 exit 0
 --- stdout
-| usage: spine [-h] {check,hash,diff,stale,behaviors,trace,conform,guard} ...
+| usage: spine COMMAND ARGUMENTS [OPTIONS]
 |
-| spine: mechanical checks for state-machine specs, and conformance of code to
-| them.
+| Mechanical checks for state-machine specs, and conformance of code to them.
 |
-| positional arguments:
-|   {check,hash,diff,stale,behaviors,trace,conform,guard}
+| commands:
+|   spine check SPEC [--format text|json] [--junit FILE]
+|   spine hash SPEC
+|   spine diff A B [--format text|json] [--junit FILE] [--depth N]
+|   spine stale SPEC CHECKS_DIR [--format text|json] [--junit FILE]
+|   spine behaviors SPEC DIR [--format text|json] [--junit FILE]
+|   spine trace SPEC FILE [--format text|json] [--junit FILE]
+|   spine conform SPEC --adapter-cmd COMMAND [--format text|json] [--junit FILE] [--depth N]
+|   spine guard POLICY [FILES ...] --branch NAME [--format text|json] [--junit FILE]
 |
-| options:
-|   -h, --help            show this help message and exit
+| spine COMMAND --help describes one command.
 |
 === in tools/internal/spine/testdata: spine -h check
 exit 0
 --- stdout
-| usage: spine [-h] {check,hash,diff,stale,behaviors,trace,conform,guard} ...
+| usage: spine COMMAND ARGUMENTS [OPTIONS]
 |
-| spine: mechanical checks for state-machine specs, and conformance of code to
-| them.
+| Mechanical checks for state-machine specs, and conformance of code to them.
 |
-| positional arguments:
-|   {check,hash,diff,stale,behaviors,trace,conform,guard}
+| commands:
+|   spine check SPEC [--format text|json] [--junit FILE]
+|   spine hash SPEC
+|   spine diff A B [--format text|json] [--junit FILE] [--depth N]
+|   spine stale SPEC CHECKS_DIR [--format text|json] [--junit FILE]
+|   spine behaviors SPEC DIR [--format text|json] [--junit FILE]
+|   spine trace SPEC FILE [--format text|json] [--junit FILE]
+|   spine conform SPEC --adapter-cmd COMMAND [--format text|json] [--junit FILE] [--depth N]
+|   spine guard POLICY [FILES ...] --branch NAME [--format text|json] [--junit FILE]
 |
-| options:
-|   -h, --help            show this help message and exit
+| spine COMMAND --help describes one command.
 |
 === in tools/internal/spine/testdata: spine behaviors --format json seeds/spine.yaml behaviors/door
 exit 1
@@ -150,19 +164,38 @@ exit 1
 |   ]
 | }
 |
+=== in tools/internal/spine/testdata: spine behaviors --help
+exit 0
+--- stdout
+| usage: spine behaviors SPEC DIR [--format text|json] [--junit FILE]
+|
+| Replays every file in DIR/valid/, which must be allowed, and DIR/invalid/, which must be refused.
+|
+| options:
+|   --format text|json       how the findings are printed; text unless given
+|   --junit FILE             also write the findings as a JUnit XML report
+|   -h, --help               show this help
+|
 === in tools/internal/spine/testdata: spine bogus
 exit 2
 --- stdout
+|
+--- stderr
+| spine: unknown command "bogus"; spine --help lists them
 |
 === in tools/internal/spine/testdata: spine check
 exit 2
 --- stdout
 |
+--- stderr
+| spine check: SPEC is missing; spine check --help describes it
+|
 === in tools/internal/spine/testdata: spine check "-a b"
-exit 1
+exit 2
 --- stdout
-| error   spec-unreadable    -a b: cannot be read: No such file or directory
-| -- 1 errors, 1 findings
+|
+--- stderr
+| spine check: unknown option -a b; spine check --help describes it
 |
 === in tools/internal/spine/testdata: spine check "a b"
 exit 1
@@ -170,10 +203,22 @@ exit 1
 | error   spec-unreadable    a b: cannot be read: No such file or directory
 | -- 1 errors, 1 findings
 |
+=== in tools/internal/spine/testdata: spine check -
+exit 1
+--- stdout
+| error   spec-unreadable    -: cannot be read: No such file or directory
+| -- 1 errors, 1 findings
+|
 === in tools/internal/spine/testdata: spine check -- --
 exit 1
 --- stdout
 | error   spec-unreadable    --: cannot be read: No such file or directory
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine check -- -h
+exit 1
+--- stdout
+| error   spec-unreadable    -h: cannot be read: No such file or directory
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine check -- seeds/spine.yaml
@@ -185,159 +230,36 @@ exit 0
 exit 2
 --- stdout
 |
+--- stderr
+| spine check: unknown option --bogus; spine check --help describes it
+|
 === in tools/internal/spine/testdata: spine check --bogus=1 seeds/spine.yaml
 exit 2
 --- stdout
 |
+--- stderr
+| spine check: unknown option --bogus; spine check --help describes it
+|
 === in tools/internal/spine/testdata: spine check --fo=json spines/unsound.yaml
-exit 1
+exit 2
 --- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "unknown-state",
-|       "severity": "error",
-|       "where": "nowhere/go",
-|       "message": "rule starts in undeclared state \"nowhere\""
-|     },
-|     {
-|       "code": "unknown-state",
-|       "severity": "error",
-|       "where": "nowhere/go",
-|       "message": "rule goes to undeclared state \"elsewhere\""
-|     },
-|     {
-|       "code": "unknown-event",
-|       "severity": "error",
-|       "where": "s/fly",
-|       "message": "rule uses undeclared event \"fly\""
-|     },
-|     {
-|       "code": "overlap",
-|       "severity": "error",
-|       "where": "s/go",
-|       "message": "mode=a, role=owner matches conflicting rules: reject and -> t"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "s/go",
-|       "message": "no rule covers mode=a, role=guest"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "s/go",
-|       "message": "no rule covers mode=a, role=\u00e9di tor"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "s/go",
-|       "message": "no rule covers mode=b, role=guest"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "s/go",
-|       "message": "no rule covers mode=b, role=\u00e9di tor"
-|     },
-|     {
-|       "code": "undecided-cell",
-|       "severity": "error",
-|       "where": "s/stop",
-|       "message": "nothing says what \"stop\" does in \"s\""
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "t/go",
-|       "message": "no rule covers mode=b, role=owner"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "t/go",
-|       "message": "no rule covers mode=b, role=guest"
-|     },
-|     {
-|       "code": "missing-case",
-|       "severity": "error",
-|       "where": "t/go",
-|       "message": "no rule covers mode=b, role=\u00e9di tor"
-|     },
-|     {
-|       "code": "undecided-cell",
-|       "severity": "error",
-|       "where": "island/go",
-|       "message": "nothing says what \"go\" does in \"island\""
-|     },
-|     {
-|       "code": "undecided-cell",
-|       "severity": "error",
-|       "where": "island/stop",
-|       "message": "nothing says what \"stop\" does in \"island\""
-|     },
-|     {
-|       "code": "terminal-has-exit",
-|       "severity": "error",
-|       "where": "end/go",
-|       "message": "\"end\" is terminal but \"go\" leaves it"
-|     },
-|     {
-|       "code": "unreachable",
-|       "severity": "error",
-|       "where": "island",
-|       "message": "no sequence of events reaches \"island\" from \"s\""
-|     },
-|     {
-|       "code": "example-fails",
-|       "severity": "error",
-|       "where": "wrong end",
-|       "message": "expected s, got t"
-|     },
-|     {
-|       "code": "example-fails",
-|       "severity": "error",
-|       "where": "refused",
-|       "message": "expected rejected, got t"
-|     }
-|   ]
-| }
+|
+--- stderr
+| spine check: unknown option --fo; spine check --help describes it
 |
 === in tools/internal/spine/testdata: spine check --form json seeds/spine.yaml
-exit 0
+exit 2
 --- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": []
-| }
+|
+--- stderr
+| spine check: unknown option --form; spine check --help describes it
 |
 === in tools/internal/spine/testdata: spine check --format json --format text spines/unsound.yaml
-exit 1
+exit 2
 --- stdout
-| error   unknown-state      nowhere/go: rule starts in undeclared state "nowhere"
-| error   unknown-state      nowhere/go: rule goes to undeclared state "elsewhere"
-| error   unknown-event      s/fly: rule uses undeclared event "fly"
-| error   overlap            s/go: mode=a, role=owner matches conflicting rules: reject and -> t
-| error   missing-case       s/go: no rule covers mode=a, role=guest
-| error   missing-case       s/go: no rule covers mode=a, role=édi tor
-| error   missing-case       s/go: no rule covers mode=b, role=guest
-| error   missing-case       s/go: no rule covers mode=b, role=édi tor
-| error   undecided-cell     s/stop: nothing says what "stop" does in "s"
-| error   missing-case       t/go: no rule covers mode=b, role=owner
-| error   missing-case       t/go: no rule covers mode=b, role=guest
-| error   missing-case       t/go: no rule covers mode=b, role=édi tor
-| error   undecided-cell     island/go: nothing says what "go" does in "island"
-| error   undecided-cell     island/stop: nothing says what "stop" does in "island"
-| error   terminal-has-exit  end/go: "end" is terminal but "go" leaves it
-| error   unreachable        island: no sequence of events reaches "island" from "s"
-| error   example-fails      wrong end: expected s, got t
-| error   example-fails      refused: expected rejected, got t
-| -- 18 errors, 18 findings
+|
+--- stderr
+| spine check: --format is given twice; spine check --help describes it
 |
 === in tools/internal/spine/testdata: spine check --format json seeds/spine.yaml
 exit 0
@@ -352,13 +274,22 @@ exit 0
 exit 2
 --- stdout
 |
+--- stderr
+| spine check: SPEC is missing; spine check --help describes it
+|
 === in tools/internal/spine/testdata: spine check --format yaml seeds/spine.yaml
 exit 2
 --- stdout
 |
+--- stderr
+| spine check: --format must be text or json, not "yaml"; spine check --help describes it
+|
 === in tools/internal/spine/testdata: spine check --format=
 exit 2
 --- stdout
+|
+--- stderr
+| spine check: SPEC is missing; spine check --help describes it
 |
 === in tools/internal/spine/testdata: spine check --format=json seeds/spine.yaml
 exit 0
@@ -372,68 +303,92 @@ exit 0
 === in tools/internal/spine/testdata: spine check --help
 exit 0
 --- stdout
-| usage: spine check [-h] [--format {text,json}] [--junit FILE] spec
+| usage: spine check SPEC [--format text|json] [--junit FILE]
 |
-| positional arguments:
-|   spec
+| Validates SPEC, then checks that every state, event and variable combination has exactly one
+| rule, every state is reachable, terminal states have no exits, and worked examples end where
+| they say.
 |
 | options:
-|   -h, --help            show this help message and exit
-|   --format {text,json}
-|   --junit FILE          also write a JUnit XML report
+|   --format text|json       how the findings are printed; text unless given
+|   --junit FILE             also write the findings as a JUnit XML report
+|   -h, --help               show this help
 |
 === in tools/internal/spine/testdata: spine check --help=x
 exit 2
 --- stdout
 |
+--- stderr
+| spine check: --help takes no value; spine check --help describes it
+|
 === in tools/internal/spine/testdata: spine check --junit= seeds/spine.yaml
-exit 0
+exit 1
 --- stdout
 | -- 0 errors, 0 findings
 |
+--- stderr
+| spine: cannot write the JUnit report: open : no such file or directory
+|
 === in tools/internal/spine/testdata: spine check -.5
-exit 1
+exit 2
 --- stdout
-| error   spec-unreadable    -.5: cannot be read: No such file or directory
-| -- 1 errors, 1 findings
+|
+--- stderr
+| spine check: unknown option -.5; spine check --help describes it
 |
 === in tools/internal/spine/testdata: spine check -1
-exit 1
+exit 2
 --- stdout
-| error   spec-unreadable    -1: cannot be read: No such file or directory
-| -- 1 errors, 1 findings
+|
+--- stderr
+| spine check: unknown option -1; spine check --help describes it
 |
 === in tools/internal/spine/testdata: spine check -1.5
-exit 1
+exit 2
 --- stdout
-| error   spec-unreadable    -1.5: cannot be read: No such file or directory
-| -- 1 errors, 1 findings
+|
+--- stderr
+| spine check: unknown option -1.5; spine check --help describes it
 |
 === in tools/internal/spine/testdata: spine check -1e5
 exit 2
 --- stdout
 |
+--- stderr
+| spine check: unknown option -1e5; spine check --help describes it
+|
 === in tools/internal/spine/testdata: spine check -h seeds/spine.yaml
 exit 0
 --- stdout
-| usage: spine check [-h] [--format {text,json}] [--junit FILE] spec
+| usage: spine check SPEC [--format text|json] [--junit FILE]
 |
-| positional arguments:
-|   spec
+| Validates SPEC, then checks that every state, event and variable combination has exactly one
+| rule, every state is reachable, terminal states have no exits, and worked examples end where
+| they say.
 |
 | options:
-|   -h, --help            show this help message and exit
-|   --format {text,json}
-|   --junit FILE          also write a JUnit XML report
+|   --format text|json       how the findings are printed; text unless given
+|   --junit FILE             also write the findings as a JUnit XML report
+|   -h, --help               show this help
 |
 === in tools/internal/spine/testdata: spine check -x seeds/spine.yaml
 exit 2
 --- stdout
 |
+--- stderr
+| spine check: unknown option -x; spine check --help describes it
+|
 === in tools/internal/spine/testdata: spine check seeds/spine.yaml --
 exit 0
 --- stdout
 | -- 0 errors, 0 findings
+|
+=== in tools/internal/spine/testdata: spine check seeds/spine.yaml --bogus -h
+exit 2
+--- stdout
+|
+--- stderr
+| spine check: unknown option --bogus; spine check --help describes it
 |
 === in tools/internal/spine/testdata: spine check seeds/spine.yaml --format json
 exit 0
@@ -445,29 +400,39 @@ exit 0
 | }
 |
 === in tools/internal/spine/testdata: spine check seeds/spine.yaml --h
-exit 0
+exit 2
 --- stdout
-| usage: spine check [-h] [--format {text,json}] [--junit FILE] spec
 |
-| positional arguments:
-|   spec
+--- stderr
+| spine check: unknown option --h; spine check --help describes it
 |
-| options:
-|   -h, --help            show this help message and exit
-|   --format {text,json}
-|   --junit FILE          also write a JUnit XML report
+=== in tools/internal/spine/testdata: spine check seeds/spine.yaml --junit --format json
+exit 2
+--- stdout
+|
+--- stderr
+| spine check: --junit needs a value; spine check --help describes it
 |
 === in tools/internal/spine/testdata: spine check seeds/spine.yaml extra
 exit 2
 --- stdout
 |
+--- stderr
+| spine check: unexpected argument "extra"; spine check --help describes it
+|
 === in tools/internal/spine/testdata: spine check seeds/spine.yaml seeds/spine.yaml
 exit 2
 --- stdout
 |
+--- stderr
+| spine check: unexpected argument "seeds/spine.yaml"; spine check --help describes it
+|
 === in tools/internal/spine/testdata: spine conform
 exit 2
 --- stdout
+|
+--- stderr
+| spine conform: SPEC is missing; spine conform --help describes it
 |
 === in tools/internal/spine/testdata: spine conform --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" seeds/spine.yaml --depth 1
 exit 0
@@ -479,66 +444,52 @@ exit 0
 exit 2
 --- stdout
 |
+--- stderr
+| spine conform: SPEC is missing; spine conform --help describes it
+|
 === in tools/internal/spine/testdata: spine conform --he
-exit 0
+exit 2
 --- stdout
-| usage: spine conform [-h] [--format {text,json}] [--junit FILE]
-|                      --adapter-cmd COMMAND [--depth DEPTH]
-|                      spec
 |
-| positional arguments:
-|   spec
-|
-| options:
-|   -h, --help            show this help message and exit
-|   --format {text,json}
-|   --junit FILE          also write a JUnit XML report
-|   --adapter-cmd COMMAND
-|                         a program speaking the adapter protocol; split like a
-|                         shell would, run without one
-|   --depth DEPTH
+--- stderr
+| spine conform: unknown option --he; spine conform --help describes it
 |
 === in tools/internal/spine/testdata: spine conform --help
 exit 0
 --- stdout
-| usage: spine conform [-h] [--format {text,json}] [--junit FILE]
-|                      --adapter-cmd COMMAND [--depth DEPTH]
-|                      spec
+| usage: spine conform SPEC --adapter-cmd COMMAND [--format text|json] [--junit FILE] [--depth N]
 |
-| positional arguments:
-|   spec
+| Runs every event sequence up to the depth against the spine and against the code, through the
+| adapter, and reports where they differ.
 |
 | options:
-|   -h, --help            show this help message and exit
-|   --format {text,json}
-|   --junit FILE          also write a JUnit XML report
-|   --adapter-cmd COMMAND
-|                         a program speaking the adapter protocol; split like a
-|                         shell would, run without one
-|   --depth DEPTH
+|   --adapter-cmd COMMAND    the adapter's command line, split as a shell would and run without one
+|   --format text|json       how the findings are printed; text unless given
+|   --junit FILE             also write the findings as a JUnit XML report
+|   --depth N                the longest event sequence tried, 1 or more; 4 unless given
+|   -h, --help               show this help
 |
 === in tools/internal/spine/testdata: spine conform -h
 exit 0
 --- stdout
-| usage: spine conform [-h] [--format {text,json}] [--junit FILE]
-|                      --adapter-cmd COMMAND [--depth DEPTH]
-|                      spec
+| usage: spine conform SPEC --adapter-cmd COMMAND [--format text|json] [--junit FILE] [--depth N]
 |
-| positional arguments:
-|   spec
+| Runs every event sequence up to the depth against the spine and against the code, through the
+| adapter, and reports where they differ.
 |
 | options:
-|   -h, --help            show this help message and exit
-|   --format {text,json}
-|   --junit FILE          also write a JUnit XML report
-|   --adapter-cmd COMMAND
-|                         a program speaking the adapter protocol; split like a
-|                         shell would, run without one
-|   --depth DEPTH
+|   --adapter-cmd COMMAND    the adapter's command line, split as a shell would and run without one
+|   --format text|json       how the findings are printed; text unless given
+|   --junit FILE             also write the findings as a JUnit XML report
+|   --depth N                the longest event sequence tried, 1 or more; 4 unless given
+|   -h, --help               show this help
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml
 exit 2
 --- stdout
+|
+--- stderr
+| spine conform: --adapter-cmd is required; spine conform --help describes it
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml "--adapter-cmd=python3 ../../../adapter_shim.py adapters/door.py" --depth=1
 exit 0
@@ -547,49 +498,74 @@ exit 0
 | -- 0 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --ad x
-exit 1
+exit 2
 --- stdout
-| error   adapter-failed     x: cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'x'
-| -- 1 errors, 1 findings
+|
+--- stderr
+| spine conform: unknown option --ad; spine conform --help describes it
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter nosuchprogram
-exit 1
+exit 2
 --- stdout
-| error   adapter-failed     nosuchprogram: cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'nosuchprogram'
-| -- 1 errors, 1 findings
+|
+--- stderr
+| spine conform: unknown option --adapter; spine conform --help describes it
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-c true
-exit 1
+exit 2
 --- stdout
-| error   adapter-failed     true: exited with status 0 before replying to new
-| -- 1 errors, 1 findings
+|
+--- stderr
+| spine conform: unknown option --adapter-c; spine conform --help describes it
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd
 exit 2
 --- stdout
 |
+--- stderr
+| spine conform: --adapter-cmd needs a value; spine conform --help describes it
+|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_start.py" --depth 1
-exit 1
+exit 2
 --- stdout
-| error   diverges           start: spine starts in closed, code starts in open
-| info    coverage           1 sequences up to 1 steps: 0 of 8 state/event/variable cases exercised
-| -- 1 errors, 2 findings
+|
+--- stderr
+| spine conform: --adapter-cmd is given twice; spine conform --help describes it
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --depth x
 exit 2
 --- stdout
 |
+--- stderr
+| spine conform: --depth must be a whole number of 1 or more, not "x"; spine conform --help describes it
+|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" extra
 exit 2
 --- stdout
+|
+--- stderr
+| spine conform: unexpected argument "extra"; spine conform --help describes it
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd --help
+exit 2
+--- stdout
+|
+--- stderr
+| spine conform: --adapter-cmd needs a value; spine conform --help describes it
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --depth 1
 exit 2
 --- stdout
 |
+--- stderr
+| spine conform: --adapter-cmd is required; spine conform --help describes it
+|
 === in tools/internal/spine/testdata: spine diff
 exit 2
 --- stdout
+|
+--- stderr
+| spine diff: A is missing; spine diff --help describes it
 |
 === in tools/internal/spine/testdata: spine diff -- seeds/spine.yaml diff/door-b.yaml
 exit 1
@@ -610,6 +586,9 @@ exit 1
 exit 2
 --- stdout
 |
+--- stderr
+| spine diff: --depth needs a value; spine diff --help describes it
+|
 === in tools/internal/spine/testdata: spine diff --depth 2 seeds/spine.yaml diff/door-b.yaml
 exit 1
 --- stdout
@@ -626,64 +605,60 @@ exit 1
 | -- 10 errors, 10 findings
 |
 === in tools/internal/spine/testdata: spine diff --he
-exit 0
+exit 2
 --- stdout
-| usage: spine diff [-h] [--format {text,json}] [--junit FILE] [--depth DEPTH]
-|                   a b
 |
-| positional arguments:
-|   a
-|   b
-|
-| options:
-|   -h, --help            show this help message and exit
-|   --format {text,json}
-|   --junit FILE          also write a JUnit XML report
-|   --depth DEPTH
+--- stderr
+| spine diff: unknown option --he; spine diff --help describes it
 |
 === in tools/internal/spine/testdata: spine diff --help
 exit 0
 --- stdout
-| usage: spine diff [-h] [--format {text,json}] [--junit FILE] [--depth DEPTH]
-|                   a b
+| usage: spine diff A B [--format text|json] [--junit FILE] [--depth N]
 |
-| positional arguments:
-|   a
-|   b
+| Compares two spines case by case, then by behavior over every event sequence up to the depth,
+| reporting the shortest sequence for each difference.
 |
 | options:
-|   -h, --help            show this help message and exit
-|   --format {text,json}
-|   --junit FILE          also write a JUnit XML report
-|   --depth DEPTH
+|   --format text|json       how the findings are printed; text unless given
+|   --junit FILE             also write the findings as a JUnit XML report
+|   --depth N                the longest event sequence tried, 1 or more; 4 unless given
+|   -h, --help               show this help
 |
 === in tools/internal/spine/testdata: spine diff -h
 exit 0
 --- stdout
-| usage: spine diff [-h] [--format {text,json}] [--junit FILE] [--depth DEPTH]
-|                   a b
+| usage: spine diff A B [--format text|json] [--junit FILE] [--depth N]
 |
-| positional arguments:
-|   a
-|   b
+| Compares two spines case by case, then by behavior over every event sequence up to the depth,
+| reporting the shortest sequence for each difference.
 |
 | options:
-|   -h, --help            show this help message and exit
-|   --format {text,json}
-|   --junit FILE          also write a JUnit XML report
-|   --depth DEPTH
+|   --format text|json       how the findings are printed; text unless given
+|   --junit FILE             also write the findings as a JUnit XML report
+|   --depth N                the longest event sequence tried, 1 or more; 4 unless given
+|   -h, --help               show this help
 |
 === in tools/internal/spine/testdata: spine diff diff/stop-a.yaml diff/stop-b.yaml --depth 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001
-exit 2
+exit 1
 --- stdout
+| error   case-disagrees     s/go: : A says -> t, B says reject
+| error   behavior-differs   go(): A ends t, B ends rejected
+| -- 2 errors, 2 findings
 |
 === in tools/internal/spine/testdata: spine diff diff/stop-a.yaml diff/stop-b.yaml --depth 99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
-exit 2
+exit 1
 --- stdout
+| error   case-disagrees     s/go: : A says -> t, B says reject
+| error   behavior-differs   go(): A ends t, B ends rejected
+| -- 2 errors, 2 findings
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml
 exit 2
 --- stdout
+|
+--- stderr
+| spine diff: B is missing; spine diff --help describes it
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml --depth 2 diff/door-b.yaml
 exit 1
@@ -701,216 +676,172 @@ exit 1
 | -- 10 errors, 10 findings
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --d 2
-exit 1
+exit 2
 --- stdout
-| error   only-in-b          states: B has state "ajar", A does not
-| error   only-in-b          events: B has event "knock", A does not
-| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
-| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
-| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
-| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
-| error   behavior-differs   open(role=guest): A ends rejected, B ends open
-| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
-| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
-| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
-| -- 10 errors, 10 findings
+|
+--- stderr
+| spine diff: unknown option --d; spine diff --help describes it
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --dep 2
-exit 1
+exit 2
 --- stdout
-| error   only-in-b          states: B has state "ajar", A does not
-| error   only-in-b          events: B has event "knock", A does not
-| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
-| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
-| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
-| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
-| error   behavior-differs   open(role=guest): A ends rejected, B ends open
-| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
-| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
-| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
-| -- 10 errors, 10 findings
+|
+--- stderr
+| spine diff: unknown option --dep; spine diff --help describes it
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth
 exit 2
 --- stdout
 |
+--- stderr
+| spine diff: --depth needs a value; spine diff --help describes it
+|
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth " 2 "
-exit 1
+exit 2
 --- stdout
-| error   only-in-b          states: B has state "ajar", A does not
-| error   only-in-b          events: B has event "knock", A does not
-| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
-| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
-| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
-| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
-| error   behavior-differs   open(role=guest): A ends rejected, B ends open
-| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
-| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
-| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
-| -- 10 errors, 10 findings
+|
+--- stderr
+| spine diff: --depth must be a whole number of 1 or more, not " 2 "; spine diff --help describes it
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth "- 2"
 exit 2
 --- stdout
 |
+--- stderr
+| spine diff: --depth needs a value; spine diff --help describes it
+|
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth "2\x1c"
 exit 2
 --- stdout
 |
+--- stderr
+| spine diff: --depth must be a whole number of 1 or more, not "2\x1c"; spine diff --help describes it
+|
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth +2
-exit 1
+exit 2
 --- stdout
-| error   only-in-b          states: B has state "ajar", A does not
-| error   only-in-b          events: B has event "knock", A does not
-| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
-| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
-| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
-| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
-| error   behavior-differs   open(role=guest): A ends rejected, B ends open
-| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
-| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
-| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
-| -- 10 errors, 10 findings
+|
+--- stderr
+| spine diff: --depth must be a whole number of 1 or more, not "+2"; spine diff --help describes it
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth --format json
 exit 2
 --- stdout
 |
+--- stderr
+| spine diff: --depth needs a value; spine diff --help describes it
+|
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth -2
-exit 1
+exit 2
 --- stdout
-| error   only-in-b          states: B has state "ajar", A does not
-| error   only-in-b          events: B has event "knock", A does not
-| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
-| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
-| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
-| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
-| -- 6 errors, 6 findings
+|
+--- stderr
+| spine diff: --depth needs a value; spine diff --help describes it
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth -٢
-exit 1
+exit 2
 --- stdout
-| error   only-in-b          states: B has state "ajar", A does not
-| error   only-in-b          events: B has event "knock", A does not
-| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
-| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
-| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
-| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
-| -- 6 errors, 6 findings
+|
+--- stderr
+| spine diff: --depth needs a value; spine diff --help describes it
+|
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 0
+exit 2
+--- stdout
+|
+--- stderr
+| spine diff: --depth must be a whole number of 1 or more, not "0"; spine diff --help describes it
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 0_2
-exit 1
+exit 2
 --- stdout
-| error   only-in-b          states: B has state "ajar", A does not
-| error   only-in-b          events: B has event "knock", A does not
-| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
-| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
-| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
-| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
-| error   behavior-differs   open(role=guest): A ends rejected, B ends open
-| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
-| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
-| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
-| -- 10 errors, 10 findings
+|
+--- stderr
+| spine diff: --depth must be a whole number of 1 or more, not "0_2"; spine diff --help describes it
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 1e1
 exit 2
 --- stdout
 |
+--- stderr
+| spine diff: --depth must be a whole number of 1 or more, not "1e1"; spine diff --help describes it
+|
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 2 --depth x
 exit 2
 --- stdout
+|
+--- stderr
+| spine diff: --depth is given twice; spine diff --help describes it
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 2.0
 exit 2
 --- stdout
 |
+--- stderr
+| spine diff: --depth must be a whole number of 1 or more, not "2.0"; spine diff --help describes it
+|
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 2_
 exit 2
 --- stdout
 |
+--- stderr
+| spine diff: --depth must be a whole number of 1 or more, not "2_"; spine diff --help describes it
+|
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 2
-exit 1
+exit 2
 --- stdout
-| error   only-in-b          states: B has state "ajar", A does not
-| error   only-in-b          events: B has event "knock", A does not
-| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
-| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
-| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
-| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
-| error   behavior-differs   open(role=guest): A ends rejected, B ends open
-| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
-| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
-| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
-| -- 10 errors, 10 findings
+|
+--- stderr
+| spine diff: --depth must be a whole number of 1 or more, not "2\u0085"; spine diff --help describes it
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth x
 exit 2
 --- stdout
 |
+--- stderr
+| spine diff: --depth must be a whole number of 1 or more, not "x"; spine diff --help describes it
+|
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth x --depth 2
 exit 2
 --- stdout
 |
+--- stderr
+| spine diff: --depth is given twice; spine diff --help describes it
+|
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth ٢
-exit 1
+exit 2
 --- stdout
-| error   only-in-b          states: B has state "ajar", A does not
-| error   only-in-b          events: B has event "knock", A does not
-| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
-| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
-| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
-| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
-| error   behavior-differs   open(role=guest): A ends rejected, B ends open
-| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
-| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
-| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
-| -- 10 errors, 10 findings
+|
+--- stderr
+| spine diff: --depth must be a whole number of 1 or more, not "٢"; spine diff --help describes it
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth 　2　
-exit 1
+exit 2
 --- stdout
-| error   only-in-b          states: B has state "ajar", A does not
-| error   only-in-b          events: B has event "knock", A does not
-| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
-| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
-| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
-| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
-| error   behavior-differs   open(role=guest): A ends rejected, B ends open
-| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
-| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
-| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
-| -- 10 errors, 10 findings
+|
+--- stderr
+| spine diff: --depth must be a whole number of 1 or more, not "\u30002\u3000"; spine diff --help describes it
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth ２
-exit 1
+exit 2
 --- stdout
-| error   only-in-b          states: B has state "ajar", A does not
-| error   only-in-b          events: B has event "knock", A does not
-| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
-| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
-| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
-| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
-| error   behavior-differs   open(role=guest): A ends rejected, B ends open
-| error   behavior-differs   remove(role=guest): A ends gone, B ends undefined
-| error   behavior-differs   open(role=owner) -> remove(role=owner): A ends open, B ends closed
-| error   behavior-differs   open(role=owner) -> remove(role=guest): A ends open, B ends closed
-| -- 10 errors, 10 findings
+|
+--- stderr
+| spine diff: --depth must be a whole number of 1 or more, not "２"; spine diff --help describes it
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth=
 exit 2
 --- stdout
 |
+--- stderr
+| spine diff: --depth must be a whole number of 1 or more, not ""; spine diff --help describes it
+|
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth=-2
-exit 1
+exit 2
 --- stdout
-| error   only-in-b          states: B has state "ajar", A does not
-| error   only-in-b          events: B has event "knock", A does not
-| error   case-disagrees     closed/open: role=guest: A says reject, B says -> open
-| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says reject and -> gone
-| error   case-disagrees     open/remove: role=owner: A says ignore, B says -> closed
-| error   case-disagrees     open/remove: role=guest: A says ignore, B says -> closed
-| -- 6 errors, 6 findings
+|
+--- stderr
+| spine diff: --depth must be a whole number of 1 or more, not "-2"; spine diff --help describes it
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml --depth=2
 exit 1
@@ -989,21 +920,29 @@ exit 1
 exit 2
 --- stdout
 |
+--- stderr
+| spine diff: --junit needs a value; spine diff --help describes it
+|
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml extra
 exit 2
 --- stdout
 |
+--- stderr
+| spine diff: unexpected argument "extra"; spine diff --help describes it
+|
 === in tools/internal/spine/testdata: spine guard --b build/x seeds/policy.yaml src/a.py
-exit 0
+exit 2
 --- stdout
-| info    role               build/x: checked 1 changed files as role builder
-| -- 0 errors, 1 findings
+|
+--- stderr
+| spine guard: unknown option --b; spine guard --help describes it
 |
 === in tools/internal/spine/testdata: spine guard --br=main seeds/policy.yaml src/a.py
-exit 0
+exit 2
 --- stdout
-| info    role               main: checked 1 changed files as role owner
-| -- 0 errors, 1 findings
+|
+--- stderr
+| spine guard: unknown option --br; spine guard --help describes it
 |
 === in tools/internal/spine/testdata: spine guard --branch build/x seeds/policy.yaml src/a.py
 exit 0
@@ -1020,22 +959,23 @@ exit 0
 === in tools/internal/spine/testdata: spine guard --help
 exit 0
 --- stdout
-| usage: spine guard [-h] [--format {text,json}] [--junit FILE] --branch BRANCH
-|                    policy [files ...]
+| usage: spine guard POLICY [FILES ...] --branch NAME [--format text|json] [--junit FILE]
 |
-| positional arguments:
-|   policy
-|   files                 changed files; read from stdin when omitted
+| Maps the branch to a role and reports changed files that role may not touch. Without FILES, it
+| reads them from stdin, one per line.
 |
 | options:
-|   -h, --help            show this help message and exit
-|   --format {text,json}
-|   --junit FILE          also write a JUnit XML report
-|   --branch BRANCH
+|   --branch NAME            the branch whose role is checked
+|   --format text|json       how the findings are printed; text unless given
+|   --junit FILE             also write the findings as a JUnit XML report
+|   -h, --help               show this help
 |
 === in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch
 exit 2
 --- stdout
+|
+--- stderr
+| spine guard: --branch needs a value; spine guard --help describes it
 |
 === in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch "" < "src/a.py\n"
 exit 1
@@ -1044,18 +984,33 @@ exit 1
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch -1 src/a.py
-exit 1
+exit 2
 --- stdout
-| error   unknown-role       -1: no policy entry matches this branch
-| -- 1 errors, 1 findings
+|
+--- stderr
+| spine guard: --branch needs a value; spine guard --help describes it
 |
 === in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch -x src/a.py
 exit 2
 --- stdout
 |
+--- stderr
+| spine guard: --branch needs a value; spine guard --help describes it
+|
 === in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x "a b" -1x
 exit 2
 --- stdout
+|
+--- stderr
+| spine guard: unknown option -1x; spine guard --help describes it
+|
+=== in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x -- -x -1
+exit 1
+--- stdout
+| error   path-not-allowed   -x: no allow rule for the builder role covers this path
+| error   path-not-allowed   -1: no allow rule for the builder role covers this path
+| info    role               build/x: checked 2 changed files as role builder
+| -- 2 errors, 3 findings
 |
 === in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x --format json src/a.py
 exit 0
@@ -1072,6 +1027,13 @@ exit 0
 |     }
 |   ]
 | }
+|
+=== in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x -1
+exit 2
+--- stdout
+|
+--- stderr
+| spine guard: unknown option -1; spine guard --help describes it
 |
 === in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x < "src/a.py\n"
 exit 0
@@ -1105,6 +1067,9 @@ exit 1
 exit 2
 --- stdout
 |
+--- stderr
+| spine guard: unknown option -v; spine guard --help describes it
+|
 === in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch build/x src/a.py spec/b.yaml
 exit 1
 --- stdout
@@ -1112,9 +1077,18 @@ exit 1
 | info    role               build/x: checked 2 changed files as role builder
 | -- 1 errors, 2 findings
 |
+=== in tools/internal/spine/testdata: spine guard seeds/policy.yaml --branch=-x src/a.py
+exit 1
+--- stdout
+| error   unknown-role       -x: no policy entry matches this branch
+| -- 1 errors, 1 findings
+|
 === in tools/internal/spine/testdata: spine guard seeds/policy.yaml src/a.py
 exit 2
 --- stdout
+|
+--- stderr
+| spine guard: --branch is required; spine guard --help describes it
 |
 === in tools/internal/spine/testdata: spine guard seeds/policy.yaml src/a.py --branch build/x spec/b.yaml
 exit 1
@@ -1127,20 +1101,25 @@ exit 1
 exit 2
 --- stdout
 |
+--- stderr
+| spine hash: unknown option --format; spine hash --help describes it
+|
 === in tools/internal/spine/testdata: spine hash --junit x seeds/spine.yaml
 exit 2
 --- stdout
 |
+--- stderr
+| spine hash: unknown option --junit; spine hash --help describes it
+|
 === in tools/internal/spine/testdata: spine hash -h
 exit 0
 --- stdout
-| usage: spine hash [-h] spec
+| usage: spine hash SPEC
 |
-| positional arguments:
-|   spec
+| Prints the whole spine's hash, spine@hash, then one hash per state/event cell, state/event@hash.
 |
 | options:
-|   -h, --help  show this help message and exit
+|   -h, --help               show this help
 |
 === in tools/internal/spine/testdata: spine hash seeds/spine.yaml
 exit 0
@@ -1167,9 +1146,25 @@ exit 0
 | end/go@d517c5adb451
 | end/stop@df53dfb55f37
 |
+=== in tools/internal/spine/testdata: spine stale --help
+exit 0
+--- stdout
+| usage: spine stale SPEC CHECKS_DIR [--format text|json] [--junit FILE]
+|
+| Finds covers: citations in the files under CHECKS_DIR, and reports stale, orphaned and
+| uncovered cells, and text meant as a citation that isn't one.
+|
+| options:
+|   --format text|json       how the findings are printed; text unless given
+|   --junit FILE             also write the findings as a JUnit XML report
+|   -h, --help               show this help
+|
 === in tools/internal/spine/testdata: spine stale seeds/spine.yaml
 exit 2
 --- stdout
+|
+--- stderr
+| spine stale: CHECKS_DIR is missing; spine stale --help describes it
 |
 === in tools/internal/spine/testdata: spine stale seeds/spine.yaml checks/door --format=json
 exit 1
@@ -1226,18 +1221,19 @@ exit 1
 === in tools/internal/spine/testdata: spine trace --help
 exit 0
 --- stdout
-| usage: spine trace [-h] [--format {text,json}] [--junit FILE] spec behavior
+| usage: spine trace SPEC FILE [--format text|json] [--junit FILE]
 |
-| positional arguments:
-|   spec
-|   behavior
+| Replays one behavior file.
 |
 | options:
-|   -h, --help            show this help message and exit
-|   --format {text,json}
-|   --junit FILE          also write a JUnit XML report
+|   --format text|json       how the findings are printed; text unless given
+|   --junit FILE             also write the findings as a JUnit XML report
+|   -h, --help               show this help
 |
 === in tools/internal/spine/testdata: spine trace seeds/spine.yaml
 exit 2
 --- stdout
+|
+--- stderr
+| spine trace: FILE is missing; spine trace --help describes it
 |

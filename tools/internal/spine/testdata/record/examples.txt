@@ -651,6 +651,9 @@ exit 1
 |   ]
 | }
 |
+--- stderr
+| adapter_shim: examples/elixir_job/conformance/adapter_job.py cannot be imported: FileNotFoundError: [Errno 2] No such file or directory: '$ROOT/examples/elixir_job/conformance/adapter_job.py'
+|
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 tools/adapter_shim.py examples/elixir_job/conformance/adapter_job.py"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
@@ -697,6 +700,9 @@ exit 1
 --- stdout
 | error   adapter-failed     python3 tools/adapter_shim.py examples/elixir_job/conformance/adapter_job.py: exited with status 1 before replying to new
 | -- 1 errors, 1 findings
+|
+--- stderr
+| adapter_shim: examples/elixir_job/conformance/adapter_job.py cannot be imported: FileNotFoundError: [Errno 2] No such file or directory: '$ROOT/examples/elixir_job/conformance/adapter_job.py'
 |
 === in .: spine conform examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/notes/conformance/adapter_notes.py" with PYTHONPATH=examples/notes/src
 exit 0

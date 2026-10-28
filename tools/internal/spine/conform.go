@@ -733,15 +733,14 @@ func replay(s *Spec, a *commandAdapter, seq []parsedStep, exercised map[string]b
 }
 
 // conform compares code with the spine through an adapter program, started from command.
-// depthText is the depth as Python prints it.
-func conform(s *Spec, command string, depth int, depthText string) Findings {
+func conform(s *Spec, command string, depth int) Findings {
 	var out Findings
 	a, err := startAdapter(command)
 	if err != nil {
 		out.Add("adapter-failed", command, err.Error())
 		return out
 	}
-	err = compareCode(s, a, depth, depthText, &out)
+	err = compareCode(s, a, depth, &out)
 	if err != nil { // keep what was found; past this, nothing compares
 		out.Add("adapter-failed", command, err.Error())
 	}
@@ -751,7 +750,7 @@ func conform(s *Spec, command string, depth int, depthText string) Findings {
 
 // compareCode is compare() in tools/spine.py: it replays every sequence up to depth, shortest
 // first, in the order of tools/spine.py's queue.
-func compareCode(s *Spec, a *commandAdapter, depth int, depthText string, out *Findings) error {
+func compareCode(s *Spec, a *commandAdapter, depth int, out *Findings) error {
 	envs := s.assignments()
 	var steps []parsedStep
 	for _, e := range s.Events {
@@ -790,7 +789,7 @@ func compareCode(s *Spec, a *commandAdapter, depth int, depthText string, out *F
 			live++
 		}
 	}
-	out.AddSeverity("coverage", fmt.Sprintf("%d sequences up to %s steps", runs, depthText),
+	out.AddSeverity("coverage", fmt.Sprintf("%d sequences up to %d steps", runs, depth),
 		fmt.Sprintf("%d of %d state/event/variable cases exercised", len(exercised), live*len(steps)), "info")
 	return nil
 }
