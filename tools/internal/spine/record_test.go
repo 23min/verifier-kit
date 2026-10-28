@@ -85,6 +85,9 @@ func (c spineCase) recordRun(t *testing.T, args []string, r result, junit *strin
 		t.Fatalf("%s: no file in testdata/record/ for this case; add its prefix to recordFile", c.name)
 	}
 	got := record.Entry{Exit: r.exit, Sections: []record.Section{{Name: "stdout", Text: normal(r.stdout)}}}
+	if r.stderr != "" {
+		got.Sections = append(got.Sections, record.Section{Name: "stderr", Text: normal(r.stderr)})
+	}
 	if junit != nil {
 		got.Sections = append(got.Sections, record.Section{Name: "junit", Text: normal(*junit)})
 	}

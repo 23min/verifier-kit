@@ -65,6 +65,13 @@ checks it against a record of what it gave on every test input.
 All commands except `hash` accept `--format text|json` and `--junit FILE`. Every command that
 takes a spine validates it first and stops with the validation findings if it is invalid.
 
+The command comes first; its arguments and options follow in any order. An option is
+`--name value` or `--name=value`, spelled in full and given at most once. Every argument that
+starts with `-`, other than `-` alone, is an option, except after `--`, where everything is an
+argument; so a value that starts with `-` is given as `--name=value`. `--depth` is a whole number of 1 or more, in the digits 0 to 9. `-h` or `--help`
+prints a command's help and exits 0. Anything else is a usage error: one line on stderr, naming
+the command and what is wrong, and exit 2.
+
 ### Finding codes
 
 | Code | Severity | From | Meaning |
