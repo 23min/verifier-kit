@@ -10,6 +10,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
+	"github.com/23min/verifier-kit/tools/internal/finding"
 	"github.com/23min/verifier-kit/tools/internal/shlex"
 )
 
@@ -134,14 +135,9 @@ type group struct {
 	unsound string
 }
 
-// finding is an error line as the tools print it, without the indent.
-func finding(code, where, message string) string {
-	return line("error", code, where, message)
-}
-
-// line is a finding line of any severity, as the tools print it, without the indent.
-func line(severity, code, where, message string) string {
-	return fmt.Sprintf("%-7s %-18s %s: %s", severity, code, where, message)
+// errorLine is an error line as the tools print it, without the indent.
+func errorLine(code, where, message string) string {
+	return finding.Line("error", code, where, message)
 }
 
 // guardStep runs guard over the changed files, given as git diff --name-only printed them.
@@ -183,7 +179,7 @@ func planRoot(r rootFacts, c config) []group {
 		out = append(out, g)
 	}
 	if len(r.machines) == 0 {
-		out = append(out, group{steps: []step{{name: "spines found", lines: []string{finding("no-machines", p+"spec", "no "+p+"spec/*/spine.yaml")}}}})
+		out = append(out, group{steps: []step{{name: "spines found", lines: []string{errorLine("no-machines", p+"spec", "no "+p+"spec/*/spine.yaml")}}}})
 	}
 
 	out = append(out, group{steps: []step{checksStep(r.checks, p)}})
@@ -192,7 +188,7 @@ func planRoot(r rootFacts, c config) []group {
 	case !c.full:
 		out = append(out, group{steps: []step{{name: "mutants killed", skip: "fast mode; --full runs them"}}})
 	case r.mutants == nil && len(r.mutations) == 0:
-		out = append(out, group{steps: []step{{name: "mutants killed", lines: []string{finding("no-mutation", p+"mutation", "no "+p+"mutation/mutants.yaml or mutate_*.cmd")}}}})
+		out = append(out, group{steps: []step{{name: "mutants killed", lines: []string{errorLine("no-mutation", p+"mutation", "no "+p+"mutation/mutants.yaml or mutate_*.cmd")}}}})
 	default:
 		if r.mutants != nil {
 			out = append(out, group{steps: []step{mutantsStep(r, c.spine)}})
@@ -210,7 +206,7 @@ func conformStep(m machineFacts, p, spine string, junit []string) step {
 	s := step{name: m.name + ": code conforms to spine"}
 	switch {
 	case m.adapter == nil:
-		s.lines = []string{finding("no-adapter", m.name, p+"conformance/adapter_"+m.name+".cmd not found")}
+		s.lines = []string{errorLine("no-adapter", m.name, p+"conformance/adapter_"+m.name+".cmd not found")}
 	default:
 		if line, _, bad := commandLine(*m.adapter); bad != "" {
 			s.lines = []string{bad}
@@ -225,7 +221,7 @@ func conformStep(m machineFacts, p, spine string, junit []string) step {
 // checksStep runs the content checks, from the root at prefix p.
 func checksStep(f *pieceFile, p string) step {
 	if f == nil {
-		return step{name: "content checks", lines: []string{finding("no-checks", p+"checks", "no "+p+"checks/run.cmd")}}
+		return step{name: "content checks", lines: []string{errorLine("no-checks", p+"checks", "no "+p+"checks/run.cmd")}}
 	}
 	return rootCommand("content checks", *f, p)
 }
@@ -262,7 +258,7 @@ func rootCommand(name string, f pieceFile, p string) step {
 // the file holds no single command line.
 func commandLine(f pieceFile) (line string, words []string, bad string) {
 	badCommand := func(why string) (string, []string, string) {
-		return "", nil, finding("bad-command", f.shown, why)
+		return "", nil, errorLine("bad-command", f.shown, why)
 	}
 	if f.err != nil {
 		return badCommand("cannot be read: " + f.err.Error())
@@ -283,7 +279,7 @@ func commandLine(f pieceFile) (line string, words []string, bad string) {
 		return badCommand("cannot be split: " + err.Error())
 	}
 	if len(words) == 0 {
-		return badCommand("holds no command")
+		return badCommand("the command is empty")
 	}
 	return line, words, ""
 }
@@ -328,7 +324,7 @@ func startFailure(c *command, why string) string {
 	if c.shown == "" {
 		return why
 	}
-	return finding("bad-command", c.shown, "cannot run "+c.argv[0]+": "+why)
+	return errorLine("bad-command", c.shown, "cannot run "+c.argv[0]+": "+why)
 }
 
 func failed(name string, lines []string) []string {

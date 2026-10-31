@@ -5,7 +5,7 @@ branches:
   "[!x]*": other
 roles:
   feature:
-    allow: ["src/[a-c]*.py", "*.[ch]", "docs/**", "lib/[]]x", "a[b-]c", "q[z-a]", "r[!]s]", "t[a-c-e]"]
+    allow: ["src/[a-c]*.py", "*.[ch]", "docs/**", "lib/[]]x", "a[b-]c", "q[z-a]", "r[!]s]", "t[a-c-e]", "x[y"]
     deny: ["src/*secret*", "[*]", "u[!-a]"]
   release:
     allow: ["*"]

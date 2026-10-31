@@ -7,7 +7,7 @@ exit 1
 | skip  empty: behaviors match spine (no examples/badcommands/spec/empty/behaviors/)
 | skip  empty: checks cite current spine (no examples/badcommands/checks/empty/)
 | FAIL  empty: code conforms to spine
-|       error   bad-command        examples/badcommands/conformance/adapter_empty.cmd: holds no command
+|       error   bad-command        examples/badcommands/conformance/adapter_empty.cmd: the command is empty
 | ok    twolines: spine is sound
 | skip  twolines: behaviors match spine (no examples/badcommands/spec/twolines/behaviors/)
 | skip  twolines: checks cite current spine (no examples/badcommands/checks/twolines/)
@@ -149,7 +149,7 @@ exit 1
 | skip  empty: behaviors match spine (no examples/badcommands/spec/empty/behaviors/)
 | skip  empty: checks cite current spine (no examples/badcommands/checks/empty/)
 | FAIL  empty: code conforms to spine
-|       error   bad-command        examples/badcommands/conformance/adapter_empty.cmd: holds no command
+|       error   bad-command        examples/badcommands/conformance/adapter_empty.cmd: the command is empty
 | ok    twolines: spine is sound
 | skip  twolines: behaviors match spine (no examples/badcommands/spec/twolines/behaviors/)
 | skip  twolines: checks cite current spine (no examples/badcommands/checks/twolines/)
@@ -348,7 +348,7 @@ exit 1
 | skip  empty: behaviors match spine (no examples/badcommands/spec/empty/behaviors/)
 | skip  empty: checks cite current spine (no examples/badcommands/checks/empty/)
 | FAIL  empty: code conforms to spine
-|       error   bad-command        examples/badcommands/conformance/adapter_empty.cmd: holds no command
+|       error   bad-command        examples/badcommands/conformance/adapter_empty.cmd: the command is empty
 | ok    twolines: spine is sound
 | skip  twolines: behaviors match spine (no examples/badcommands/spec/twolines/behaviors/)
 | skip  twolines: checks cite current spine (no examples/badcommands/checks/twolines/)

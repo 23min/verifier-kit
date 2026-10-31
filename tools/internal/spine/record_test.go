@@ -18,7 +18,7 @@ import (
 	"github.com/23min/verifier-kit/tools/internal/record"
 )
 
-var update = flag.Bool("update", false, "write testdata/record/ again from the Go spine")
+var update = flag.Bool("update", false, "write testdata/record/ again from spine")
 
 var (
 	rec       *record.Record
@@ -28,7 +28,7 @@ var (
 // loadRecord reads testdata/record/, unless the test is to write it.
 func loadRecord(t *testing.T, td, tmp string) {
 	recordTmp = tmp
-	rec = record.Load(t, filepath.Join(td, "record"), *update, "the Go spine", "go -C tools test ./internal/spine/ -update")
+	rec = record.Load(t, filepath.Join(td, "record"), *update, "spine", "go -C tools test ./internal/spine/ -update")
 }
 
 // recordFile names the file a case's runs are kept in, from the case's name.
@@ -76,7 +76,7 @@ func (c spineCase) key(args []string) string {
 	return strings.Join(parts, " ")
 }
 
-// recordRun compares one run of the Go spine with the record, or keeps it to write the record.
+// recordRun compares one run of spine with the record, or keeps it to write the record.
 func (c spineCase) recordRun(t *testing.T, args []string, r result, junit *string) {
 	t.Helper()
 	file := recordFile(c.name)

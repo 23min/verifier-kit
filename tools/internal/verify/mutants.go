@@ -9,7 +9,8 @@ import (
 	"path"
 	"strings"
 
-	yaml "go.yaml.in/yaml/v4"
+	"github.com/23min/verifier-kit/tools/internal/finding"
+	"github.com/23min/verifier-kit/tools/internal/yamldoc"
 )
 
 // mutant is one edit to the code: in file, under src/, the text find, which must occur there
@@ -33,54 +34,50 @@ var copied = []string{"spec", "conformance", "checks", "src"}
 // readMutants reads mutants.yaml. problems are its bad-mutants lines; with any, no mutant runs.
 func readMutants(f pieceFile) (mutants []mutant, problems []string) {
 	bad := func(format string, args ...any) {
-		problems = append(problems, finding("bad-mutants", f.shown, fmt.Sprintf(format, args...)))
+		problems = append(problems, errorLine("bad-mutants", f.shown, fmt.Sprintf(format, args...)))
 	}
 	if f.err != nil {
 		bad("cannot be read: %s", f.err)
 		return nil, problems
 	}
-	var doc yaml.Node
-	if err := yaml.Unmarshal(f.data, &doc); err != nil {
+	list, err := yamldoc.Load(f.data)
+	if err != nil {
 		bad("is not YAML: %s", strings.SplitN(err.Error(), "\n", 2)[0])
 		return nil, problems
 	}
-	list := &doc
-	if doc.Kind == yaml.DocumentNode && len(doc.Content) > 0 {
-		list = doc.Content[0]
-	}
 	switch {
-	case list.Kind == 0 || list.Kind == yaml.DocumentNode || list.Tag == "!!null":
+	case list.Kind == yamldoc.KNull:
 		bad("holds no mutants")
 		return nil, problems
-	case list.Kind != yaml.SequenceNode:
+	case list.Kind != yamldoc.KList:
 		bad("is not a list of mutants")
 		return nil, problems
-	case len(list.Content) == 0:
+	case len(list.Items) == 0:
 		bad("holds no mutants")
 		return nil, problems
 	}
 	named := map[string]bool{}
-	for i, item := range list.Content {
+	for i, item := range list.Items {
 		before := len(problems)
 		which := fmt.Sprintf("mutant %d", i+1)
-		if item.Kind != yaml.MappingNode {
+		if item.Kind != yamldoc.KMap {
 			bad("%s is not a mapping of name, file, find and replace", which)
 			continue
 		}
 		given, text := map[string]bool{}, map[string]string{}
 		var wrong []string // the fields' problems, named once the mutant's name is known
-		for j := 0; j+1 < len(item.Content); j += 2 {
-			key, value := item.Content[j].Value, item.Content[j+1]
+		for j, k := range item.Map.Keys {
+			key, value := k.Str, item.Map.Values[j]
 			switch {
+			case k.Kind != yamldoc.KStr:
+				wrong = append(wrong, "a field's name is not text")
 			case key != "name" && key != "file" && key != "find" && key != "replace":
 				wrong = append(wrong, "unknown field "+key)
-			case given[key]:
-				wrong = append(wrong, key+" is given twice")
-			case value.Kind != yaml.ScalarNode || value.Tag != "!!str":
+			case value.Kind != yamldoc.KStr:
 				given[key] = true
 				wrong = append(wrong, key+" is not text")
 			default:
-				given[key], text[key] = true, value.Value
+				given[key], text[key] = true, value.Str
 			}
 		}
 		if name := text["name"]; name != "" {
@@ -162,7 +159,7 @@ func oracleFails(shown string, runs []ran) string {
 	if names == nil {
 		return ""
 	}
-	return withFirst(finding("oracle-fails", shown, "on the code as it is, "+strings.Join(names, ", ")+" failed"), first)
+	return withFirst(errorLine("oracle-fails", shown, "on the code as it is, "+strings.Join(names, ", ")+" failed"), first)
 }
 
 // verdictOf is a mutant's line, and whether it counts as an error: killed when a step fails on
@@ -170,14 +167,14 @@ func oracleFails(shown string, runs []ran) string {
 func verdictOf(name string, runs []ran) (string, bool) {
 	names, first := caught(runs)
 	if names == nil {
-		return finding("mutant-survived", name, "no part of the oracle noticed"), true
+		return errorLine("mutant-survived", name, "no part of the oracle noticed"), true
 	}
-	return withFirst(line("info", "mutant-killed", name, "caught by "+strings.Join(names, ", ")), first), false
+	return withFirst(finding.Line("info", "mutant-killed", name, "caught by "+strings.Join(names, ", ")), first), false
 }
 
 // staleLine is the line for a mutant that can't be made.
 func staleLine(name, why string) string {
-	return finding("mutant-stale", name, why)
+	return errorLine("mutant-stale", name, why)
 }
 
 // tally is the last line under the step.

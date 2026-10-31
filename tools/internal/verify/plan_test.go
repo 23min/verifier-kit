@@ -54,7 +54,7 @@ func TestPrefixAndRoots(t *testing.T) {
 }
 
 func TestCommandLine(t *testing.T) {
-	bad := func(why string) string { return finding("bad-command", "r/x.cmd", why) }
+	bad := func(why string) string { return errorLine("bad-command", "r/x.cmd", why) }
 	for _, c := range []struct {
 		data  string
 		err   error
@@ -67,8 +67,9 @@ func TestCommandLine(t *testing.T) {
 		{data: "prog", line: "prog", words: []string{"prog"}},
 		{data: "prog\n\n", bad: bad("holds more than one line")},
 		{data: "prog\r", bad: bad("holds more than one line")},
-		{data: "   \n", bad: bad("holds no command")},
-		{data: "", bad: bad("holds no command")},
+		{data: "   \n", bad: bad("the command is empty")},
+		{data: "", bad: bad("the command is empty")},
+		{data: `prog "a\$b" "a\b" 'a\$b' a\$b` + "\n", line: `prog "a\$b" "a\b" 'a\$b' a\$b`, words: []string{"prog", "a$b", `a\b`, `a\$b`, "a$b"}},
 		{data: "prog \"open\n", bad: bad("cannot be split: no closing quotation")},
 		{data: "prog \\", bad: bad("cannot be split: no escaped character")},
 		{data: "\xff\n", bad: bad("cannot be read: not UTF-8")},
@@ -240,7 +241,7 @@ func TestPlanMutants(t *testing.T) {
 }
 
 func TestReadMutants(t *testing.T) {
-	bad := func(why string) string { return finding("bad-mutants", "m.yaml", why) }
+	bad := func(why string) string { return errorLine("bad-mutants", "m.yaml", why) }
 	for _, c := range []struct {
 		data     string
 		err      error
@@ -256,7 +257,9 @@ func TestReadMutants(t *testing.T) {
 		{data: "[]\n", problems: []string{bad("holds no mutants")}},
 		{data: "name: a\n", problems: []string{bad("is not a list of mutants")}},
 		{data: "- [\n", problems: []string{bad("is not YAML: go-yaml load error in parser (while parsing a flow node) at L2.C1: did not find expected node content")}},
-		{data: "- {name: a, name: b, file: src/x, find: x, replace: y}\n", problems: []string{bad("mutant 1 (a): name is given twice")}},
+		{data: "- {name: a, name: b, file: src/x, find: x, replace: y}\n", problems: []string{bad(`is not YAML: key "name" is given twice in one mapping, on line 1`)}},
+		{data: "- {name: a, file: src/x, find: yes, replace: y}\n", problems: []string{bad("mutant 1 (a): find is not text")}},
+		{data: "- {name: a, file: src/x, find: x, replace: y}\n---\n- {}\n", problems: []string{bad("is not YAML: expected a single document in the stream")}},
 		{data: "- {name: a, file: /src/x, find: 1, replace: y}\n", problems: []string{bad("mutant 1 (a): find is not text"), bad("mutant 1 (a): file /src/x is not under src/")}},
 		{data: "- {name: '', file: src/x, find: x}\n", problems: []string{bad("mutant 1: no replace"), bad("mutant 1: name is empty")}},
 	} {
@@ -282,7 +285,7 @@ func TestMutantVerdicts(t *testing.T) {
 	if line := oracleFails("m.yaml", []ran{passed}); line != "" {
 		t.Errorf("oracleFails on passing steps gave %q", line)
 	}
-	if line := oracleFails("m.yaml", []ran{conform, checks}); line != finding("oracle-fails", "m.yaml", "on the code as it is, lamp: code conforms to spine, content checks failed; first: error diverges lit/press : no") {
+	if line := oracleFails("m.yaml", []ran{conform, checks}); line != errorLine("oracle-fails", "m.yaml", "on the code as it is, lamp: code conforms to spine, content checks failed; first: error diverges lit/press : no") {
 		t.Errorf("oracleFails gave %q", line)
 	}
 	if line, isError := verdictOf("m", []ran{passed}); isError != true || line != "error   mutant-survived    m: no part of the oracle noticed" {
@@ -294,7 +297,7 @@ func TestMutantVerdicts(t *testing.T) {
 	if line, _ := verdictOf("m", []ran{{name: "s", failed: true, out: "info    only\nRunning ExUnit with seed: 1\n  1) test x\n"}}); line != "info    mutant-killed      m: caught by s" {
 		t.Errorf("verdictOf with no problem line gave %q", line)
 	}
-	if staleLine("m", "gone") != finding("mutant-stale", "m", "gone") || tally(1, 2) != "-- 1 errors, 2 mutants" {
+	if staleLine("m", "gone") != errorLine("mutant-stale", "m", "gone") || tally(1, 2) != "-- 1 errors, 2 mutants" {
 		t.Errorf("staleLine or tally gave %q, %q", staleLine("m", "gone"), tally(1, 2))
 	}
 }

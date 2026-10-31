@@ -51,8 +51,8 @@ are part of the contract: new codes may be added, existing codes are never renam
 | `check` | `SPEC` | Validates the file, then: every state, event and variable combination has exactly one rule; every state is reachable; terminal states have no exits; worked examples replay to their expected end |
 | `diff` | `A B [--depth N]` | Compares two spines case by case, then by behavior over every sequence up to N events (default 4), reporting the shortest witness for each difference |
 | `hash` | `SPEC` | Prints the whole spine's hash, `spine@hash`, then one content hash per state/event cell: `state/event@hash`. Text only: `--format` and `--junit` are usage errors |
-| `stale` | `SPEC CHECKS_DIR` | Finds `covers: state/event@hash` and `covers: spine@hash` citations in files under `CHECKS_DIR` and reports stale, orphaned and uncovered cells, and text meant as a citation that isn't one. A check that cites the current whole spine counts every transition as cited |
-| `behaviors` | `SPEC DIR` | Replays every file in `DIR/valid/` (must be allowed) and `DIR/invalid/` (must be refused) |
+| `stale` | `SPEC CHECKS_DIR` | Finds `covers: state/event@hash` and `covers: spine@hash` citations in the files under `CHECKS_DIR`, except binary ones (a file holding a NUL byte, such as Python's compiled `__pycache__` files), and reports stale, orphaned and uncovered cells, and text meant as a citation that isn't one. A check that cites the current whole spine counts every transition as cited |
+| `behaviors` | `SPEC DIR` | Replays every `.yaml` or `.yml` file in `DIR/valid/` (must be allowed) and `DIR/invalid/` (must be refused) |
 | `trace` | `SPEC FILE` | Replays one behavior file; for callers that run a validator once per fixture |
 | `conform` | `SPEC --adapter-cmd COMMAND [--depth N]` | Runs every event sequence up to N steps (default 4) against the spine and against the code through the adapter, and reports where they differ. The adapter is a program that speaks the adapter protocol (below); a Python adapter's command runs it through `tools/adapter_shim.py` |
 | `guard` | `POLICY --branch NAME [FILES...]` | Maps the branch to a role and reports changed files that role may not touch; reads files from stdin when none are given |
@@ -67,9 +67,10 @@ takes a spine validates it first and stops with the validation findings if it is
 The command comes first; its arguments and options follow in any order. An option is
 `--name value` or `--name=value`, spelled in full and given at most once. Every argument that
 starts with `-`, other than `-` alone, is an option, except after `--`, where everything is an
-argument; so a value that starts with `-` is given as `--name=value`. `--depth` is a whole number of 1 or more, in the digits 0 to 9. `-h` or `--help`
-prints a command's help and exits 0. Anything else is a usage error: one line on stderr, naming
-the command and what is wrong, and exit 2.
+argument; so a value that starts with `-` is given as `--name=value`. `--depth` is a whole
+number of 1 or more, in the digits 0 to 9. `-h` or `--help` prints a command's help and exits 0.
+Anything else is a usage error: one line on stderr, naming the command and what is wrong, and
+exit 2.
 
 ### Finding codes
 
@@ -187,10 +188,13 @@ roles:
     deny: ["spec/*", "checks/*", ...]
 ```
 
-A changed file fails if any `deny` pattern matches, or if no `allow` pattern does. Patterns use
-`fnmatch`, where `*` also matches `/`. `branches` and `roles` are required and nothing else is
-allowed; every role a branch pattern names must be in `roles`, and a role holds only `allow`
-and `deny`, each a list of patterns and each optional, so a role given as null holds neither. Anything else is a finding.
+A changed file fails if any `deny` pattern matches, or if no `allow` pattern does. In a pattern,
+`*` is any text, `/` included, `?` one character, and `[...]` one character in a set or `[!...]`
+one not in it; in a set, `a-z` is a range (a backwards one holds nothing), and `]` first or `-`
+first or last is itself, and a `[` never closed is itself. `branches` and `roles` are required
+and nothing else is allowed; every role a branch pattern names must be in `roles`, and a role
+holds only `allow` and `deny`, each a list of patterns and each optional, so a role given as
+null holds neither. Anything else is a finding.
 
 ## `./verify`
 
@@ -233,9 +237,11 @@ mutation tool, passes when it exits 0, which must mean that at least one mutant 
 was caught; it runs the oracle on each mutant itself, through `VERIFY_SPINE`. Either one's output
 is shown when it fails.
 
-`mutation/mutants.yaml` is a YAML list of mutants, each a mapping of exactly four texts: `name`,
-which no other mutant in the list has; `file`, a path under `src/`; `find`, which must occur in
-that file exactly once; and `replace`, which takes its place:
+`mutation/mutants.yaml` is a YAML list of mutants, read as the spine format reads every file
+(`spine-format.md`, "Text only": quote a `find` or `replace` YAML would read as something else),
+each a mapping of exactly four texts: `name`, which no other mutant in the list has; `file`, a
+path under `src/`; `find`, which must occur in that file exactly once; and `replace`, which
+takes its place:
 
 ```yaml
 - name: edits are stored in upper case

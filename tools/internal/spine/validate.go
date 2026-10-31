@@ -3,8 +3,11 @@ package spine
 import (
 	"errors"
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
+
+	"github.com/23min/verifier-kit/tools/internal/yamldoc"
 )
 
 // ---------- loading and validation ----------
@@ -37,7 +40,7 @@ func names(list ...string) map[string]bool {
 
 // checkKeys adds yaml-boolean-key for a key YAML read as true or false, and unknown-key for any
 // other key that isn't text or (when allowed isn't nil) isn't in allowed.
-func checkKeys(m *Map, allowed map[string]bool, where, what string, out *Findings, hint string) {
+func checkKeys(m *yamldoc.Map, allowed map[string]bool, where, what string, out *Findings, hint string) {
 	for _, k := range m.Keys {
 		switch {
 		case isBool(k):
@@ -45,14 +48,14 @@ func checkKeys(m *Map, allowed map[string]bool, where, what string, out *Finding
 		case !isText(k):
 			out.Add("unknown-key", where, fmt.Sprintf("a %s key is not text", what))
 		case allowed != nil && !allowed[k.Str]:
-			out.Add("unknown-key", where, fmt.Sprintf("unknown %s key \"%s\"", what, k.Str))
+			out.Add("unknown-key", where, fmt.Sprintf("unknown %s key %q", what, k.Str))
 		}
 	}
 }
 
 // checkText reports whether v is text; otherwise it adds yaml-boolean-value or spec-shape,
 // without echoing the value.
-func checkText(v *Value, where, what string, out *Findings) bool {
+func checkText(v *yamldoc.Value, where, what string, out *Findings) bool {
 	switch {
 	case isText(v):
 		return true
@@ -65,13 +68,13 @@ func checkText(v *Value, where, what string, out *Findings) bool {
 }
 
 // isMap reports whether v is a mapping.
-func isMap(v *Value) bool { return v != nil && v.Kind == KMap }
+func isMap(v *yamldoc.Value) bool { return v != nil && v.Kind == yamldoc.KMap }
 
 // isList reports whether v is a list.
-func isList(v *Value) bool { return v != nil && v.Kind == KList }
+func isList(v *yamldoc.Value) bool { return v != nil && v.Kind == yamldoc.KList }
 
 // allText reports whether every item of the list v is text.
-func allText(v *Value) bool {
+func allText(v *yamldoc.Value) bool {
 	for _, x := range v.Items {
 		if !isText(x) {
 			return false
@@ -81,11 +84,11 @@ func allText(v *Value) bool {
 }
 
 // orEmpty is v, or an empty mapping when v is missing or null.
-func orEmpty(v *Value) *Value {
-	if v != nil && v.Kind != KNull {
+func orEmpty(v *yamldoc.Value) *yamldoc.Value {
+	if v != nil && v.Kind != yamldoc.KNull {
 		return v
 	}
-	return &Value{Kind: KMap, Map: newMap()}
+	return &yamldoc.Value{Kind: yamldoc.KMap, Map: &yamldoc.Map{}}
 }
 
 // Var is one declared variable and its values, in the order the spine gives them.
@@ -97,21 +100,21 @@ type Var struct {
 // checkSteps adds spec-shape unless steps is a list of text, and bad-step for each step that
 // can't be parsed, names an event not in events, or doesn't give each of vars one of its
 // values (vars nil skips that).
-func checkSteps(steps *Value, where string, out *Findings, events []string, vars []Var) {
+func checkSteps(steps *yamldoc.Value, where string, out *Findings, events []string, vars []Var) {
 	if !isList(steps) || !allText(steps) {
 		out.Add("spec-shape", where, `"steps" must be a list of steps such as "restore role=editor"`)
 		return
 	}
 	for i, s := range steps.Items {
 		event, env, err := parseStep(s.Str)
-		if err == nil && !contains(events, event) {
-			err = fmt.Errorf("\"%s\" is not a declared event", event)
+		if err == nil && !slices.Contains(events, event) {
+			err = fmt.Errorf("%q is not a declared event", event)
 		}
 		if err == nil && vars != nil {
 			err = checkEnv(env, vars)
 		}
 		if err != nil {
-			out.Add("bad-step", where, fmt.Sprintf("step %d \"%s\": %s", i+1, s.Str, err))
+			out.Add("bad-step", where, fmt.Sprintf("step %d %q: %s", i+1, s.Str, err))
 		}
 	}
 }
@@ -141,10 +144,10 @@ func parseStep(s string) (string, Env, error) {
 	for _, pair := range words[1:] {
 		name, value, ok := strings.Cut(pair, "=")
 		if !ok {
-			return "", env, fmt.Errorf("\"%s\" is not variable=value", pair)
+			return "", env, fmt.Errorf("%q is not variable=value", pair)
 		}
 		if _, seen := env.Values[name]; seen {
-			return "", env, fmt.Errorf("\"%s\" is given twice", name)
+			return "", env, fmt.Errorf("%q is given twice", name)
 		}
 		env.Names = append(env.Names, name)
 		env.Values[name] = value
@@ -161,31 +164,22 @@ func checkEnv(env Env, vars []Var) error {
 	for _, name := range env.Names {
 		values, ok := declared[name]
 		if !ok {
-			return fmt.Errorf("\"%s\" is not a declared variable", name)
+			return fmt.Errorf("%q is not a declared variable", name)
 		}
-		if !contains(values, env.Values[name]) {
-			return fmt.Errorf("\"%s\" is not a value of \"%s\"", env.Values[name], name)
+		if !slices.Contains(values, env.Values[name]) {
+			return fmt.Errorf("%q is not a value of %q", env.Values[name], name)
 		}
 	}
 	for _, v := range vars {
 		if _, ok := env.Values[v.Name]; !ok {
-			return fmt.Errorf("no value for \"%s\"", v.Name)
+			return fmt.Errorf("no value for %q", v.Name)
 		}
 	}
 	return nil
 }
 
-func contains(list []string, s string) bool {
-	for _, x := range list {
-		if x == s {
-			return true
-		}
-	}
-	return false
-}
-
 // textValues is a list of text as strings; the caller has checked it.
-func textValues(v *Value) []string {
+func textValues(v *yamldoc.Value) []string {
 	out := make([]string, len(v.Items))
 	for i, x := range v.Items {
 		out[i] = x.Str
@@ -199,7 +193,7 @@ func listedTwice(xs []string, where string, out *Findings) {
 	for _, x := range xs {
 		if seen[x] && !reported[x] {
 			reported[x] = true
-			out.Add("listed-twice", where, fmt.Sprintf(`"%s" is listed more than once`, x))
+			out.Add("listed-twice", where, fmt.Sprintf(`%q is listed more than once`, x))
 		}
 		seen[x] = true
 	}
@@ -247,7 +241,7 @@ func loadBehavior(path string, s *Spec) (*Behavior, Findings) {
 	}
 	expect, hasExpect := v.Map.Get("expect")
 	if hasExpect && checkText(expect, where, `"expect"`, &out) && !s.stateSet[expect.Str] {
-		out.Add("bad-value", where, fmt.Sprintf(`expect "%s" is not a declared state`, expect.Str))
+		out.Add("bad-value", where, fmt.Sprintf(`expect %q is not a declared state`, expect.Str))
 	}
 	if out.Errors() > 0 {
 		return nil, out
@@ -283,7 +277,7 @@ func loadPolicy(path string) (*Policy, Findings) {
 	checkKeys(v.Map, names(policyKeys...), path, "policy", &out, quoteHint)
 	for _, k := range policyKeys {
 		if !v.Map.Has(k) {
-			out.Add("missing-key", path, fmt.Sprintf(`the policy needs "%s"`, k))
+			out.Add("missing-key", path, fmt.Sprintf(`the policy needs %q`, k))
 		}
 	}
 	if out.Errors() > 0 {
@@ -291,10 +285,10 @@ func loadPolicy(path string) (*Policy, Findings) {
 	}
 	branches, _ := v.Map.Get("branches")
 	roles, _ := v.Map.Get("roles")
-	if !isMap(branches) || !allPairs(branches.Map, func(k, x *Value) bool { return isText(k) && isText(x) }) {
+	if !isMap(branches) || !allPairs(branches.Map, func(k, x *yamldoc.Value) bool { return isText(k) && isText(x) }) {
 		out.Add("spec-shape", path, `"branches" must map branch patterns to role names`)
 	}
-	if !isMap(roles) || !allPairs(roles.Map, func(k, _ *Value) bool { return isText(k) }) {
+	if !isMap(roles) || !allPairs(roles.Map, func(k, _ *yamldoc.Value) bool { return isText(k) }) {
 		out.Add("spec-shape", path, `"roles" must map role names to their allow and deny lists`)
 	}
 	if out.Errors() > 0 {
@@ -304,10 +298,10 @@ func loadPolicy(path string) (*Policy, Findings) {
 	for i, k := range roles.Map.Keys {
 		name, rules := k.Str, orEmpty(roles.Map.Values[i])
 		if !isMap(rules) {
-			out.Add("spec-shape", path, fmt.Sprintf(`role "%s" must be a mapping with "allow" and "deny" lists`, name))
+			out.Add("spec-shape", path, fmt.Sprintf(`role %q must be a mapping with "allow" and "deny" lists`, name))
 			continue
 		}
-		checkKeys(rules.Map, names(roleKeys...), path, fmt.Sprintf(`role "%s"`, name), &out, quoteHint)
+		checkKeys(rules.Map, names(roleKeys...), path, fmt.Sprintf(`role %q`, name), &out, quoteHint)
 		var role Role
 		for _, key := range roleKeys {
 			list, ok := rules.Map.Get(key)
@@ -315,7 +309,7 @@ func loadPolicy(path string) (*Policy, Findings) {
 				continue
 			}
 			if !isList(list) || !allText(list) {
-				out.Add("spec-shape", path, fmt.Sprintf(`"%s" of role "%s" must be a list of path patterns`, key, name))
+				out.Add("spec-shape", path, fmt.Sprintf(`%q of role %q must be a list of path patterns`, key, name))
 				continue
 			}
 			if key == "allow" {
@@ -329,7 +323,7 @@ func loadPolicy(path string) (*Policy, Findings) {
 	for i, k := range branches.Map.Keys {
 		pattern, role := k.Str, branches.Map.Values[i].Str
 		if !roles.Map.Has(role) {
-			out.Add("bad-value", path, fmt.Sprintf(`branch pattern "%s" names role "%s", which "roles" does not define`, pattern, role))
+			out.Add("bad-value", path, fmt.Sprintf(`branch pattern %q names role %q, which "roles" does not define`, pattern, role))
 		}
 		p.Branches = append(p.Branches, BranchRole{pattern, role})
 	}
@@ -339,7 +333,7 @@ func loadPolicy(path string) (*Policy, Findings) {
 	return p, out
 }
 
-func allPairs(m *Map, ok func(k, v *Value) bool) bool {
+func allPairs(m *yamldoc.Map, ok func(k, v *yamldoc.Value) bool) bool {
 	for i, k := range m.Keys {
 		if !ok(k, m.Values[i]) {
 			return false
@@ -349,7 +343,7 @@ func allPairs(m *Map, ok func(k, v *Value) bool) bool {
 }
 
 // validate checks a spine's shape and every name in it.
-func validate(spec *Value, path string) Findings {
+func validate(spec *yamldoc.Value, path string) Findings {
 	var out Findings
 	if !isMap(spec) {
 		out.Add("spec-shape", path, "the top level must be a mapping")
@@ -359,7 +353,7 @@ func validate(spec *Value, path string) Findings {
 	checkKeys(top, topKeys, path, "top-level", &out, boolKeyHint)
 	for _, k := range requiredKeys {
 		if !top.Has(k) {
-			out.Add("missing-key", path, fmt.Sprintf(`required key "%s" is missing`, k))
+			out.Add("missing-key", path, fmt.Sprintf(`required key %q is missing`, k))
 		}
 	}
 	if out.Errors() > 0 {
@@ -392,7 +386,7 @@ func validate(spec *Value, path string) Findings {
 		}
 		checkKeys(meta.Map, stateKeys, where, "state", &out, quoteHint)
 		if kind, ok := meta.Map.Get("kind"); ok && (!isText(kind) || !stateKinds[kind.Str]) {
-			out.Add("bad-value", where, "kind must be one of ['design', 'fact', 'policy']")
+			out.Add("bad-value", where, `kind must be one of "design", "fact" and "policy"`)
 		}
 		if t, ok := meta.Map.Get("terminal"); ok && !isBool(t) {
 			out.Add("bad-value", where, "terminal must be true or false")
@@ -433,7 +427,7 @@ func validate(spec *Value, path string) Findings {
 	}
 	initial, _ := top.Get("initial")
 	if checkText(initial, "initial", "initial", &out) && !states.Map.Has(initial.Str) {
-		out.Add("unknown-state", "initial", fmt.Sprintf(`initial state "%s" is not declared`, initial.Str))
+		out.Add("unknown-state", "initial", fmt.Sprintf(`initial state %q is not declared`, initial.Str))
 	}
 
 	rules, _ := top.Get("rules")
@@ -451,7 +445,7 @@ func validate(spec *Value, path string) Findings {
 		checkKeys(r, ruleKeys, where, "rule", &out, boolKeyHint)
 		for _, k := range []string{"from", "event"} {
 			if !r.Has(k) {
-				out.Add("missing-key", where, fmt.Sprintf(`rule needs "%s"`, k))
+				out.Add("missing-key", where, fmt.Sprintf(`rule needs %q`, k))
 			}
 		}
 		for _, k := range []string{"from", "event", "to"} {
@@ -478,11 +472,11 @@ func validate(spec *Value, path string) Findings {
 	}
 
 	examples, hasExamples := top.Get("examples")
-	if hasExamples && examples.Kind != KNull && !isList(examples) {
+	if hasExamples && examples.Kind != yamldoc.KNull && !isList(examples) {
 		out.Add("spec-shape", "examples", "examples must be a list")
 		return out
 	}
-	if !hasExamples || examples.Kind == KNull {
+	if !hasExamples || examples.Kind == yamldoc.KNull {
 		return out
 	}
 	for i, ex := range examples.Items {
@@ -494,7 +488,7 @@ func validate(spec *Value, path string) Findings {
 		checkKeys(ex.Map, names(exampleKeys...), where, "example", &out, quoteHint)
 		for _, k := range exampleKeys {
 			if !ex.Map.Has(k) {
-				out.Add("missing-key", where, fmt.Sprintf(`example needs "%s"`, k))
+				out.Add("missing-key", where, fmt.Sprintf(`example needs %q`, k))
 			}
 		}
 		if name, ok := ex.Map.Get("name"); ok {
@@ -502,7 +496,7 @@ func validate(spec *Value, path string) Findings {
 		}
 		if expect, ok := ex.Map.Get("expect"); ok && checkText(expect, where, `"expect"`, &out) &&
 			!states.Map.Has(expect.Str) && expect.Str != "rejected" && expect.Str != "undefined" {
-			out.Add("bad-value", where, fmt.Sprintf(`expect "%s" is not a declared state, rejected or undefined`, expect.Str))
+			out.Add("bad-value", where, fmt.Sprintf(`expect %q is not a declared state, rejected or undefined`, expect.Str))
 		}
 		if steps, ok := ex.Map.Get("steps"); ok {
 			checkSteps(steps, where, &out, textValues(events), known)
@@ -511,7 +505,7 @@ func validate(spec *Value, path string) Findings {
 	return out
 }
 
-func anyBool(v *Value) bool {
+func anyBool(v *yamldoc.Value) bool {
 	for _, x := range v.Items {
 		if isBool(x) {
 			return true
@@ -521,7 +515,7 @@ func anyBool(v *Value) bool {
 }
 
 // checkWhen checks that a rule's when is text in the condition language.
-func checkWhen(when *Value, varNames map[string]bool) error {
+func checkWhen(when *yamldoc.Value, varNames map[string]bool) error {
 	if !isText(when) {
 		return errors.New("condition must be text")
 	}
@@ -530,7 +524,7 @@ func checkWhen(when *Value, varNames map[string]bool) error {
 }
 
 // specVars is the declared variables of a validated vars mapping, in their order.
-func specVars(variables *Value) []Var {
+func specVars(variables *yamldoc.Value) []Var {
 	vars := []Var{}
 	for i, k := range variables.Map.Keys {
 		vars = append(vars, Var{k.Str, textValues(variables.Map.Values[i])})

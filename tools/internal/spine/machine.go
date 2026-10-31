@@ -1,6 +1,8 @@
 package spine
 
 import (
+	"bytes"
+	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 	"os"
@@ -11,8 +13,8 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"crypto/sha256"
 	"github.com/23min/verifier-kit/tools/internal/program"
+	"github.com/23min/verifier-kit/tools/internal/yamldoc"
 )
 
 // ---------- the machine ----------
@@ -47,9 +49,9 @@ type Spec struct {
 }
 
 // newSpec builds a Spec from a spine that validate() passed.
-func newSpec(v *Value) *Spec {
+func newSpec(v *yamldoc.Value) *Spec {
 	top := v.Map
-	get := func(k string) *Value { x, _ := top.Get(k); return x }
+	get := func(k string) *yamldoc.Value { x, _ := top.Get(k); return x }
 	s := &Spec{stateSet: map[string]bool{}, terminal: map[string]bool{}}
 	states := get("states").Map
 	for i, k := range states.Keys {
@@ -87,7 +89,7 @@ func newSpec(v *Value) *Spec {
 		}
 		s.Rules = append(s.Rules, r)
 	}
-	if ex, ok := top.Get("examples"); ok && ex.Kind == KList {
+	if ex, ok := top.Get("examples"); ok && ex.Kind == yamldoc.KList {
 		for _, item := range ex.Items {
 			name, _ := item.Map.Get("name")
 			expect, _ := item.Map.Get("expect")
@@ -145,7 +147,7 @@ func hashString(s string) string {
 }
 
 // canonJSON is a validated rule in the hashed form: its keys sorted, its values text or true.
-func canonJSON(m *Map) string {
+func canonJSON(m *yamldoc.Map) string {
 	type kv struct{ k, v string }
 	var pairs []kv
 	for i, k := range m.Keys {
@@ -250,6 +252,35 @@ type parsedStep struct {
 	env   Env
 }
 
+// stepsOf is every event with every combination of values, events first.
+func stepsOf(events []string, envs []Env) []parsedStep {
+	var steps []parsedStep
+	for _, e := range events {
+		for _, env := range envs {
+			steps = append(steps, parsedStep{e, env})
+		}
+	}
+	return steps
+}
+
+// stepsText is steps as findings show them: event(values) -> event(values).
+func stepsText(steps []parsedStep) string {
+	parts := make([]string, len(steps))
+	for i, st := range steps {
+		parts[i] = st.event + "(" + st.env.String() + ")"
+	}
+	return strings.Join(parts, " -> ")
+}
+
+// key identifies the step: its event and its variables' values.
+func (st parsedStep) key() string {
+	values := make([]string, len(st.env.Names))
+	for i, n := range st.env.Names {
+		values[i] = st.env.Values[n]
+	}
+	return fmt.Sprintf("%q %q", st.event, values)
+}
+
 func (s *Spec) run(steps []parsedStep) string {
 	state := s.Initial
 	for _, st := range steps {
@@ -276,13 +307,13 @@ func check(s *Spec) Findings {
 	for _, r := range s.Rules {
 		where := r.From + "/" + r.Event
 		if !s.stateSet[r.From] {
-			out.Add("unknown-state", where, fmt.Sprintf(`rule starts in undeclared state "%s"`, r.From))
+			out.Add("unknown-state", where, fmt.Sprintf(`rule starts in undeclared state %q`, r.From))
 		}
 		if r.Outcome.Kind == "to" && !s.stateSet[r.Outcome.Target] {
-			out.Add("unknown-state", where, fmt.Sprintf(`rule goes to undeclared state "%s"`, r.Outcome.Target))
+			out.Add("unknown-state", where, fmt.Sprintf(`rule goes to undeclared state %q`, r.Outcome.Target))
 		}
-		if !contains(s.Events, r.Event) {
-			out.Add("unknown-event", where, fmt.Sprintf(`rule uses undeclared event "%s"`, r.Event))
+		if !slices.Contains(s.Events, r.Event) {
+			out.Add("unknown-event", where, fmt.Sprintf(`rule uses undeclared event %q`, r.Event))
 		}
 	}
 
@@ -293,14 +324,14 @@ func check(s *Spec) Findings {
 			if s.terminal[st] {
 				for _, r := range rules {
 					if r.Outcome.Kind == "to" {
-						out.Add("terminal-has-exit", where, fmt.Sprintf(`"%s" is terminal but "%s" leaves it`, st, e))
+						out.Add("terminal-has-exit", where, fmt.Sprintf(`%q is terminal but %q leaves it`, st, e))
 						break
 					}
 				}
 				continue
 			}
 			if len(rules) == 0 {
-				out.Add("undecided-cell", where, fmt.Sprintf(`nothing says what "%s" does in "%s"`, e, st))
+				out.Add("undecided-cell", where, fmt.Sprintf(`nothing says what %q does in %q`, e, st))
 				continue
 			}
 			for _, env := range envs {
@@ -331,7 +362,7 @@ func check(s *Spec) Findings {
 	}
 	for _, st := range s.States {
 		if !seen[st] {
-			out.Add("unreachable", st, fmt.Sprintf(`no sequence of events reaches "%s" from "%s"`, st, s.Initial))
+			out.Add("unreachable", st, fmt.Sprintf(`no sequence of events reaches %q from %q`, st, s.Initial))
 		}
 	}
 
@@ -357,14 +388,14 @@ func diff(a, b *Spec, depth int) Findings {
 		a, b []string
 	}{{"states", a.States, b.States}, {"events", a.Events, b.Events}} {
 		for _, x := range sortedMinus(part.a, part.b) {
-			out.Add("only-in-a", part.name, fmt.Sprintf(`A has %s "%s", B does not`, strings.TrimSuffix(part.name, "s"), x))
+			out.Add("only-in-a", part.name, fmt.Sprintf(`A has %s %q, B does not`, strings.TrimSuffix(part.name, "s"), x))
 		}
 		for _, x := range sortedMinus(part.b, part.a) {
-			out.Add("only-in-b", part.name, fmt.Sprintf(`B has %s "%s", A does not`, strings.TrimSuffix(part.name, "s"), x))
+			out.Add("only-in-b", part.name, fmt.Sprintf(`B has %s %q, A does not`, strings.TrimSuffix(part.name, "s"), x))
 		}
 	}
 	if a.Initial != b.Initial {
-		out.Add("initial-differs", "initial", fmt.Sprintf(`A starts in "%s", B starts in "%s"`, a.Initial, b.Initial))
+		out.Add("initial-differs", "initial", fmt.Sprintf(`A starts in %q, B starts in %q`, a.Initial, b.Initial))
 	}
 	if !sameVars(a.Vars, b.Vars) {
 		out.Add("vars-differ", "vars", "A and B declare different variables; case comparison skipped")
@@ -377,7 +408,7 @@ func diff(a, b *Spec, depth int) Findings {
 		}
 	}
 	for _, e := range a.Events {
-		if contains(b.Events, e) {
+		if slices.Contains(b.Events, e) {
 			events = append(events, e)
 		}
 	}
@@ -401,21 +432,12 @@ func diff(a, b *Spec, depth int) Findings {
 	// length; a sequence on which A and B end apart is a
 	// witness, and is not extended. Each sequence carries where A and B end, and where they
 	// ended one step earlier.
-	type stepCase struct {
-		event string
-		env   Env
-	}
-	var steps []stepCase
-	for _, e := range events {
-		for _, env := range envs {
-			steps = append(steps, stepCase{e, env})
-		}
-	}
+	steps := stepsOf(events, envs)
 	type sequence struct {
 		steps          []int
 		ra, rb, pa, pb string
 	}
-	end := func(s *Spec, from string, st stepCase) string {
+	end := func(s *Spec, from string, st parsedStep) string {
 		state, verdict := s.step(from, st.event, st.env)
 		if verdict != "" {
 			return verdict
@@ -428,19 +450,14 @@ func diff(a, b *Spec, depth int) Findings {
 		var next []sequence
 		for _, seq := range level {
 			if seq.ra != seq.rb {
-				last := steps[seq.steps[len(seq.steps)-1]]
-				values := make([]string, len(last.env.Names))
-				for i, n := range last.env.Names {
-					values[i] = last.env.Values[n]
-				}
-				key := fmt.Sprintf("%q %q %q %q", seq.pa, seq.pb, last.event, values)
+				key := fmt.Sprintf("%q %q ", seq.pa, seq.pb) + steps[seq.steps[len(seq.steps)-1]].key()
 				if !reported[key] {
 					reported[key] = true
-					trace := make([]string, len(seq.steps))
+					trace := make([]parsedStep, len(seq.steps))
 					for i, n := range seq.steps {
-						trace[i] = steps[n].event + "(" + steps[n].env.String() + ")"
+						trace[i] = steps[n]
 					}
-					out.Add("behavior-differs", strings.Join(trace, " -> "), fmt.Sprintf("A ends %s, B ends %s", seq.ra, seq.rb))
+					out.Add("behavior-differs", stepsText(trace), fmt.Sprintf("A ends %s, B ends %s", seq.ra, seq.rb))
 				}
 				continue
 			}
@@ -455,12 +472,12 @@ func diff(a, b *Spec, depth int) Findings {
 	return out
 }
 
-// sortedMinus is sorted(set(xs) - set(ys)).
+// sortedMinus is what xs holds and ys does not, once each and sorted.
 func sortedMinus(xs, ys []string) []string {
 	seen := map[string]bool{}
 	var out []string
 	for _, x := range xs {
-		if !seen[x] && !contains(ys, x) {
+		if !seen[x] && !slices.Contains(ys, x) {
 			seen[x] = true
 			out = append(out, x)
 		}
@@ -543,8 +560,9 @@ var (
 	citation = regexp.MustCompile(`^covers:` + lineSpace + `*(?:([\p{L}\p{N}_-]+)/([\p{L}\p{N}_-]+)|(spine))@([0-9a-f]+)$`)
 )
 
+// lineSpaces are the spaces unicode.IsSpace knows, less the line break.
 const (
-	lineSpaces = `\t\v\f\r\x1c-\x1f \x{85}\x{a0}\x{1680}\x{2000}-\x{200a}\x{2028}\x{2029}\x{202f}\x{205f}\x{3000}`
+	lineSpaces = `\t\v\f\r \x{85}\x{a0}\x{1680}\x{2000}-\x{200a}\x{2028}\x{2029}\x{202f}\x{205f}\x{3000}`
 	lineSpace  = `[` + lineSpaces + `]`
 	word       = `[^@\n` + lineSpaces + `]*`
 )
@@ -552,14 +570,17 @@ const (
 func stale(s *Spec, checksDir string) Findings {
 	var out Findings
 	covered, whole := map[string]bool{}, false
-	for _, path := range rglob(checksDir) {
-		if !isFile(path) || contains(strings.Split(path, "/"), "__pycache__") {
+	for _, path := range below(checksDir) {
+		if !isFile(path) {
 			continue
 		}
 		data, err := os.ReadFile(path)
 		if err != nil {
 			out.Add("spec-unreadable", path, "cannot be read: "+program.Strerror(err))
 			continue
+		}
+		if bytes.IndexByte(data, 0) >= 0 {
+			continue // a binary file, such as compiled code, holds no citation to read
 		}
 		text := strings.ToValidUTF8(string(data), "�")
 		for _, at := range meant.FindAllStringSubmatchIndex(text, -1) {
@@ -582,7 +603,7 @@ func stale(s *Spec, checksDir string) Findings {
 			st, e, h := m[1], m[2], m[4]
 			cell := st + "/" + e
 			switch {
-			case !s.stateSet[st] || !contains(s.Events, e) || len(s.rulesFor(st, e)) == 0:
+			case !s.stateSet[st] || !slices.Contains(s.Events, e) || len(s.rulesFor(st, e)) == 0:
 				out.Add("orphan-check", path, fmt.Sprintf("covers %s, which the spec no longer defines", cell))
 			case s.cellHash(st, e) != h:
 				out.Add("stale-check", path, fmt.Sprintf(
@@ -619,7 +640,7 @@ func replayBehavior(s *Spec, b *Behavior) (bool, string) {
 		var verdict string
 		state, verdict = s.step(state, event, env)
 		if verdict != "" {
-			return false, fmt.Sprintf(`step %d "%s" is %s in state %s`, i+1, text, verdict, state)
+			return false, fmt.Sprintf(`step %d %q is %s in state %s`, i+1, text, verdict, state)
 		}
 	}
 	if b.Expect != nil && state != *b.Expect {
@@ -635,7 +656,7 @@ func behaviors(s *Spec, directory string) Findings {
 		name      string
 		mustAllow bool
 	}{{"valid", true}, {"invalid", false}} {
-		for _, path := range glob(filepath.Join(directory, folder.name), "*.y*ml") {
+		for _, path := range yamlFiles(filepath.Join(directory, folder.name)) {
 			counted++
 			b, problems := loadBehavior(path, s)
 			out = append(out, problems...)
@@ -682,7 +703,7 @@ func guard(p *Policy, branch string, files []string) Findings {
 	var out Findings
 	role, found := "", false
 	for _, b := range p.Branches {
-		if fnmatch(branch, b.Pattern) {
+		if matches(branch, b.Pattern) {
 			role, found = b.Role, true
 			break
 		}
@@ -705,7 +726,7 @@ func guard(p *Policy, branch string, files []string) Findings {
 
 func anyMatch(name string, patterns []string) bool {
 	for _, p := range patterns {
-		if fnmatch(name, p) {
+		if matches(name, p) {
 			return true
 		}
 	}

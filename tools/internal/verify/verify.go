@@ -11,7 +11,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 
 	"github.com/23min/verifier-kit/tools/internal/program"
@@ -437,7 +436,7 @@ func folder(root string) (string, bool) {
 }
 
 // folders are the names of the folders in dir, as a shell's dir/*/ gives them: without hidden
-// ones, links to folders included, sorted.
+// ones, links to folders included, in name order.
 func folders(dir string) []string {
 	entries, _ := os.ReadDir(dir)
 	var out []string
@@ -446,7 +445,6 @@ func folders(dir string) []string {
 			out = append(out, e.Name())
 		}
 	}
-	sort.Strings(out)
 	return out
 }
 

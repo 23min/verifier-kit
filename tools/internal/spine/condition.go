@@ -84,11 +84,11 @@ func compileCondition(text string, variables map[string]bool) (*condition, error
 	p := &condParser{}
 	root, err := p.read(text)
 	if err != nil {
-		return nil, fmt.Errorf("cannot parse condition %s: %s", strconv.Quote(text), err)
+		return nil, fmt.Errorf("cannot parse condition %q: %s", text, err)
 	}
 	for _, name := range p.names {
 		if !variables[name] {
-			return nil, fmt.Errorf("condition %s uses undeclared variable \"%s\"", strconv.Quote(text), name)
+			return nil, fmt.Errorf("condition %q uses undeclared variable %q", text, name)
 		}
 	}
 	return &condition{root}, nil

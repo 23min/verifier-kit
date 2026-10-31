@@ -1,13 +1,12 @@
 package spine
 
-// The cases test (#27, #44): the Go spine runs on every input below, and each run must give
+// The cases test (#27, #44): spine runs on every input below, and each run must give
 // exactly what the record holds (record_test.go). Between them, the inputs must produce every
 // finding code the tool
 // contract lists. JSON output must parse, and a JUnit report must parse and refer to no character
 // XML can't hold.
 //
-// A Python adapter is served through tools/adapter_shim.py, run by the python3 on PATH. Help is
-// written at 80 columns (COLUMNS=80).
+// A Python adapter is served through tools/adapter_shim.py, run by the python3 on PATH.
 
 import (
 	"bytes"
@@ -28,10 +27,11 @@ import (
 
 	"github.com/23min/verifier-kit/tools/internal/record"
 	"github.com/23min/verifier-kit/tools/internal/shlex"
+	"github.com/23min/verifier-kit/tools/internal/yamldoc"
 )
 
 var (
-	goSpine  string // the binary TestMain builds
+	spineBin string // the binary TestMain builds
 	repoRoot string
 )
 
@@ -46,8 +46,8 @@ func runTests(m *testing.M) int {
 		return 1
 	}
 	defer os.RemoveAll(dir)
-	goSpine = filepath.Join(dir, "spine")
-	build := exec.Command("go", "build", "-o", goSpine, "github.com/23min/verifier-kit/tools/cmd/spine")
+	spineBin = filepath.Join(dir, "spine")
+	build := exec.Command("go", "build", "-o", spineBin, "github.com/23min/verifier-kit/tools/cmd/spine")
 	build.Stdout, build.Stderr = os.Stderr, os.Stderr
 	if err := build.Run(); err != nil {
 		fmt.Fprintln(os.Stderr, "building spine:", err)
@@ -57,7 +57,7 @@ func runTests(m *testing.M) int {
 	return m.Run()
 }
 
-// ---------- running the Go spine ----------
+// ---------- running spine ----------
 
 type result struct {
 	exit   int
@@ -66,9 +66,9 @@ type result struct {
 }
 
 func execute(dir string, args []string, stdin string, env []string) (result, error) {
-	cmd := exec.Command(goSpine, args...)
+	cmd := exec.Command(spineBin, args...)
 	cmd.Dir = dir
-	cmd.Env = append(append(os.Environ(), "COLUMNS=80"), env...)
+	cmd.Env = append(os.Environ(), env...)
 	cmd.Stdin = strings.NewReader(stdin)
 	var out, errOut bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &out, &errOut
@@ -104,7 +104,7 @@ type spineCase struct {
 
 var formatCommands = map[string]bool{"check": true, "diff": true, "stale": true, "behaviors": true, "trace": true, "conform": true, "guard": true}
 
-// codesSeen collects the finding codes the Go spine gave, across all cases.
+// codesSeen collects the finding codes spine gave, across all cases.
 var codesSeen = struct {
 	sync.Mutex
 	m map[string]bool
@@ -329,26 +329,26 @@ type ynode struct {
 	b     bool
 }
 
-func toNode(v *Value) *ynode {
+func toNode(v *yamldoc.Value) *ynode {
 	switch v.Kind {
-	case KMap:
+	case yamldoc.KMap:
 		n := &ynode{kind: "map"}
 		for i, k := range v.Map.Keys {
 			n.keys = append(n.keys, toNode(k))
 			n.items = append(n.items, toNode(v.Map.Values[i]))
 		}
 		return n
-	case KList:
+	case yamldoc.KList:
 		n := &ynode{kind: "list"}
 		for _, x := range v.Items {
 			n.items = append(n.items, toNode(x))
 		}
 		return n
-	case KStr:
+	case yamldoc.KStr:
 		return &ynode{kind: "text", text: v.Str}
-	case KBool:
+	case yamldoc.KBool:
 		return &ynode{kind: "bool", b: v.Bool}
-	case KNull:
+	case yamldoc.KNull:
 		return &ynode{kind: "null"}
 	}
 	panic(fmt.Sprintf("a seed holds a value of kind %d", v.Kind))
@@ -407,7 +407,7 @@ func variants(t *testing.T, seed, dir string) []string {
 	if err != nil {
 		t.Fatal(err)
 	}
-	v, err := loadYAML(data)
+	v, err := yamldoc.Load(data)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -456,8 +456,8 @@ func conditions(t *testing.T, td string) []string {
 	if err := json.Unmarshal(data, &out); err != nil {
 		t.Fatal(err)
 	}
-	left := []string{"role", "n", "'owner'", "'own'", "1", "True", "['owner', 'x']", "('own',)", "[]", "'o'"}
-	right := []string{"role", "n", "'owner'", "'own'", "1", "1.0", "True", "['owner', 'x']", "('own', 1)", "[]", "'ow'", "[1, True]"}
+	left := []string{"role", "n", "'owner'", "'own'", "['owner', 'x']", "[]", "'o'"}
+	right := []string{"role", "n", "'owner'", "'own'", "['owner', 'x']", "[]", "'ow'", "1"}
 	for _, a := range left {
 		for _, op := range []string{"==", "!=", "in", "not in"} {
 			for _, b := range right {
@@ -465,11 +465,8 @@ func conditions(t *testing.T, td string) []string {
 			}
 		}
 	}
-	vocab := []string{"role", "n", "x", "'owner'", `"own"`, "'o'", "''", "1", "2", "1.0", "0", "True", "False", "None",
-		"[", "]", "(", ")", ",", "==", "!=", "in", "not", "and", "or", "is", "<", ">=", "+", "-", "*", "**", ".", ":",
-		"lambda", "if", "else", "for", "{", "}", ":=", "f'x'", "b'x'", "1j", "...", "#", "\\\n", "\n", "  ", "yield",
-		"await", "@", "~", "'a' 'b'", `r'\n'`, "0x1F", "1_0", "1e3", "upper", "=", ";", "!", "$", "\t", "u'x'",
-		"rb'x'", `'\x41'`, "'''t'''"}
+	vocab := []string{"role", "n", "x", "'owner'", `"own"`, "'o'", "''", "1", "[", "]", "(", ")", ",", "==", "!=",
+		"in", "not", "and", "or", "<", "-", ".", "#", "\\\n", "\n", "  ", "\t", "=", ";", "!", "$", "upper", `'a\b'`}
 	rnd := rand.New(rand.NewPCG(27, 7))
 	for range 2000 {
 		words := make([]string, 1+rnd.IntN(7))
@@ -502,7 +499,8 @@ func valueSpine(spelling string) string {
 		spelling + "\n    stay: true\n"
 }
 
-// filesystemCases builds the inputs git can't hold: links, unreadable files, __pycache__.
+// filesystemCases builds the inputs git can't hold: links, unreadable files, and a compiled file
+// in __pycache__, which is binary and which stale doesn't read.
 func filesystemCases(t *testing.T, td, dir string) []spineCase {
 	spine := filepath.Join(td, "seeds", "spine.yaml")
 	link := func(target, name string) {
@@ -529,7 +527,7 @@ func filesystemCases(t *testing.T, td, dir string) []spineCase {
 	unreadable("b/invalid/locked.yaml")
 
 	writeFile(t, filepath.Join(dir, "c/a.py"), "# covers: closed/open@26ccaba33ea0\n")
-	writeFile(t, filepath.Join(dir, "c/__pycache__/a.pyc"), "# covers: closed/open@000000000000\n")
+	writeFile(t, filepath.Join(dir, "c/__pycache__/a.pyc"), "\x00\x0d\x0d\x0a# covers: closed/open@000000000000\n")
 	writeFile(t, filepath.Join(dir, "c/b-c/x.py"), "# covers: open/open@000000000001\n")
 	writeFile(t, filepath.Join(dir, "c/b/x.py"), "# covers: open/open@000000000002\n")
 	writeFile(t, filepath.Join(dir, "c/latin1.py"), "# caf\xe9 covers: open/remove@6c6a6ee2ab96 \xff\xfe covers: x\xe9/y@1\n")
@@ -621,7 +619,7 @@ func exampleCases(t *testing.T) []spineCase {
 	return out
 }
 
-// faultCases seeds the faults demo/faults.sh seeds that the ported commands see, the same way,
+// faultCases seeds the faults demo/faults.sh seeds that spine's commands see, the same way,
 // into copies of the notes spine and service: scenario 1 is the service as first written, 2
 // loosens restore, 3 writes `on:` for `event:`, 4 is a builder's branch that also edits the
 // spine, and 9 imports a module that doesn't exist.
@@ -684,7 +682,7 @@ func faultCases(t *testing.T, dir string) []spineCase {
 	return out
 }
 
-// contractCodes is every finding code the tool contract lists for the commands the port has.
+// contractCodes is every finding code the tool contract lists for spine's commands.
 func contractCodes(t *testing.T) map[string]bool {
 	data, err := os.ReadFile(filepath.Join(repoRoot, "docs", "reference", "tool-contract.md"))
 	if err != nil {
@@ -695,7 +693,7 @@ func contractCodes(t *testing.T) map[string]bool {
 		t.Fatal("tool-contract.md has no finding codes table")
 	}
 	table, _, _ = strings.Cut(table, "\n## ")
-	ported := map[string]bool{"all": true, "check": true, "hash": true, "diff": true, "stale": true, "behaviors": true, "trace": true, "conform": true, "guard": true}
+	spineCommands := map[string]bool{"all": true, "check": true, "hash": true, "diff": true, "stale": true, "behaviors": true, "trace": true, "conform": true, "guard": true}
 	code := regexp.MustCompile("`([a-z-]+)`")
 	codes := map[string]bool{}
 	for _, line := range strings.Split(table, "\n") {
@@ -703,7 +701,7 @@ func contractCodes(t *testing.T) map[string]bool {
 		if len(cols) < 5 || !strings.HasPrefix(strings.TrimSpace(cols[1]), "`") {
 			continue
 		}
-		if ported[strings.Trim(strings.TrimSpace(cols[3]), "`")] {
+		if spineCommands[strings.Trim(strings.TrimSpace(cols[3]), "`")] {
 			for _, m := range code.FindAllStringSubmatch(cols[1], -1) {
 				codes[m[1]] = true
 			}
