@@ -2,13 +2,12 @@ package spine
 
 import (
 	"bufio"
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
-	"math"
-	"math/big"
 	"os"
-	"strconv"
 	"strings"
 	"syscall"
 	"unicode/utf8"
@@ -47,7 +46,7 @@ type commandAdapter struct {
 }
 
 var replies = map[string][2]string{
-	"new": {"ok", `{"ok": true}`}, "apply": {"result", `{"result": ...}`}, "observe": {"state", `{"state": ...}`},
+	"new": {"ok", `{"ok": true}`}, "apply": {"result", `{"result": "..."}`}, "observe": {"state", `{"state": "..."}`},
 }
 
 // startAdapter starts the program, its argv split from command.
@@ -114,7 +113,7 @@ func (a *commandAdapter) new() error {
 	return err
 }
 
-func (a *commandAdapter) apply(event string, env Env) (*jsonValue, error) {
+func (a *commandAdapter) apply(event string, env Env) (string, error) {
 	pairs := make([]string, len(env.Names))
 	for i, n := range env.Names {
 		pairs[i] = pyJSONString(n) + ": " + pyJSONString(env.Values[n])
@@ -122,32 +121,65 @@ func (a *commandAdapter) apply(event string, env Env) (*jsonValue, error) {
 	return a.ask("apply", `{"op": "apply", "event": `+pyJSONString(event)+`, "env": {`+strings.Join(pairs, ", ")+`}}`)
 }
 
-func (a *commandAdapter) observe() (*jsonValue, error) {
+func (a *commandAdapter) observe() (string, error) {
 	return a.ask("observe", `{"op": "observe"}`)
 }
 
-func (a *commandAdapter) ask(op, request string) (*jsonValue, error) {
+// ask sends one request and reads one reply, a line ending at \n: a JSON object in UTF-8 with
+// one key, the op's key or "error", each given once. Its value is true for new's "ok", and text
+// otherwise; ask gives that text.
+func (a *commandAdapter) ask(op, request string) (string, error) {
 	var line []byte
 	if _, err := io.WriteString(a.stdin, request+"\n"); err == nil {
-		line = readTextLine(a.stdout)
+		line, _ = a.stdout.ReadBytes('\n')
 	}
 	if len(line) == 0 {
-		return nil, a.exited(op)
+		return "", a.exited(op)
 	}
-	text := pyDecode(line)
-	reply, ok := pyJSONLoads(text)
-	if !ok {
-		return nil, &adapterFailed{fmt.Sprintf("replied to %s with a line that is not JSON: %s", op, pyRepr(pyRStrip(text)))}
+	text := strings.TrimRight(string(line), "\r\n")
+	if !utf8.Valid(line) {
+		return "", &adapterFailed{fmt.Sprintf("replied to %s with a line that is not UTF-8", op)}
 	}
-	key, shape := replies[op][0], replies[op][1]
-	if reply.kind == jObject && len(reply.keys) == 1 && reply.keys[0] == "error" {
-		return nil, &adapterError{reply.vals[0].str()}
+	if !json.Valid(line) {
+		return "", &adapterFailed{fmt.Sprintf("replied to %s with a line that is not JSON: %s", op, pyRepr(text))}
 	}
-	if reply.kind != jObject || len(reply.keys) != 1 || reply.keys[0] != key ||
-		(op == "new" && reply.vals[0].kind != jTrue) {
-		return nil, &adapterFailed{fmt.Sprintf(`replied to %s with %s, not %s or {"error": ...}`, op, pyRStrip(text), shape)}
+	key, value, ok := oneKey(line)
+	var said string
+	isText := ok && bytes.HasPrefix(value, []byte(`"`)) && json.Unmarshal(value, &said) == nil // null too reads as ""
+	want := replies[op]
+	switch {
+	case key == "error" && isText:
+		return "", &adapterError{said}
+	case key == want[0] && op == "new" && string(value) == "true":
+		return "", nil
+	case key == want[0] && op != "new" && isText:
+		return said, nil
 	}
-	return reply.vals[0], nil
+	return "", &adapterFailed{fmt.Sprintf(`replied to %s with %s, not %s or {"error": "..."}`, op, pyRepr(text), want[1])}
+}
+
+// oneKey reads a JSON object with exactly one key, given once: the key and its value.
+func oneKey(line []byte) (string, json.RawMessage, bool) {
+	dec := json.NewDecoder(bytes.NewReader(line))
+	if t, err := dec.Token(); err != nil || t != json.Delim('{') {
+		return "", nil, false
+	}
+	var keys []string
+	var value json.RawMessage
+	for dec.More() {
+		t, err := dec.Token()
+		if err != nil {
+			return "", nil, false
+		}
+		keys = append(keys, t.(string))
+		if err := dec.Decode(&value); err != nil {
+			return "", nil, false
+		}
+	}
+	if len(keys) != 1 {
+		return "", nil, false
+	}
+	return keys[0], value, true
 }
 
 // exited is the failure when the program exits before replying to op.
@@ -180,471 +212,6 @@ func (a *commandAdapter) close(kill bool) {
 	a.wait()
 }
 
-// readTextLine is readline() on a pipe Python opened in text mode: a line ends at \n, \r\n or
-// \r, and comes back ending in \n; at the end of output, the rest. A \r waits for the next byte,
-// to see whether \n follows, as Python's decoder does.
-func readTextLine(r *bufio.Reader) []byte {
-	var line []byte
-	for {
-		c, err := r.ReadByte()
-		if err != nil {
-			return line
-		}
-		switch c {
-		case '\n':
-			return append(line, '\n')
-		case '\r':
-			if next, err := r.Peek(1); err == nil && next[0] == '\n' {
-				r.ReadByte()
-			}
-			return append(line, '\n')
-		}
-		line = append(line, c)
-	}
-}
-
-// pyDecode is bytes.decode("utf-8", "replace"): each invalid sequence, as far as it is a valid
-// beginning, becomes one replacement character.
-func pyDecode(b []byte) string {
-	if utf8.Valid(b) {
-		return string(b)
-	}
-	var out strings.Builder
-	for i := 0; i < len(b); {
-		r, size := utf8.DecodeRune(b[i:])
-		if r != utf8.RuneError || size > 1 {
-			out.Write(b[i : i+size])
-			i += size
-			continue
-		}
-		out.WriteRune(utf8.RuneError)
-		i += invalidLength(b[i:])
-	}
-	return out.String()
-}
-
-// invalidLength is how many bytes Python's decoder replaces at the start of b, which doesn't
-// begin with a valid sequence: the lead byte and the continuation bytes that could follow it.
-func invalidLength(b []byte) int {
-	c, need, lo, hi := b[0], 0, byte(0x80), byte(0xbf)
-	switch {
-	case c >= 0xc2 && c <= 0xdf:
-		need = 1
-	case c >= 0xe0 && c <= 0xef:
-		need = 2
-		if c == 0xe0 {
-			lo = 0xa0
-		} else if c == 0xed {
-			hi = 0x9f
-		}
-	case c >= 0xf0 && c <= 0xf4:
-		need = 3
-		if c == 0xf0 {
-			lo = 0x90
-		} else if c == 0xf4 {
-			hi = 0x8f
-		}
-	default:
-		return 1
-	}
-	n := 1
-	for k := 1; k <= need && k < len(b); k++ {
-		x := b[k]
-		if (k == 1 && (x < lo || x > hi)) || (k > 1 && (x < 0x80 || x > 0xbf)) {
-			break
-		}
-		n++
-	}
-	return n
-}
-
-// pyRStrip is str.rstrip() with no arguments.
-func pyRStrip(s string) string {
-	return strings.TrimRightFunc(s, pyIsSpace)
-}
-
-// ---------- JSON as json.loads reads it ----------
-
-type jsonKind int
-
-const (
-	jNull jsonKind = iota
-	jTrue
-	jFalse
-	jInt
-	jFloat
-	jString
-	jArray
-	jObject
-)
-
-// jsonValue is what json.loads gives: None, True, False, int, float, str, list or dict, whose
-// keys keep their first place and take their last value.
-type jsonValue struct {
-	kind  jsonKind
-	s     string
-	i     *big.Int
-	f     float64
-	items []*jsonValue
-	keys  []string
-	vals  []*jsonValue
-}
-
-// pyJSONLoads is json.loads(s), or false where it raises ValueError.
-func pyJSONLoads(s string) (*jsonValue, bool) {
-	p := &jsonParser{s: s}
-	p.space()
-	v, ok := p.value()
-	if !ok {
-		return nil, false
-	}
-	p.space()
-	return v, p.i == len(p.s)
-}
-
-type jsonParser struct {
-	s string
-	i int
-}
-
-func (p *jsonParser) space() {
-	for p.i < len(p.s) && strings.IndexByte(" \t\n\r", p.s[p.i]) >= 0 {
-		p.i++
-	}
-}
-
-func (p *jsonParser) literal(word string) bool {
-	if strings.HasPrefix(p.s[p.i:], word) {
-		p.i += len(word)
-		return true
-	}
-	return false
-}
-
-func (p *jsonParser) value() (*jsonValue, bool) {
-	if p.i >= len(p.s) {
-		return nil, false
-	}
-	switch c := p.s[p.i]; {
-	case c == '"':
-		p.i++
-		s, ok := p.str()
-		return &jsonValue{kind: jString, s: s}, ok
-	case c == '{':
-		p.i++
-		return p.object()
-	case c == '[':
-		p.i++
-		return p.array()
-	case p.literal("null"):
-		return &jsonValue{kind: jNull}, true
-	case p.literal("true"):
-		return &jsonValue{kind: jTrue}, true
-	case p.literal("false"):
-		return &jsonValue{kind: jFalse}, true
-	case p.literal("NaN"):
-		return &jsonValue{kind: jFloat, f: math.NaN()}, true
-	case p.literal("Infinity"):
-		return &jsonValue{kind: jFloat, f: math.Inf(1)}, true
-	case p.literal("-Infinity"):
-		return &jsonValue{kind: jFloat, f: math.Inf(-1)}, true
-	case c == '-' || (c >= '0' && c <= '9'):
-		return p.number()
-	}
-	return nil, false
-}
-
-func (p *jsonParser) digits() int {
-	start := p.i
-	for p.i < len(p.s) && p.s[p.i] >= '0' && p.s[p.i] <= '9' {
-		p.i++
-	}
-	return p.i - start
-}
-
-// number is json's NUMBER_RE: an int, or a float when a fraction or exponent follows. An int of
-// more than 4,300 digits is a ValueError, as int() makes it.
-func (p *jsonParser) number() (*jsonValue, bool) {
-	start := p.i
-	if p.s[p.i] == '-' {
-		p.i++
-	}
-	if p.i < len(p.s) && p.s[p.i] == '0' {
-		p.i++
-	} else if p.digits() == 0 {
-		return nil, false
-	}
-	isFloat := false
-	if p.i+1 < len(p.s) && p.s[p.i] == '.' && p.s[p.i+1] >= '0' && p.s[p.i+1] <= '9' {
-		p.i++
-		p.digits()
-		isFloat = true
-	}
-	if p.i < len(p.s) && (p.s[p.i] == 'e' || p.s[p.i] == 'E') {
-		save := p.i
-		p.i++
-		if p.i < len(p.s) && (p.s[p.i] == '+' || p.s[p.i] == '-') {
-			p.i++
-		}
-		if p.digits() == 0 {
-			p.i = save
-		} else {
-			isFloat = true
-		}
-	}
-	text := p.s[start:p.i]
-	if isFloat {
-		f, err := strconv.ParseFloat(text, 64)
-		if err != nil && !errors.Is(err, strconv.ErrRange) {
-			return nil, false
-		}
-		return &jsonValue{kind: jFloat, f: f}, true
-	}
-	if len(strings.TrimPrefix(text, "-")) > 4300 {
-		return nil, false
-	}
-	n, _ := new(big.Int).SetString(text, 10)
-	return &jsonValue{kind: jInt, i: n}, true
-}
-
-// str reads a string after its opening quote: no raw control characters, and \u escapes with
-// surrogate pairs joined. A lone surrogate, which Go can't hold, becomes U+FFFD.
-func (p *jsonParser) str() (string, bool) {
-	var b strings.Builder
-	for p.i < len(p.s) {
-		r, size := utf8.DecodeRuneInString(p.s[p.i:])
-		p.i += size
-		switch {
-		case r == '"':
-			return b.String(), true
-		case r < 0x20:
-			return "", false
-		case r != '\\':
-			b.WriteRune(r)
-			continue
-		}
-		if p.i >= len(p.s) {
-			return "", false
-		}
-		c := p.s[p.i]
-		p.i++
-		switch c {
-		case '"', '\\', '/':
-			b.WriteByte(c)
-		case 'b':
-			b.WriteByte('\b')
-		case 'f':
-			b.WriteByte('\f')
-		case 'n':
-			b.WriteByte('\n')
-		case 'r':
-			b.WriteByte('\r')
-		case 't':
-			b.WriteByte('\t')
-		case 'u':
-			u, ok := p.hex4()
-			if !ok {
-				return "", false
-			}
-			if u >= 0xd800 && u <= 0xdbff && strings.HasPrefix(p.s[p.i:], `\u`) {
-				save := p.i
-				p.i += 2
-				if lo, ok := p.hex4(); ok && lo >= 0xdc00 && lo <= 0xdfff {
-					u = 0x10000 + (u-0xd800)<<10 + (lo - 0xdc00)
-				} else {
-					p.i = save
-				}
-			}
-			b.WriteRune(rune(u)) // a lone surrogate is written as U+FFFD
-		default:
-			return "", false
-		}
-	}
-	return "", false
-}
-
-func (p *jsonParser) hex4() (int, bool) {
-	if p.i+4 > len(p.s) {
-		return 0, false
-	}
-	h := p.s[p.i : p.i+4]
-	for _, c := range h {
-		if !strings.ContainsRune("0123456789abcdefABCDEF", c) {
-			return 0, false
-		}
-	}
-	p.i += 4
-	v, _ := strconv.ParseUint(h, 16, 32)
-	return int(v), true
-}
-
-func (p *jsonParser) array() (*jsonValue, bool) {
-	v := &jsonValue{kind: jArray}
-	p.space()
-	if p.i < len(p.s) && p.s[p.i] == ']' {
-		p.i++
-		return v, true
-	}
-	for {
-		p.space()
-		item, ok := p.value()
-		if !ok {
-			return nil, false
-		}
-		v.items = append(v.items, item)
-		p.space()
-		if p.i >= len(p.s) {
-			return nil, false
-		}
-		switch p.s[p.i] {
-		case ',':
-			p.i++
-		case ']':
-			p.i++
-			return v, true
-		default:
-			return nil, false
-		}
-	}
-}
-
-func (p *jsonParser) object() (*jsonValue, bool) {
-	v := &jsonValue{kind: jObject}
-	p.space()
-	if p.i < len(p.s) && p.s[p.i] == '}' {
-		p.i++
-		return v, true
-	}
-	place := map[string]int{}
-	for {
-		p.space()
-		if p.i >= len(p.s) || p.s[p.i] != '"' {
-			return nil, false
-		}
-		p.i++
-		key, ok := p.str()
-		if !ok {
-			return nil, false
-		}
-		p.space()
-		if p.i >= len(p.s) || p.s[p.i] != ':' {
-			return nil, false
-		}
-		p.i++
-		p.space()
-		val, ok := p.value()
-		if !ok {
-			return nil, false
-		}
-		if n, seen := place[key]; seen {
-			v.vals[n] = val
-		} else {
-			place[key] = len(v.keys)
-			v.keys = append(v.keys, key)
-			v.vals = append(v.vals, val)
-		}
-		p.space()
-		if p.i >= len(p.s) {
-			return nil, false
-		}
-		switch p.s[p.i] {
-		case ',':
-			p.i++
-		case '}':
-			p.i++
-			return v, true
-		default:
-			return nil, false
-		}
-	}
-}
-
-// str is Python's str() of the value; repr is its repr(), as inside a list or dict.
-func (v *jsonValue) str() string {
-	if v.kind == jString {
-		return v.s
-	}
-	return v.repr()
-}
-
-func (v *jsonValue) repr() string {
-	switch v.kind {
-	case jNull:
-		return "None"
-	case jTrue:
-		return "True"
-	case jFalse:
-		return "False"
-	case jInt:
-		return v.i.String()
-	case jFloat:
-		return pyFloatRepr(v.f)
-	case jString:
-		return pyRepr(v.s)
-	case jArray:
-		parts := make([]string, len(v.items))
-		for i, x := range v.items {
-			parts[i] = x.repr()
-		}
-		return "[" + strings.Join(parts, ", ") + "]"
-	}
-	parts := make([]string, len(v.keys))
-	for i, k := range v.keys {
-		parts[i] = pyRepr(k) + ": " + v.vals[i].repr()
-	}
-	return "{" + strings.Join(parts, ", ") + "}"
-}
-
-// equals is v == s in Python for a str s: only a str can equal one.
-func (v *jsonValue) equals(s string) bool {
-	return v.kind == jString && v.s == s
-}
-
-// pyFloatRepr is repr() of a float: the shortest digits that read back the same, in fixed
-// notation from 1e-4 up to 1e16 and with an exponent outside it.
-func pyFloatRepr(f float64) string {
-	switch {
-	case math.IsNaN(f):
-		return "nan"
-	case math.IsInf(f, 1):
-		return "inf"
-	case math.IsInf(f, -1):
-		return "-inf"
-	}
-	sign := ""
-	if math.Signbit(f) {
-		sign, f = "-", -f
-	}
-	if f == 0 {
-		return sign + "0.0"
-	}
-	e := strconv.FormatFloat(f, 'e', -1, 64) // d.ddde+XX or d.ddde-XX
-	mantissa, exp, _ := strings.Cut(e, "e")
-	digits := strings.Replace(mantissa, ".", "", 1)
-	x, _ := strconv.Atoi(exp)
-	point := x + 1 // where the decimal point goes in digits
-	switch {
-	case point < -3 || point > 16:
-		m := digits[:1]
-		if len(digits) > 1 {
-			m += "." + digits[1:]
-		}
-		es := strconv.Itoa(int(math.Abs(float64(x))))
-		if len(es) < 2 {
-			es = "0" + es
-		}
-		if x < 0 {
-			return sign + m + "e-" + es
-		}
-		return sign + m + "e+" + es
-	case point <= 0:
-		return sign + "0." + strings.Repeat("0", -point) + digits
-	case point >= len(digits):
-		return sign + digits + strings.Repeat("0", point-len(digits)) + ".0"
-	}
-	return sign + digits[:point] + "." + digits[point:]
-}
-
 // ---------- replaying sequences ----------
 
 // divergence is where code and spine first disagree on one sequence.
@@ -652,7 +219,7 @@ type divergence struct {
 	key, where, message string
 }
 
-// callAdapter is call_adapter: an error reply to new or observe is the adapter's failure.
+// callAdapter makes an error reply to new or observe the adapter's failure.
 func callAdapter(name string, steps []parsedStep, err error) error {
 	var failed *adapterFailed
 	if errors.As(err, &failed) {
@@ -662,7 +229,7 @@ func callAdapter(name string, steps []parsedStep, err error) error {
 	if len(steps) > 0 {
 		after = " after " + stepsText(steps)
 	}
-	return &adapterFailed{fmt.Sprintf("%s() raised %s%s", name, err.Error(), after)}
+	return &adapterFailed{fmt.Sprintf("replied to %s with the error %s%s", name, pyRepr(err.Error()), after)}
 }
 
 // stepKey identifies a state, event and values, as the tuple tools/spine.py keys them by.
@@ -685,8 +252,8 @@ func replay(s *Spec, a *commandAdapter, seq []parsedStep, exercised map[string]b
 	if err != nil {
 		return nil, "", "", callAdapter("observe", nil, err)
 	}
-	if !observed.equals(state) {
-		return &divergence{"start", "start", fmt.Sprintf("spine starts in %s, code starts in %s", state, observed.str())}, state, "", nil
+	if observed != state {
+		return &divergence{"start", "start", fmt.Sprintf("spine starts in %s, code starts in %s", state, observed)}, state, "", nil
 	}
 	kind := ""
 	for i, st := range seq {
@@ -713,18 +280,18 @@ func replay(s *Spec, a *commandAdapter, seq []parsedStep, exercised map[string]b
 			resultText = "crashed (" + err.Error() + ")"
 			resultOK = resultText == expectResult
 		} else {
-			resultOK, resultText = result.equals(expectResult), result.str()
+			resultOK, resultText = result == expectResult, result
 		}
 		got, err := a.observe()
 		if err != nil {
 			return nil, "", "", callAdapter("observe", seq[:i+1], err)
 		}
-		if !resultOK || !got.equals(expectState) {
+		if !resultOK || got != expectState {
 			return &divergence{
 				stepKey(state, st),
 				fmt.Sprintf("%s/%s %s", state, st.event, st.env),
 				fmt.Sprintf("after %s: spine expects %s in %s, code gave %s in %s",
-					stepsText(seq[:i+1]), expectResult, expectState, resultText, got.str()),
+					stepsText(seq[:i+1]), expectResult, expectState, resultText, got),
 			}, state, kind, nil
 		}
 		state = expectState
