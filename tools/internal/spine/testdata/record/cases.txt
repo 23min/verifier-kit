@@ -812,14 +812,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "   ",
-|       "message": "cannot be started: ValueError: the command is empty"
+|       "message": "the command is empty"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed    "><failure message="cannot be started: ValueError: the command is empty">cannot be started: ValueError: the command is empty</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed    "><failure message="the command is empty">the command is empty</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd ""
 exit 1
 --- stdout
@@ -831,14 +831,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "",
-|       "message": "cannot be started: ValueError: the command is empty"
+|       "message": "the command is empty"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed "><failure message="cannot be started: ValueError: the command is empty">cannot be started: ValueError: the command is empty</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed "><failure message="the command is empty">the command is empty</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "'unclosed"
 exit 1
 --- stdout
@@ -850,14 +850,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "'unclosed",
-|       "message": "cannot be started: ValueError: No closing quotation"
+|       "message": "cannot be split: no closing quotation"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed 'unclosed"><failure message="cannot be started: ValueError: No closing quotation">cannot be started: ValueError: No closing quotation</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed 'unclosed"><failure message="cannot be split: no closing quotation">cannot be split: no closing quotation</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 'adapters/protocol.py' \"ok\" " --depth 1
 exit 0
 --- stdout
@@ -1037,14 +1037,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 ../../../adapter_shim.py adapters/door_exit.py",
-|       "message": "exited with status -9 before replying to apply"
+|       "message": "was ended by signal 9 (killed) before replying to apply"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_exit.py"><failure message="exited with status -9 before replying to apply">exited with status -9 before replying to apply</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_exit.py"><failure message="was ended by signal 9 (killed) before replying to apply">was ended by signal 9 (killed) before replying to apply</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_import.py" --depth 2
 exit 1
 --- stdout
@@ -2059,14 +2059,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py signal",
-|       "message": "exited with status -15 before replying to apply"
+|       "message": "was ended by signal 15 (terminated) before replying to apply"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py signal"><failure message="exited with status -15 before replying to apply">exited with status -15 before replying to apply</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py signal"><failure message="was ended by signal 15 (terminated) before replying to apply">was ended by signal 15 (terminated) before replying to apply</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py spaced" --depth 2
 exit 0
 --- stdout
@@ -2173,14 +2173,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "trailing\\",
-|       "message": "cannot be started: ValueError: No escaped character"
+|       "message": "cannot be split: no escaped character"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed trailing\"><failure message="cannot be started: ValueError: No escaped character">cannot be started: ValueError: No escaped character</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed trailing\"><failure message="cannot be split: no escaped character">cannot be split: no escaped character</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd ./adapters/garbage
 exit 1
 --- stdout
@@ -2192,14 +2192,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "./adapters/garbage",
-|       "message": "cannot be started: OSError: [Errno 8] Exec format error: './adapters/garbage'"
+|       "message": "cannot be started: ./adapters/garbage: Exec format error"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed ./adapters/garbage"><failure message="cannot be started: OSError: [Errno 8] Exec format error: './adapters/garbage'">cannot be started: OSError: [Errno 8] Exec format error: './adapters/garbage'</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed ./adapters/garbage"><failure message="cannot be started: ./adapters/garbage: Exec format error">cannot be started: ./adapters/garbage: Exec format error</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd /nonexistent/x
 exit 1
 --- stdout
@@ -2211,14 +2211,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "/nonexistent/x",
-|       "message": "cannot be started: FileNotFoundError: [Errno 2] No such file or directory: '/nonexistent/x'"
+|       "message": "cannot be started: /nonexistent/x: No such file or directory"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed /nonexistent/x"><failure message="cannot be started: FileNotFoundError: [Errno 2] No such file or directory: '/nonexistent/x'">cannot be started: FileNotFoundError: [Errno 2] No such file or directory: '/nonexistent/x'</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed /nonexistent/x"><failure message="cannot be started: /nonexistent/x: No such file or directory">cannot be started: /nonexistent/x: No such file or directory</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd adapters
 exit 1
 --- stdout
@@ -2230,14 +2230,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "adapters",
-|       "message": "cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'adapters'"
+|       "message": "cannot be started: adapters: No such file or directory"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters"><failure message="cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'adapters'">cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'adapters'</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters"><failure message="cannot be started: adapters: No such file or directory">cannot be started: adapters: No such file or directory</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd adapters/
 exit 1
 --- stdout
@@ -2249,14 +2249,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "adapters/",
-|       "message": "cannot be started: PermissionError: [Errno 13] Permission denied: 'adapters/'"
+|       "message": "cannot be started: adapters/: Permission denied"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters/"><failure message="cannot be started: PermissionError: [Errno 13] Permission denied: 'adapters/'">cannot be started: PermissionError: [Errno 13] Permission denied: 'adapters/'</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters/"><failure message="cannot be started: adapters/: Permission denied">cannot be started: adapters/: Permission denied</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd adapters/plain.txt
 exit 1
 --- stdout
@@ -2268,14 +2268,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "adapters/plain.txt",
-|       "message": "cannot be started: PermissionError: [Errno 13] Permission denied: 'adapters/plain.txt'"
+|       "message": "cannot be started: adapters/plain.txt: Permission denied"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters/plain.txt"><failure message="cannot be started: PermissionError: [Errno 13] Permission denied: 'adapters/plain.txt'">cannot be started: PermissionError: [Errno 13] Permission denied: 'adapters/plain.txt'</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters/plain.txt"><failure message="cannot be started: adapters/plain.txt: Permission denied">cannot be started: adapters/plain.txt: Permission denied</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd nosuchprogram
 exit 1
 --- stdout
@@ -2287,14 +2287,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "nosuchprogram",
-|       "message": "cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'nosuchprogram'"
+|       "message": "cannot be started: nosuchprogram: No such file or directory"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed nosuchprogram"><failure message="cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'nosuchprogram'">cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'nosuchprogram'</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed nosuchprogram"><failure message="cannot be started: nosuchprogram: No such file or directory">cannot be started: nosuchprogram: No such file or directory</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd tool with PATH=
 exit 1
 --- stdout
@@ -2306,14 +2306,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "tool",
-|       "message": "cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'tool'"
+|       "message": "cannot be started: tool: No such file or directory"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed tool"><failure message="cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'tool'">cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'tool'</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed tool"><failure message="cannot be started: tool: No such file or directory">cannot be started: tool: No such file or directory</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd tool with PATH=adapters/pathA:adapters/pathB
 exit 1
 --- stdout
@@ -2325,14 +2325,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "tool",
-|       "message": "cannot be started: PermissionError: [Errno 13] Permission denied: 'tool'"
+|       "message": "cannot be started: tool: Permission denied"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed tool"><failure message="cannot be started: PermissionError: [Errno 13] Permission denied: 'tool'">cannot be started: PermissionError: [Errno 13] Permission denied: 'tool'</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed tool"><failure message="cannot be started: tool: Permission denied">cannot be started: tool: Permission denied</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd tool with PATH=adapters/pathB::adapters/pathA
 exit 1
 --- stdout
@@ -2344,14 +2344,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "tool",
-|       "message": "cannot be started: PermissionError: [Errno 13] Permission denied: 'tool'"
+|       "message": "cannot be started: tool: Permission denied"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed tool"><failure message="cannot be started: PermissionError: [Errno 13] Permission denied: 'tool'">cannot be started: PermissionError: [Errno 13] Permission denied: 'tool'</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed tool"><failure message="cannot be started: tool: Permission denied">cannot be started: tool: Permission denied</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/unsound.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --depth 1
 exit 1
 --- stdout
@@ -2420,19 +2420,19 @@ exit 1
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "   "
 exit 1
 --- stdout
-| error   adapter-failed        : cannot be started: ValueError: the command is empty
+| error   adapter-failed        : the command is empty
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd ""
 exit 1
 --- stdout
-| error   adapter-failed     : cannot be started: ValueError: the command is empty
+| error   adapter-failed     : the command is empty
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "'unclosed"
 exit 1
 --- stdout
-| error   adapter-failed     'unclosed: cannot be started: ValueError: No closing quotation
+| error   adapter-failed     'unclosed: cannot be split: no closing quotation
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 'adapters/protocol.py' \"ok\" " --depth 1
@@ -2483,7 +2483,7 @@ exit 1
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_exit.py" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_exit.py: exited with status -9 before replying to apply
+| error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_exit.py: was ended by signal 9 (killed) before replying to apply
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_import.py" --depth 2
@@ -2793,7 +2793,7 @@ exit 1
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py signal" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py signal: exited with status -15 before replying to apply
+| error   adapter-failed     python3 adapters/protocol.py signal: was ended by signal 15 (terminated) before replying to apply
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py spaced" --depth 2
@@ -2829,61 +2829,61 @@ exit 1
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "trailing\\"
 exit 1
 --- stdout
-| error   adapter-failed     trailing\: cannot be started: ValueError: No escaped character
+| error   adapter-failed     trailing\: cannot be split: no escaped character
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd ./adapters/garbage
 exit 1
 --- stdout
-| error   adapter-failed     ./adapters/garbage: cannot be started: OSError: [Errno 8] Exec format error: './adapters/garbage'
+| error   adapter-failed     ./adapters/garbage: cannot be started: ./adapters/garbage: Exec format error
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd /nonexistent/x
 exit 1
 --- stdout
-| error   adapter-failed     /nonexistent/x: cannot be started: FileNotFoundError: [Errno 2] No such file or directory: '/nonexistent/x'
+| error   adapter-failed     /nonexistent/x: cannot be started: /nonexistent/x: No such file or directory
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd adapters
 exit 1
 --- stdout
-| error   adapter-failed     adapters: cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'adapters'
+| error   adapter-failed     adapters: cannot be started: adapters: No such file or directory
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd adapters/
 exit 1
 --- stdout
-| error   adapter-failed     adapters/: cannot be started: PermissionError: [Errno 13] Permission denied: 'adapters/'
+| error   adapter-failed     adapters/: cannot be started: adapters/: Permission denied
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd adapters/plain.txt
 exit 1
 --- stdout
-| error   adapter-failed     adapters/plain.txt: cannot be started: PermissionError: [Errno 13] Permission denied: 'adapters/plain.txt'
+| error   adapter-failed     adapters/plain.txt: cannot be started: adapters/plain.txt: Permission denied
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd nosuchprogram
 exit 1
 --- stdout
-| error   adapter-failed     nosuchprogram: cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'nosuchprogram'
+| error   adapter-failed     nosuchprogram: cannot be started: nosuchprogram: No such file or directory
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd tool with PATH=
 exit 1
 --- stdout
-| error   adapter-failed     tool: cannot be started: FileNotFoundError: [Errno 2] No such file or directory: 'tool'
+| error   adapter-failed     tool: cannot be started: tool: No such file or directory
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd tool with PATH=adapters/pathA:adapters/pathB
 exit 1
 --- stdout
-| error   adapter-failed     tool: cannot be started: PermissionError: [Errno 13] Permission denied: 'tool'
+| error   adapter-failed     tool: cannot be started: tool: Permission denied
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd tool with PATH=adapters/pathB::adapters/pathA
 exit 1
 --- stdout
-| error   adapter-failed     tool: cannot be started: PermissionError: [Errno 13] Permission denied: 'tool'
+| error   adapter-failed     tool: cannot be started: tool: Permission denied
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform spines/unsound.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --depth 1

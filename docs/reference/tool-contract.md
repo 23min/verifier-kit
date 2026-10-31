@@ -142,7 +142,9 @@ The adapter translates and never decides whether an action is allowed.
 
 `spine conform --adapter-cmd COMMAND` runs the adapter as a program, so the code under test can
 be in any language. COMMAND is one string, split by shell quoting rules and run without a shell
-(no pipes, variables or globs), in `conform`'s working directory and environment.
+(no pipes, variables or globs), in `conform`'s working directory and environment. Its first word
+names the program, as in a shell: a name with a `/` is a path, and any other name is looked for in
+each folder of `PATH` in turn, or of `/bin:/usr/bin` when `PATH` is unset.
 
 `conform` writes one JSON request per line to the program's stdin and reads one reply per line
 from its stdout, a line ending at `\n` or at the end of the output. A reply is standard JSON

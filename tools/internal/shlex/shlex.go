@@ -45,7 +45,7 @@ func Split(s string) ([]string, error) {
 				quoted = true
 				switch {
 				case next < 0:
-					return nil, errors.New("No closing quotation")
+					return nil, errors.New("no closing quotation")
 				case next == state:
 					state = 'a'
 				case next == '\\' && state == '"':
@@ -56,7 +56,7 @@ func Split(s string) ([]string, error) {
 				}
 			case state == '\\':
 				if next < 0 {
-					return nil, errors.New("No escaped character")
+					return nil, errors.New("no escaped character")
 				}
 				if (escapedState == '\'' || escapedState == '"') && next != state && next != escapedState {
 					token = append(token, byte(state))

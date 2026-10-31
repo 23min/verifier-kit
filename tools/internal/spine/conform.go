@@ -42,7 +42,7 @@ type commandAdapter struct {
 	proc   *os.Process
 	stdin  *os.File
 	stdout *bufio.Reader
-	status *int
+	ended  *string // how the program ended, once it has
 }
 
 var replies = map[string][2]string{
@@ -54,10 +54,10 @@ func startAdapter(command string) (*commandAdapter, error) {
 	a := &commandAdapter{}
 	argv, err := shlex.Split(command)
 	if err != nil {
-		return nil, &adapterFailed{"cannot be started: ValueError: " + err.Error()}
+		return nil, &adapterFailed{"cannot be split: " + err.Error()}
 	}
 	if len(argv) == 0 {
-		return nil, &adapterFailed{"cannot be started: ValueError: the command is empty"}
+		return nil, &adapterFailed{"the command is empty"}
 	}
 	stdinR, stdinW, err := os.Pipe()
 	if err != nil {
@@ -79,33 +79,14 @@ func startAdapter(command string) (*commandAdapter, error) {
 	return a, nil
 }
 
-// startProgram is subprocess.Popen(argv), with Python's OSError as the error.
+// startProgram starts argv with files as its stdin, stdout and stderr; a failure names the
+// program and gives the system's reason.
 func startProgram(argv []string, files []*os.File) (*os.Process, error) {
 	proc, err := program.Start(argv, &os.ProcAttr{Files: files})
-	var errno syscall.Errno
-	if errors.As(err, &errno) {
-		return nil, fmt.Errorf("%s: [Errno %d] %s: %s", pyOSErrorClass(errno), int(errno), program.Strerror(errno), pyRepr(argv[0]))
+	if err != nil {
+		return nil, fmt.Errorf("%s: %s", argv[0], program.Strerror(err))
 	}
-	return proc, err
-}
-
-// pyOSErrorClass is the OSError subclass Python raises for an errno.
-func pyOSErrorClass(errno syscall.Errno) string {
-	switch errno {
-	case syscall.ENOENT:
-		return "FileNotFoundError"
-	case syscall.EACCES, syscall.EPERM:
-		return "PermissionError"
-	case syscall.ENOTDIR:
-		return "NotADirectoryError"
-	case syscall.EISDIR:
-		return "IsADirectoryError"
-	case syscall.EAGAIN, syscall.EALREADY, syscall.EINPROGRESS:
-		return "BlockingIOError"
-	case syscall.EINTR:
-		return "InterruptedError"
-	}
-	return "OSError"
+	return proc, nil
 }
 
 func (a *commandAdapter) new() error {
@@ -184,28 +165,28 @@ func oneKey(line []byte) (string, json.RawMessage, bool) {
 
 // exited is the failure when the program exits before replying to op.
 func (a *commandAdapter) exited(op string) error {
-	return &adapterFailed{fmt.Sprintf("exited with status %d before replying to %s", a.wait(), op)}
+	return &adapterFailed{fmt.Sprintf("%s before replying to %s", a.wait(), op)}
 }
 
-// wait is Popen.wait(): the exit status, or minus the signal that ended the program.
-func (a *commandAdapter) wait() int {
-	if a.status == nil {
-		status := 0
+// wait waits for the program to end and says how it did: with an exit status, or by a signal.
+func (a *commandAdapter) wait() string {
+	if a.ended == nil {
+		ended := "exited with status 0"
 		if state, err := a.proc.Wait(); err == nil {
 			ws := state.Sys().(syscall.WaitStatus)
 			if ws.Signaled() {
-				status = -int(ws.Signal())
+				ended = fmt.Sprintf("was ended by signal %d (%s)", int(ws.Signal()), ws.Signal())
 			} else {
-				status = ws.ExitStatus()
+				ended = fmt.Sprintf("exited with status %d", ws.ExitStatus())
 			}
 		}
-		a.status = &status
+		a.ended = &ended
 	}
-	return *a.status
+	return *a.ended
 }
 
 func (a *commandAdapter) close(kill bool) {
-	if kill && a.status == nil {
+	if kill && a.ended == nil {
 		a.proc.Kill()
 	}
 	a.stdin.Close() // the end of input ends the adapter
