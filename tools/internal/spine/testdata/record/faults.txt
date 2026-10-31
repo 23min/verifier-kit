@@ -21,7 +21,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine behaviors" tests="1" failures="1"><testcase classname="spine behaviors" name="behavior-allowed $ROOT/examples/notes/spec/notes/behaviors/invalid/editor-restores.yaml"><failure message="marked invalid, but the spine allows it (allowed, ends in active)">marked invalid, but the spine allows it (allowed, ends in active)</failure></testcase></testsuite>
 === in $TMP/faults: spine behaviors --format json --junit REPORT 3/spine.yaml $ROOT/examples/notes/spec/notes/behaviors
 exit 1
@@ -34,7 +34,7 @@ exit 1
 |       "code": "yaml-boolean-key",
 |       "severity": "error",
 |       "where": "rules[1]",
-|       "message": "rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it"
+|       "message": "rule key read as true; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it"
 |     },
 |     {
 |       "code": "missing-key",
@@ -46,8 +46,8 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine behaviors" tests="2" failures="2"><testcase classname="spine behaviors" name="yaml-boolean-key rules[1]"><failure message="rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it">rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it</failure></testcase><testcase classname="spine behaviors" name="missing-key rules[1]"><failure message="rule needs &quot;event&quot;">rule needs "event"</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine behaviors" tests="2" failures="2"><testcase classname="spine behaviors" name="yaml-boolean-key rules[1]"><failure message="rule key read as true; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it">rule key read as true; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it</failure></testcase><testcase classname="spine behaviors" name="missing-key rules[1]"><failure message="rule needs &quot;event&quot;">rule needs "event"</failure></testcase></testsuite>
 === in $TMP/faults: spine behaviors 2/spine.yaml $ROOT/examples/notes/spec/notes/behaviors
 exit 1
 --- stdout
@@ -58,7 +58,7 @@ exit 1
 === in $TMP/faults: spine behaviors 3/spine.yaml $ROOT/examples/notes/spec/notes/behaviors
 exit 1
 --- stdout
-| error   yaml-boolean-key   rules[1]: rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it
+| error   yaml-boolean-key   rules[1]: rule key read as true; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it
 | error   missing-key        rules[1]: rule needs "event"
 | -- 2 errors, 2 findings
 |
@@ -72,7 +72,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in $TMP/faults: spine check --format json --junit REPORT 3/spine.yaml
 exit 1
@@ -85,7 +85,7 @@ exit 1
 |       "code": "yaml-boolean-key",
 |       "severity": "error",
 |       "where": "rules[1]",
-|       "message": "rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it"
+|       "message": "rule key read as true; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it"
 |     },
 |     {
 |       "code": "missing-key",
@@ -97,8 +97,8 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="2" failures="2"><testcase classname="spine check" name="yaml-boolean-key rules[1]"><failure message="rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it">rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it</failure></testcase><testcase classname="spine check" name="missing-key rules[1]"><failure message="rule needs &quot;event&quot;">rule needs "event"</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine check" tests="2" failures="2"><testcase classname="spine check" name="yaml-boolean-key rules[1]"><failure message="rule key read as true; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it">rule key read as true; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it</failure></testcase><testcase classname="spine check" name="missing-key rules[1]"><failure message="rule needs &quot;event&quot;">rule needs "event"</failure></testcase></testsuite>
 === in $TMP/faults: spine check --format json --junit REPORT 4/spine.yaml
 exit 0
 --- stdout
@@ -109,7 +109,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in $TMP/faults: spine check 2/spine.yaml
 exit 0
@@ -119,7 +119,7 @@ exit 0
 === in $TMP/faults: spine check 3/spine.yaml
 exit 1
 --- stdout
-| error   yaml-boolean-key   rules[1]: rule key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it
+| error   yaml-boolean-key   rules[1]: rule key read as true; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it
 | error   missing-key        rules[1]: rule needs "event"
 | -- 2 errors, 2 findings
 |
@@ -178,7 +178,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="3" failures="3"><testcase classname="spine conform" name="diverges draft/trash role=owner"><failure message="after trash(role=owner): spine expects rejected in draft, code gave ok in trashed">after trash(role=owner): spine expects rejected in draft, code gave ok in trashed</failure></testcase><testcase classname="spine conform" name="diverges trashed/edit role=owner"><failure message="after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=owner): spine expects rejected in trashed, code gave ok in trashed">after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=owner): spine expects rejected in trashed, code gave ok in trashed</failure></testcase><testcase classname="spine conform" name="diverges trashed/edit role=editor"><failure message="after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=editor): spine expects rejected in trashed, code gave ok in trashed">after publish(role=owner) -&gt; trash(role=owner) -&gt; edit(role=editor): spine expects rejected in trashed, code gave ok in trashed</failure></testcase></testsuite>
 === in $TMP/faults: spine conform --format json --junit REPORT $ROOT/examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/9/src
 exit 1
@@ -197,7 +197,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py"><failure message="replied to new with the error &quot;ModuleNotFoundError: No module named 'no_such_module'&quot;">replied to new with the error "ModuleNotFoundError: No module named 'no_such_module'"</failure></testcase></testsuite>
 === in $TMP/faults: spine conform --format json --junit REPORT 2/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/2/src
 exit 1
@@ -222,7 +222,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges trashed/restore role=editor"><failure message="after publish(role=owner) -&gt; trash(role=owner) -&gt; restore(role=editor): spine expects ok in active, code gave rejected in trashed">after publish(role=owner) -&gt; trash(role=owner) -&gt; restore(role=editor): spine expects ok in active, code gave rejected in trashed</failure></testcase></testsuite>
 === in $TMP/faults: spine conform 2/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/2/src
 exit 1
@@ -261,7 +261,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="path-denied examples/notes/spec/notes/spine.yaml"><failure message="the builder role may not change this path">the builder role may not change this path</failure></testcase></testsuite>
 === in $TMP/faults: spine stale --format json --junit REPORT 2/spine.yaml $ROOT/examples/notes/checks/notes
 exit 1
@@ -304,7 +304,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine stale" tests="1" failures="1"><testcase classname="spine stale" name="stale-check $ROOT/examples/notes/checks/notes/test_content.py"><failure message="covers trashed/restore@95f9c8204e9f, but that cell now hashes to c63b97c8691c: re-ratify, then update the check">covers trashed/restore@95f9c8204e9f, but that cell now hashes to c63b97c8691c: re-ratify, then update the check</failure></testcase></testsuite>
 === in $TMP/faults: spine stale 2/spine.yaml $ROOT/examples/notes/checks/notes
 exit 1

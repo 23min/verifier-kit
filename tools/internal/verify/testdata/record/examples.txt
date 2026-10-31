@@ -603,16 +603,16 @@ exit 0
 --- stderr
 |
 --- report/examples-python-lamp-behaviors.xml
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine behaviors" tests="1" failures="0"><testcase classname="spine behaviors" name="no errors" /></testsuite>
 --- report/examples-python-lamp-check.xml
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 --- report/examples-python-lamp-conform.xml
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
 --- report/examples-python-lamp-stale.xml
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine stale" tests="1" failures="0"><testcase classname="spine stale" name="no errors" /></testsuite>
 === examples: ./verify examples/pythonnames --full
 exit 1

@@ -48,8 +48,8 @@ tools/bin/spine check examples/notes/spec/notes/spine.yaml  # check one spine
 go -C tools test ./...                                     # spine on every test input, ./verify on its fixtures
 ```
 
-The record, in `tools/internal/spine/testdata/record/`, holds what `spine` gave on every test
-input, written while it still matched `tools/spine.py`, the Python original it replaced (#44).
+The record, in `tools/internal/spine/testdata/record/`, holds what `spine` gives on every test
+input (#44).
 After a deliberate change, `go -C tools test ./internal/spine/ -update` writes it again, and its
 diff shows what changed. `./verify` has a record of its own, in
 `tools/internal/verify/testdata/record/`: what it gives on fixture projects that between them

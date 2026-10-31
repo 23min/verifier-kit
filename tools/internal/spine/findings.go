@@ -1,6 +1,6 @@
-// Package spine is the toolkit's spine, a port of tools/spine.py, since retired: the same
-// commands, findings, messages and exit codes (docs/reference/tool-contract.md). The cases
-// test in this package checks it against a record of its output, written while the two agreed.
+// Package spine is the toolkit's spine: its commands, findings and exit codes are the tool
+// contract's (docs/reference/tool-contract.md). The cases test in this package checks it
+// against a record of its output.
 package spine
 
 // Finding is one result line: a code from the contract, its severity, where it applies and why.

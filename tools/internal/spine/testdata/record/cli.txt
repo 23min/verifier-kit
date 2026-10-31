@@ -1174,7 +1174,7 @@ exit 1
 |       "code": "orphan-check",
 |       "severity": "error",
 |       "where": "checks/door/sub/test_more.txt",
-|       "message": "covers caf\u00e9/\u00fcber, which the spec no longer defines"
+|       "message": "covers café/über, which the spec no longer defines"
 |     },
 |     {
 |       "code": "orphan-check",

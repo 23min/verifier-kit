@@ -295,10 +295,10 @@ scenarios 1 to 4, 9 and 10 seed. Between them they give every finding code the c
 
 Each run must give exactly what the record holds (`tools/internal/spine/testdata/record/`,
 written by `record_test.go` beside it, in the format `tools/internal/record` reads and writes):
-its exit code and output, and in JSON runs the JUnit report, with the paths that differ
-between machines written as `$ROOT` and `$TMP`. `go -C tools test ./internal/spine/ -update`
-writes the record again; its diff is what a reviewer reads. The record was written while the
-Go `spine` still matched `tools/spine.py` on every input, before that retired (#44).
+its exit code and output, the message on standard error of a usage error, and in JSON runs the
+JUnit report, with the paths that differ between machines written as `$ROOT` and `$TMP` (#44).
+`go -C tools test ./internal/spine/ -update` writes the record again; its diff is what a
+reviewer reads.
 
 `go test` also holds the record of `./verify` (`tools/internal/verify/record_test.go`, #68).
 It copies `verify` and `tools/` into fixture projects, as a project does, and runs `./verify`

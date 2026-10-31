@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"strings"
 	"syscall"
 	"unicode/utf8"
@@ -18,7 +19,7 @@ import (
 
 // ---------- conform ----------
 
-// adapterFailed is AdapterFailed in tools/spine.py: no comparison is possible past it.
+// adapterFailed is a failure of the adapter itself: no comparison is possible past it.
 type adapterFailed struct{ msg string }
 
 func (e *adapterFailed) Error() string { return e.msg }
@@ -36,8 +37,7 @@ func stepsText(steps []parsedStep) string {
 	return strings.Join(parts, " -> ")
 }
 
-// commandAdapter is CommandAdapter in tools/spine.py: an adapter program spoken to in JSON
-// lines.
+// commandAdapter is an adapter program, spoken to in JSON lines.
 type commandAdapter struct {
 	proc   *os.Process
 	stdin  *os.File
@@ -97,9 +97,9 @@ func (a *commandAdapter) new() error {
 func (a *commandAdapter) apply(event string, env Env) (string, error) {
 	pairs := make([]string, len(env.Names))
 	for i, n := range env.Names {
-		pairs[i] = pyJSONString(n) + ": " + pyJSONString(env.Values[n])
+		pairs[i] = jsonText(n) + ": " + jsonText(env.Values[n])
 	}
-	return a.ask("apply", `{"op": "apply", "event": `+pyJSONString(event)+`, "env": {`+strings.Join(pairs, ", ")+`}}`)
+	return a.ask("apply", `{"op": "apply", "event": `+jsonText(event)+`, "env": {`+strings.Join(pairs, ", ")+`}}`)
 }
 
 func (a *commandAdapter) observe() (string, error) {
@@ -122,7 +122,7 @@ func (a *commandAdapter) ask(op, request string) (string, error) {
 		return "", &adapterFailed{fmt.Sprintf("replied to %s with a line that is not UTF-8", op)}
 	}
 	if !json.Valid(line) {
-		return "", &adapterFailed{fmt.Sprintf("replied to %s with a line that is not JSON: %s", op, pyRepr(text))}
+		return "", &adapterFailed{fmt.Sprintf("replied to %s with a line that is not JSON: %s", op, strconv.Quote(text))}
 	}
 	key, value, ok := oneKey(line)
 	var said string
@@ -136,7 +136,7 @@ func (a *commandAdapter) ask(op, request string) (string, error) {
 	case key == want[0] && op != "new" && isText:
 		return said, nil
 	}
-	return "", &adapterFailed{fmt.Sprintf(`replied to %s with %s, not %s or {"error": "..."}`, op, pyRepr(text), want[1])}
+	return "", &adapterFailed{fmt.Sprintf(`replied to %s with %s, not %s or {"error": "..."}`, op, strconv.Quote(text), want[1])}
 }
 
 // oneKey reads a JSON object with exactly one key, given once: the key and its value.
@@ -210,10 +210,10 @@ func callAdapter(name string, steps []parsedStep, err error) error {
 	if len(steps) > 0 {
 		after = " after " + stepsText(steps)
 	}
-	return &adapterFailed{fmt.Sprintf("replied to %s with the error %s%s", name, pyRepr(err.Error()), after)}
+	return &adapterFailed{fmt.Sprintf("replied to %s with the error %s%s", name, strconv.Quote(err.Error()), after)}
 }
 
-// stepKey identifies a state, event and values, as the tuple tools/spine.py keys them by.
+// stepKey identifies a state, an event and the variables' values.
 func stepKey(state string, st parsedStep) string {
 	values := make([]string, len(st.env.Names))
 	for i, n := range st.env.Names {
@@ -296,8 +296,8 @@ func conform(s *Spec, command string, depth int) Findings {
 	return out
 }
 
-// compareCode is compare() in tools/spine.py: it replays every sequence up to depth, shortest
-// first, in the order of tools/spine.py's queue.
+// compareCode replays every sequence up to depth, shortest first, and within a length in the
+// order of the events and values.
 func compareCode(s *Spec, a *commandAdapter, depth int, out *Findings) error {
 	envs := s.assignments()
 	var steps []parsedStep

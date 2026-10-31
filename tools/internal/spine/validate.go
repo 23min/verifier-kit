@@ -3,10 +3,11 @@ package spine
 import (
 	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 )
 
-// ---------- loading and validation, as in tools/spine.py ----------
+// ---------- loading and validation ----------
 
 var (
 	topKeys      = names("machine", "section", "vars", "states", "initial", "events", "rules", "examples")
@@ -40,7 +41,7 @@ func checkKeys(m *Map, allowed map[string]bool, where, what string, out *Finding
 	for _, k := range m.Keys {
 		switch {
 		case isBool(k):
-			out.Add("yaml-boolean-key", where, fmt.Sprintf("%s key read as %s; %s", what, pyBoolRepr(k.Bool), hint))
+			out.Add("yaml-boolean-key", where, fmt.Sprintf("%s key read as %s; %s", what, strconv.FormatBool(k.Bool), hint))
 		case !isText(k):
 			out.Add("unknown-key", where, fmt.Sprintf("a %s key is not text", what))
 		case allowed != nil && !allowed[k.Str]:
@@ -63,13 +64,13 @@ func checkText(v *Value, where, what string, out *Findings) bool {
 	return false
 }
 
-// isMap is isinstance(v, dict).
+// isMap reports whether v is a mapping.
 func isMap(v *Value) bool { return v != nil && v.Kind == KMap }
 
-// isList is isinstance(v, list).
+// isList reports whether v is a list.
 func isList(v *Value) bool { return v != nil && v.Kind == KList }
 
-// allText is all(isinstance(x, str) for x in v.Items).
+// allText reports whether every item of the list v is text.
 func allText(v *Value) bool {
 	for _, x := range v.Items {
 		if !isText(x) {
@@ -132,7 +133,7 @@ func (e Env) String() string {
 
 // parseStep turns "restore role=editor" into ("restore", role=editor), or an error when malformed.
 func parseStep(s string) (string, Env, error) {
-	words := pySplit(s)
+	words := strings.Fields(s)
 	env := Env{Values: map[string]string{}}
 	if len(words) == 0 {
 		return "", env, errors.New("a step needs an event")
@@ -347,7 +348,7 @@ func allPairs(m *Map, ok func(k, v *Value) bool) bool {
 	return true
 }
 
-// validate checks a spine's shape and every name in it, in the order tools/spine.py does.
+// validate checks a spine's shape and every name in it.
 func validate(spec *Value, path string) Findings {
 	var out Findings
 	if !isMap(spec) {

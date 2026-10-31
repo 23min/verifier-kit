@@ -1,6 +1,5 @@
-// Package program starts programs and words what the system says about them as Python does:
-// shared by spine, which starts an adapter's command, and verify, which starts every other
-// command of a root.
+// Package program starts programs, and words what the system says about them: shared by spine,
+// which starts an adapter's command, and verify, which starts every other command of a root.
 package program
 
 import (
@@ -10,8 +9,8 @@ import (
 	"syscall"
 )
 
-// Start is os.execvp(argv[0], argv), run in a new process with attr: a name without a slash is
-// looked for in each directory of the PATH in attr.Env (this process's when attr.Env is nil, and
+// Start runs argv in a new process with attr, finding its program as a shell does: a name without
+// a slash is looked for in each directory of the PATH in attr.Env (this process's when attr.Env is nil, and
 // /bin:/usr/bin when there is none), and the first error other than "not found" is the one
 // reported. The error is a syscall.Errno when the system refused every candidate.
 func Start(argv []string, attr *os.ProcAttr) (*os.Process, error) {
@@ -68,8 +67,8 @@ func lookupPath(env []string) (string, bool) {
 	return path, ok
 }
 
-// Strerror is the C library's text for an errno, which Python's OSError.strerror carries;
-// Go's own texts are the same in lower case.
+// Strerror is the C library's text for an errno, such as "No such file or directory"; Go's own
+// texts are the same in lower case.
 func Strerror(err error) string {
 	var errno syscall.Errno
 	if errors.As(err, &errno) {
