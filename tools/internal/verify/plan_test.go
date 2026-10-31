@@ -69,8 +69,8 @@ func TestCommandLine(t *testing.T) {
 		{data: "prog\r", bad: bad("holds more than one line")},
 		{data: "   \n", bad: bad("holds no command")},
 		{data: "", bad: bad("holds no command")},
-		{data: "prog \"open\n", bad: bad("cannot be split: No closing quotation")},
-		{data: "prog \\", bad: bad("cannot be split: No escaped character")},
+		{data: "prog \"open\n", bad: bad("cannot be split: no closing quotation")},
+		{data: "prog \\", bad: bad("cannot be split: no escaped character")},
 		{data: "\xff\n", bad: bad("cannot be read: not UTF-8")},
 		{err: errors.New("Permission denied"), bad: bad("cannot be read: Permission denied")},
 	} {

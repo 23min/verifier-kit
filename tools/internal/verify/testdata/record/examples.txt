@@ -22,7 +22,7 @@ exit 1
 | skip  unsplit: behaviors match spine (no examples/badcommands/spec/unsplit/behaviors/)
 | skip  unsplit: checks cite current spine (no examples/badcommands/checks/unsplit/)
 | FAIL  unsplit: code conforms to spine
-|       error   bad-command        examples/badcommands/conformance/adapter_unsplit.cmd: cannot be split: No closing quotation
+|       error   bad-command        examples/badcommands/conformance/adapter_unsplit.cmd: cannot be split: no closing quotation
 | FAIL  content checks
 |       error   bad-command        examples/badcommands/checks/run.cmd: cannot run no-such-program: No such file or directory
 | skip  mutants killed (fast mode; --full runs them)
@@ -164,7 +164,7 @@ exit 1
 | skip  unsplit: behaviors match spine (no examples/badcommands/spec/unsplit/behaviors/)
 | skip  unsplit: checks cite current spine (no examples/badcommands/checks/unsplit/)
 | FAIL  unsplit: code conforms to spine
-|       error   bad-command        examples/badcommands/conformance/adapter_unsplit.cmd: cannot be split: No closing quotation
+|       error   bad-command        examples/badcommands/conformance/adapter_unsplit.cmd: cannot be split: no closing quotation
 | FAIL  content checks
 |       error   bad-command        examples/badcommands/checks/run.cmd: cannot run no-such-program: No such file or directory
 | FAIL  mutants killed (mutate_one)
@@ -363,7 +363,7 @@ exit 1
 | skip  unsplit: behaviors match spine (no examples/badcommands/spec/unsplit/behaviors/)
 | skip  unsplit: checks cite current spine (no examples/badcommands/checks/unsplit/)
 | FAIL  unsplit: code conforms to spine
-|       error   bad-command        examples/badcommands/conformance/adapter_unsplit.cmd: cannot be split: No closing quotation
+|       error   bad-command        examples/badcommands/conformance/adapter_unsplit.cmd: cannot be split: no closing quotation
 | FAIL  content checks
 |       error   bad-command        examples/badcommands/checks/run.cmd: cannot run no-such-program: No such file or directory
 | FAIL  mutants killed (mutate_one)
