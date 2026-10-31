@@ -2,68 +2,54 @@ package spine
 
 import (
 	"fmt"
-	"math"
-	"math/big"
-	"strconv"
 	"strings"
 	"unicode"
 )
 
-// Kind is the Python type PyYAML's safe_load would give a YAML value. The spine format accepts
-// only text, so most checks need just the kind; the value matters for text, for true/false, and
-// for telling mapping keys apart the way a Python dict does.
+// Kind is what a YAML value is to the spine format: text, true or false, nothing, a list or a
+// mapping, or something else the format never reads, such as a number, a date or a value with an
+// explicit tag.
 type Kind int
 
 const (
-	KNull  Kind = iota // None
-	KBool              // bool
-	KInt               // int
-	KFloat             // float
-	KStr               // str
-	KDate              // datetime.date
-	KTime              // datetime.datetime
-	KBytes             // bytes (!!binary)
-	KList              // list, and the lists of pairs !!omap and !!pairs give
-	KMap               // dict
-	KSet               // set (!!set)
+	KNull  Kind = iota // null, ~ or nothing
+	KBool              // true or false, in YAML 1.1's words (yes, no, on, off too)
+	KStr               // text
+	KList              // a list
+	KMap               // a mapping
+	KOther             // a number, a date, a merge key or a value with an explicit tag
 )
 
-// Value is one YAML value as Python would hold it.
+// Value is one YAML value.
 type Value struct {
 	Kind  Kind
-	Bool  bool
-	Int   *big.Int
-	Float float64
-	Str   string // KStr; KBytes as raw bytes; KDate and KTime as a key for equality
+	Bool  bool   // KBool
+	Str   string // KStr
 	Items []*Value
-	Map   *Map // KMap, and KSet (keys only)
+	Map   *Map
 }
 
-// Map is a Python dict: keys stay in first-insertion order, and a key equal to an earlier one
-// (as Python compares them: 1, 1.0 and true are one key) replaces that key's value.
+// Map is a mapping: keys in the order the file gives them. A text key is given at most once.
 type Map struct {
 	Keys   []*Value
 	Values []*Value
-	index  map[string]int
+	index  map[string]int // text keys
 }
 
 func newMap() *Map { return &Map{index: map[string]int{}} }
 
-// Set inserts or replaces, keeping the first key, as dict assignment does.
-func (m *Map) Set(k, v *Value) {
-	hk := hashKey(k)
-	if i, ok := m.index[hk]; ok {
-		m.Values[i] = v
-		return
+// add appends a pair; the reader has refused a text key given twice.
+func (m *Map) add(k, v *Value) {
+	if k.Kind == KStr {
+		m.index[k.Str] = len(m.Keys)
 	}
-	m.index[hk] = len(m.Keys)
 	m.Keys = append(m.Keys, k)
 	m.Values = append(m.Values, v)
 }
 
 // Get looks up a text key.
 func (m *Map) Get(name string) (*Value, bool) {
-	i, ok := m.index["S:"+name]
+	i, ok := m.index[name]
 	if !ok {
 		return nil, false
 	}
@@ -72,93 +58,21 @@ func (m *Map) Get(name string) (*Value, bool) {
 
 // Has reports whether the map has a text key.
 func (m *Map) Has(name string) bool {
-	_, ok := m.index["S:"+name]
+	_, ok := m.index[name]
 	return ok
 }
 
 // Len is the number of keys.
 func (m *Map) Len() int { return len(m.Keys) }
 
-var nanCount int
-
-// hashKey gives keys that are equal in Python the same string. Values that are unhashable in
-// Python (lists, dicts, sets) never reach it: the loader reports them first.
-func hashKey(v *Value) string {
-	switch v.Kind {
-	case KNull:
-		return "N"
-	case KBool:
-		if v.Bool {
-			return "I:1"
-		}
-		return "I:0"
-	case KInt:
-		return "I:" + v.Int.String()
-	case KFloat:
-		f := v.Float
-		switch {
-		case math.IsNaN(f) && v.Str == "shared nan":
-			return "NaN"
-		case math.IsNaN(f):
-			nanCount++ // nan != nan: each one is its own key
-			return fmt.Sprintf("NaN:%d", nanCount)
-		case math.IsInf(f, 0):
-			return "F:" + strconv.FormatFloat(f, 'g', -1, 64)
-		case f == math.Trunc(f):
-			i, _ := new(big.Float).SetFloat64(f).Int(nil)
-			return "I:" + i.String()
-		}
-		return "F:" + strconv.FormatFloat(f, 'g', -1, 64)
-	case KStr:
-		return "S:" + v.Str
-	case KDate:
-		return "D:" + v.Str
-	case KTime:
-		return "T:" + v.Str
-	case KBytes:
-		return "B:" + v.Str
-	}
-	panic(fmt.Sprintf("unhashable kind %d", v.Kind))
-}
-
-// hashable reports whether Python could use the value as a dict key.
-func hashable(v *Value) bool {
-	return v.Kind != KList && v.Kind != KMap && v.Kind != KSet
-}
-
-// truthy is Python's bool(value).
-func truthy(v *Value) bool {
-	if v == nil {
-		return false
-	}
-	switch v.Kind {
-	case KNull:
-		return false
-	case KBool:
-		return v.Bool
-	case KInt:
-		return v.Int.Sign() != 0
-	case KFloat:
-		return v.Float != 0 // nan is true in Python too
-	case KStr, KBytes:
-		return v.Str != ""
-	case KDate, KTime:
-		return true
-	case KList:
-		return len(v.Items) > 0
-	case KMap, KSet:
-		return v.Map.Len() > 0
-	}
-	return true
-}
-
-func text(s string) *Value { return &Value{Kind: KStr, Str: s} }
-
-// isText is isinstance(v, str).
+// isText reports whether v is text.
 func isText(v *Value) bool { return v != nil && v.Kind == KStr }
 
-// isBool is isinstance(v, bool).
+// isBool reports whether v is true or false.
 func isBool(v *Value) bool { return v != nil && v.Kind == KBool }
+
+// isTrue reports whether v is true.
+func isTrue(v *Value) bool { return isBool(v) && v.Bool }
 
 // pyRepr is Python's repr() of text: the quote it picks and the escapes it uses.
 func pyRepr(s string) string {

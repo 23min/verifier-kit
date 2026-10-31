@@ -62,7 +62,7 @@ func newSpec(v *Value) *Spec {
 	for i, k := range states.Keys {
 		s.States = append(s.States, k.Str)
 		s.stateSet[k.Str] = true
-		if t, ok := orEmpty(states.Values[i]).Map.Get("terminal"); ok && truthy(t) {
+		if t, ok := orEmpty(states.Values[i]).Map.Get("terminal"); ok && isTrue(t) {
 			s.terminal[k.Str] = true
 		}
 	}
@@ -83,7 +83,7 @@ func newSpec(v *Value) *Spec {
 			r.Outcome = Outcome{"to", to.Str}
 		} else {
 			for _, k := range []string{"reject", "ignore", "stay"} {
-				if x, ok := m.Get(k); ok && truthy(x) {
+				if x, ok := m.Get(k); ok && isTrue(x) {
 					r.Outcome = Outcome{Kind: k}
 					break
 				}

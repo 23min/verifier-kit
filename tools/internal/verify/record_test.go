@@ -49,7 +49,7 @@ func (f files) with(dir string, g files) files {
 }
 
 const lampSpine = `machine: lamp
-vars: []
+vars: {}
 states: {dark: {}, lit: {}, broken: {}}
 initial: dark
 events: [press, drop]

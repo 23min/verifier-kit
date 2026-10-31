@@ -2341,35 +2341,17 @@ exit 1
 |   "command": "guard",
 |   "findings": [
 |     {
-|       "code": "path-not-allowed",
+|       "code": "spec-shape",
 |       "severity": "error",
-|       "where": "src/a.py",
-|       "message": "no allow rule for the builder role covers this path"
-|     },
-|     {
-|       "code": "path-not-allowed",
-|       "severity": "error",
-|       "where": "src/secret.py",
-|       "message": "no allow rule for the builder role covers this path"
-|     },
-|     {
-|       "code": "path-not-allowed",
-|       "severity": "error",
-|       "where": "spec/b.yaml",
-|       "message": "no allow rule for the builder role covers this path"
-|     },
-|     {
-|       "code": "role",
-|       "severity": "info",
-|       "where": "build/x",
-|       "message": "checked 3 changed files as role builder"
+|       "where": "v0068.yaml",
+|       "message": "role \"builder\" must be a mapping with \"allow\" and \"deny\" lists"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine guard" tests="3" failures="3"><testcase classname="spine guard" name="path-not-allowed src/a.py"><failure message="no allow rule for the builder role covers this path">no allow rule for the builder role covers this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed src/secret.py"><failure message="no allow rule for the builder role covers this path">no allow rule for the builder role covers this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed spec/b.yaml"><failure message="no allow rule for the builder role covers this path">no allow rule for the builder role covers this path</failure></testcase></testsuite>
+| <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="spec-shape v0068.yaml"><failure message="role &quot;builder&quot; must be a mapping with &quot;allow&quot; and &quot;deny&quot; lists">role "builder" must be a mapping with "allow" and "deny" lists</failure></testcase></testsuite>
 === in $TMP/policy: spine guard --format json --junit REPORT v0069.yaml --branch build/x src/a.py src/secret.py spec/b.yaml
 exit 1
 --- stdout
@@ -2472,35 +2454,17 @@ exit 1
 |   "command": "guard",
 |   "findings": [
 |     {
-|       "code": "path-not-allowed",
+|       "code": "spec-shape",
 |       "severity": "error",
-|       "where": "src/a.py",
-|       "message": "no allow rule for the builder role covers this path"
-|     },
-|     {
-|       "code": "path-not-allowed",
-|       "severity": "error",
-|       "where": "src/secret.py",
-|       "message": "no allow rule for the builder role covers this path"
-|     },
-|     {
-|       "code": "path-not-allowed",
-|       "severity": "error",
-|       "where": "spec/b.yaml",
-|       "message": "no allow rule for the builder role covers this path"
-|     },
-|     {
-|       "code": "role",
-|       "severity": "info",
-|       "where": "build/x",
-|       "message": "checked 3 changed files as role builder"
+|       "where": "v0073.yaml",
+|       "message": "role \"builder\" must be a mapping with \"allow\" and \"deny\" lists"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine guard" tests="3" failures="3"><testcase classname="spine guard" name="path-not-allowed src/a.py"><failure message="no allow rule for the builder role covers this path">no allow rule for the builder role covers this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed src/secret.py"><failure message="no allow rule for the builder role covers this path">no allow rule for the builder role covers this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed spec/b.yaml"><failure message="no allow rule for the builder role covers this path">no allow rule for the builder role covers this path</failure></testcase></testsuite>
+| <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="spec-shape v0073.yaml"><failure message="role &quot;builder&quot; must be a mapping with &quot;allow&quot; and &quot;deny&quot; lists">role "builder" must be a mapping with "allow" and "deny" lists</failure></testcase></testsuite>
 === in $TMP/policy: spine guard --format json --junit REPORT v0074.yaml --branch build/x src/a.py src/secret.py spec/b.yaml
 exit 1
 --- stdout
@@ -2547,35 +2511,17 @@ exit 1
 |   "command": "guard",
 |   "findings": [
 |     {
-|       "code": "path-not-allowed",
+|       "code": "spec-shape",
 |       "severity": "error",
-|       "where": "src/a.py",
-|       "message": "no allow rule for the builder role covers this path"
-|     },
-|     {
-|       "code": "path-not-allowed",
-|       "severity": "error",
-|       "where": "src/secret.py",
-|       "message": "no allow rule for the builder role covers this path"
-|     },
-|     {
-|       "code": "path-not-allowed",
-|       "severity": "error",
-|       "where": "spec/b.yaml",
-|       "message": "no allow rule for the builder role covers this path"
-|     },
-|     {
-|       "code": "role",
-|       "severity": "info",
-|       "where": "build/x",
-|       "message": "checked 3 changed files as role builder"
+|       "where": "v0076.yaml",
+|       "message": "role \"builder\" must be a mapping with \"allow\" and \"deny\" lists"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine guard" tests="3" failures="3"><testcase classname="spine guard" name="path-not-allowed src/a.py"><failure message="no allow rule for the builder role covers this path">no allow rule for the builder role covers this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed src/secret.py"><failure message="no allow rule for the builder role covers this path">no allow rule for the builder role covers this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed spec/b.yaml"><failure message="no allow rule for the builder role covers this path">no allow rule for the builder role covers this path</failure></testcase></testsuite>
+| <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="spec-shape v0076.yaml"><failure message="role &quot;builder&quot; must be a mapping with &quot;allow&quot; and &quot;deny&quot; lists">role "builder" must be a mapping with "allow" and "deny" lists</failure></testcase></testsuite>
 === in $TMP/policy: spine guard --format json --junit REPORT v0077.yaml --branch build/x src/a.py src/secret.py spec/b.yaml
 exit 1
 --- stdout
@@ -4027,29 +3973,17 @@ exit 1
 |   "command": "guard",
 |   "findings": [
 |     {
-|       "code": "path-denied",
+|       "code": "spec-shape",
 |       "severity": "error",
-|       "where": "src/secret.py",
-|       "message": "the builder role may not change this path"
-|     },
-|     {
-|       "code": "path-not-allowed",
-|       "severity": "error",
-|       "where": "spec/b.yaml",
-|       "message": "no allow rule for the builder role covers this path"
-|     },
-|     {
-|       "code": "role",
-|       "severity": "info",
-|       "where": "build/x",
-|       "message": "checked 3 changed files as role builder"
+|       "where": "v0146.yaml",
+|       "message": "role \"owner\" must be a mapping with \"allow\" and \"deny\" lists"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine guard" tests="2" failures="2"><testcase classname="spine guard" name="path-denied src/secret.py"><failure message="the builder role may not change this path">the builder role may not change this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed spec/b.yaml"><failure message="no allow rule for the builder role covers this path">no allow rule for the builder role covers this path</failure></testcase></testsuite>
+| <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="spec-shape v0146.yaml"><failure message="role &quot;owner&quot; must be a mapping with &quot;allow&quot; and &quot;deny&quot; lists">role "owner" must be a mapping with "allow" and "deny" lists</failure></testcase></testsuite>
 === in $TMP/policy: spine guard --format json --junit REPORT v0147.yaml --branch build/x src/a.py src/secret.py spec/b.yaml
 exit 1
 --- stdout
@@ -4146,29 +4080,17 @@ exit 1
 |   "command": "guard",
 |   "findings": [
 |     {
-|       "code": "path-denied",
+|       "code": "spec-shape",
 |       "severity": "error",
-|       "where": "src/secret.py",
-|       "message": "the builder role may not change this path"
-|     },
-|     {
-|       "code": "path-not-allowed",
-|       "severity": "error",
-|       "where": "spec/b.yaml",
-|       "message": "no allow rule for the builder role covers this path"
-|     },
-|     {
-|       "code": "role",
-|       "severity": "info",
-|       "where": "build/x",
-|       "message": "checked 3 changed files as role builder"
+|       "where": "v0151.yaml",
+|       "message": "role \"owner\" must be a mapping with \"allow\" and \"deny\" lists"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine guard" tests="2" failures="2"><testcase classname="spine guard" name="path-denied src/secret.py"><failure message="the builder role may not change this path">the builder role may not change this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed spec/b.yaml"><failure message="no allow rule for the builder role covers this path">no allow rule for the builder role covers this path</failure></testcase></testsuite>
+| <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="spec-shape v0151.yaml"><failure message="role &quot;owner&quot; must be a mapping with &quot;allow&quot; and &quot;deny&quot; lists">role "owner" must be a mapping with "allow" and "deny" lists</failure></testcase></testsuite>
 === in $TMP/policy: spine guard --format json --junit REPORT v0152.yaml --branch build/x src/a.py src/secret.py spec/b.yaml
 exit 1
 --- stdout
@@ -4215,29 +4137,17 @@ exit 1
 |   "command": "guard",
 |   "findings": [
 |     {
-|       "code": "path-denied",
+|       "code": "spec-shape",
 |       "severity": "error",
-|       "where": "src/secret.py",
-|       "message": "the builder role may not change this path"
-|     },
-|     {
-|       "code": "path-not-allowed",
-|       "severity": "error",
-|       "where": "spec/b.yaml",
-|       "message": "no allow rule for the builder role covers this path"
-|     },
-|     {
-|       "code": "role",
-|       "severity": "info",
-|       "where": "build/x",
-|       "message": "checked 3 changed files as role builder"
+|       "where": "v0154.yaml",
+|       "message": "role \"owner\" must be a mapping with \"allow\" and \"deny\" lists"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine guard" tests="2" failures="2"><testcase classname="spine guard" name="path-denied src/secret.py"><failure message="the builder role may not change this path">the builder role may not change this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed spec/b.yaml"><failure message="no allow rule for the builder role covers this path">no allow rule for the builder role covers this path</failure></testcase></testsuite>
+| <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="spec-shape v0154.yaml"><failure message="role &quot;owner&quot; must be a mapping with &quot;allow&quot; and &quot;deny&quot; lists">role "owner" must be a mapping with "allow" and "deny" lists</failure></testcase></testsuite>
 === in $TMP/policy: spine guard --format json --junit REPORT v0155.yaml --branch build/x src/a.py src/secret.py spec/b.yaml
 exit 1
 --- stdout
@@ -5475,29 +5385,17 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "bad-condition",
+|       "code": "spec-shape",
 |       "severity": "error",
-|       "where": "rules[1]",
-|       "message": "condition \"role == 'owner'\" uses undeclared variable \"role\""
-|     },
-|     {
-|       "code": "bad-condition",
-|       "severity": "error",
-|       "where": "rules[2]",
-|       "message": "condition \"role != 'owner'\" uses undeclared variable \"role\""
-|     },
-|     {
-|       "code": "bad-step",
-|       "severity": "error",
-|       "where": "examples[1]",
-|       "message": "step 1 \"open role=owner\": \"role\" is not a declared variable"
+|       "where": "vars",
+|       "message": "vars must map each variable to its list of values"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="3" failures="3"><testcase classname="spine check" name="bad-condition rules[1]"><failure message="condition &quot;role == 'owner'&quot; uses undeclared variable &quot;role&quot;">condition "role == 'owner'" uses undeclared variable "role"</failure></testcase><testcase classname="spine check" name="bad-condition rules[2]"><failure message="condition &quot;role != 'owner'&quot; uses undeclared variable &quot;role&quot;">condition "role != 'owner'" uses undeclared variable "role"</failure></testcase><testcase classname="spine check" name="bad-step examples[1]"><failure message="step 1 &quot;open role=owner&quot;: &quot;role&quot; is not a declared variable">step 1 "open role=owner": "role" is not a declared variable</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape vars"><failure message="vars must map each variable to its list of values">vars must map each variable to its list of values</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0033.yaml
 exit 1
 --- stdout
@@ -5606,29 +5504,17 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "bad-condition",
+|       "code": "spec-shape",
 |       "severity": "error",
-|       "where": "rules[1]",
-|       "message": "condition \"role == 'owner'\" uses undeclared variable \"role\""
-|     },
-|     {
-|       "code": "bad-condition",
-|       "severity": "error",
-|       "where": "rules[2]",
-|       "message": "condition \"role != 'owner'\" uses undeclared variable \"role\""
-|     },
-|     {
-|       "code": "bad-step",
-|       "severity": "error",
-|       "where": "examples[1]",
-|       "message": "step 1 \"open role=owner\": \"role\" is not a declared variable"
+|       "where": "vars",
+|       "message": "vars must map each variable to its list of values"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="3" failures="3"><testcase classname="spine check" name="bad-condition rules[1]"><failure message="condition &quot;role == 'owner'&quot; uses undeclared variable &quot;role&quot;">condition "role == 'owner'" uses undeclared variable "role"</failure></testcase><testcase classname="spine check" name="bad-condition rules[2]"><failure message="condition &quot;role != 'owner'&quot; uses undeclared variable &quot;role&quot;">condition "role != 'owner'" uses undeclared variable "role"</failure></testcase><testcase classname="spine check" name="bad-step examples[1]"><failure message="step 1 &quot;open role=owner&quot;: &quot;role&quot; is not a declared variable">step 1 "open role=owner": "role" is not a declared variable</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape vars"><failure message="vars must map each variable to its list of values">vars must map each variable to its list of values</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0038.yaml
 exit 1
 --- stdout
@@ -5675,29 +5561,17 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "bad-condition",
+|       "code": "spec-shape",
 |       "severity": "error",
-|       "where": "rules[1]",
-|       "message": "condition \"role == 'owner'\" uses undeclared variable \"role\""
-|     },
-|     {
-|       "code": "bad-condition",
-|       "severity": "error",
-|       "where": "rules[2]",
-|       "message": "condition \"role != 'owner'\" uses undeclared variable \"role\""
-|     },
-|     {
-|       "code": "bad-step",
-|       "severity": "error",
-|       "where": "examples[1]",
-|       "message": "step 1 \"open role=owner\": \"role\" is not a declared variable"
+|       "where": "vars",
+|       "message": "vars must map each variable to its list of values"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="3" failures="3"><testcase classname="spine check" name="bad-condition rules[1]"><failure message="condition &quot;role == 'owner'&quot; uses undeclared variable &quot;role&quot;">condition "role == 'owner'" uses undeclared variable "role"</failure></testcase><testcase classname="spine check" name="bad-condition rules[2]"><failure message="condition &quot;role != 'owner'&quot; uses undeclared variable &quot;role&quot;">condition "role != 'owner'" uses undeclared variable "role"</failure></testcase><testcase classname="spine check" name="bad-step examples[1]"><failure message="step 1 &quot;open role=owner&quot;: &quot;role&quot; is not a declared variable">step 1 "open role=owner": "role" is not a declared variable</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape vars"><failure message="vars must map each variable to its list of values">vars must map each variable to its list of values</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0041.yaml
 exit 1
 --- stdout
@@ -6887,17 +6761,24 @@ exit 0
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0104.yaml
-exit 0
+exit 1
 --- stdout
 | {
 |   "tool": "spine",
 |   "command": "check",
-|   "findings": []
+|   "findings": [
+|     {
+|       "code": "spec-shape",
+|       "severity": "error",
+|       "where": "states/closed",
+|       "message": "state details must be a mapping"
+|     }
+|   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape states/closed"><failure message="state details must be a mapping">state details must be a mapping</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0105.yaml
 exit 1
 --- stdout
@@ -6968,17 +6849,24 @@ exit 1
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape states/closed"><failure message="state details must be a mapping">state details must be a mapping</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0109.yaml
-exit 0
+exit 1
 --- stdout
 | {
 |   "tool": "spine",
 |   "command": "check",
-|   "findings": []
+|   "findings": [
+|     {
+|       "code": "spec-shape",
+|       "severity": "error",
+|       "where": "states/closed",
+|       "message": "state details must be a mapping"
+|     }
+|   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape states/closed"><failure message="state details must be a mapping">state details must be a mapping</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0110.yaml
 exit 1
 --- stdout
@@ -7018,17 +6906,24 @@ exit 1
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape states/closed"><failure message="state details must be a mapping">state details must be a mapping</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0112.yaml
-exit 0
+exit 1
 --- stdout
 | {
 |   "tool": "spine",
 |   "command": "check",
-|   "findings": []
+|   "findings": [
+|     {
+|       "code": "spec-shape",
+|       "severity": "error",
+|       "where": "states/closed",
+|       "message": "state details must be a mapping"
+|     }
+|   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape states/closed"><failure message="state details must be a mapping">state details must be a mapping</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0113.yaml
 exit 1
 --- stdout
@@ -7422,17 +7317,24 @@ exit 0
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0134.yaml
-exit 0
+exit 1
 --- stdout
 | {
 |   "tool": "spine",
 |   "command": "check",
-|   "findings": []
+|   "findings": [
+|     {
+|       "code": "spec-shape",
+|       "severity": "error",
+|       "where": "states/open",
+|       "message": "state details must be a mapping"
+|     }
+|   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape states/open"><failure message="state details must be a mapping">state details must be a mapping</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0135.yaml
 exit 1
 --- stdout
@@ -7503,17 +7405,24 @@ exit 1
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape states/open"><failure message="state details must be a mapping">state details must be a mapping</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0139.yaml
-exit 0
+exit 1
 --- stdout
 | {
 |   "tool": "spine",
 |   "command": "check",
-|   "findings": []
+|   "findings": [
+|     {
+|       "code": "spec-shape",
+|       "severity": "error",
+|       "where": "states/open",
+|       "message": "state details must be a mapping"
+|     }
+|   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape states/open"><failure message="state details must be a mapping">state details must be a mapping</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0140.yaml
 exit 1
 --- stdout
@@ -7553,17 +7462,24 @@ exit 1
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape states/open"><failure message="state details must be a mapping">state details must be a mapping</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0142.yaml
-exit 0
+exit 1
 --- stdout
 | {
 |   "tool": "spine",
 |   "command": "check",
-|   "findings": []
+|   "findings": [
+|     {
+|       "code": "spec-shape",
+|       "severity": "error",
+|       "where": "states/open",
+|       "message": "state details must be a mapping"
+|     }
+|   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape states/open"><failure message="state details must be a mapping">state details must be a mapping</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0143.yaml
 exit 1
 --- stdout
@@ -7749,23 +7665,17 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "undecided-cell",
+|       "code": "spec-shape",
 |       "severity": "error",
-|       "where": "gone/open",
-|       "message": "nothing says what \"open\" does in \"gone\""
-|     },
-|     {
-|       "code": "undecided-cell",
-|       "severity": "error",
-|       "where": "gone/remove",
-|       "message": "nothing says what \"remove\" does in \"gone\""
+|       "where": "states/gone",
+|       "message": "state details must be a mapping"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="2" failures="2"><testcase classname="spine check" name="undecided-cell gone/open"><failure message="nothing says what &quot;open&quot; does in &quot;gone&quot;">nothing says what "open" does in "gone"</failure></testcase><testcase classname="spine check" name="undecided-cell gone/remove"><failure message="nothing says what &quot;remove&quot; does in &quot;gone&quot;">nothing says what "remove" does in "gone"</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape states/gone"><failure message="state details must be a mapping">state details must be a mapping</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0153.yaml
 exit 1
 --- stdout
@@ -7856,23 +7766,17 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "undecided-cell",
+|       "code": "spec-shape",
 |       "severity": "error",
-|       "where": "gone/open",
-|       "message": "nothing says what \"open\" does in \"gone\""
-|     },
-|     {
-|       "code": "undecided-cell",
-|       "severity": "error",
-|       "where": "gone/remove",
-|       "message": "nothing says what \"remove\" does in \"gone\""
+|       "where": "states/gone",
+|       "message": "state details must be a mapping"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="2" failures="2"><testcase classname="spine check" name="undecided-cell gone/open"><failure message="nothing says what &quot;open&quot; does in &quot;gone&quot;">nothing says what "open" does in "gone"</failure></testcase><testcase classname="spine check" name="undecided-cell gone/remove"><failure message="nothing says what &quot;remove&quot; does in &quot;gone&quot;">nothing says what "remove" does in "gone"</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape states/gone"><failure message="state details must be a mapping">state details must be a mapping</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0158.yaml
 exit 1
 --- stdout
@@ -7919,23 +7823,17 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "undecided-cell",
+|       "code": "spec-shape",
 |       "severity": "error",
-|       "where": "gone/open",
-|       "message": "nothing says what \"open\" does in \"gone\""
-|     },
-|     {
-|       "code": "undecided-cell",
-|       "severity": "error",
-|       "where": "gone/remove",
-|       "message": "nothing says what \"remove\" does in \"gone\""
+|       "where": "states/gone",
+|       "message": "state details must be a mapping"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="2" failures="2"><testcase classname="spine check" name="undecided-cell gone/open"><failure message="nothing says what &quot;open&quot; does in &quot;gone&quot;">nothing says what "open" does in "gone"</failure></testcase><testcase classname="spine check" name="undecided-cell gone/remove"><failure message="nothing says what &quot;remove&quot; does in &quot;gone&quot;">nothing says what "remove" does in "gone"</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape states/gone"><failure message="state details must be a mapping">state details must be a mapping</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0161.yaml
 exit 1
 --- stdout
@@ -8324,23 +8222,17 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "undecided-cell",
+|       "code": "bad-value",
 |       "severity": "error",
-|       "where": "gone/open",
-|       "message": "nothing says what \"open\" does in \"gone\""
-|     },
-|     {
-|       "code": "undecided-cell",
-|       "severity": "error",
-|       "where": "gone/remove",
-|       "message": "nothing says what \"remove\" does in \"gone\""
+|       "where": "states/gone",
+|       "message": "terminal must be true or false"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="2" failures="2"><testcase classname="spine check" name="undecided-cell gone/open"><failure message="nothing says what &quot;open&quot; does in &quot;gone&quot;">nothing says what "open" does in "gone"</failure></testcase><testcase classname="spine check" name="undecided-cell gone/remove"><failure message="nothing says what &quot;remove&quot; does in &quot;gone&quot;">nothing says what "remove" does in "gone"</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="terminal must be true or false">terminal must be true or false</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0182.yaml
 exit 1
 --- stdout
@@ -8349,35 +8241,36 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "undecided-cell",
+|       "code": "bad-value",
 |       "severity": "error",
-|       "where": "gone/open",
-|       "message": "nothing says what \"open\" does in \"gone\""
-|     },
-|     {
-|       "code": "undecided-cell",
-|       "severity": "error",
-|       "where": "gone/remove",
-|       "message": "nothing says what \"remove\" does in \"gone\""
+|       "where": "states/gone",
+|       "message": "terminal must be true or false"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="2" failures="2"><testcase classname="spine check" name="undecided-cell gone/open"><failure message="nothing says what &quot;open&quot; does in &quot;gone&quot;">nothing says what "open" does in "gone"</failure></testcase><testcase classname="spine check" name="undecided-cell gone/remove"><failure message="nothing says what &quot;remove&quot; does in &quot;gone&quot;">nothing says what "remove" does in "gone"</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="terminal must be true or false">terminal must be true or false</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0183.yaml
-exit 0
+exit 1
 --- stdout
 | {
 |   "tool": "spine",
 |   "command": "check",
-|   "findings": []
+|   "findings": [
+|     {
+|       "code": "bad-value",
+|       "severity": "error",
+|       "where": "states/gone",
+|       "message": "terminal must be true or false"
+|     }
+|   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="terminal must be true or false">terminal must be true or false</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0184.yaml
 exit 1
 --- stdout
@@ -8386,35 +8279,36 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "undecided-cell",
+|       "code": "bad-value",
 |       "severity": "error",
-|       "where": "gone/open",
-|       "message": "nothing says what \"open\" does in \"gone\""
-|     },
-|     {
-|       "code": "undecided-cell",
-|       "severity": "error",
-|       "where": "gone/remove",
-|       "message": "nothing says what \"remove\" does in \"gone\""
+|       "where": "states/gone",
+|       "message": "terminal must be true or false"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="2" failures="2"><testcase classname="spine check" name="undecided-cell gone/open"><failure message="nothing says what &quot;open&quot; does in &quot;gone&quot;">nothing says what "open" does in "gone"</failure></testcase><testcase classname="spine check" name="undecided-cell gone/remove"><failure message="nothing says what &quot;remove&quot; does in &quot;gone&quot;">nothing says what "remove" does in "gone"</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="terminal must be true or false">terminal must be true or false</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0185.yaml
-exit 0
+exit 1
 --- stdout
 | {
 |   "tool": "spine",
 |   "command": "check",
-|   "findings": []
+|   "findings": [
+|     {
+|       "code": "bad-value",
+|       "severity": "error",
+|       "where": "states/gone",
+|       "message": "terminal must be true or false"
+|     }
+|   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="terminal must be true or false">terminal must be true or false</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0186.yaml
 exit 0
 --- stdout
@@ -8453,29 +8347,43 @@ exit 1
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="2" failures="2"><testcase classname="spine check" name="undecided-cell gone/open"><failure message="nothing says what &quot;open&quot; does in &quot;gone&quot;">nothing says what "open" does in "gone"</failure></testcase><testcase classname="spine check" name="undecided-cell gone/remove"><failure message="nothing says what &quot;remove&quot; does in &quot;gone&quot;">nothing says what "remove" does in "gone"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0188.yaml
-exit 0
+exit 1
 --- stdout
 | {
 |   "tool": "spine",
 |   "command": "check",
-|   "findings": []
+|   "findings": [
+|     {
+|       "code": "bad-value",
+|       "severity": "error",
+|       "where": "states/gone",
+|       "message": "terminal must be true or false"
+|     }
+|   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="terminal must be true or false">terminal must be true or false</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0189.yaml
-exit 0
+exit 1
 --- stdout
 | {
 |   "tool": "spine",
 |   "command": "check",
-|   "findings": []
+|   "findings": [
+|     {
+|       "code": "bad-value",
+|       "severity": "error",
+|       "where": "states/gone",
+|       "message": "terminal must be true or false"
+|     }
+|   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="terminal must be true or false">terminal must be true or false</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0190.yaml
 exit 1
 --- stdout
@@ -8484,47 +8392,55 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "undecided-cell",
+|       "code": "bad-value",
 |       "severity": "error",
-|       "where": "gone/open",
-|       "message": "nothing says what \"open\" does in \"gone\""
-|     },
-|     {
-|       "code": "undecided-cell",
-|       "severity": "error",
-|       "where": "gone/remove",
-|       "message": "nothing says what \"remove\" does in \"gone\""
+|       "where": "states/gone",
+|       "message": "terminal must be true or false"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="2" failures="2"><testcase classname="spine check" name="undecided-cell gone/open"><failure message="nothing says what &quot;open&quot; does in &quot;gone&quot;">nothing says what "open" does in "gone"</failure></testcase><testcase classname="spine check" name="undecided-cell gone/remove"><failure message="nothing says what &quot;remove&quot; does in &quot;gone&quot;">nothing says what "remove" does in "gone"</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="terminal must be true or false">terminal must be true or false</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0191.yaml
-exit 0
+exit 1
 --- stdout
 | {
 |   "tool": "spine",
 |   "command": "check",
-|   "findings": []
+|   "findings": [
+|     {
+|       "code": "bad-value",
+|       "severity": "error",
+|       "where": "states/gone",
+|       "message": "terminal must be true or false"
+|     }
+|   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="terminal must be true or false">terminal must be true or false</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0192.yaml
-exit 0
+exit 1
 --- stdout
 | {
 |   "tool": "spine",
 |   "command": "check",
-|   "findings": []
+|   "findings": [
+|     {
+|       "code": "bad-value",
+|       "severity": "error",
+|       "where": "states/gone",
+|       "message": "terminal must be true or false"
+|     }
+|   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="terminal must be true or false">terminal must be true or false</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0193.yaml
 exit 1
 --- stdout

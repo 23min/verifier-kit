@@ -245,17 +245,59 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "spec-unreadable",
+|       "code": "unknown-key",
 |       "severity": "error",
 |       "where": "yaml/anchor-redefined.yaml",
-|       "message": "found duplicate anchor 'x'"
+|       "message": "unknown top-level key \"a\""
+|     },
+|     {
+|       "code": "unknown-key",
+|       "severity": "error",
+|       "where": "yaml/anchor-redefined.yaml",
+|       "message": "unknown top-level key \"b\""
+|     },
+|     {
+|       "code": "unknown-key",
+|       "severity": "error",
+|       "where": "yaml/anchor-redefined.yaml",
+|       "message": "unknown top-level key \"c\""
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/anchor-redefined.yaml",
+|       "message": "required key \"events\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/anchor-redefined.yaml",
+|       "message": "required key \"initial\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/anchor-redefined.yaml",
+|       "message": "required key \"machine\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/anchor-redefined.yaml",
+|       "message": "required key \"rules\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/anchor-redefined.yaml",
+|       "message": "required key \"states\" is missing"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/anchor-redefined.yaml"><failure message="found duplicate anchor 'x'">found duplicate anchor 'x'</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="8" failures="8"><testcase classname="spine check" name="unknown-key yaml/anchor-redefined.yaml"><failure message="unknown top-level key &quot;a&quot;">unknown top-level key "a"</failure></testcase><testcase classname="spine check" name="unknown-key yaml/anchor-redefined.yaml"><failure message="unknown top-level key &quot;b&quot;">unknown top-level key "b"</failure></testcase><testcase classname="spine check" name="unknown-key yaml/anchor-redefined.yaml"><failure message="unknown top-level key &quot;c&quot;">unknown top-level key "c"</failure></testcase><testcase classname="spine check" name="missing-key yaml/anchor-redefined.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/anchor-redefined.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/anchor-redefined.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/anchor-redefined.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/anchor-redefined.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/block-a-b-c.yaml
 exit 1
 --- stdout
@@ -1077,47 +1119,17 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "unknown-key",
+|       "code": "spec-unreadable",
 |       "severity": "error",
 |       "where": "yaml/directive-foo.yaml",
-|       "message": "unknown top-level key \"k\""
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-foo.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-foo.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-foo.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-foo.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-foo.yaml",
-|       "message": "required key \"states\" is missing"
+|       "message": "go-yaml load error in scanner (while scanning a directive) at L1.C1-C5: found unknown directive name"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/directive-foo.yaml"><failure message="unknown top-level key &quot;k&quot;">unknown top-level key "k"</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-foo.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-foo.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-foo.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-foo.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-foo.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/directive-foo.yaml"><failure message="go-yaml load error in scanner (while scanning a directive) at L1.C1-C5: found unknown directive name">go-yaml load error in scanner (while scanning a directive) at L1.C1-C5: found unknown directive name</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/directive-nodoc.yaml
 exit 1
 --- stdout
@@ -1129,14 +1141,14 @@ exit 1
 |       "code": "spec-unreadable",
 |       "severity": "error",
 |       "where": "yaml/directive-nodoc.yaml",
-|       "message": "go-yaml load error in parser at L2.C1: did not find expected <document start>"
+|       "message": "go-yaml load error in parser at L1.C1: found incompatible YAML document"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/directive-nodoc.yaml"><failure message="go-yaml load error in parser at L2.C1: did not find expected &lt;document start&gt;">go-yaml load error in parser at L2.C1: did not find expected &lt;document start&gt;</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/directive-nodoc.yaml"><failure message="go-yaml load error in parser at L1.C1: found incompatible YAML document">go-yaml load error in parser at L1.C1: found incompatible YAML document</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/directive-twice.yaml
 exit 1
 --- stdout
@@ -1156,74 +1168,6 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/directive-twice.yaml"><failure message="go-yaml load error in parser at L2.C1: found duplicate %YAML directive">go-yaml load error in parser at L2.C1: found duplicate %YAML directive</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/directive-v-0.9.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "spec-unreadable",
-|       "severity": "error",
-|       "where": "yaml/directive-v-0.9.yaml",
-|       "message": "go-yaml load error in parser at L1.C1: found incompatible YAML document"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/directive-v-0.9.yaml"><failure message="go-yaml load error in parser at L1.C1: found incompatible YAML document">go-yaml load error in parser at L1.C1: found incompatible YAML document</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/directive-v-1.0.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.0.yaml",
-|       "message": "unknown top-level key \"k\""
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.0.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.0.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.0.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.0.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.0.yaml",
-|       "message": "required key \"states\" is missing"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/directive-v-1.0.yaml"><failure message="unknown top-level key &quot;k&quot;">unknown top-level key "k"</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.0.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.0.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.0.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.0.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.0.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/directive-v-1.1.yaml
 exit 1
 --- stdout
@@ -1273,154 +1217,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/directive-v-1.1.yaml"><failure message="unknown top-level key &quot;k&quot;">unknown top-level key "k"</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.1.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.1.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.1.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.1.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.1.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/directive-v-1.10.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.10.yaml",
-|       "message": "unknown top-level key \"k\""
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.10.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.10.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.10.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.10.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.10.yaml",
-|       "message": "required key \"states\" is missing"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/directive-v-1.10.yaml"><failure message="unknown top-level key &quot;k&quot;">unknown top-level key "k"</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.10.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.10.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.10.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.10.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.10.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/directive-v-1.2.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.2.yaml",
-|       "message": "unknown top-level key \"k\""
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.2.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.2.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.2.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.2.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.2.yaml",
-|       "message": "required key \"states\" is missing"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/directive-v-1.2.yaml"><failure message="unknown top-level key &quot;k&quot;">unknown top-level key "k"</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.2.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.2.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.2.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.2.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.2.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/directive-v-1.3.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.3.yaml",
-|       "message": "unknown top-level key \"k\""
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.3.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.3.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.3.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.3.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/directive-v-1.3.yaml",
-|       "message": "required key \"states\" is missing"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/directive-v-1.3.yaml"><failure message="unknown top-level key &quot;k&quot;">unknown top-level key "k"</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.3.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.3.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.3.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.3.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/directive-v-1.3.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/directive-v-2.0.yaml
 exit 1
 --- stdout
 | {
@@ -1430,7 +1227,7 @@ exit 1
 |     {
 |       "code": "spec-unreadable",
 |       "severity": "error",
-|       "where": "yaml/directive-v-2.0.yaml",
+|       "where": "yaml/directive-v-1.2.yaml",
 |       "message": "go-yaml load error in parser at L1.C1: found incompatible YAML document"
 |     }
 |   ]
@@ -1438,7 +1235,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/directive-v-2.0.yaml"><failure message="go-yaml load error in parser at L1.C1: found incompatible YAML document">go-yaml load error in parser at L1.C1: found incompatible YAML document</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/directive-v-1.2.yaml"><failure message="go-yaml load error in parser at L1.C1: found incompatible YAML document">go-yaml load error in parser at L1.C1: found incompatible YAML document</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/doc-directive-no-start.yaml
 exit 1
 --- stdout
@@ -1708,47 +1505,17 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "unknown-key",
+|       "code": "spec-unreadable",
 |       "severity": "error",
 |       "where": "yaml/doc-yaml-12.yaml",
-|       "message": "unknown top-level key \"k\""
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/doc-yaml-12.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/doc-yaml-12.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/doc-yaml-12.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/doc-yaml-12.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/doc-yaml-12.yaml",
-|       "message": "required key \"states\" is missing"
+|       "message": "go-yaml load error in parser at L1.C1: found incompatible YAML document"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/doc-yaml-12.yaml"><failure message="unknown top-level key &quot;k&quot;">unknown top-level key "k"</failure></testcase><testcase classname="spine check" name="missing-key yaml/doc-yaml-12.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/doc-yaml-12.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/doc-yaml-12.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/doc-yaml-12.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/doc-yaml-12.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/doc-yaml-12.yaml"><failure message="go-yaml load error in parser at L1.C1: found incompatible YAML document">go-yaml load error in parser at L1.C1: found incompatible YAML document</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/enc-bom.yaml
 exit 1
 --- stdout
@@ -1809,14 +1576,14 @@ exit 1
 |       "code": "spec-unreadable",
 |       "severity": "error",
 |       "where": "yaml/enc-control.yaml",
-|       "message": "unacceptable character #x0007: special characters are not allowed"
+|       "message": "go-yaml load error in reader at <unknown position>: control characters are not allowed (value: 7)"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/enc-control.yaml"><failure message="unacceptable character #x0007: special characters are not allowed">unacceptable character #x0007: special characters are not allowed</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/enc-control.yaml"><failure message="go-yaml load error in reader at &lt;unknown position&gt;: control characters are not allowed (value: 7)">go-yaml load error in reader at &lt;unknown position&gt;: control characters are not allowed (value: 7)</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/enc-cr-only.yaml
 exit 1
 --- stdout
@@ -2044,14 +1811,14 @@ exit 1
 |       "code": "spec-unreadable",
 |       "severity": "error",
 |       "where": "yaml/enc-nul.yaml",
-|       "message": "unacceptable character #x0000: special characters are not allowed"
+|       "message": "go-yaml load error in reader at <unknown position>: control characters are not allowed (value: 0)"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/enc-nul.yaml"><failure message="unacceptable character #x0000: special characters are not allowed">unacceptable character #x0000: special characters are not allowed</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/enc-nul.yaml"><failure message="go-yaml load error in reader at &lt;unknown position&gt;: control characters are not allowed (value: 0)">go-yaml load error in reader at &lt;unknown position&gt;: control characters are not allowed (value: 0)</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/enc-utf16.yaml
 exit 1
 --- stdout
@@ -2644,17 +2411,47 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "spec-unreadable",
+|       "code": "unknown-key",
 |       "severity": "error",
 |       "where": "yaml/key-complex-flow.yaml",
-|       "message": "while constructing a mapping"
+|       "message": "a top-level key is not text"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/key-complex-flow.yaml",
+|       "message": "required key \"events\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/key-complex-flow.yaml",
+|       "message": "required key \"initial\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/key-complex-flow.yaml",
+|       "message": "required key \"machine\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/key-complex-flow.yaml",
+|       "message": "required key \"rules\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/key-complex-flow.yaml",
+|       "message": "required key \"states\" is missing"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/key-complex-flow.yaml"><failure message="while constructing a mapping">while constructing a mapping</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/key-complex-flow.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-complex-flow.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-complex-flow.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-complex-flow.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-complex-flow.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-complex-flow.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/key-duplicate-nested.yaml
 exit 1
 --- stdout
@@ -2742,7 +2539,7 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/key-explicit-plain.yaml"><failure message="unknown top-level key &quot;a&quot;">unknown top-level key "a"</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-explicit-plain.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-explicit-plain.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-explicit-plain.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-explicit-plain.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-explicit-plain.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/key-long-bom-1024.yaml
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/key-long.yaml
 exit 1
 --- stdout
 | {
@@ -2752,37 +2549,37 @@ exit 1
 |     {
 |       "code": "unknown-key",
 |       "severity": "error",
-|       "where": "yaml/key-long-bom-1024.yaml",
-|       "message": "unknown top-level key \"kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk\""
+|       "where": "yaml/key-long.yaml",
+|       "message": "unknown top-level key \"kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk\""
 |     },
 |     {
 |       "code": "missing-key",
 |       "severity": "error",
-|       "where": "yaml/key-long-bom-1024.yaml",
+|       "where": "yaml/key-long.yaml",
 |       "message": "required key \"events\" is missing"
 |     },
 |     {
 |       "code": "missing-key",
 |       "severity": "error",
-|       "where": "yaml/key-long-bom-1024.yaml",
+|       "where": "yaml/key-long.yaml",
 |       "message": "required key \"initial\" is missing"
 |     },
 |     {
 |       "code": "missing-key",
 |       "severity": "error",
-|       "where": "yaml/key-long-bom-1024.yaml",
+|       "where": "yaml/key-long.yaml",
 |       "message": "required key \"machine\" is missing"
 |     },
 |     {
 |       "code": "missing-key",
 |       "severity": "error",
-|       "where": "yaml/key-long-bom-1024.yaml",
+|       "where": "yaml/key-long.yaml",
 |       "message": "required key \"rules\" is missing"
 |     },
 |     {
 |       "code": "missing-key",
 |       "severity": "error",
-|       "where": "yaml/key-long-bom-1024.yaml",
+|       "where": "yaml/key-long.yaml",
 |       "message": "required key \"states\" is missing"
 |     }
 |   ]
@@ -2790,45 +2587,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/key-long-bom-1024.yaml"><failure message="unknown top-level key &quot;kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk&quot;">unknown top-level key "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-long-bom-1024.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-long-bom-1024.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-long-bom-1024.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-long-bom-1024.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-long-bom-1024.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/key-long-bom-1025.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "spec-unreadable",
-|       "severity": "error",
-|       "where": "yaml/key-long-bom-1025.yaml",
-|       "message": "mapping values are not allowed here"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/key-long-bom-1025.yaml"><failure message="mapping values are not allowed here">mapping values are not allowed here</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/key-long.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "spec-unreadable",
-|       "severity": "error",
-|       "where": "yaml/key-long.yaml",
-|       "message": "mapping values are not allowed here"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/key-long.yaml"><failure message="mapping values are not allowed here">mapping values are not allowed here</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/key-long.yaml"><failure message="unknown top-level key &quot;kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk&quot;">unknown top-level key "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-long.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-long.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-long.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-long.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-long.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/key-quoted-number.yaml
 exit 1
 --- stdout
@@ -2878,67 +2637,6 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/key-quoted-number.yaml"><failure message="unknown top-level key &quot;012&quot;">unknown top-level key "012"</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-quoted-number.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-quoted-number.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-quoted-number.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-quoted-number.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/key-quoted-number.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/merge-list.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/merge-list.yaml",
-|       "message": "unknown top-level key \"a\""
-|     },
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/merge-list.yaml",
-|       "message": "unknown top-level key \"b\""
-|     },
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/merge-list.yaml",
-|       "message": "unknown top-level key \"c\""
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/merge-list.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/merge-list.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/merge-list.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/merge-list.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/merge-list.yaml",
-|       "message": "required key \"states\" is missing"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="8" failures="8"><testcase classname="spine check" name="unknown-key yaml/merge-list.yaml"><failure message="unknown top-level key &quot;a&quot;">unknown top-level key "a"</failure></testcase><testcase classname="spine check" name="unknown-key yaml/merge-list.yaml"><failure message="unknown top-level key &quot;b&quot;">unknown top-level key "b"</failure></testcase><testcase classname="spine check" name="unknown-key yaml/merge-list.yaml"><failure message="unknown top-level key &quot;c&quot;">unknown top-level key "c"</failure></testcase><testcase classname="spine check" name="missing-key yaml/merge-list.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/merge-list.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/merge-list.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/merge-list.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/merge-list.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/merge-one.yaml
 exit 1
 --- stdout
@@ -3628,135 +3326,6 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/quote-double-multiline.yaml"><failure message="unknown top-level key &quot;k&quot;">unknown top-level key "k"</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-multiline.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-multiline.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-multiline.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-multiline.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-multiline.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/quote-double-slash-bom.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash-bom.yaml",
-|       "message": "unknown top-level key \"a/b\""
-|     },
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash-bom.yaml",
-|       "message": "unknown top-level key \"//x/\""
-|     },
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash-bom.yaml",
-|       "message": "unknown top-level key \"c\\/d\""
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash-bom.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash-bom.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash-bom.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash-bom.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash-bom.yaml",
-|       "message": "required key \"states\" is missing"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="8" failures="8"><testcase classname="spine check" name="unknown-key yaml/quote-double-slash-bom.yaml"><failure message="unknown top-level key &quot;a/b&quot;">unknown top-level key "a/b"</failure></testcase><testcase classname="spine check" name="unknown-key yaml/quote-double-slash-bom.yaml"><failure message="unknown top-level key &quot;//x/&quot;">unknown top-level key "//x/"</failure></testcase><testcase classname="spine check" name="unknown-key yaml/quote-double-slash-bom.yaml"><failure message="unknown top-level key &quot;c\/d&quot;">unknown top-level key "c\/d"</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-slash-bom.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-slash-bom.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-slash-bom.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-slash-bom.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-slash-bom.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/quote-double-slash-key-1024.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash-key-1024.yaml",
-|       "message": "unknown top-level key \"a/kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk\""
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash-key-1024.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash-key-1024.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash-key-1024.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash-key-1024.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash-key-1024.yaml",
-|       "message": "required key \"states\" is missing"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/quote-double-slash-key-1024.yaml"><failure message="unknown top-level key &quot;a/kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk&quot;">unknown top-level key "a/kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-slash-key-1024.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-slash-key-1024.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-slash-key-1024.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-slash-key-1024.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-slash-key-1024.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/quote-double-slash-key-1025.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "spec-unreadable",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash-key-1025.yaml",
-|       "message": "mapping values are not allowed here"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/quote-double-slash-key-1025.yaml"><failure message="mapping values are not allowed here">mapping values are not allowed here</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/quote-double-slash.yaml
 exit 1
 --- stdout
@@ -3765,60 +3334,18 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "unknown-key",
+|       "code": "spec-unreadable",
 |       "severity": "error",
 |       "where": "yaml/quote-double-slash.yaml",
-|       "message": "unknown top-level key \"a/b\""
-|     },
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash.yaml",
-|       "message": "unknown top-level key \"//x/\""
-|     },
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash.yaml",
-|       "message": "unknown top-level key \"c\\/d\""
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/quote-double-slash.yaml",
-|       "message": "required key \"states\" is missing"
+|       "message": "go-yaml load error in scanner (while scanning a quoted scalar) at L1.C2-C4: found unknown escape character"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="8" failures="8"><testcase classname="spine check" name="unknown-key yaml/quote-double-slash.yaml"><failure message="unknown top-level key &quot;a/b&quot;">unknown top-level key "a/b"</failure></testcase><testcase classname="spine check" name="unknown-key yaml/quote-double-slash.yaml"><failure message="unknown top-level key &quot;//x/&quot;">unknown top-level key "//x/"</failure></testcase><testcase classname="spine check" name="unknown-key yaml/quote-double-slash.yaml"><failure message="unknown top-level key &quot;c\/d&quot;">unknown top-level key "c\/d"</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-slash.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-slash.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-slash.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-slash.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/quote-double-slash.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/quote-double-surrogate-after-slash.yaml
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/quote-double-slash.yaml"><failure message="go-yaml load error in scanner (while scanning a quoted scalar) at L1.C2-C4: found unknown escape character">go-yaml load error in scanner (while scanning a quoted scalar) at L1.C2-C4: found unknown escape character</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/quote-double-surrogate-bom.yaml
 exit 1
 --- stdout
 | {
@@ -3828,15 +3355,15 @@ exit 1
 |     {
 |       "code": "spec-unreadable",
 |       "severity": "error",
-|       "where": "yaml/quote-double-surrogate-after-slash.yaml",
-|       "message": "not UTF-8: the string at line 1, column 22 escapes a surrogate (U+D800 to U+DFFF), which isn't a character; write the character itself"
+|       "where": "yaml/quote-double-surrogate-bom.yaml",
+|       "message": "not UTF-8: the string at line 1, column 4 escapes a surrogate (U+D800 to U+DFFF), which isn't a character; write the character itself"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/quote-double-surrogate-after-slash.yaml"><failure message="not UTF-8: the string at line 1, column 22 escapes a surrogate (U+D800 to U+DFFF), which isn't a character; write the character itself">not UTF-8: the string at line 1, column 22 escapes a surrogate (U+D800 to U+DFFF), which isn't a character; write the character itself</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/quote-double-surrogate-bom.yaml"><failure message="not UTF-8: the string at line 1, column 4 escapes a surrogate (U+D800 to U+DFFF), which isn't a character; write the character itself">not UTF-8: the string at line 1, column 4 escapes a surrogate (U+D800 to U+DFFF), which isn't a character; write the character itself</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/quote-double-surrogate-multiline.yaml
 exit 1
 --- stdout
@@ -5658,7 +5185,7 @@ exit 1
 |       "code": "unknown-key",
 |       "severity": "error",
 |       "where": "yaml/scalar-key-33.yaml",
-|       "message": "unknown top-level key \"=\""
+|       "message": "a top-level key is not text"
 |     },
 |     {
 |       "code": "missing-key",
@@ -5695,7 +5222,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/scalar-key-33.yaml"><failure message="unknown top-level key &quot;=&quot;">unknown top-level key "="</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-key-33.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-key-33.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-key-33.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-key-33.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-key-33.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/scalar-key-33.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-key-33.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-key-33.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-key-33.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-key-33.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-key-33.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/scalar-key-34.yaml
 exit 1
 --- stdout
@@ -5704,17 +5231,47 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "spec-unreadable",
+|       "code": "unknown-key",
 |       "severity": "error",
 |       "where": "yaml/scalar-key-34.yaml",
-|       "message": "while constructing a mapping"
+|       "message": "a top-level key is not text"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/scalar-key-34.yaml",
+|       "message": "required key \"events\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/scalar-key-34.yaml",
+|       "message": "required key \"initial\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/scalar-key-34.yaml",
+|       "message": "required key \"machine\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/scalar-key-34.yaml",
+|       "message": "required key \"rules\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/scalar-key-34.yaml",
+|       "message": "required key \"states\" is missing"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/scalar-key-34.yaml"><failure message="while constructing a mapping">while constructing a mapping</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/scalar-key-34.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-key-34.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-key-34.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-key-34.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-key-34.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-key-34.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/scalar-key-35.yaml
 exit 1
 --- stdout
@@ -7732,17 +7289,47 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "spec-unreadable",
+|       "code": "unknown-key",
 |       "severity": "error",
 |       "where": "yaml/scalar-value-33.yaml",
-|       "message": "could not determine a constructor for the tag 'tag:yaml.org,2002:value'"
+|       "message": "unknown top-level key \"k\""
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/scalar-value-33.yaml",
+|       "message": "required key \"events\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/scalar-value-33.yaml",
+|       "message": "required key \"initial\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/scalar-value-33.yaml",
+|       "message": "required key \"machine\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/scalar-value-33.yaml",
+|       "message": "required key \"rules\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/scalar-value-33.yaml",
+|       "message": "required key \"states\" is missing"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/scalar-value-33.yaml"><failure message="could not determine a constructor for the tag 'tag:yaml.org,2002:value'">could not determine a constructor for the tag 'tag:yaml.org,2002:value'</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/scalar-value-33.yaml"><failure message="unknown top-level key &quot;k&quot;">unknown top-level key "k"</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-value-33.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-value-33.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-value-33.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-value-33.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-value-33.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/scalar-value-34.yaml
 exit 1
 --- stdout
@@ -7751,17 +7338,47 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "spec-unreadable",
+|       "code": "unknown-key",
 |       "severity": "error",
 |       "where": "yaml/scalar-value-34.yaml",
-|       "message": "could not determine a constructor for the tag 'tag:yaml.org,2002:merge'"
+|       "message": "unknown top-level key \"k\""
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/scalar-value-34.yaml",
+|       "message": "required key \"events\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/scalar-value-34.yaml",
+|       "message": "required key \"initial\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/scalar-value-34.yaml",
+|       "message": "required key \"machine\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/scalar-value-34.yaml",
+|       "message": "required key \"rules\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/scalar-value-34.yaml",
+|       "message": "required key \"states\" is missing"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/scalar-value-34.yaml"><failure message="could not determine a constructor for the tag 'tag:yaml.org,2002:merge'">could not determine a constructor for the tag 'tag:yaml.org,2002:merge'</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/scalar-value-34.yaml"><failure message="unknown top-level key &quot;k&quot;">unknown top-level key "k"</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-value-34.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-value-34.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-value-34.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-value-34.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/scalar-value-34.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/scalar-value-35.yaml
 exit 1
 --- stdout
@@ -8211,17 +7828,47 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "spec-unreadable",
+|       "code": "unknown-key",
 |       "severity": "error",
 |       "where": "yaml/tag-custom.yaml",
-|       "message": "could not determine a constructor for the tag '!custom'"
+|       "message": "unknown top-level key \"k\""
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/tag-custom.yaml",
+|       "message": "required key \"events\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/tag-custom.yaml",
+|       "message": "required key \"initial\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/tag-custom.yaml",
+|       "message": "required key \"machine\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/tag-custom.yaml",
+|       "message": "required key \"rules\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/tag-custom.yaml",
+|       "message": "required key \"states\" is missing"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/tag-custom.yaml"><failure message="could not determine a constructor for the tag '!custom'">could not determine a constructor for the tag '!custom'</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/tag-custom.yaml"><failure message="unknown top-level key &quot;k&quot;">unknown top-level key "k"</failure></testcase><testcase classname="spine check" name="missing-key yaml/tag-custom.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/tag-custom.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/tag-custom.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/tag-custom.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/tag-custom.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/tag-directive.yaml
 exit 1
 --- stdout
@@ -8230,17 +7877,47 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "spec-unreadable",
+|       "code": "unknown-key",
 |       "severity": "error",
 |       "where": "yaml/tag-directive.yaml",
-|       "message": "could not determine a constructor for the tag 'tag:example.com,2000:thing'"
+|       "message": "unknown top-level key \"k\""
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/tag-directive.yaml",
+|       "message": "required key \"events\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/tag-directive.yaml",
+|       "message": "required key \"initial\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/tag-directive.yaml",
+|       "message": "required key \"machine\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/tag-directive.yaml",
+|       "message": "required key \"rules\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/tag-directive.yaml",
+|       "message": "required key \"states\" is missing"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/tag-directive.yaml"><failure message="could not determine a constructor for the tag 'tag:example.com,2000:thing'">could not determine a constructor for the tag 'tag:example.com,2000:thing'</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/tag-directive.yaml"><failure message="unknown top-level key &quot;k&quot;">unknown top-level key "k"</failure></testcase><testcase classname="spine check" name="missing-key yaml/tag-directive.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/tag-directive.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/tag-directive.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/tag-directive.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/tag-directive.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/tag-int-quoted.yaml
 exit 1
 --- stdout
@@ -8290,6 +7967,25 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/tag-int-quoted.yaml"><failure message="unknown top-level key &quot;k&quot;">unknown top-level key "k"</failure></testcase><testcase classname="spine check" name="missing-key yaml/tag-int-quoted.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/tag-int-quoted.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/tag-int-quoted.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/tag-int-quoted.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/tag-int-quoted.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/tag-nonspecific-value.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": [
+|     {
+|       "code": "spec-shape",
+|       "severity": "error",
+|       "where": "machine",
+|       "message": "\"machine\" must be text"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version='1.0' encoding='utf-8'?>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape machine"><failure message="&quot;machine&quot; must be text">"machine" must be text</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/tag-nonspecific.yaml
 exit 1
 --- stdout
@@ -8549,70 +8245,39 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "spec-unreadable",
+|       "code": "unknown-key",
 |       "severity": "error",
 |       "where": "yaml/value-custom-tag.yaml",
-|       "message": "could not determine a constructor for the tag '!custom'"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/value-custom-tag.yaml"><failure message="could not determine a constructor for the tag '!custom'">could not determine a constructor for the tag '!custom'</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-keys-dates.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/value-keys-dates.yaml",
-|       "message": "a top-level key is not text"
-|     },
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/value-keys-dates.yaml",
-|       "message": "a top-level key is not text"
-|     },
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/value-keys-dates.yaml",
-|       "message": "a top-level key is not text"
+|       "message": "unknown top-level key \"v\""
 |     },
 |     {
 |       "code": "missing-key",
 |       "severity": "error",
-|       "where": "yaml/value-keys-dates.yaml",
+|       "where": "yaml/value-custom-tag.yaml",
 |       "message": "required key \"events\" is missing"
 |     },
 |     {
 |       "code": "missing-key",
 |       "severity": "error",
-|       "where": "yaml/value-keys-dates.yaml",
+|       "where": "yaml/value-custom-tag.yaml",
 |       "message": "required key \"initial\" is missing"
 |     },
 |     {
 |       "code": "missing-key",
 |       "severity": "error",
-|       "where": "yaml/value-keys-dates.yaml",
+|       "where": "yaml/value-custom-tag.yaml",
 |       "message": "required key \"machine\" is missing"
 |     },
 |     {
 |       "code": "missing-key",
 |       "severity": "error",
-|       "where": "yaml/value-keys-dates.yaml",
+|       "where": "yaml/value-custom-tag.yaml",
 |       "message": "required key \"rules\" is missing"
 |     },
 |     {
 |       "code": "missing-key",
 |       "severity": "error",
-|       "where": "yaml/value-keys-dates.yaml",
+|       "where": "yaml/value-custom-tag.yaml",
 |       "message": "required key \"states\" is missing"
 |     }
 |   ]
@@ -8620,7 +8285,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="8" failures="8"><testcase classname="spine check" name="unknown-key yaml/value-keys-dates.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-keys-dates.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-keys-dates.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-dates.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-dates.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-dates.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-dates.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-dates.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/value-custom-tag.yaml"><failure message="unknown top-level key &quot;v&quot;">unknown top-level key "v"</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-custom-tag.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-custom-tag.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-custom-tag.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-custom-tag.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-custom-tag.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-keys-equal.yaml
 exit 1
 --- stdout
@@ -8633,6 +8298,30 @@ exit 1
 |       "severity": "error",
 |       "where": "yaml/value-keys-equal.yaml",
 |       "message": "a top-level key is not text"
+|     },
+|     {
+|       "code": "yaml-boolean-key",
+|       "severity": "error",
+|       "where": "yaml/value-keys-equal.yaml",
+|       "message": "top-level key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it"
+|     },
+|     {
+|       "code": "unknown-key",
+|       "severity": "error",
+|       "where": "yaml/value-keys-equal.yaml",
+|       "message": "a top-level key is not text"
+|     },
+|     {
+|       "code": "unknown-key",
+|       "severity": "error",
+|       "where": "yaml/value-keys-equal.yaml",
+|       "message": "a top-level key is not text"
+|     },
+|     {
+|       "code": "yaml-boolean-key",
+|       "severity": "error",
+|       "where": "yaml/value-keys-equal.yaml",
+|       "message": "top-level key read as False; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it"
 |     },
 |     {
 |       "code": "unknown-key",
@@ -8681,111 +8370,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="8" failures="8"><testcase classname="spine check" name="unknown-key yaml/value-keys-equal.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-keys-equal.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-keys-equal.yaml"><failure message="unknown top-level key &quot;1&quot;">unknown top-level key "1"</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-equal.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-equal.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-equal.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-equal.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-equal.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-keys-int-float-big.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/value-keys-int-float-big.yaml",
-|       "message": "a top-level key is not text"
-|     },
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/value-keys-int-float-big.yaml",
-|       "message": "a top-level key is not text"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-keys-int-float-big.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-keys-int-float-big.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-keys-int-float-big.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-keys-int-float-big.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-keys-int-float-big.yaml",
-|       "message": "required key \"states\" is missing"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="7" failures="7"><testcase classname="spine check" name="unknown-key yaml/value-keys-int-float-big.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-keys-int-float-big.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-int-float-big.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-int-float-big.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-int-float-big.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-int-float-big.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-int-float-big.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-keys-nan.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/value-keys-nan.yaml",
-|       "message": "a top-level key is not text"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-keys-nan.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-keys-nan.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-keys-nan.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-keys-nan.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-keys-nan.yaml",
-|       "message": "required key \"states\" is missing"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/value-keys-nan.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-nan.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-nan.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-nan.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-nan.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-nan.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="12" failures="12"><testcase classname="spine check" name="unknown-key yaml/value-keys-equal.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="yaml-boolean-key yaml/value-keys-equal.yaml"><failure message="top-level key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it">top-level key read as True; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-keys-equal.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-keys-equal.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="yaml-boolean-key yaml/value-keys-equal.yaml"><failure message="top-level key read as False; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it">top-level key read as False; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-keys-equal.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-keys-equal.yaml"><failure message="unknown top-level key &quot;1&quot;">unknown top-level key "1"</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-equal.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-equal.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-equal.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-equal.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-equal.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-keys-null.yaml
 exit 1
 --- stdout
@@ -8793,6 +8378,12 @@ exit 1
 |   "tool": "spine",
 |   "command": "check",
 |   "findings": [
+|     {
+|       "code": "unknown-key",
+|       "severity": "error",
+|       "where": "yaml/value-keys-null.yaml",
+|       "message": "a top-level key is not text"
+|     },
 |     {
 |       "code": "unknown-key",
 |       "severity": "error",
@@ -8840,7 +8431,7 @@ exit 1
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="7" failures="7"><testcase classname="spine check" name="unknown-key yaml/value-keys-null.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-keys-null.yaml"><failure message="unknown top-level key &quot;&quot;">unknown top-level key ""</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-null.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-null.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-null.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-null.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-null.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="8" failures="8"><testcase classname="spine check" name="unknown-key yaml/value-keys-null.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-keys-null.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-keys-null.yaml"><failure message="unknown top-level key &quot;&quot;">unknown top-level key ""</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-null.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-null.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-null.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-null.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-null.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-keys-unhashable-list.yaml
 exit 1
 --- stdout
@@ -8849,17 +8440,47 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "spec-unreadable",
+|       "code": "unknown-key",
 |       "severity": "error",
 |       "where": "yaml/value-keys-unhashable-list.yaml",
-|       "message": "while constructing a mapping"
+|       "message": "a top-level key is not text"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-keys-unhashable-list.yaml",
+|       "message": "required key \"events\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-keys-unhashable-list.yaml",
+|       "message": "required key \"initial\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-keys-unhashable-list.yaml",
+|       "message": "required key \"machine\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-keys-unhashable-list.yaml",
+|       "message": "required key \"rules\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-keys-unhashable-list.yaml",
+|       "message": "required key \"states\" is missing"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/value-keys-unhashable-list.yaml"><failure message="while constructing a mapping">while constructing a mapping</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/value-keys-unhashable-list.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-unhashable-list.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-unhashable-list.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-unhashable-list.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-unhashable-list.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-unhashable-list.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-keys-unhashable-map.yaml
 exit 1
 --- stdout
@@ -8868,17 +8489,47 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "spec-unreadable",
+|       "code": "unknown-key",
 |       "severity": "error",
 |       "where": "yaml/value-keys-unhashable-map.yaml",
-|       "message": "while constructing a mapping"
+|       "message": "a top-level key is not text"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-keys-unhashable-map.yaml",
+|       "message": "required key \"events\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-keys-unhashable-map.yaml",
+|       "message": "required key \"initial\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-keys-unhashable-map.yaml",
+|       "message": "required key \"machine\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-keys-unhashable-map.yaml",
+|       "message": "required key \"rules\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-keys-unhashable-map.yaml",
+|       "message": "required key \"states\" is missing"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/value-keys-unhashable-map.yaml"><failure message="while constructing a mapping">while constructing a mapping</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/value-keys-unhashable-map.yaml"><failure message="a top-level key is not text">a top-level key is not text</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-unhashable-map.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-unhashable-map.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-unhashable-map.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-unhashable-map.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-keys-unhashable-map.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-merge-basic.yaml
 exit 1
 --- stdout
@@ -8934,147 +8585,6 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="7" failures="7"><testcase classname="spine check" name="unknown-key yaml/value-merge-basic.yaml"><failure message="unknown top-level key &quot;b&quot;">unknown top-level key "b"</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-merge-basic.yaml"><failure message="unknown top-level key &quot;u&quot;">unknown top-level key "u"</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-basic.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-basic.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-basic.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-basic.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-basic.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-merge-list-scalar.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "spec-unreadable",
-|       "severity": "error",
-|       "where": "yaml/value-merge-list-scalar.yaml",
-|       "message": "while constructing a mapping"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/value-merge-list-scalar.yaml"><failure message="while constructing a mapping">while constructing a mapping</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-merge-list.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-list.yaml",
-|       "message": "unknown top-level key \"a\""
-|     },
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-list.yaml",
-|       "message": "unknown top-level key \"b\""
-|     },
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-list.yaml",
-|       "message": "unknown top-level key \"u\""
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-list.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-list.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-list.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-list.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-list.yaml",
-|       "message": "required key \"states\" is missing"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="8" failures="8"><testcase classname="spine check" name="unknown-key yaml/value-merge-list.yaml"><failure message="unknown top-level key &quot;a&quot;">unknown top-level key "a"</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-merge-list.yaml"><failure message="unknown top-level key &quot;b&quot;">unknown top-level key "b"</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-merge-list.yaml"><failure message="unknown top-level key &quot;u&quot;">unknown top-level key "u"</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-list.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-list.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-list.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-list.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-list.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-merge-nested.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-nested.yaml",
-|       "message": "unknown top-level key \"a\""
-|     },
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-nested.yaml",
-|       "message": "unknown top-level key \"b\""
-|     },
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-nested.yaml",
-|       "message": "unknown top-level key \"u\""
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-nested.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-nested.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-nested.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-nested.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-nested.yaml",
-|       "message": "required key \"states\" is missing"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="8" failures="8"><testcase classname="spine check" name="unknown-key yaml/value-merge-nested.yaml"><failure message="unknown top-level key &quot;a&quot;">unknown top-level key "a"</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-merge-nested.yaml"><failure message="unknown top-level key &quot;b&quot;">unknown top-level key "b"</failure></testcase><testcase classname="spine check" name="unknown-key yaml/value-merge-nested.yaml"><failure message="unknown top-level key &quot;u&quot;">unknown top-level key "u"</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-nested.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-nested.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-nested.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-nested.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-nested.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-merge-quoted.yaml
 exit 1
 --- stdout
@@ -9124,93 +8634,6 @@ exit 1
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
 | <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/value-merge-quoted.yaml"><failure message="unknown top-level key &quot;u&quot;">unknown top-level key "u"</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-quoted.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-quoted.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-quoted.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-quoted.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-quoted.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-merge-scalar.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "spec-unreadable",
-|       "severity": "error",
-|       "where": "yaml/value-merge-scalar.yaml",
-|       "message": "while constructing a mapping"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/value-merge-scalar.yaml"><failure message="while constructing a mapping">while constructing a mapping</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-merge-self.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "unknown-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-self.yaml",
-|       "message": "unknown top-level key \"u\""
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-self.yaml",
-|       "message": "required key \"events\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-self.yaml",
-|       "message": "required key \"initial\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-self.yaml",
-|       "message": "required key \"machine\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-self.yaml",
-|       "message": "required key \"rules\" is missing"
-|     },
-|     {
-|       "code": "missing-key",
-|       "severity": "error",
-|       "where": "yaml/value-merge-self.yaml",
-|       "message": "required key \"states\" is missing"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/value-merge-self.yaml"><failure message="unknown top-level key &quot;u&quot;">unknown top-level key "u"</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-self.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-self.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-self.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-self.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-merge-self.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-merge-value.yaml
-exit 1
---- stdout
-| {
-|   "tool": "spine",
-|   "command": "check",
-|   "findings": [
-|     {
-|       "code": "spec-unreadable",
-|       "severity": "error",
-|       "where": "yaml/value-merge-value.yaml",
-|       "message": "could not determine a constructor for the tag 'tag:yaml.org,2002:merge'"
-|     }
-|   ]
-| }
-|
---- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/value-merge-value.yaml"><failure message="could not determine a constructor for the tag 'tag:yaml.org,2002:merge'">could not determine a constructor for the tag 'tag:yaml.org,2002:merge'</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-omap.yaml
 exit 1
 --- stdout
@@ -9268,17 +8691,47 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "spec-unreadable",
+|       "code": "unknown-key",
 |       "severity": "error",
 |       "where": "yaml/value-pairs-bad.yaml",
-|       "message": "expected a mapping of length 1"
+|       "message": "unknown top-level key \"v\""
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-pairs-bad.yaml",
+|       "message": "required key \"events\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-pairs-bad.yaml",
+|       "message": "required key \"initial\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-pairs-bad.yaml",
+|       "message": "required key \"machine\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-pairs-bad.yaml",
+|       "message": "required key \"rules\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-pairs-bad.yaml",
+|       "message": "required key \"states\" is missing"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/value-pairs-bad.yaml"><failure message="expected a mapping of length 1">expected a mapping of length 1</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/value-pairs-bad.yaml"><failure message="unknown top-level key &quot;v&quot;">unknown top-level key "v"</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-pairs-bad.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-pairs-bad.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-pairs-bad.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-pairs-bad.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-pairs-bad.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-recursive-list.yaml
 exit 1
 --- stdout
@@ -9385,17 +8838,47 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "spec-unreadable",
+|       "code": "unknown-key",
 |       "severity": "error",
 |       "where": "yaml/value-set.yaml",
-|       "message": "key 'a' is given twice in one mapping, on line 1"
+|       "message": "unknown top-level key \"v\""
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-set.yaml",
+|       "message": "required key \"events\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-set.yaml",
+|       "message": "required key \"initial\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-set.yaml",
+|       "message": "required key \"machine\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-set.yaml",
+|       "message": "required key \"rules\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-set.yaml",
+|       "message": "required key \"states\" is missing"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/value-set.yaml"><failure message="key 'a' is given twice in one mapping, on line 1">key 'a' is given twice in one mapping, on line 1</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/value-set.yaml"><failure message="unknown top-level key &quot;v&quot;">unknown top-level key "v"</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-set.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-set.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-set.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-set.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-set.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-tag-handle.yaml
 exit 1
 --- stdout
@@ -9502,17 +8985,47 @@ exit 1
 |   "command": "check",
 |   "findings": [
 |     {
-|       "code": "spec-unreadable",
+|       "code": "unknown-key",
 |       "severity": "error",
 |       "where": "yaml/value-value-key.yaml",
-|       "message": "could not determine a constructor for the tag 'tag:yaml.org,2002:value'"
+|       "message": "unknown top-level key \"u\""
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-value-key.yaml",
+|       "message": "required key \"events\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-value-key.yaml",
+|       "message": "required key \"initial\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-value-key.yaml",
+|       "message": "required key \"machine\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-value-key.yaml",
+|       "message": "required key \"rules\" is missing"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "yaml/value-value-key.yaml",
+|       "message": "required key \"states\" is missing"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable yaml/value-value-key.yaml"><failure message="could not determine a constructor for the tag 'tag:yaml.org,2002:value'">could not determine a constructor for the tag 'tag:yaml.org,2002:value'</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="6" failures="6"><testcase classname="spine check" name="unknown-key yaml/value-value-key.yaml"><failure message="unknown top-level key &quot;u&quot;">unknown top-level key "u"</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-value-key.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-value-key.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-value-key.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-value-key.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key yaml/value-value-key.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT yaml/value-verbatim.yaml
 exit 1
 --- stdout

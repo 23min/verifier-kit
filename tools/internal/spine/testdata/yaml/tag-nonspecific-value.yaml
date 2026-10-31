@@ -1,0 +1,7 @@
+# The non-specific tag: YAML readers disagree on "! yes", so the format refuses it.
+machine: ! yes
+states: {a: {}}
+initial: a
+events: [go]
+rules:
+  - {from: a, event: go, stay: true}
