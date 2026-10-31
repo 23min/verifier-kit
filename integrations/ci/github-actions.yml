@@ -25,11 +25,8 @@ jobs:
         with:
           fetch-depth: 0            # the path guard diffs against the base commit
 
-      - uses: actions/setup-python@v7
-        with:
-          python-version: "3.13"
-
-      - run: pip install pyyaml
+      # Set up the languages your project's pieces are written in here: for a Python project,
+      # actions/setup-python, as its .cmd lines call tools/run_checks.py and tools/adapter_shim.py.
 
       - uses: actions/setup-go@v7       # ./verify builds spine and verify from tools/
         with:
