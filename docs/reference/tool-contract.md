@@ -82,7 +82,7 @@ the command and what is wrong, and exit 2.
 | `unknown-key` | error | all | a key outside an input file's format, or a key that isn't text |
 | `yaml-boolean-key` | error | all | a key YAML read as a boolean (`on`, `off`, `yes`, `no`) |
 | `yaml-boolean-value` | error | all | a value YAML read as a boolean where a name was meant |
-| `bad-value` | error | all | a value outside its closed set, such as a state kind, a role the policy does not define, or an `expect` that isn't a declared state |
+| `bad-value` | error | all | a value outside its closed set, such as a state kind, a `terminal` that isn't true or false, a role the policy does not define, or an `expect` that isn't a declared state |
 | `listed-twice` | error | all | an event, or a value of one variable, listed more than once in a spine or reading |
 | `bad-outcome` | error | all | a rule without exactly one outcome |
 | `bad-condition` | error | all | a condition outside the condition language (`spine-format.md`) |
@@ -191,7 +191,7 @@ roles:
 A changed file fails if any `deny` pattern matches, or if no `allow` pattern does. Patterns use
 `fnmatch`, where `*` also matches `/`. `branches` and `roles` are required and nothing else is
 allowed; every role a branch pattern names must be in `roles`, and a role holds only `allow`
-and `deny`, each a list of patterns and each optional. Anything else is a finding.
+and `deny`, each a list of patterns and each optional, so a role given as null holds neither. Anything else is a finding.
 
 ## `./verify`
 

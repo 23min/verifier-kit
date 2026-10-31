@@ -1,6 +1,6 @@
-# No variables: an empty list counts as none, as in tools/spine.py.
+# No variables: an empty mapping.
 machine: lamp
-vars: []
+vars: {}
 states: {dark: {}, lit: {}, broken: {}}
 initial: dark
 events: [press, drop]

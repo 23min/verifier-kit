@@ -95,6 +95,22 @@ else: `"yes"`, `"no"`, `"on"`, `"off"`, `"012"`, `"1.5"`, `"2026-10-14"`, `"null
 as true or false is a `yaml-boolean-key` and such a value a `yaml-boolean-value`; any other key
 that isn't text is an `unknown-key`, and any other value a `spec-shape`.
 
+That is the reading of plain words that YAML 1.1 readers share, so a spine means the same
+whatever YAML a tool reads it with:
+
+- `yes`, `no`, `on`, `off`, `true` and `false`, in lower case, with a capital or in capitals,
+  are true or false;
+- `null`, `Null`, `NULL`, `~` and nothing are null;
+- numbers, such as `12`, `-1`, `012`, `0x1F`, `1_000`, `1.5`, `.inf` and `1:20`, dates and times,
+  such as `2026-10-14` and `2026-10-14 12:00:00`, and the keys `<<` and `=` are none of these,
+  and not text either.
+
+Quoted words, and words tagged `!!str`, are text. A value with any other explicit tag, `!`
+included, is not text, except `!!seq` on a list and `!!map` on a mapping. `terminal` is `true`
+or `false`, and a missing or null `vars`, or state details, is an empty mapping. YAML that
+`spine` can't read, such as a `%YAML 1.2` or unknown directive, or a `\/` escape, makes the
+file `spec-unreadable`.
+
 A file is UTF-8 text. An escape for a surrogate, U+D800 to U+DFFF, such as `"\ud800"` or the
 JSON-style pair `"\ud83d\ude00"`, isn't a character: the file is `spec-unreadable`. Write the
 character itself, or `\U` and its eight hex digits.

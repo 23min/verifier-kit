@@ -79,9 +79,9 @@ func allText(v *Value) bool {
 	return true
 }
 
-// orEmpty is Python's `v or {}`: a false value becomes an empty mapping.
+// orEmpty is v, or an empty mapping when v is missing or null.
 func orEmpty(v *Value) *Value {
-	if truthy(v) {
+	if v != nil && v.Kind != KNull {
 		return v
 	}
 	return &Value{Kind: KMap, Map: newMap()}
@@ -393,6 +393,9 @@ func validate(spec *Value, path string) Findings {
 		if kind, ok := meta.Map.Get("kind"); ok && (!isText(kind) || !stateKinds[kind.Str]) {
 			out.Add("bad-value", where, "kind must be one of ['design', 'fact', 'policy']")
 		}
+		if t, ok := meta.Map.Get("terminal"); ok && !isBool(t) {
+			out.Add("bad-value", where, "terminal must be true or false")
+		}
 	}
 	if !isList(events) || !allText(events) {
 		out.Add("spec-shape", "events", "events must be a list of names")
@@ -463,7 +466,7 @@ func validate(spec *Value, path string) Findings {
 		}
 		if len(given) != 1 {
 			out.Add("bad-outcome", where, "a rule needs exactly one of to, reject, ignore, stay")
-		} else if v, _ := r.Get(given[0]); given[0] != "to" && !(isBool(v) && v.Bool) {
+		} else if v, _ := r.Get(given[0]); given[0] != "to" && !isTrue(v) {
 			out.Add("bad-outcome", where, given[0]+" must be true")
 		}
 		if when, ok := r.Get("when"); ok {
