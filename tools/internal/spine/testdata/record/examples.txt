@@ -15,7 +15,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine behaviors" tests="1" failures="0"><testcase classname="spine behaviors" name="no errors" /></testsuite>
 === in .: spine behaviors --format json --junit REPORT examples/notes/spec/notes/spine.yaml examples/notes/spec/notes/behaviors
 exit 0
@@ -34,7 +34,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine behaviors" tests="1" failures="0"><testcase classname="spine behaviors" name="no errors" /></testsuite>
 === in .: spine behaviors --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/spec/ref_sync/behaviors
 exit 0
@@ -53,7 +53,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine behaviors" tests="1" failures="0"><testcase classname="spine behaviors" name="no errors" /></testsuite>
 === in .: spine behaviors examples/elixir_job/spec/job/spine.yaml examples/elixir_job/spec/job/behaviors
 exit 0
@@ -83,7 +83,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in .: spine check --format json --junit REPORT examples/elixir_job/spec/job/readings/reading-b.yaml
 exit 0
@@ -95,7 +95,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in .: spine check --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml
 exit 0
@@ -107,7 +107,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in .: spine check --format json --junit REPORT examples/notes/spec/notes/readings/reading-a.yaml
 exit 1
@@ -270,7 +270,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="25" failures="25"><testcase classname="spine check" name="missing-case draft/publish"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case draft/edit"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case draft/edit"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case draft/trash"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case draft/trash"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case draft/restore"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case draft/restore"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case draft/purge"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case draft/purge"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case active/publish"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case active/publish"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case active/edit"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case active/trash"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case active/restore"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case active/restore"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case active/purge"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case active/purge"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case trashed/publish"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case trashed/publish"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case trashed/edit"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case trashed/edit"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case trashed/trash"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case trashed/trash"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case trashed/restore"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case trashed/purge"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase></testsuite>
 === in .: spine check --format json --junit REPORT examples/notes/spec/notes/readings/reading-b.yaml
 exit 1
@@ -403,7 +403,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="20" failures="20"><testcase classname="spine check" name="missing-case draft/publish"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case draft/publish"><failure message="no rule covers roles=viewer">no rule covers roles=viewer</failure></testcase><testcase classname="spine check" name="missing-case draft/edit"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case draft/trash"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case draft/trash"><failure message="no rule covers roles=viewer">no rule covers roles=viewer</failure></testcase><testcase classname="spine check" name="undecided-cell draft/restore"><failure message="nothing says what &quot;restore&quot; does in &quot;draft&quot;">nothing says what "restore" does in "draft"</failure></testcase><testcase classname="spine check" name="undecided-cell draft/purge"><failure message="nothing says what &quot;purge&quot; does in &quot;draft&quot;">nothing says what "purge" does in "draft"</failure></testcase><testcase classname="spine check" name="undecided-cell active/publish"><failure message="nothing says what &quot;publish&quot; does in &quot;active&quot;">nothing says what "publish" does in "active"</failure></testcase><testcase classname="spine check" name="missing-case active/edit"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case active/trash"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case active/trash"><failure message="no rule covers roles=viewer">no rule covers roles=viewer</failure></testcase><testcase classname="spine check" name="undecided-cell active/restore"><failure message="nothing says what &quot;restore&quot; does in &quot;active&quot;">nothing says what "restore" does in "active"</failure></testcase><testcase classname="spine check" name="undecided-cell active/purge"><failure message="nothing says what &quot;purge&quot; does in &quot;active&quot;">nothing says what "purge" does in "active"</failure></testcase><testcase classname="spine check" name="undecided-cell trashed/publish"><failure message="nothing says what &quot;publish&quot; does in &quot;trashed&quot;">nothing says what "publish" does in "trashed"</failure></testcase><testcase classname="spine check" name="missing-case trashed/edit"><failure message="no rule covers roles=owner">no rule covers roles=owner</failure></testcase><testcase classname="spine check" name="missing-case trashed/edit"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="undecided-cell trashed/trash"><failure message="nothing says what &quot;trash&quot; does in &quot;trashed&quot;">nothing says what "trash" does in "trashed"</failure></testcase><testcase classname="spine check" name="undecided-cell trashed/restore"><failure message="nothing says what &quot;restore&quot; does in &quot;trashed&quot;">nothing says what "restore" does in "trashed"</failure></testcase><testcase classname="spine check" name="missing-case trashed/purge"><failure message="no rule covers roles=editor">no rule covers roles=editor</failure></testcase><testcase classname="spine check" name="missing-case trashed/purge"><failure message="no rule covers roles=viewer">no rule covers roles=viewer</failure></testcase></testsuite>
 === in .: spine check --format json --junit REPORT examples/notes/spec/notes/spine.yaml
 exit 0
@@ -415,7 +415,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in .: spine check --format json --junit REPORT examples/ref_sync/spec/ref_sync/readings/reading-a.yaml
 exit 0
@@ -427,7 +427,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in .: spine check --format json --junit REPORT examples/ref_sync/spec/ref_sync/readings/reading-b.yaml
 exit 1
@@ -518,7 +518,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="13" failures="13"><testcase classname="spine check" name="undecided-cell queued/accepted"><failure message="nothing says what &quot;accepted&quot; does in &quot;queued&quot;">nothing says what "accepted" does in "queued"</failure></testcase><testcase classname="spine check" name="undecided-cell queued/non_fast_forward"><failure message="nothing says what &quot;non_fast_forward&quot; does in &quot;queued&quot;">nothing says what "non_fast_forward" does in "queued"</failure></testcase><testcase classname="spine check" name="undecided-cell queued/response_lost"><failure message="nothing says what &quot;response_lost&quot; does in &quot;queued&quot;">nothing says what "response_lost" does in "queued"</failure></testcase><testcase classname="spine check" name="undecided-cell prepared/prepare"><failure message="nothing says what &quot;prepare&quot; does in &quot;prepared&quot;">nothing says what "prepare" does in "prepared"</failure></testcase><testcase classname="spine check" name="undecided-cell prepared/seen_on_remote"><failure message="nothing says what &quot;seen_on_remote&quot; does in &quot;prepared&quot;">nothing says what "seen_on_remote" does in "prepared"</failure></testcase><testcase classname="spine check" name="undecided-cell prepared/absent_on_remote"><failure message="nothing says what &quot;absent_on_remote&quot; does in &quot;prepared&quot;">nothing says what "absent_on_remote" does in "prepared"</failure></testcase><testcase classname="spine check" name="undecided-cell prepared/digest_mismatch"><failure message="nothing says what &quot;digest_mismatch&quot; does in &quot;prepared&quot;">nothing says what "digest_mismatch" does in "prepared"</failure></testcase><testcase classname="spine check" name="undecided-cell prepared/invalidated"><failure message="nothing says what &quot;invalidated&quot; does in &quot;prepared&quot;">nothing says what "invalidated" does in "prepared"</failure></testcase><testcase classname="spine check" name="undecided-cell uncertain/prepare"><failure message="nothing says what &quot;prepare&quot; does in &quot;uncertain&quot;">nothing says what "prepare" does in "uncertain"</failure></testcase><testcase classname="spine check" name="undecided-cell uncertain/accepted"><failure message="nothing says what &quot;accepted&quot; does in &quot;uncertain&quot;">nothing says what "accepted" does in "uncertain"</failure></testcase><testcase classname="spine check" name="undecided-cell uncertain/non_fast_forward"><failure message="nothing says what &quot;non_fast_forward&quot; does in &quot;uncertain&quot;">nothing says what "non_fast_forward" does in "uncertain"</failure></testcase><testcase classname="spine check" name="undecided-cell uncertain/response_lost"><failure message="nothing says what &quot;response_lost&quot; does in &quot;uncertain&quot;">nothing says what "response_lost" does in "uncertain"</failure></testcase><testcase classname="spine check" name="undecided-cell uncertain/invalidated"><failure message="nothing says what &quot;invalidated&quot; does in &quot;uncertain&quot;">nothing says what "invalidated" does in "uncertain"</failure></testcase></testsuite>
 === in .: spine check --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml
 exit 0
@@ -530,7 +530,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in .: spine check examples/elixir_job/spec/job/readings/reading-a.yaml
 exit 0
@@ -652,7 +652,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 tools/adapter_shim.py examples/elixir_job/conformance/adapter_job.py"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
 === in .: spine conform --format json --junit REPORT examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/notes/conformance/adapter_notes.py" with PYTHONPATH=examples/notes/src
 exit 0
@@ -671,7 +671,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
 === in .: spine conform --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/ref_sync/conformance/adapter_ref_sync.py" with PYTHONPATH=examples/ref_sync/src
 exit 0
@@ -690,7 +690,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
 === in .: spine conform examples/elixir_job/spec/job/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/elixir_job/conformance/adapter_job.py" with PYTHONPATH=examples/elixir_job/src
 exit 1
@@ -720,7 +720,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/elixir_job/spec/job/readings/reading-a.yaml examples/elixir_job/spec/job/readings/reading-b.yaml
 exit 0
@@ -732,7 +732,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/elixir_job/spec/job/readings/reading-a.yaml examples/elixir_job/spec/job/spine.yaml
 exit 0
@@ -744,7 +744,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/elixir_job/spec/job/readings/reading-b.yaml examples/elixir_job/spec/job/readings/reading-a.yaml
 exit 0
@@ -756,7 +756,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/elixir_job/spec/job/readings/reading-b.yaml examples/elixir_job/spec/job/readings/reading-b.yaml
 exit 0
@@ -768,7 +768,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/elixir_job/spec/job/readings/reading-b.yaml examples/elixir_job/spec/job/spine.yaml
 exit 0
@@ -780,7 +780,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml examples/elixir_job/spec/job/readings/reading-a.yaml
 exit 0
@@ -792,7 +792,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml examples/elixir_job/spec/job/readings/reading-b.yaml
 exit 0
@@ -804,7 +804,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml examples/elixir_job/spec/job/spine.yaml
 exit 0
@@ -816,7 +816,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/notes/spec/notes/readings/reading-a.yaml examples/notes/spec/notes/readings/reading-a.yaml
 exit 0
@@ -828,7 +828,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/notes/spec/notes/readings/reading-a.yaml examples/notes/spec/notes/readings/reading-b.yaml
 exit 1
@@ -1021,7 +1021,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="30" failures="30"><testcase classname="spine diff" name="case-disagrees active/publish"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees active/trash"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees active/restore"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees active/purge"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/publish"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/edit"><failure message="roles=editor: A says nothing (no rule matches), B says stay">roles=editor: A says nothing (no rule matches), B says stay</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/trash"><failure message="roles=owner: A says nothing (no rule matches), B says -&gt; trashed">roles=owner: A says nothing (no rule matches), B says -&gt; trashed</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/trash"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/restore"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/purge"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/publish"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/trash"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/restore"><failure message="roles=owner: A says -&gt; active, B says nothing (no rule matches)">roles=owner: A says -&gt; active, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/restore"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/purge"><failure message="roles=viewer: A says reject, B says nothing (no rule matches)">roles=viewer: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs edit(roles=editor)"><failure message="A ends undefined, B ends draft">A ends undefined, B ends draft</failure></testcase><testcase classname="spine diff" name="behavior-differs trash(roles=owner)"><failure message="A ends undefined, B ends trashed">A ends undefined, B ends trashed</failure></testcase><testcase classname="spine diff" name="behavior-differs trash(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs restore(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs purge(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; publish(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; restore(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; purge(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; publish(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; trash(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; restore(roles=owner)"><failure message="A ends active, B ends undefined">A ends active, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; restore(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; purge(roles=viewer)"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/notes/spec/notes/readings/reading-a.yaml examples/notes/spec/notes/spine.yaml
 exit 1
@@ -1040,7 +1040,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="vars-differ vars"><failure message="A and B declare different variables; case comparison skipped">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/notes/spec/notes/readings/reading-b.yaml examples/notes/spec/notes/readings/reading-a.yaml
 exit 1
@@ -1233,7 +1233,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="30" failures="30"><testcase classname="spine diff" name="case-disagrees active/publish"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees active/trash"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees active/restore"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees active/purge"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/publish"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/edit"><failure message="roles=editor: A says stay, B says nothing (no rule matches)">roles=editor: A says stay, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/trash"><failure message="roles=owner: A says -&gt; trashed, B says nothing (no rule matches)">roles=owner: A says -&gt; trashed, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/trash"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/restore"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees draft/purge"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/publish"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/trash"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/restore"><failure message="roles=owner: A says nothing (no rule matches), B says -&gt; active">roles=owner: A says nothing (no rule matches), B says -&gt; active</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/restore"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees trashed/purge"><failure message="roles=viewer: A says nothing (no rule matches), B says reject">roles=viewer: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs edit(roles=editor)"><failure message="A ends draft, B ends undefined">A ends draft, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs trash(roles=owner)"><failure message="A ends trashed, B ends undefined">A ends trashed, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs trash(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs restore(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs purge(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; publish(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; restore(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; purge(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; publish(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; trash(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; restore(roles=owner)"><failure message="A ends undefined, B ends active">A ends undefined, B ends active</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; restore(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs publish(roles=owner) -&gt; trash(roles=owner) -&gt; purge(roles=viewer)"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/notes/spec/notes/readings/reading-b.yaml examples/notes/spec/notes/readings/reading-b.yaml
 exit 0
@@ -1245,7 +1245,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/notes/spec/notes/readings/reading-b.yaml examples/notes/spec/notes/spine.yaml
 exit 1
@@ -1264,7 +1264,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="vars-differ vars"><failure message="A and B declare different variables; case comparison skipped">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/notes/spec/notes/spine.yaml examples/notes/spec/notes/readings/reading-a.yaml
 exit 1
@@ -1283,7 +1283,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="vars-differ vars"><failure message="A and B declare different variables; case comparison skipped">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/notes/spec/notes/spine.yaml examples/notes/spec/notes/readings/reading-b.yaml
 exit 1
@@ -1302,7 +1302,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="vars-differ vars"><failure message="A and B declare different variables; case comparison skipped">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/notes/spec/notes/spine.yaml examples/notes/spec/notes/spine.yaml
 exit 0
@@ -1314,7 +1314,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/notes/spec/notes/spine.yaml examples/ref_sync/spec/ref_sync/spine.yaml
 exit 1
@@ -1483,7 +1483,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="26" failures="26"><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;active&quot;, B does not">A has state "active", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;draft&quot;, B does not">A has state "draft", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;purged&quot;, B does not">A has state "purged", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;trashed&quot;, B does not">A has state "trashed", B does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;confirmed&quot;, A does not">B has state "confirmed", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;conflicted&quot;, A does not">B has state "conflicted", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;prepared&quot;, A does not">B has state "prepared", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;protocol_error&quot;, A does not">B has state "protocol_error", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;queued&quot;, A does not">B has state "queued", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;uncertain&quot;, A does not">B has state "uncertain", A does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;edit&quot;, B does not">A has event "edit", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;publish&quot;, B does not">A has event "publish", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;purge&quot;, B does not">A has event "purge", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;restore&quot;, B does not">A has event "restore", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;trash&quot;, B does not">A has event "trash", B does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;absent_on_remote&quot;, A does not">B has event "absent_on_remote", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;accepted&quot;, A does not">B has event "accepted", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;digest_mismatch&quot;, A does not">B has event "digest_mismatch", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;invalidated&quot;, A does not">B has event "invalidated", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;non_fast_forward&quot;, A does not">B has event "non_fast_forward", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;prepare&quot;, A does not">B has event "prepare", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;response_lost&quot;, A does not">B has event "response_lost", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;restart&quot;, A does not">B has event "restart", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;seen_on_remote&quot;, A does not">B has event "seen_on_remote", A does not</failure></testcase><testcase classname="spine diff" name="initial-differs initial"><failure message="A starts in &quot;draft&quot;, B starts in &quot;queued&quot;">A starts in "draft", B starts in "queued"</failure></testcase><testcase classname="spine diff" name="vars-differ vars"><failure message="A and B declare different variables; case comparison skipped">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/ref_sync/spec/ref_sync/readings/reading-a.yaml examples/ref_sync/spec/ref_sync/readings/reading-a.yaml
 exit 0
@@ -1495,7 +1495,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/ref_sync/spec/ref_sync/readings/reading-a.yaml examples/ref_sync/spec/ref_sync/readings/reading-b.yaml
 exit 1
@@ -1664,7 +1664,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="26" failures="26"><testcase classname="spine diff" name="case-disagrees prepared/prepare"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees prepared/seen_on_remote"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees prepared/absent_on_remote"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees prepared/digest_mismatch"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees prepared/invalidated"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees queued/accepted"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees queued/non_fast_forward"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees queued/response_lost"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/prepare"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/accepted"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/non_fast_forward"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/response_lost"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/invalidated"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="behavior-differs accepted()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs non_fast_forward()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs response_lost()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; prepare()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; seen_on_remote()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; absent_on_remote()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; digest_mismatch()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; invalidated()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; prepare()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; accepted()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; non_fast_forward()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; response_lost()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; invalidated()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/ref_sync/spec/ref_sync/readings/reading-a.yaml examples/ref_sync/spec/ref_sync/spine.yaml
 exit 0
@@ -1676,7 +1676,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/ref_sync/spec/ref_sync/readings/reading-b.yaml examples/ref_sync/spec/ref_sync/readings/reading-a.yaml
 exit 1
@@ -1845,7 +1845,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="26" failures="26"><testcase classname="spine diff" name="case-disagrees prepared/prepare"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees prepared/seen_on_remote"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees prepared/absent_on_remote"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees prepared/digest_mismatch"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees prepared/invalidated"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees queued/accepted"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees queued/non_fast_forward"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees queued/response_lost"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/prepare"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/accepted"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/non_fast_forward"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/response_lost"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/invalidated"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="behavior-differs accepted()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs non_fast_forward()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs response_lost()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; prepare()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; seen_on_remote()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; absent_on_remote()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; digest_mismatch()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; invalidated()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; prepare()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; accepted()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; non_fast_forward()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; response_lost()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; invalidated()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/ref_sync/spec/ref_sync/readings/reading-b.yaml examples/ref_sync/spec/ref_sync/readings/reading-b.yaml
 exit 0
@@ -1857,7 +1857,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/ref_sync/spec/ref_sync/readings/reading-b.yaml examples/ref_sync/spec/ref_sync/spine.yaml
 exit 1
@@ -2026,7 +2026,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="26" failures="26"><testcase classname="spine diff" name="case-disagrees prepared/prepare"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees prepared/seen_on_remote"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees prepared/absent_on_remote"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees prepared/digest_mismatch"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees prepared/invalidated"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees queued/accepted"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees queued/non_fast_forward"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees queued/response_lost"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/prepare"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/accepted"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/non_fast_forward"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/response_lost"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/invalidated"><failure message=": A says nothing (no rule matches), B says reject">: A says nothing (no rule matches), B says reject</failure></testcase><testcase classname="spine diff" name="behavior-differs accepted()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs non_fast_forward()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs response_lost()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; prepare()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; seen_on_remote()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; absent_on_remote()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; digest_mismatch()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; invalidated()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; prepare()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; accepted()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; non_fast_forward()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; response_lost()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; invalidated()"><failure message="A ends undefined, B ends rejected">A ends undefined, B ends rejected</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/spec/ref_sync/readings/reading-a.yaml
 exit 0
@@ -2038,7 +2038,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/spec/ref_sync/readings/reading-b.yaml
 exit 1
@@ -2207,7 +2207,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="26" failures="26"><testcase classname="spine diff" name="case-disagrees prepared/prepare"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees prepared/seen_on_remote"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees prepared/absent_on_remote"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees prepared/digest_mismatch"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees prepared/invalidated"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees queued/accepted"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees queued/non_fast_forward"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees queued/response_lost"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/prepare"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/accepted"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/non_fast_forward"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/response_lost"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees uncertain/invalidated"><failure message=": A says reject, B says nothing (no rule matches)">: A says reject, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="behavior-differs accepted()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs non_fast_forward()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs response_lost()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; prepare()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; seen_on_remote()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; absent_on_remote()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; digest_mismatch()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; invalidated()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; prepare()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; accepted()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; non_fast_forward()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; response_lost()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs prepare() -&gt; response_lost() -&gt; invalidated()"><failure message="A ends rejected, B ends undefined">A ends rejected, B ends undefined</failure></testcase></testsuite>
 === in .: spine diff --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/spec/ref_sync/spine.yaml
 exit 0
@@ -2219,7 +2219,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff examples/elixir_job/spec/job/readings/reading-a.yaml examples/elixir_job/spec/job/readings/reading-a.yaml
 exit 0
@@ -2578,7 +2578,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="path-denied examples/elixir_job/spec/job/spine.yaml"><failure message="the builder role may not change this path">the builder role may not change this path</failure></testcase></testsuite>
 === in .: spine guard --format json --junit REPORT policy.yaml --branch build/x examples/notes/src/a.py examples/notes/spec/notes/spine.yaml
 exit 1
@@ -2603,7 +2603,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="path-denied examples/notes/spec/notes/spine.yaml"><failure message="the builder role may not change this path">the builder role may not change this path</failure></testcase></testsuite>
 === in .: spine guard --format json --junit REPORT policy.yaml --branch build/x examples/ref_sync/src/a.py examples/ref_sync/spec/ref_sync/spine.yaml
 exit 1
@@ -2628,7 +2628,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="path-denied examples/ref_sync/spec/ref_sync/spine.yaml"><failure message="the builder role may not change this path">the builder role may not change this path</failure></testcase></testsuite>
 === in .: spine guard policy.yaml --branch build/x examples/elixir_job/src/a.py examples/elixir_job/spec/job/spine.yaml
 exit 1
@@ -2856,7 +2856,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine stale" tests="1" failures="0"><testcase classname="spine stale" name="no errors" /></testsuite>
 === in .: spine stale --format json --junit REPORT examples/notes/spec/notes/spine.yaml examples/notes/checks/notes
 exit 0
@@ -2887,7 +2887,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine stale" tests="1" failures="0"><testcase classname="spine stale" name="no errors" /></testsuite>
 === in .: spine stale --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/checks/ref_sync
 exit 0
@@ -2899,7 +2899,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine stale" tests="1" failures="0"><testcase classname="spine stale" name="no errors" /></testsuite>
 === in .: spine stale examples/elixir_job/spec/job/spine.yaml examples/elixir_job/checks/job
 exit 0
@@ -2936,7 +2936,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused examples/elixir_job/spec/job/behaviors/invalid/fourth-attempt.yaml"><failure message="step 9 &quot;start attempts=last&quot; is undefined in state discarded">step 9 "start attempts=last" is undefined in state discarded</failure></testcase></testsuite>
 === in .: spine trace --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml examples/elixir_job/spec/job/behaviors/invalid/last-failure-retried.yaml
 exit 1
@@ -2955,7 +2955,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused examples/elixir_job/spec/job/behaviors/invalid/last-failure-retried.yaml"><failure message="ends in discarded, expected retrying">ends in discarded, expected retrying</failure></testcase></testsuite>
 === in .: spine trace --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml examples/elixir_job/spec/job/behaviors/invalid/start-during-backoff.yaml
 exit 1
@@ -2974,7 +2974,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused examples/elixir_job/spec/job/behaviors/invalid/start-during-backoff.yaml"><failure message="step 3 &quot;start attempts=some_left&quot; is rejected in state retrying">step 3 "start attempts=some_left" is rejected in state retrying</failure></testcase></testsuite>
 === in .: spine trace --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml examples/elixir_job/spec/job/behaviors/invalid/success-after-cancel.yaml
 exit 1
@@ -2993,7 +2993,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused examples/elixir_job/spec/job/behaviors/invalid/success-after-cancel.yaml"><failure message="step 3 &quot;succeed attempts=some_left&quot; is undefined in state discarded">step 3 "succeed attempts=some_left" is undefined in state discarded</failure></testcase></testsuite>
 === in .: spine trace --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml examples/elixir_job/spec/job/behaviors/valid/cancelled-while-queued.yaml
 exit 0
@@ -3005,7 +3005,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in .: spine trace --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml examples/elixir_job/spec/job/behaviors/valid/cancelled-while-retrying.yaml
 exit 0
@@ -3017,7 +3017,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in .: spine trace --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml examples/elixir_job/spec/job/behaviors/valid/cancelled-while-running.yaml
 exit 0
@@ -3029,7 +3029,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in .: spine trace --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml examples/elixir_job/spec/job/behaviors/valid/discarded-after-last-attempt.yaml
 exit 0
@@ -3041,7 +3041,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in .: spine trace --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml examples/elixir_job/spec/job/behaviors/valid/single-attempt-fails.yaml
 exit 0
@@ -3053,7 +3053,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in .: spine trace --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml examples/elixir_job/spec/job/behaviors/valid/succeeds-at-first-attempt.yaml
 exit 0
@@ -3065,7 +3065,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in .: spine trace --format json --junit REPORT examples/elixir_job/spec/job/spine.yaml examples/elixir_job/spec/job/behaviors/valid/succeeds-at-last-attempt.yaml
 exit 0
@@ -3077,7 +3077,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in .: spine trace --format json --junit REPORT examples/notes/spec/notes/spine.yaml examples/notes/spec/notes/behaviors/invalid/draft-is-trashed.yaml
 exit 1
@@ -3096,7 +3096,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused examples/notes/spec/notes/behaviors/invalid/draft-is-trashed.yaml"><failure message="step 1 &quot;trash role=owner&quot; is rejected in state draft">step 1 "trash role=owner" is rejected in state draft</failure></testcase></testsuite>
 === in .: spine trace --format json --junit REPORT examples/notes/spec/notes/spine.yaml examples/notes/spec/notes/behaviors/invalid/editor-restores.yaml
 exit 1
@@ -3115,7 +3115,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused examples/notes/spec/notes/behaviors/invalid/editor-restores.yaml"><failure message="step 3 &quot;restore role=editor&quot; is rejected in state trashed">step 3 "restore role=editor" is rejected in state trashed</failure></testcase></testsuite>
 === in .: spine trace --format json --junit REPORT examples/notes/spec/notes/spine.yaml examples/notes/spec/notes/behaviors/invalid/viewer-edits.yaml
 exit 1
@@ -3134,7 +3134,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused examples/notes/spec/notes/behaviors/invalid/viewer-edits.yaml"><failure message="step 2 &quot;edit role=viewer&quot; is rejected in state active">step 2 "edit role=viewer" is rejected in state active</failure></testcase></testsuite>
 === in .: spine trace --format json --junit REPORT examples/notes/spec/notes/spine.yaml examples/notes/spec/notes/behaviors/valid/editor-edits-published-note.yaml
 exit 0
@@ -3146,7 +3146,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in .: spine trace --format json --junit REPORT examples/notes/spec/notes/spine.yaml examples/notes/spec/notes/behaviors/valid/owner-trashes-and-restores.yaml
 exit 0
@@ -3158,7 +3158,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in .: spine trace --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/spec/ref_sync/behaviors/invalid/conflict-while-pushing.yaml
 exit 1
@@ -3177,7 +3177,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused examples/ref_sync/spec/ref_sync/behaviors/invalid/conflict-while-pushing.yaml"><failure message="step 2 &quot;invalidated&quot; is rejected in state prepared">step 2 "invalidated" is rejected in state prepared</failure></testcase></testsuite>
 === in .: spine trace --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/spec/ref_sync/behaviors/invalid/early-success.yaml
 exit 1
@@ -3196,7 +3196,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused examples/ref_sync/spec/ref_sync/behaviors/invalid/early-success.yaml"><failure message="step 1 &quot;accepted&quot; is rejected in state queued">step 1 "accepted" is rejected in state queued</failure></testcase></testsuite>
 === in .: spine trace --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/spec/ref_sync/behaviors/invalid/uncertain-direct-success.yaml
 exit 1
@@ -3215,7 +3215,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused examples/ref_sync/spec/ref_sync/behaviors/invalid/uncertain-direct-success.yaml"><failure message="step 3 &quot;accepted&quot; is rejected in state uncertain">step 3 "accepted" is rejected in state uncertain</failure></testcase></testsuite>
 === in .: spine trace --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/spec/ref_sync/behaviors/valid/late-push-lands.yaml
 exit 0
@@ -3227,7 +3227,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in .: spine trace --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/spec/ref_sync/behaviors/valid/lost-reply-recovered.yaml
 exit 0
@@ -3239,7 +3239,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in .: spine trace --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/spec/ref_sync/behaviors/valid/protocol-error.yaml
 exit 0
@@ -3251,7 +3251,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in .: spine trace --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/spec/ref_sync/behaviors/valid/publish.yaml
 exit 0
@@ -3263,7 +3263,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in .: spine trace --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/spec/ref_sync/behaviors/valid/restart-resumes.yaml
 exit 0
@@ -3275,7 +3275,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in .: spine trace --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/spec/ref_sync/behaviors/valid/retry-after-contention.yaml
 exit 0
@@ -3287,7 +3287,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in .: spine trace examples/elixir_job/spec/job/spine.yaml examples/elixir_job/spec/job/behaviors/invalid/fourth-attempt.yaml
 exit 1

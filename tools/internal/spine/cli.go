@@ -280,13 +280,13 @@ func Main(argv []string, stdin io.Reader, stdout, stderr io.Writer) int {
 	return 0
 }
 
-// stdinLines is the changed files on stdin: each line with the whitespace at its ends removed,
-// \r among it, and blank lines left out.
+// stdinLines is the changed files on stdin: each line with the spaces at its ends removed, \r
+// among them, and blank lines left out.
 func stdinLines(r io.Reader) []string {
 	data, _ := io.ReadAll(r)
 	var out []string
 	for _, line := range strings.Split(string(data), "\n") {
-		if s := pyStrip(line); s != "" {
+		if s := strings.TrimSpace(line); s != "" {
 			out = append(out, s)
 		}
 	}

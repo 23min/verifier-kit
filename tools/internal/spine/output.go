@@ -9,7 +9,7 @@ import (
 	"unicode/utf8"
 )
 
-// ---------- output, as in tools/spine.py ----------
+// ---------- output ----------
 
 func emitText(w io.Writer, findings Findings) {
 	for _, f := range findings {
@@ -18,10 +18,10 @@ func emitText(w io.Writer, findings Findings) {
 	fmt.Fprintf(w, "-- %d errors, %d findings\n", findings.Errors(), len(findings))
 }
 
-// emitJSON writes what json.dumps(..., indent=2) gives.
+// emitJSON writes the findings as JSON, indented by two spaces.
 func emitJSON(w io.Writer, command string, findings Findings) {
 	var b strings.Builder
-	b.WriteString("{\n  \"tool\": \"spine\",\n  \"command\": " + pyJSONString(command) + ",\n  \"findings\": ")
+	b.WriteString("{\n  \"tool\": \"spine\",\n  \"command\": " + jsonText(command) + ",\n  \"findings\": ")
 	if len(findings) == 0 {
 		b.WriteString("[]")
 	} else {
@@ -30,7 +30,7 @@ func emitJSON(w io.Writer, command string, findings Findings) {
 			b.WriteString("    {\n")
 			fields := [][2]string{{"code", f.Code}, {"severity", f.Severity}, {"where", f.Where}, {"message", f.Message}}
 			for j, kv := range fields {
-				b.WriteString("      " + pyJSONString(kv[0]) + ": " + pyJSONString(kv[1]))
+				b.WriteString("      " + jsonText(kv[0]) + ": " + jsonText(kv[1]))
 				if j < len(fields)-1 {
 					b.WriteString(",")
 				}
@@ -48,7 +48,7 @@ func emitJSON(w io.Writer, command string, findings Findings) {
 	io.WriteString(w, b.String())
 }
 
-// writeJUnit writes what xml.etree.ElementTree writes for the report.
+// writeJUnit writes the JUnit XML report: one test case per error, or one passing case.
 func writeJUnit(path, suite string, findings Findings) error {
 	var errs Findings
 	for _, f := range findings {
@@ -57,7 +57,7 @@ func writeJUnit(path, suite string, findings Findings) error {
 		}
 	}
 	var b strings.Builder
-	b.WriteString("<?xml version='1.0' encoding='utf-8'?>\n")
+	b.WriteString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
 	b.WriteString(fmt.Sprintf(`<testsuite name="%s" tests="%d" failures="%d">`, xmlAttr(suite), max(1, len(errs)), len(errs)))
 	if len(errs) == 0 {
 		b.WriteString(fmt.Sprintf(`<testcase classname="%s" name="no errors" />`, xmlAttr(suite)))
@@ -67,7 +67,7 @@ func writeJUnit(path, suite string, findings Findings) error {
 			xmlAttr(suite), xmlAttr(f.Code+" "+f.Where), xmlAttr(f.Message), xmlText(f.Message)))
 	}
 	b.WriteString("</testsuite>")
-	if err := os.MkdirAll(filepath.Dir(pyPath(path)), 0o777); err != nil { // Path(path).parent
+	if err := os.MkdirAll(filepath.Dir(path), 0o777); err != nil {
 		return err
 	}
 	return os.WriteFile(path, []byte(b.String()), 0o666)
@@ -82,7 +82,7 @@ func xmlAttr(s string) string {
 		"\r", "&#13;", "\n", "&#10;", "\t", "&#09;").Replace(xmlSafe(s))
 }
 
-// xmlSafe is xml_safe in tools/spine.py: s with each character XML can't hold written as an
+// xmlSafe is s with each character XML can't hold written as an
 // escape, so the report always parses: \x1b for a control character, \ufffe for U+FFFE, and
 // \xff for a byte that isn't UTF-8.
 func xmlSafe(s string) string {
@@ -101,5 +101,31 @@ func xmlSafe(s string) string {
 		}
 		i += size
 	}
+	return b.String()
+}
+
+// jsonText is s as a JSON string in UTF-8: `"` and `\` escaped, and control characters as JSON
+// writes them; a byte that isn't UTF-8 becomes U+FFFD.
+func jsonText(s string) string {
+	var b strings.Builder
+	b.WriteByte('"')
+	for _, r := range strings.ToValidUTF8(s, "\uFFFD") {
+		switch {
+		case r == '"' || r == '\\':
+			b.WriteRune('\\')
+			b.WriteRune(r)
+		case r == '\n':
+			b.WriteString(`\n`)
+		case r == '\r':
+			b.WriteString(`\r`)
+		case r == '\t':
+			b.WriteString(`\t`)
+		case r < 0x20:
+			fmt.Fprintf(&b, `\u%04x`, r)
+		default:
+			b.WriteRune(r)
+		}
+	}
+	b.WriteByte('"')
 	return b.String()
 }

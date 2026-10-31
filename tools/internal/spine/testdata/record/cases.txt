@@ -15,7 +15,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine behaviors" tests="1" failures="0"><testcase classname="spine behaviors" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine behaviors --format json --junit REPORT seeds/spine.yaml ./behaviors//door
 exit 1
@@ -106,7 +106,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine behaviors" tests="12" failures="12"><testcase classname="spine behaviors" name="behavior-refused behaviors/door/valid/refused.yaml"><failure message="marked valid, but the spine refuses it: step 1 &quot;open role=guest&quot; is rejected in state closed">marked valid, but the spine refuses it: step 1 "open role=guest" is rejected in state closed</failure></testcase><testcase classname="spine behaviors" name="behavior-refused behaviors/door/valid/wrong-end.yml"><failure message="marked valid, but the spine refuses it: ends in open, expected gone">marked valid, but the spine refuses it: ends in open, expected gone</failure></testcase><testcase classname="spine behaviors" name="behavior-allowed behaviors/door/invalid/allowed.yaml"><failure message="marked invalid, but the spine allows it (allowed, ends in gone)">marked invalid, but the spine allows it (allowed, ends in gone)</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 1 &quot;open role=nobody&quot;: &quot;nobody&quot; is not a value of &quot;role&quot;">step 1 "open role=nobody": "nobody" is not a value of "role"</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 2 &quot;open&quot;: no value for &quot;role&quot;">step 2 "open": no value for "role"</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 3 &quot;open role=owner role=owner&quot;: &quot;role&quot; is given twice">step 3 "open role=owner role=owner": "role" is given twice</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 4 &quot;open role=owner colour=red&quot;: &quot;colour&quot; is not a declared variable">step 4 "open role=owner colour=red": "colour" is not a declared variable</failure></testcase><testcase classname="spine behaviors" name="spec-shape behaviors/door/invalid/bad-step.yaml"><failure message="&quot;expect&quot; must be text">"expect" must be text</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/event-typo.yaml"><failure message="step 1 &quot;opn role=owner&quot;: &quot;opn&quot; is not a declared event">step 1 "opn role=owner": "opn" is not a declared event</failure></testcase><testcase classname="spine behaviors" name="bad-value behaviors/door/invalid/expect-rejected.yaml"><failure message="expect &quot;rejected&quot; is not a declared state">expect "rejected" is not a declared state</failure></testcase><testcase classname="spine behaviors" name="bad-value behaviors/door/invalid/expect-typo.yaml"><failure message="expect &quot;opn&quot; is not a declared state">expect "opn" is not a declared state</failure></testcase><testcase classname="spine behaviors" name="spec-shape behaviors/door/invalid/list.yaml"><failure message="a behavior file must be a mapping with &quot;steps&quot; and an optional &quot;expect&quot;">a behavior file must be a mapping with "steps" and an optional "expect"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine behaviors --format json --junit REPORT seeds/spine.yaml behaviors/door
 exit 1
@@ -197,7 +197,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine behaviors" tests="12" failures="12"><testcase classname="spine behaviors" name="behavior-refused behaviors/door/valid/refused.yaml"><failure message="marked valid, but the spine refuses it: step 1 &quot;open role=guest&quot; is rejected in state closed">marked valid, but the spine refuses it: step 1 "open role=guest" is rejected in state closed</failure></testcase><testcase classname="spine behaviors" name="behavior-refused behaviors/door/valid/wrong-end.yml"><failure message="marked valid, but the spine refuses it: ends in open, expected gone">marked valid, but the spine refuses it: ends in open, expected gone</failure></testcase><testcase classname="spine behaviors" name="behavior-allowed behaviors/door/invalid/allowed.yaml"><failure message="marked invalid, but the spine allows it (allowed, ends in gone)">marked invalid, but the spine allows it (allowed, ends in gone)</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 1 &quot;open role=nobody&quot;: &quot;nobody&quot; is not a value of &quot;role&quot;">step 1 "open role=nobody": "nobody" is not a value of "role"</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 2 &quot;open&quot;: no value for &quot;role&quot;">step 2 "open": no value for "role"</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 3 &quot;open role=owner role=owner&quot;: &quot;role&quot; is given twice">step 3 "open role=owner role=owner": "role" is given twice</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 4 &quot;open role=owner colour=red&quot;: &quot;colour&quot; is not a declared variable">step 4 "open role=owner colour=red": "colour" is not a declared variable</failure></testcase><testcase classname="spine behaviors" name="spec-shape behaviors/door/invalid/bad-step.yaml"><failure message="&quot;expect&quot; must be text">"expect" must be text</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/event-typo.yaml"><failure message="step 1 &quot;opn role=owner&quot;: &quot;opn&quot; is not a declared event">step 1 "opn role=owner": "opn" is not a declared event</failure></testcase><testcase classname="spine behaviors" name="bad-value behaviors/door/invalid/expect-rejected.yaml"><failure message="expect &quot;rejected&quot; is not a declared state">expect "rejected" is not a declared state</failure></testcase><testcase classname="spine behaviors" name="bad-value behaviors/door/invalid/expect-typo.yaml"><failure message="expect &quot;opn&quot; is not a declared state">expect "opn" is not a declared state</failure></testcase><testcase classname="spine behaviors" name="spec-shape behaviors/door/invalid/list.yaml"><failure message="a behavior file must be a mapping with &quot;steps&quot; and an optional &quot;expect&quot;">a behavior file must be a mapping with "steps" and an optional "expect"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine behaviors --format json --junit REPORT seeds/spine.yaml behaviors/door/
 exit 1
@@ -288,7 +288,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine behaviors" tests="12" failures="12"><testcase classname="spine behaviors" name="behavior-refused behaviors/door/valid/refused.yaml"><failure message="marked valid, but the spine refuses it: step 1 &quot;open role=guest&quot; is rejected in state closed">marked valid, but the spine refuses it: step 1 "open role=guest" is rejected in state closed</failure></testcase><testcase classname="spine behaviors" name="behavior-refused behaviors/door/valid/wrong-end.yml"><failure message="marked valid, but the spine refuses it: ends in open, expected gone">marked valid, but the spine refuses it: ends in open, expected gone</failure></testcase><testcase classname="spine behaviors" name="behavior-allowed behaviors/door/invalid/allowed.yaml"><failure message="marked invalid, but the spine allows it (allowed, ends in gone)">marked invalid, but the spine allows it (allowed, ends in gone)</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 1 &quot;open role=nobody&quot;: &quot;nobody&quot; is not a value of &quot;role&quot;">step 1 "open role=nobody": "nobody" is not a value of "role"</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 2 &quot;open&quot;: no value for &quot;role&quot;">step 2 "open": no value for "role"</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 3 &quot;open role=owner role=owner&quot;: &quot;role&quot; is given twice">step 3 "open role=owner role=owner": "role" is given twice</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 4 &quot;open role=owner colour=red&quot;: &quot;colour&quot; is not a declared variable">step 4 "open role=owner colour=red": "colour" is not a declared variable</failure></testcase><testcase classname="spine behaviors" name="spec-shape behaviors/door/invalid/bad-step.yaml"><failure message="&quot;expect&quot; must be text">"expect" must be text</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/event-typo.yaml"><failure message="step 1 &quot;opn role=owner&quot;: &quot;opn&quot; is not a declared event">step 1 "opn role=owner": "opn" is not a declared event</failure></testcase><testcase classname="spine behaviors" name="bad-value behaviors/door/invalid/expect-rejected.yaml"><failure message="expect &quot;rejected&quot; is not a declared state">expect "rejected" is not a declared state</failure></testcase><testcase classname="spine behaviors" name="bad-value behaviors/door/invalid/expect-typo.yaml"><failure message="expect &quot;opn&quot; is not a declared state">expect "opn" is not a declared state</failure></testcase><testcase classname="spine behaviors" name="spec-shape behaviors/door/invalid/list.yaml"><failure message="a behavior file must be a mapping with &quot;steps&quot; and an optional &quot;expect&quot;">a behavior file must be a mapping with "steps" and an optional "expect"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine behaviors --format json --junit REPORT seeds/spine.yaml behaviors/none
 exit 0
@@ -307,7 +307,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine behaviors" tests="1" failures="0"><testcase classname="spine behaviors" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine behaviors --format json --junit REPORT spines/not-utf8.yaml behaviors/door
 exit 1
@@ -326,7 +326,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine behaviors" tests="1" failures="1"><testcase classname="spine behaviors" name="spec-unreadable spines/not-utf8.yaml"><failure message="not UTF-8: byte 0xe9 at offset 32">not UTF-8: byte 0xe9 at offset 32</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine behaviors --format json --junit REPORT spines/unsound.yaml behaviors/door
 exit 1
@@ -459,7 +459,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine behaviors" tests="19" failures="19"><testcase classname="spine behaviors" name="bad-step behaviors/door/valid/opens.yaml"><failure message="step 1 &quot;open role=owner&quot;: &quot;open&quot; is not a declared event">step 1 "open role=owner": "open" is not a declared event</failure></testcase><testcase classname="spine behaviors" name="bad-value behaviors/door/valid/opens.yaml"><failure message="expect &quot;open&quot; is not a declared state">expect "open" is not a declared state</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/valid/refused.yaml"><failure message="step 1 &quot;open role=guest&quot;: &quot;open&quot; is not a declared event">step 1 "open role=guest": "open" is not a declared event</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/valid/wrong-end.yml"><failure message="step 1 &quot;open role=owner&quot;: &quot;open&quot; is not a declared event">step 1 "open role=owner": "open" is not a declared event</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/valid/wrong-end.yml"><failure message="step 2 &quot;remove role=owner&quot;: &quot;remove&quot; is not a declared event">step 2 "remove role=owner": "remove" is not a declared event</failure></testcase><testcase classname="spine behaviors" name="bad-value behaviors/door/valid/wrong-end.yml"><failure message="expect &quot;gone&quot; is not a declared state">expect "gone" is not a declared state</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/allowed.yaml"><failure message="step 1 &quot;remove role=guest&quot;: &quot;remove&quot; is not a declared event">step 1 "remove role=guest": "remove" is not a declared event</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 1 &quot;open role=nobody&quot;: &quot;open&quot; is not a declared event">step 1 "open role=nobody": "open" is not a declared event</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 2 &quot;open&quot;: &quot;open&quot; is not a declared event">step 2 "open": "open" is not a declared event</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 3 &quot;open role=owner role=owner&quot;: &quot;role&quot; is given twice">step 3 "open role=owner role=owner": "role" is given twice</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 4 &quot;open role=owner colour=red&quot;: &quot;open&quot; is not a declared event">step 4 "open role=owner colour=red": "open" is not a declared event</failure></testcase><testcase classname="spine behaviors" name="spec-shape behaviors/door/invalid/bad-step.yaml"><failure message="&quot;expect&quot; must be text">"expect" must be text</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/event-typo.yaml"><failure message="step 1 &quot;opn role=owner&quot;: &quot;opn&quot; is not a declared event">step 1 "opn role=owner": "opn" is not a declared event</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/expect-rejected.yaml"><failure message="step 1 &quot;open role=guest&quot;: &quot;open&quot; is not a declared event">step 1 "open role=guest": "open" is not a declared event</failure></testcase><testcase classname="spine behaviors" name="bad-value behaviors/door/invalid/expect-rejected.yaml"><failure message="expect &quot;rejected&quot; is not a declared state">expect "rejected" is not a declared state</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/expect-typo.yaml"><failure message="step 1 &quot;open role=owner&quot;: &quot;open&quot; is not a declared event">step 1 "open role=owner": "open" is not a declared event</failure></testcase><testcase classname="spine behaviors" name="bad-value behaviors/door/invalid/expect-typo.yaml"><failure message="expect &quot;opn&quot; is not a declared state">expect "opn" is not a declared state</failure></testcase><testcase classname="spine behaviors" name="spec-shape behaviors/door/invalid/list.yaml"><failure message="a behavior file must be a mapping with &quot;steps&quot; and an optional &quot;expect&quot;">a behavior file must be a mapping with "steps" and an optional "expect"</failure></testcase><testcase classname="spine behaviors" name="bad-step behaviors/door/invalid/rejected.yaml"><failure message="step 1 &quot;open role=guest&quot;: &quot;open&quot; is not a declared event">step 1 "open role=guest": "open" is not a declared event</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine behaviors seeds/spine.yaml ""
 exit 0
@@ -561,7 +561,7 @@ exit 1
 === in tools/internal/spine/testdata: spine check ""
 exit 1
 --- stdout
-| error   spec-unreadable    : cannot be read: Is a directory
+| error   spec-unreadable    : cannot be read: No such file or directory
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT ""
@@ -575,14 +575,14 @@ exit 1
 |       "code": "spec-unreadable",
 |       "severity": "error",
 |       "where": "",
-|       "message": "cannot be read: Is a directory"
+|       "message": "cannot be read: No such file or directory"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable "><failure message="cannot be read: Is a directory">cannot be read: Is a directory</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable "><failure message="cannot be read: No such file or directory">cannot be read: No such file or directory</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT seeds/policy.yaml
 exit 1
 --- stdout
@@ -636,7 +636,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="7" failures="7"><testcase classname="spine check" name="unknown-key seeds/policy.yaml"><failure message="unknown top-level key &quot;branches&quot;">unknown top-level key "branches"</failure></testcase><testcase classname="spine check" name="unknown-key seeds/policy.yaml"><failure message="unknown top-level key &quot;roles&quot;">unknown top-level key "roles"</failure></testcase><testcase classname="spine check" name="missing-key seeds/policy.yaml"><failure message="required key &quot;events&quot; is missing">required key "events" is missing</failure></testcase><testcase classname="spine check" name="missing-key seeds/policy.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine check" name="missing-key seeds/policy.yaml"><failure message="required key &quot;machine&quot; is missing">required key "machine" is missing</failure></testcase><testcase classname="spine check" name="missing-key seeds/policy.yaml"><failure message="required key &quot;rules&quot; is missing">required key "rules" is missing</failure></testcase><testcase classname="spine check" name="missing-key seeds/policy.yaml"><failure message="required key &quot;states&quot; is missing">required key "states" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT spines
 exit 1
@@ -655,7 +655,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable spines"><failure message="cannot be read: Is a directory">cannot be read: Is a directory</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/missing.yaml
 exit 1
@@ -674,7 +674,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable spines/missing.yaml"><failure message="cannot be read: No such file or directory">cannot be read: No such file or directory</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/when-names.yaml
 exit 0
@@ -686,7 +686,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine check seeds/policy.yaml
 exit 1
@@ -740,7 +740,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges lit/press "><failure message="after press() -&gt; press(): spine expects ok in dark, code gave ok in lit">after press() -&gt; press(): spine expects ok in dark, code gave ok in lit</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --depth -1
 exit 2
@@ -773,7 +773,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --depth ٣
 exit 2
@@ -799,7 +799,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="spec-unreadable diff/unreadable.yaml"><failure message="go-yaml load error in parser (while parsing a flow sequence) at L2.C9-L3.C1: did not find expected ',' or ']'">go-yaml load error in parser (while parsing a flow sequence) at L2.C9-L3.C1: did not find expected ',' or ']'</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "   "
 exit 1
@@ -818,7 +818,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed    "><failure message="the command is empty">the command is empty</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd ""
 exit 1
@@ -837,7 +837,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed "><failure message="the command is empty">the command is empty</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "'unclosed"
 exit 1
@@ -856,7 +856,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed 'unclosed"><failure message="cannot be split: no closing quotation">cannot be split: no closing quotation</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 'adapters/protocol.py' \"ok\" " --depth 1
 exit 0
@@ -875,7 +875,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py ''"
 exit 1
@@ -894,7 +894,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py ''"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters"
 exit 1
@@ -913,7 +913,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py"
 exit 0
@@ -932,7 +932,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_bugs.py" --depth 2
 exit 1
@@ -981,7 +981,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="5" failures="5"><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave ok in open">after open(role=guest): spine expects rejected in closed, code gave ok in open</failure></testcase><testcase classname="spine conform" name="diverges open/open role=owner"><failure message="after open(role=owner) -&gt; open(role=owner): spine expects ok in open, code gave done in open">after open(role=owner) -&gt; open(role=owner): spine expects ok in open, code gave done in open</failure></testcase><testcase classname="spine conform" name="diverges open/open role=guest"><failure message="after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave done in open">after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave done in open</failure></testcase><testcase classname="spine conform" name="diverges open/remove role=owner"><failure message="after open(role=owner) -&gt; remove(role=owner): spine expects ok in open, code gave ok in gone">after open(role=owner) -&gt; remove(role=owner): spine expects ok in open, code gave ok in gone</failure></testcase><testcase classname="spine conform" name="diverges open/remove role=guest"><failure message="after open(role=owner) -&gt; remove(role=guest): spine expects ok in open, code gave ok in gone">after open(role=owner) -&gt; remove(role=guest): spine expects ok in open, code gave ok in gone</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_crash.py" --depth 2
 exit 1
@@ -1024,7 +1024,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="4" failures="4"><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave crashed (ValueError: guests can't open) in closed">after open(role=guest): spine expects rejected in closed, code gave crashed (ValueError: guests can't open) in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave crashed (ValueError: guests can't remove) in closed">after remove(role=guest): spine expects ok in gone, code gave crashed (ValueError: guests can't remove) in closed</failure></testcase><testcase classname="spine conform" name="diverges open/open role=guest"><failure message="after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't open) in open">after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't open) in open</failure></testcase><testcase classname="spine conform" name="diverges open/remove role=guest"><failure message="after open(role=owner) -&gt; remove(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't remove) in open">after open(role=owner) -&gt; remove(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't remove) in open</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_exit.py" --depth 2
 exit 1
@@ -1043,7 +1043,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_exit.py"><failure message="was ended by signal 9 (killed) before replying to apply">was ended by signal 9 (killed) before replying to apply</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_import.py" --depth 2
 exit 1
@@ -1062,7 +1062,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_import.py"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_missing.py" --depth 2
 exit 1
@@ -1081,7 +1081,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_missing.py"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_new_raises.py" --depth 2
 exit 1
@@ -1094,14 +1094,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 ../../../adapter_shim.py adapters/door_new_raises.py",
-|       "message": "replied to new with the error 'RuntimeError: no database'"
+|       "message": "replied to new with the error \"RuntimeError: no database\""
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_new_raises.py"><failure message="replied to new with the error 'RuntimeError: no database'">replied to new with the error 'RuntimeError: no database'</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_new_raises.py"><failure message="replied to new with the error &quot;RuntimeError: no database&quot;">replied to new with the error "RuntimeError: no database"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_observe_raises.py" --depth 2
 exit 1
 --- stdout
@@ -1119,7 +1119,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_observe_raises.py"><failure message="replied to observe with the error &quot;KeyError: 'gone'&quot; after remove(role=owner)">replied to observe with the error "KeyError: 'gone'" after remove(role=owner)</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_set.py" --depth 2
 exit 1
@@ -1138,7 +1138,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_set.py"><failure message="exited with status 1 before replying to observe">exited with status 1 before replying to observe</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_start.py" --depth 2
 exit 1
@@ -1163,7 +1163,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges start"><failure message="spine starts in closed, code starts in open">spine starts in closed, code starts in open</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_values.py" --depth 2
 exit 1
@@ -1206,7 +1206,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="4" failures="4"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave ok  in closed">after open(role=owner): spine expects ok in open, code gave ok  in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave OK in closed">after open(role=guest): spine expects rejected in closed, code gave OK in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok in gone, code gave  in closed">after remove(role=owner): spine expects ok in gone, code gave  in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave crashed (no) in closed">after remove(role=guest): spine expects ok in gone, code gave crashed (no) in closed</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_values.py" --depth 3
 exit 1
@@ -1249,7 +1249,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="4" failures="4"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave ok  in closed">after open(role=owner): spine expects ok in open, code gave ok  in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave OK in closed">after open(role=guest): spine expects rejected in closed, code gave OK in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok in gone, code gave  in closed">after remove(role=owner): spine expects ok in gone, code gave  in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave crashed (no) in closed">after remove(role=guest): spine expects ok in gone, code gave crashed (no) in closed</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/missing.py"
 exit 1
@@ -1268,7 +1268,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/missing.py"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/not-python.txt"
 exit 1
@@ -1287,7 +1287,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/not-python.txt"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/proto\\col.py ok" --depth 1
 exit 0
@@ -1306,7 +1306,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py \"o\\k\"" --depth 1
 exit 1
@@ -1325,7 +1325,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py &quot;o\k&quot;"><failure message="exited with status 2 before replying to new">exited with status 2 before replying to new</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-escape" --depth 2
 exit 1
@@ -1338,14 +1338,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py bad-escape",
-|       "message": "replied to observe with a line that is not JSON: '{\"state\": \"a\\\\x\"}'"
+|       "message": "replied to observe with a line that is not JSON: \"{\\\"state\\\": \\\"a\\\\x\\\"}\""
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py bad-escape"><failure message="replied to observe with a line that is not JSON: '{&quot;state&quot;: &quot;a\\x&quot;}'">replied to observe with a line that is not JSON: '{"state": "a\\x"}'</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py bad-escape"><failure message="replied to observe with a line that is not JSON: &quot;{\&quot;state\&quot;: \&quot;a\\x\&quot;}&quot;">replied to observe with a line that is not JSON: "{\"state\": \"a\\x\"}"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-utf8" --depth 2
 exit 1
 --- stdout
@@ -1363,7 +1363,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py bad-utf8"><failure message="replied to observe with a line that is not UTF-8">replied to observe with a line that is not UTF-8</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-utf8-outside" --depth 2
 exit 1
@@ -1382,7 +1382,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py bad-utf8-outside"><failure message="replied to observe with a line that is not UTF-8">replied to observe with a line that is not UTF-8</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bom" --depth 2
 exit 1
@@ -1395,14 +1395,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py bom",
-|       "message": "replied to new with a line that is not JSON: '\\ufeff{\"ok\": true}'"
+|       "message": "replied to new with a line that is not JSON: \"\\ufeff{\\\"ok\\\": true}\""
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py bom"><failure message="replied to new with a line that is not JSON: '\ufeff{&quot;ok&quot;: true}'">replied to new with a line that is not JSON: '\ufeff{"ok": true}'</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py bom"><failure message="replied to new with a line that is not JSON: &quot;\ufeff{\&quot;ok\&quot;: true}&quot;">replied to new with a line that is not JSON: "\ufeff{\"ok\": true}"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py compact" --depth 2
 exit 0
 --- stdout
@@ -1420,7 +1420,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py control-char" --depth 2
 exit 1
@@ -1433,14 +1433,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py control-char",
-|       "message": "replied to observe with a line that is not JSON: '{\"state\": \"a\\tb\"}'"
+|       "message": "replied to observe with a line that is not JSON: \"{\\\"state\\\": \\\"a\\tb\\\"}\""
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py control-char"><failure message="replied to observe with a line that is not JSON: '{&quot;state&quot;: &quot;a\tb&quot;}'">replied to observe with a line that is not JSON: '{"state": "a\tb"}'</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py control-char"><failure message="replied to observe with a line that is not JSON: &quot;{\&quot;state\&quot;: \&quot;a\tb\&quot;}&quot;">replied to observe with a line that is not JSON: "{\"state\": \"a\tb\"}"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py cr-at-exit" --depth 2
 exit 1
 --- stdout
@@ -1458,7 +1458,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py cr-at-exit"><failure message="exited with status 0 before replying to observe">exited with status 0 before replying to observe</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py cr-split" --depth 2
 exit 1
@@ -1471,14 +1471,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py cr-split",
-|       "message": "replied to new with a line that is not JSON: '{\"ok\": true}\\r{\"state\": \"closed\"}'"
+|       "message": "replied to new with a line that is not JSON: \"{\\\"ok\\\": true}\\r{\\\"state\\\": \\\"closed\\\"}\""
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py cr-split"><failure message="replied to new with a line that is not JSON: '{&quot;ok&quot;: true}\r{&quot;state&quot;: &quot;closed&quot;}'">replied to new with a line that is not JSON: '{"ok": true}\r{"state": "closed"}'</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py cr-split"><failure message="replied to new with a line that is not JSON: &quot;{\&quot;ok\&quot;: true}\r{\&quot;state\&quot;: \&quot;closed\&quot;}&quot;">replied to new with a line that is not JSON: "{\"ok\": true}\r{\"state\": \"closed\"}"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py crlf" --depth 2
 exit 0
 --- stdout
@@ -1496,7 +1496,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py dup-keys" --depth 2
 exit 1
@@ -1509,14 +1509,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py dup-keys",
-|       "message": "replied to observe with '{\"state\": \"open\", \"state\": \"closed\"}', not {\"state\": \"...\"} or {\"error\": \"...\"}"
+|       "message": "replied to observe with \"{\\\"state\\\": \\\"open\\\", \\\"state\\\": \\\"closed\\\"}\", not {\"state\": \"...\"} or {\"error\": \"...\"}"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py dup-keys"><failure message="replied to observe with '{&quot;state&quot;: &quot;open&quot;, &quot;state&quot;: &quot;closed&quot;}', not {&quot;state&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to observe with '{"state": "open", "state": "closed"}', not {"state": "..."} or {"error": "..."}</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py dup-keys"><failure message="replied to observe with &quot;{\&quot;state\&quot;: \&quot;open\&quot;, \&quot;state\&quot;: \&quot;closed\&quot;}&quot;, not {&quot;state&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to observe with "{\"state\": \"open\", \"state\": \"closed\"}", not {"state": "..."} or {"error": "..."}</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py echo-apply" --depth 2
 exit 1
 --- stdout
@@ -1558,7 +1558,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="4" failures="4"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave crashed ({&quot;op&quot;: &quot;apply&quot;, &quot;event&quot;: &quot;open&quot;, &quot;env&quot;: {&quot;role&quot;: &quot;owner&quot;}}) in open">after open(role=owner): spine expects ok in open, code gave crashed ({"op": "apply", "event": "open", "env": {"role": "owner"}}) in open</failure></testcase><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave crashed ({&quot;op&quot;: &quot;apply&quot;, &quot;event&quot;: &quot;open&quot;, &quot;env&quot;: {&quot;role&quot;: &quot;guest&quot;}}) in closed">after open(role=guest): spine expects rejected in closed, code gave crashed ({"op": "apply", "event": "open", "env": {"role": "guest"}}) in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok in gone, code gave crashed ({&quot;op&quot;: &quot;apply&quot;, &quot;event&quot;: &quot;remove&quot;, &quot;env&quot;: {&quot;role&quot;: &quot;owner&quot;}}) in gone">after remove(role=owner): spine expects ok in gone, code gave crashed ({"op": "apply", "event": "remove", "env": {"role": "owner"}}) in gone</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave crashed ({&quot;op&quot;: &quot;apply&quot;, &quot;event&quot;: &quot;remove&quot;, &quot;env&quot;: {&quot;role&quot;: &quot;guest&quot;}}) in gone">after remove(role=guest): spine expects ok in gone, code gave crashed ({"op": "apply", "event": "remove", "env": {"role": "guest"}}) in gone</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py empty" --depth 2
 exit 1
@@ -1571,14 +1571,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py empty",
-|       "message": "replied to new with a line that is not JSON: ''"
+|       "message": "replied to new with a line that is not JSON: \"\""
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py empty"><failure message="replied to new with a line that is not JSON: ''">replied to new with a line that is not JSON: ''</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py empty"><failure message="replied to new with a line that is not JSON: &quot;&quot;">replied to new with a line that is not JSON: ""</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py empty-object" --depth 2
 exit 1
 --- stdout
@@ -1590,14 +1590,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py empty-object",
-|       "message": "replied to new with '{}', not {\"ok\": true} or {\"error\": \"...\"}"
+|       "message": "replied to new with \"{}\", not {\"ok\": true} or {\"error\": \"...\"}"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py empty-object"><failure message="replied to new with '{}', not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with '{}', not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py empty-object"><failure message="replied to new with &quot;{}&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "{}", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-and-more" --depth 2
 exit 1
 --- stdout
@@ -1609,14 +1609,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py error-and-more",
-|       "message": "replied to new with '{\"error\": \"boom\", \"ok\": true}', not {\"ok\": true} or {\"error\": \"...\"}"
+|       "message": "replied to new with \"{\\\"error\\\": \\\"boom\\\", \\\"ok\\\": true}\", not {\"ok\": true} or {\"error\": \"...\"}"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py error-and-more"><failure message="replied to new with '{&quot;error&quot;: &quot;boom&quot;, &quot;ok&quot;: true}', not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with '{"error": "boom", "ok": true}', not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py error-and-more"><failure message="replied to new with &quot;{\&quot;error\&quot;: \&quot;boom\&quot;, \&quot;ok\&quot;: true}&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "{\"error\": \"boom\", \"ok\": true}", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-apply" --depth 2
 exit 1
 --- stdout
@@ -1640,7 +1640,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave crashed (ValueError: no) in open">after open(role=owner): spine expects ok in open, code gave crashed (ValueError: no) in open</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-new" --depth 2
 exit 1
@@ -1653,14 +1653,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py error-new",
-|       "message": "replied to new with the error 'boom'"
+|       "message": "replied to new with the error \"boom\""
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py error-new"><failure message="replied to new with the error 'boom'">replied to new with the error 'boom'</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py error-new"><failure message="replied to new with the error &quot;boom&quot;">replied to new with the error "boom"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-null" --depth 2
 exit 1
 --- stdout
@@ -1672,14 +1672,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py error-null",
-|       "message": "replied to observe with '{\"error\": null}', not {\"state\": \"...\"} or {\"error\": \"...\"}"
+|       "message": "replied to observe with \"{\\\"error\\\": null}\", not {\"state\": \"...\"} or {\"error\": \"...\"}"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py error-null"><failure message="replied to observe with '{&quot;error&quot;: null}', not {&quot;state&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to observe with '{"error": null}', not {"state": "..."} or {"error": "..."}</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py error-null"><failure message="replied to observe with &quot;{\&quot;error\&quot;: null}&quot;, not {&quot;state&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to observe with "{\"error\": null}", not {"state": "..."} or {"error": "..."}</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-observe" --depth 2
 exit 1
 --- stdout
@@ -1691,14 +1691,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py error-observe",
-|       "message": "replied to observe with '{\"error\": {\"a\": [1, 2.0, null, true], \"b\": \"it\\'s\"}}', not {\"state\": \"...\"} or {\"error\": \"...\"}"
+|       "message": "replied to observe with \"{\\\"error\\\": {\\\"a\\\": [1, 2.0, null, true], \\\"b\\\": \\\"it's\\\"}}\", not {\"state\": \"...\"} or {\"error\": \"...\"}"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py error-observe"><failure message="replied to observe with '{&quot;error&quot;: {&quot;a&quot;: [1, 2.0, null, true], &quot;b&quot;: &quot;it\'s&quot;}}', not {&quot;state&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to observe with '{"error": {"a": [1, 2.0, null, true], "b": "it\'s"}}', not {"state": "..."} or {"error": "..."}</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py error-observe"><failure message="replied to observe with &quot;{\&quot;error\&quot;: {\&quot;a\&quot;: [1, 2.0, null, true], \&quot;b\&quot;: \&quot;it's\&quot;}}&quot;, not {&quot;state&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to observe with "{\"error\": {\"a\": [1, 2.0, null, true], \"b\": \"it's\"}}", not {"state": "..."} or {"error": "..."}</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py escaped-key" --depth 2
 exit 0
 --- stdout
@@ -1716,7 +1716,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py escapes" --depth 2
 exit 1
@@ -1729,7 +1729,7 @@ exit 1
 |       "code": "diverges",
 |       "severity": "error",
 |       "where": "start",
-|       "message": "spine starts in closed, code starts in \u00e9\ud83d\ude00\n\t\"\\/"
+|       "message": "spine starts in closed, code starts in é😀\n\t\"\\/"
 |     },
 |     {
 |       "code": "coverage",
@@ -1741,7 +1741,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges start"><failure message="spine starts in closed, code starts in é😀&#10;&#09;&quot;\/">spine starts in closed, code starts in é😀
 | 	"\/</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py exit-3" --depth 2
@@ -1761,7 +1761,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py exit-3"><failure message="exited with status 3 before replying to new">exited with status 3 before replying to new</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py exit-after-new" --depth 2
 exit 1
@@ -1780,7 +1780,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py exit-after-new"><failure message="exited with status 0 before replying to observe">exited with status 0 before replying to observe</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ideographic-space" --depth 2
 exit 1
@@ -1793,14 +1793,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py ideographic-space",
-|       "message": "replied to new with a line that is not JSON: '{\"ok\": true}\\u3000'"
+|       "message": "replied to new with a line that is not JSON: \"{\\\"ok\\\": true}\\u3000\""
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py ideographic-space"><failure message="replied to new with a line that is not JSON: '{&quot;ok&quot;: true}\u3000'">replied to new with a line that is not JSON: '{"ok": true}\u3000'</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py ideographic-space"><failure message="replied to new with a line that is not JSON: &quot;{\&quot;ok\&quot;: true}\u3000&quot;">replied to new with a line that is not JSON: "{\"ok\": true}\u3000"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py infinity" --depth 2
 exit 1
 --- stdout
@@ -1812,14 +1812,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py infinity",
-|       "message": "replied to apply with a line that is not JSON: '{\"result\": -Infinity}'"
+|       "message": "replied to apply with a line that is not JSON: \"{\\\"result\\\": -Infinity}\""
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py infinity"><failure message="replied to apply with a line that is not JSON: '{&quot;result&quot;: -Infinity}'">replied to apply with a line that is not JSON: '{"result": -Infinity}'</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py infinity"><failure message="replied to apply with a line that is not JSON: &quot;{\&quot;result\&quot;: -Infinity}&quot;">replied to apply with a line that is not JSON: "{\"result\": -Infinity}"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py list" --depth 2
 exit 1
 --- stdout
@@ -1831,14 +1831,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py list",
-|       "message": "replied to new with '[]', not {\"ok\": true} or {\"error\": \"...\"}"
+|       "message": "replied to new with \"[]\", not {\"ok\": true} or {\"error\": \"...\"}"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py list"><failure message="replied to new with '[]', not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with '[]', not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py list"><failure message="replied to new with &quot;[]&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "[]", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py mixed-endings" --depth 2
 exit 0
 --- stdout
@@ -1856,7 +1856,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py nan" --depth 2
 exit 1
@@ -1869,14 +1869,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py nan",
-|       "message": "replied to apply with a line that is not JSON: '{\"result\": NaN}'"
+|       "message": "replied to apply with a line that is not JSON: \"{\\\"result\\\": NaN}\""
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py nan"><failure message="replied to apply with a line that is not JSON: '{&quot;result&quot;: NaN}'">replied to apply with a line that is not JSON: '{"result": NaN}'</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py nan"><failure message="replied to apply with a line that is not JSON: &quot;{\&quot;result\&quot;: NaN}&quot;">replied to apply with a line that is not JSON: "{\"result\": NaN}"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py no-reply" --depth 2
 exit 1
 --- stdout
@@ -1894,7 +1894,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py no-reply"><failure message="exited with status 0 before replying to observe">exited with status 0 before replying to observe</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py nosuchmode"
 exit 1
@@ -1913,7 +1913,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py nosuchmode"><failure message="exited with status 2 before replying to new">exited with status 2 before replying to new</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py notjson" --depth 2
 exit 1
@@ -1926,14 +1926,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py notjson",
-|       "message": "replied to new with a line that is not JSON: 'hello'"
+|       "message": "replied to new with a line that is not JSON: \"hello\""
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py notjson"><failure message="replied to new with a line that is not JSON: 'hello'">replied to new with a line that is not JSON: 'hello'</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py notjson"><failure message="replied to new with a line that is not JSON: &quot;hello&quot;">replied to new with a line that is not JSON: "hello"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok"
 exit 0
 --- stdout
@@ -1951,7 +1951,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-1" --depth 2
 exit 1
@@ -1964,14 +1964,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py ok-1",
-|       "message": "replied to new with '{\"ok\": 1}', not {\"ok\": true} or {\"error\": \"...\"}"
+|       "message": "replied to new with \"{\\\"ok\\\": 1}\", not {\"ok\": true} or {\"error\": \"...\"}"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py ok-1"><failure message="replied to new with '{&quot;ok&quot;: 1}', not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with '{"ok": 1}', not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py ok-1"><failure message="replied to new with &quot;{\&quot;ok\&quot;: 1}&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "{\"ok\": 1}", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-false" --depth 2
 exit 1
 --- stdout
@@ -1983,14 +1983,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py ok-false",
-|       "message": "replied to new with '{\"ok\": false}', not {\"ok\": true} or {\"error\": \"...\"}"
+|       "message": "replied to new with \"{\\\"ok\\\": false}\", not {\"ok\": true} or {\"error\": \"...\"}"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py ok-false"><failure message="replied to new with '{&quot;ok&quot;: false}', not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with '{"ok": false}', not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py ok-false"><failure message="replied to new with &quot;{\&quot;ok\&quot;: false}&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "{\"ok\": false}", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-twice" --depth 2
 exit 1
 --- stdout
@@ -2002,14 +2002,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py ok-twice",
-|       "message": "replied to new with '{\"ok\": true, \"ok\": true}', not {\"ok\": true} or {\"error\": \"...\"}"
+|       "message": "replied to new with \"{\\\"ok\\\": true, \\\"ok\\\": true}\", not {\"ok\": true} or {\"error\": \"...\"}"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py ok-twice"><failure message="replied to new with '{&quot;ok&quot;: true, &quot;ok&quot;: true}', not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with '{"ok": true, "ok": true}', not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py ok-twice"><failure message="replied to new with &quot;{\&quot;ok\&quot;: true, \&quot;ok\&quot;: true}&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "{\"ok\": true, \"ok\": true}", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py result-for-new" --depth 2
 exit 1
 --- stdout
@@ -2021,14 +2021,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py result-for-new",
-|       "message": "replied to new with '{\"result\": \"ok\"}', not {\"ok\": true} or {\"error\": \"...\"}"
+|       "message": "replied to new with \"{\\\"result\\\": \\\"ok\\\"}\", not {\"ok\": true} or {\"error\": \"...\"}"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py result-for-new"><failure message="replied to new with '{&quot;result&quot;: &quot;ok&quot;}', not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with '{"result": "ok"}', not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py result-for-new"><failure message="replied to new with &quot;{\&quot;result\&quot;: \&quot;ok\&quot;}&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "{\"result\": \"ok\"}", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py result-null" --depth 2
 exit 1
 --- stdout
@@ -2040,14 +2040,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py result-null",
-|       "message": "replied to apply with '{\"result\": null}', not {\"result\": \"...\"} or {\"error\": \"...\"}"
+|       "message": "replied to apply with \"{\\\"result\\\": null}\", not {\"result\": \"...\"} or {\"error\": \"...\"}"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py result-null"><failure message="replied to apply with '{&quot;result&quot;: null}', not {&quot;result&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to apply with '{"result": null}', not {"result": "..."} or {"error": "..."}</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py result-null"><failure message="replied to apply with &quot;{\&quot;result\&quot;: null}&quot;, not {&quot;result&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to apply with "{\"result\": null}", not {"result": "..."} or {"error": "..."}</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py signal" --depth 2
 exit 1
 --- stdout
@@ -2065,7 +2065,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py signal"><failure message="was ended by signal 15 (terminated) before replying to apply">was ended by signal 15 (terminated) before replying to apply</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py spaced" --depth 2
 exit 0
@@ -2084,7 +2084,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py state-number" --depth 2
 exit 1
@@ -2097,14 +2097,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py state-number",
-|       "message": "replied to observe with '{\"state\": 1}', not {\"state\": \"...\"} or {\"error\": \"...\"}"
+|       "message": "replied to observe with \"{\\\"state\\\": 1}\", not {\"state\": \"...\"} or {\"error\": \"...\"}"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py state-number"><failure message="replied to observe with '{&quot;state&quot;: 1}', not {&quot;state&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to observe with '{"state": 1}', not {"state": "..."} or {"error": "..."}</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py state-number"><failure message="replied to observe with &quot;{\&quot;state\&quot;: 1}&quot;, not {&quot;state&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to observe with "{\"state\": 1}", not {"state": "..."} or {"error": "..."}</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py string" --depth 2
 exit 1
 --- stdout
@@ -2116,14 +2116,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py string",
-|       "message": "replied to new with '\"ok\"', not {\"ok\": true} or {\"error\": \"...\"}"
+|       "message": "replied to new with \"\\\"ok\\\"\", not {\"ok\": true} or {\"error\": \"...\"}"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py string"><failure message="replied to new with '&quot;ok&quot;', not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with '"ok"', not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py string"><failure message="replied to new with &quot;\&quot;ok\&quot;&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "\"ok\"", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py trailing" --depth 2
 exit 1
 --- stdout
@@ -2135,14 +2135,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py trailing",
-|       "message": "replied to new with a line that is not JSON: '{\"ok\": true} x'"
+|       "message": "replied to new with a line that is not JSON: \"{\\\"ok\\\": true} x\""
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py trailing"><failure message="replied to new with a line that is not JSON: '{&quot;ok&quot;: true} x'">replied to new with a line that is not JSON: '{"ok": true} x'</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py trailing"><failure message="replied to new with a line that is not JSON: &quot;{\&quot;ok\&quot;: true} x&quot;">replied to new with a line that is not JSON: "{\"ok\": true} x"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py two-keys" --depth 2
 exit 1
 --- stdout
@@ -2154,14 +2154,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 adapters/protocol.py two-keys",
-|       "message": "replied to new with '{\"ok\": true, \"extra\": 1}', not {\"ok\": true} or {\"error\": \"...\"}"
+|       "message": "replied to new with \"{\\\"ok\\\": true, \\\"extra\\\": 1}\", not {\"ok\": true} or {\"error\": \"...\"}"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py two-keys"><failure message="replied to new with '{&quot;ok&quot;: true, &quot;extra&quot;: 1}', not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with '{"ok": true, "extra": 1}', not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py two-keys"><failure message="replied to new with &quot;{\&quot;ok\&quot;: true, \&quot;extra\&quot;: 1}&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "{\"ok\": true, \"extra\": 1}", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "trailing\\"
 exit 1
 --- stdout
@@ -2179,7 +2179,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed trailing\"><failure message="cannot be split: no escaped character">cannot be split: no escaped character</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd ./adapters/garbage
 exit 1
@@ -2198,7 +2198,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed ./adapters/garbage"><failure message="cannot be started: ./adapters/garbage: Exec format error">cannot be started: ./adapters/garbage: Exec format error</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd /nonexistent/x
 exit 1
@@ -2217,7 +2217,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed /nonexistent/x"><failure message="cannot be started: /nonexistent/x: No such file or directory">cannot be started: /nonexistent/x: No such file or directory</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd adapters
 exit 1
@@ -2236,7 +2236,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters"><failure message="cannot be started: adapters: No such file or directory">cannot be started: adapters: No such file or directory</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd adapters/
 exit 1
@@ -2255,7 +2255,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters/"><failure message="cannot be started: adapters/: Permission denied">cannot be started: adapters/: Permission denied</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd adapters/plain.txt
 exit 1
@@ -2274,7 +2274,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed adapters/plain.txt"><failure message="cannot be started: adapters/plain.txt: Permission denied">cannot be started: adapters/plain.txt: Permission denied</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd nosuchprogram
 exit 1
@@ -2293,7 +2293,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed nosuchprogram"><failure message="cannot be started: nosuchprogram: No such file or directory">cannot be started: nosuchprogram: No such file or directory</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd tool with PATH=
 exit 1
@@ -2312,7 +2312,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed tool"><failure message="cannot be started: tool: No such file or directory">cannot be started: tool: No such file or directory</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd tool with PATH=adapters/pathA:adapters/pathB
 exit 1
@@ -2331,7 +2331,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed tool"><failure message="cannot be started: tool: Permission denied">cannot be started: tool: Permission denied</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd tool with PATH=adapters/pathB::adapters/pathA
 exit 1
@@ -2350,7 +2350,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed tool"><failure message="cannot be started: tool: Permission denied">cannot be started: tool: Permission denied</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/unsound.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --depth 1
 exit 1
@@ -2375,7 +2375,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges start"><failure message="spine starts in s, code starts in closed">spine starts in s, code starts in closed</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform diff/plain-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/lamp.py"
 exit 1
@@ -2501,7 +2501,7 @@ exit 1
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_new_raises.py" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_new_raises.py: replied to new with the error 'RuntimeError: no database'
+| error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_new_raises.py: replied to new with the error "RuntimeError: no database"
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_observe_raises.py" --depth 2
@@ -2570,7 +2570,7 @@ exit 1
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-escape" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py bad-escape: replied to observe with a line that is not JSON: '{"state": "a\\x"}'
+| error   adapter-failed     python3 adapters/protocol.py bad-escape: replied to observe with a line that is not JSON: "{\"state\": \"a\\x\"}"
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-utf8" --depth 2
@@ -2588,7 +2588,7 @@ exit 1
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bom" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py bom: replied to new with a line that is not JSON: '\ufeff{"ok": true}'
+| error   adapter-failed     python3 adapters/protocol.py bom: replied to new with a line that is not JSON: "\ufeff{\"ok\": true}"
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py compact" --depth 2
@@ -2600,7 +2600,7 @@ exit 0
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py control-char" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py control-char: replied to observe with a line that is not JSON: '{"state": "a\tb"}'
+| error   adapter-failed     python3 adapters/protocol.py control-char: replied to observe with a line that is not JSON: "{\"state\": \"a\tb\"}"
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py cr-at-exit" --depth 2
@@ -2612,7 +2612,7 @@ exit 1
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py cr-split" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py cr-split: replied to new with a line that is not JSON: '{"ok": true}\r{"state": "closed"}'
+| error   adapter-failed     python3 adapters/protocol.py cr-split: replied to new with a line that is not JSON: "{\"ok\": true}\r{\"state\": \"closed\"}"
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py crlf" --depth 2
@@ -2624,7 +2624,7 @@ exit 0
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py dup-keys" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py dup-keys: replied to observe with '{"state": "open", "state": "closed"}', not {"state": "..."} or {"error": "..."}
+| error   adapter-failed     python3 adapters/protocol.py dup-keys: replied to observe with "{\"state\": \"open\", \"state\": \"closed\"}", not {"state": "..."} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py echo-apply" --depth 2
@@ -2640,19 +2640,19 @@ exit 1
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py empty" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py empty: replied to new with a line that is not JSON: ''
+| error   adapter-failed     python3 adapters/protocol.py empty: replied to new with a line that is not JSON: ""
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py empty-object" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py empty-object: replied to new with '{}', not {"ok": true} or {"error": "..."}
+| error   adapter-failed     python3 adapters/protocol.py empty-object: replied to new with "{}", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-and-more" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py error-and-more: replied to new with '{"error": "boom", "ok": true}', not {"ok": true} or {"error": "..."}
+| error   adapter-failed     python3 adapters/protocol.py error-and-more: replied to new with "{\"error\": \"boom\", \"ok\": true}", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-apply" --depth 2
@@ -2665,19 +2665,19 @@ exit 1
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-new" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py error-new: replied to new with the error 'boom'
+| error   adapter-failed     python3 adapters/protocol.py error-new: replied to new with the error "boom"
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-null" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py error-null: replied to observe with '{"error": null}', not {"state": "..."} or {"error": "..."}
+| error   adapter-failed     python3 adapters/protocol.py error-null: replied to observe with "{\"error\": null}", not {"state": "..."} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-observe" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py error-observe: replied to observe with '{"error": {"a": [1, 2.0, null, true], "b": "it\'s"}}', not {"state": "..."} or {"error": "..."}
+| error   adapter-failed     python3 adapters/protocol.py error-observe: replied to observe with "{\"error\": {\"a\": [1, 2.0, null, true], \"b\": \"it's\"}}", not {"state": "..."} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py escaped-key" --depth 2
@@ -2709,19 +2709,19 @@ exit 1
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ideographic-space" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py ideographic-space: replied to new with a line that is not JSON: '{"ok": true}\u3000'
+| error   adapter-failed     python3 adapters/protocol.py ideographic-space: replied to new with a line that is not JSON: "{\"ok\": true}\u3000"
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py infinity" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py infinity: replied to apply with a line that is not JSON: '{"result": -Infinity}'
+| error   adapter-failed     python3 adapters/protocol.py infinity: replied to apply with a line that is not JSON: "{\"result\": -Infinity}"
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py list" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py list: replied to new with '[]', not {"ok": true} or {"error": "..."}
+| error   adapter-failed     python3 adapters/protocol.py list: replied to new with "[]", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py mixed-endings" --depth 2
@@ -2733,7 +2733,7 @@ exit 0
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py nan" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py nan: replied to apply with a line that is not JSON: '{"result": NaN}'
+| error   adapter-failed     python3 adapters/protocol.py nan: replied to apply with a line that is not JSON: "{\"result\": NaN}"
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py no-reply" --depth 2
@@ -2751,7 +2751,7 @@ exit 1
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py notjson" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py notjson: replied to new with a line that is not JSON: 'hello'
+| error   adapter-failed     python3 adapters/protocol.py notjson: replied to new with a line that is not JSON: "hello"
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok"
@@ -2763,31 +2763,31 @@ exit 0
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-1" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py ok-1: replied to new with '{"ok": 1}', not {"ok": true} or {"error": "..."}
+| error   adapter-failed     python3 adapters/protocol.py ok-1: replied to new with "{\"ok\": 1}", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-false" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py ok-false: replied to new with '{"ok": false}', not {"ok": true} or {"error": "..."}
+| error   adapter-failed     python3 adapters/protocol.py ok-false: replied to new with "{\"ok\": false}", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-twice" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py ok-twice: replied to new with '{"ok": true, "ok": true}', not {"ok": true} or {"error": "..."}
+| error   adapter-failed     python3 adapters/protocol.py ok-twice: replied to new with "{\"ok\": true, \"ok\": true}", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py result-for-new" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py result-for-new: replied to new with '{"result": "ok"}', not {"ok": true} or {"error": "..."}
+| error   adapter-failed     python3 adapters/protocol.py result-for-new: replied to new with "{\"result\": \"ok\"}", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py result-null" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py result-null: replied to apply with '{"result": null}', not {"result": "..."} or {"error": "..."}
+| error   adapter-failed     python3 adapters/protocol.py result-null: replied to apply with "{\"result\": null}", not {"result": "..."} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py signal" --depth 2
@@ -2805,25 +2805,25 @@ exit 0
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py state-number" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py state-number: replied to observe with '{"state": 1}', not {"state": "..."} or {"error": "..."}
+| error   adapter-failed     python3 adapters/protocol.py state-number: replied to observe with "{\"state\": 1}", not {"state": "..."} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py string" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py string: replied to new with '"ok"', not {"ok": true} or {"error": "..."}
+| error   adapter-failed     python3 adapters/protocol.py string: replied to new with "\"ok\"", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py trailing" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py trailing: replied to new with a line that is not JSON: '{"ok": true} x'
+| error   adapter-failed     python3 adapters/protocol.py trailing: replied to new with a line that is not JSON: "{\"ok\": true} x"
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py two-keys" --depth 2
 exit 1
 --- stdout
-| error   adapter-failed     python3 adapters/protocol.py two-keys: replied to new with '{"ok": true, "extra": 1}', not {"ok": true} or {"error": "..."}
+| error   adapter-failed     python3 adapters/protocol.py two-keys: replied to new with "{\"ok\": true, \"extra\": 1}", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "trailing\\"
@@ -2982,7 +2982,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="13" failures="13"><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;ajar&quot;, B does not">A has state "ajar", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;gone&quot;, B does not">A has state "gone", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;knock&quot;, B does not">A has event "knock", B does not</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=guest: A says -&gt; open, B says reject">role=guest: A says -&gt; open, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=owner: A says -&gt; gone, B says stay">role=owner: A says -&gt; gone, B says stay</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=guest: A says reject and -&gt; gone, B says stay">role=guest: A says reject and -&gt; gone, B says stay</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=owner: A says -&gt; closed, B says ignore">role=owner: A says -&gt; closed, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=guest: A says -&gt; closed, B says ignore">role=guest: A says -&gt; closed, B says ignore</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=guest)"><failure message="A ends open, B ends rejected">A ends open, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=owner)"><failure message="A ends gone, B ends closed">A ends gone, B ends closed</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=guest)"><failure message="A ends undefined, B ends closed">A ends undefined, B ends closed</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=owner)"><failure message="A ends closed, B ends open">A ends closed, B ends open</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=guest)"><failure message="A ends closed, B ends open">A ends closed, B ends open</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/door-b.yaml seeds/spine.yaml
 exit 1
@@ -3055,7 +3055,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="10" failures="10"><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;ajar&quot;, B does not">A has state "ajar", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;knock&quot;, B does not">A has event "knock", B does not</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=guest: A says -&gt; open, B says reject">role=guest: A says -&gt; open, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=guest: A says reject and -&gt; gone, B says -&gt; gone">role=guest: A says reject and -&gt; gone, B says -&gt; gone</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=owner: A says -&gt; closed, B says ignore">role=owner: A says -&gt; closed, B says ignore</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=guest: A says -&gt; closed, B says ignore">role=guest: A says -&gt; closed, B says ignore</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=guest)"><failure message="A ends open, B ends rejected">A ends open, B ends rejected</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=guest)"><failure message="A ends undefined, B ends gone">A ends undefined, B ends gone</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=owner)"><failure message="A ends closed, B ends open">A ends closed, B ends open</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=guest)"><failure message="A ends closed, B ends open">A ends closed, B ends open</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/door-c.yaml diff/door-b.yaml
 exit 1
@@ -3146,7 +3146,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="13" failures="13"><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;ajar&quot;, A does not">B has state "ajar", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;gone&quot;, A does not">B has state "gone", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;knock&quot;, A does not">B has event "knock", A does not</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=owner: A says stay, B says -&gt; gone">role=owner: A says stay, B says -&gt; gone</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=guest: A says stay, B says reject and -&gt; gone">role=guest: A says stay, B says reject and -&gt; gone</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=guest: A says reject, B says -&gt; open">role=guest: A says reject, B says -&gt; open</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=owner: A says ignore, B says -&gt; closed">role=owner: A says ignore, B says -&gt; closed</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=guest: A says ignore, B says -&gt; closed">role=guest: A says ignore, B says -&gt; closed</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=owner)"><failure message="A ends closed, B ends gone">A ends closed, B ends gone</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=guest)"><failure message="A ends closed, B ends undefined">A ends closed, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=guest)"><failure message="A ends rejected, B ends open">A ends rejected, B ends open</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=owner)"><failure message="A ends open, B ends closed">A ends open, B ends closed</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=guest)"><failure message="A ends open, B ends closed">A ends open, B ends closed</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/door-open.yaml diff/door-b.yaml
 exit 1
@@ -3201,7 +3201,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="7" failures="7"><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;ajar&quot;, A does not">B has state "ajar", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;knock&quot;, A does not">B has event "knock", A does not</failure></testcase><testcase classname="spine diff" name="initial-differs initial"><failure message="A starts in &quot;open&quot;, B starts in &quot;closed&quot;">A starts in "open", B starts in "closed"</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=guest: A says reject, B says -&gt; open">role=guest: A says reject, B says -&gt; open</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=guest: A says -&gt; gone, B says reject and -&gt; gone">role=guest: A says -&gt; gone, B says reject and -&gt; gone</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=owner: A says ignore, B says -&gt; closed">role=owner: A says ignore, B says -&gt; closed</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=guest: A says ignore, B says -&gt; closed">role=guest: A says ignore, B says -&gt; closed</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/invalid.yaml diff/unreadable.yaml
 exit 1
@@ -3226,7 +3226,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="2" failures="2"><testcase classname="spine diff" name="missing-key diff/invalid.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase><testcase classname="spine diff" name="spec-unreadable diff/unreadable.yaml"><failure message="go-yaml load error in parser (while parsing a flow sequence) at L2.C9-L3.C1: did not find expected ',' or ']'">go-yaml load error in parser (while parsing a flow sequence) at L2.C9-L3.C1: did not find expected ',' or ']'</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/missing.yaml spines/not-utf8.yaml
 exit 1
@@ -3251,7 +3251,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="2" failures="2"><testcase classname="spine diff" name="spec-unreadable diff/missing.yaml"><failure message="cannot be read: No such file or directory">cannot be read: No such file or directory</failure></testcase><testcase classname="spine diff" name="spec-unreadable spines/not-utf8.yaml"><failure message="not UTF-8: byte 0xe9 at offset 32">not UTF-8: byte 0xe9 at offset 32</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/plain-a.yaml diff/plain-b.yaml
 exit 1
@@ -3288,7 +3288,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="4" failures="4"><testcase classname="spine diff" name="case-disagrees dark/drop"><failure message=": A says -&gt; broken, B says nothing (no rule matches)">: A says -&gt; broken, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees lit/press"><failure message=": A says -&gt; dark, B says -&gt; broken">: A says -&gt; dark, B says -&gt; broken</failure></testcase><testcase classname="spine diff" name="behavior-differs drop()"><failure message="A ends broken, B ends undefined">A ends broken, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs press() -&gt; press()"><failure message="A ends dark, B ends broken">A ends dark, B ends broken</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/plain-b.yaml diff/plain-a.yaml --depth 5
 exit 1
@@ -3325,7 +3325,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="4" failures="4"><testcase classname="spine diff" name="case-disagrees dark/drop"><failure message=": A says nothing (no rule matches), B says -&gt; broken">: A says nothing (no rule matches), B says -&gt; broken</failure></testcase><testcase classname="spine diff" name="case-disagrees lit/press"><failure message=": A says -&gt; broken, B says -&gt; dark">: A says -&gt; broken, B says -&gt; dark</failure></testcase><testcase classname="spine diff" name="behavior-differs drop()"><failure message="A ends undefined, B ends broken">A ends undefined, B ends broken</failure></testcase><testcase classname="spine diff" name="behavior-differs press() -&gt; press()"><failure message="A ends broken, B ends dark">A ends broken, B ends dark</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/stop-a.yaml diff/stop-a.yaml --depth 1000000000000000000000000000000
 exit 0
@@ -3337,7 +3337,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/stop-a.yaml diff/stop-b.yaml --depth -99999999999999999999
 exit 2
@@ -3369,7 +3369,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="2" failures="2"><testcase classname="spine diff" name="case-disagrees s/go"><failure message=": A says -&gt; t, B says reject">: A says -&gt; t, B says reject</failure></testcase><testcase classname="spine diff" name="behavior-differs go()"><failure message="A ends t, B ends rejected">A ends t, B ends rejected</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/unreadable.yaml seeds/spine.yaml
 exit 1
@@ -3388,7 +3388,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="spec-unreadable diff/unreadable.yaml"><failure message="go-yaml load error in parser (while parsing a flow sequence) at L2.C9-L3.C1: did not find expected ',' or ']'">go-yaml load error in parser (while parsing a flow sequence) at L2.C9-L3.C1: did not find expected ',' or ']'</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/vars-more.yaml seeds/spine.yaml
 exit 1
@@ -3407,7 +3407,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="vars-differ vars"><failure message="A and B declare different variables; case comparison skipped">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/vars-order.yaml diff/door-open.yaml
 exit 1
@@ -3426,7 +3426,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="initial-differs initial"><failure message="A starts in &quot;closed&quot;, B starts in &quot;open&quot;">A starts in "closed", B starts in "open"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/verdicts-a.yaml diff/verdicts-b.yaml
 exit 1
@@ -3463,7 +3463,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="4" failures="4"><testcase classname="spine diff" name="case-disagrees rejected/go"><failure message=": A says -&gt; later, B says -&gt; start">: A says -&gt; later, B says -&gt; start</failure></testcase><testcase classname="spine diff" name="case-disagrees start/go"><failure message=": A says -&gt; rejected, B says reject">: A says -&gt; rejected, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees start/wait"><failure message=": A says -&gt; undefined, B says nothing (no rule matches)">: A says -&gt; undefined, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees undefined/go"><failure message=": A says -&gt; later, B says -&gt; start">: A says -&gt; later, B says -&gt; start</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/verdicts-b.yaml diff/verdicts-a.yaml --depth 3
 exit 1
@@ -3500,7 +3500,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="4" failures="4"><testcase classname="spine diff" name="case-disagrees rejected/go"><failure message=": A says -&gt; start, B says -&gt; later">: A says -&gt; start, B says -&gt; later</failure></testcase><testcase classname="spine diff" name="case-disagrees start/go"><failure message=": A says reject, B says -&gt; rejected">: A says reject, B says -&gt; rejected</failure></testcase><testcase classname="spine diff" name="case-disagrees start/wait"><failure message=": A says nothing (no rule matches), B says -&gt; undefined">: A says nothing (no rule matches), B says -&gt; undefined</failure></testcase><testcase classname="spine diff" name="case-disagrees undefined/go"><failure message=": A says -&gt; start, B says -&gt; later">: A says -&gt; start, B says -&gt; later</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml diff/door-b.yaml
 exit 1
@@ -3573,7 +3573,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="10" failures="10"><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;ajar&quot;, A does not">B has state "ajar", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;knock&quot;, A does not">B has event "knock", A does not</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=guest: A says reject, B says -&gt; open">role=guest: A says reject, B says -&gt; open</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=guest: A says -&gt; gone, B says reject and -&gt; gone">role=guest: A says -&gt; gone, B says reject and -&gt; gone</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=owner: A says ignore, B says -&gt; closed">role=owner: A says ignore, B says -&gt; closed</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=guest: A says ignore, B says -&gt; closed">role=guest: A says ignore, B says -&gt; closed</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=guest)"><failure message="A ends rejected, B ends open">A ends rejected, B ends open</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=guest)"><failure message="A ends gone, B ends undefined">A ends gone, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=owner)"><failure message="A ends open, B ends closed">A ends open, B ends closed</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=guest)"><failure message="A ends open, B ends closed">A ends open, B ends closed</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml diff/door-b.yaml --depth -1
 exit 2
@@ -3648,7 +3648,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="8" failures="8"><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;ajar&quot;, A does not">B has state "ajar", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;knock&quot;, A does not">B has event "knock", A does not</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=guest: A says reject, B says -&gt; open">role=guest: A says reject, B says -&gt; open</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=guest: A says -&gt; gone, B says reject and -&gt; gone">role=guest: A says -&gt; gone, B says reject and -&gt; gone</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=owner: A says ignore, B says -&gt; closed">role=owner: A says ignore, B says -&gt; closed</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=guest: A says ignore, B says -&gt; closed">role=guest: A says ignore, B says -&gt; closed</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=guest)"><failure message="A ends rejected, B ends open">A ends rejected, B ends open</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=guest)"><failure message="A ends gone, B ends undefined">A ends gone, B ends undefined</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml diff/door-b.yaml --depth 6
 exit 1
@@ -3721,7 +3721,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="10" failures="10"><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;ajar&quot;, A does not">B has state "ajar", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;knock&quot;, A does not">B has event "knock", A does not</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=guest: A says reject, B says -&gt; open">role=guest: A says reject, B says -&gt; open</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=guest: A says -&gt; gone, B says reject and -&gt; gone">role=guest: A says -&gt; gone, B says reject and -&gt; gone</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=owner: A says ignore, B says -&gt; closed">role=owner: A says ignore, B says -&gt; closed</failure></testcase><testcase classname="spine diff" name="case-disagrees open/remove"><failure message="role=guest: A says ignore, B says -&gt; closed">role=guest: A says ignore, B says -&gt; closed</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=guest)"><failure message="A ends rejected, B ends open">A ends rejected, B ends open</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=guest)"><failure message="A ends gone, B ends undefined">A ends gone, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=owner)"><failure message="A ends open, B ends closed">A ends open, B ends closed</failure></testcase><testcase classname="spine diff" name="behavior-differs open(role=owner) -&gt; remove(role=guest)"><failure message="A ends open, B ends closed">A ends open, B ends closed</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml diff/door-c.yaml
 exit 1
@@ -3764,7 +3764,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="5" failures="5"><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;gone&quot;, B does not">A has state "gone", B does not</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=owner: A says -&gt; gone, B says stay">role=owner: A says -&gt; gone, B says stay</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=guest: A says -&gt; gone, B says stay">role=guest: A says -&gt; gone, B says stay</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=owner)"><failure message="A ends gone, B ends closed">A ends gone, B ends closed</failure></testcase><testcase classname="spine diff" name="behavior-differs remove(role=guest)"><failure message="A ends gone, B ends closed">A ends gone, B ends closed</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml diff/door-open.yaml
 exit 1
@@ -3783,7 +3783,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="initial-differs initial"><failure message="A starts in &quot;closed&quot;, B starts in &quot;open&quot;">A starts in "closed", B starts in "open"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml diff/invalid.yaml
 exit 1
@@ -3802,7 +3802,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="missing-key diff/invalid.yaml"><failure message="required key &quot;initial&quot; is missing">required key "initial" is missing</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml diff/vars-order.yaml
 exit 0
@@ -3814,7 +3814,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml diff/vars-value.yaml
 exit 1
@@ -3833,7 +3833,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="vars-differ vars"><failure message="A and B declare different variables; case comparison skipped">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml seeds/spine.yaml
 exit 0
@@ -3845,7 +3845,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml spines/key-twice.yaml
 exit 1
@@ -3858,14 +3858,14 @@ exit 1
 |       "code": "spec-unreadable",
 |       "severity": "error",
 |       "where": "spines/key-twice.yaml",
-|       "message": "key 'role' is given twice in one mapping, at lines 6 and 7"
+|       "message": "key \"role\" is given twice in one mapping, at lines 6 and 7"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="spec-unreadable spines/key-twice.yaml"><failure message="key 'role' is given twice in one mapping, at lines 6 and 7">key 'role' is given twice in one mapping, at lines 6 and 7</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="spec-unreadable spines/key-twice.yaml"><failure message="key &quot;role&quot; is given twice in one mapping, at lines 6 and 7">key "role" is given twice in one mapping, at lines 6 and 7</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml spines/names.yaml
 exit 1
 --- stdout
@@ -3901,13 +3901,13 @@ exit 1
 |       "code": "only-in-b",
 |       "severity": "error",
 |       "where": "states",
-|       "message": "B has state \"caf\u00e9\", A does not"
+|       "message": "B has state \"café\", A does not"
 |     },
 |     {
 |       "code": "only-in-b",
 |       "severity": "error",
 |       "where": "states",
-|       "message": "B has state \"emoji \ud83d\ude42\", A does not"
+|       "message": "B has state \"emoji 🙂\", A does not"
 |     },
 |     {
 |       "code": "only-in-b",
@@ -3925,13 +3925,13 @@ exit 1
 |       "code": "only-in-b",
 |       "severity": "error",
 |       "where": "states",
-|       "message": "B has state \"\u007f\u0085\", A does not"
+|q "      \"message\": \"B has state \\\"\x7f\u0085\\\", A does not\""
 |     },
 |     {
 |       "code": "only-in-b",
 |       "severity": "error",
 |       "where": "states",
-|       "message": "B has state \"\u65e5\u672c\", A does not"
+|       "message": "B has state \"日本\", A does not"
 |     },
 |     {
 |       "code": "only-in-a",
@@ -3955,13 +3955,13 @@ exit 1
 |       "code": "only-in-b",
 |       "severity": "error",
 |       "where": "events",
-|       "message": "B has event \"\u00fcber\", A does not"
+|       "message": "B has event \"über\", A does not"
 |     },
 |     {
 |       "code": "initial-differs",
 |       "severity": "error",
 |       "where": "initial",
-|       "message": "A starts in \"closed\", B starts in \"caf\u00e9\""
+|       "message": "A starts in \"closed\", B starts in \"café\""
 |     },
 |     {
 |       "code": "vars-differ",
@@ -3973,7 +3973,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 |q "<testsuite name=\"spine diff\" tests=\"16\" failures=\"16\"><testcase classname=\"spine diff\" name=\"only-in-a states\"><failure message=\"A has state &quot;closed&quot;, B does not\">A has state \"closed\", B does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-a states\"><failure message=\"A has state &quot;gone&quot;, B does not\">A has state \"gone\", B does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-a states\"><failure message=\"A has state &quot;open&quot;, B does not\">A has state \"open\", B does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-b states\"><failure message=\"B has state &quot;back\\slash&quot;, A does not\">B has state \"back\\slash\", A does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-b states\"><failure message=\"B has state &quot;caf\u00e9&quot;, A does not\">B has state \"caf\u00e9\", A does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-b states\"><failure message=\"B has state &quot;emoji \U0001f642&quot;, A does not\">B has state \"emoji \U0001f642\", A does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-b states\"><failure message=\"B has state &quot;quote&quot;d&quot;, A does not\">B has state \"quote\"d\", A does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-b states\"><failure message=\"B has state &quot;tab&#09;name&quot;, A does not\">B has state \"tab\tname\", A does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-b states\"><failure message=\"B has state &quot;\x7f\u0085&quot;, A does not\">B has state \"\x7f\u0085\", A does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-b states\"><failure message=\"B has state &quot;\u65e5\u672c&quot;, A does not\">B has state \"\u65e5\u672c\", A does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-a events\"><failure message=\"A has event &quot;open&quot;, B does not\">A has event \"open\", B does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-a events\"><failure message=\"A has event &quot;remove&quot;, B does not\">A has event \"remove\", B does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-b events\"><failure message=\"B has event &quot;ev&quot;q&quot;, A does not\">B has event \"ev\"q\", A does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-b events\"><failure message=\"B has event &quot;\u00fcber&quot;, A does not\">B has event \"\u00fcber\", A does not</failure></testcase><testcase classname=\"spine diff\" name=\"initial-differs initial\"><failure message=\"A starts in &quot;closed&quot;, B starts in &quot;caf\u00e9&quot;\">A starts in \"closed\", B starts in \"caf\u00e9\"</failure></testcase><testcase classname=\"spine diff\" name=\"vars-differ vars\"><failure message=\"A and B declare different variables; case comparison skipped\">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>"
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT spines/names.yaml seeds/spine.yaml
 exit 1
@@ -3992,13 +3992,13 @@ exit 1
 |       "code": "only-in-a",
 |       "severity": "error",
 |       "where": "states",
-|       "message": "A has state \"caf\u00e9\", B does not"
+|       "message": "A has state \"café\", B does not"
 |     },
 |     {
 |       "code": "only-in-a",
 |       "severity": "error",
 |       "where": "states",
-|       "message": "A has state \"emoji \ud83d\ude42\", B does not"
+|       "message": "A has state \"emoji 🙂\", B does not"
 |     },
 |     {
 |       "code": "only-in-a",
@@ -4016,13 +4016,13 @@ exit 1
 |       "code": "only-in-a",
 |       "severity": "error",
 |       "where": "states",
-|       "message": "A has state \"\u007f\u0085\", B does not"
+|q "      \"message\": \"A has state \\\"\x7f\u0085\\\", B does not\""
 |     },
 |     {
 |       "code": "only-in-a",
 |       "severity": "error",
 |       "where": "states",
-|       "message": "A has state \"\u65e5\u672c\", B does not"
+|       "message": "A has state \"日本\", B does not"
 |     },
 |     {
 |       "code": "only-in-b",
@@ -4052,7 +4052,7 @@ exit 1
 |       "code": "only-in-a",
 |       "severity": "error",
 |       "where": "events",
-|       "message": "A has event \"\u00fcber\", B does not"
+|       "message": "A has event \"über\", B does not"
 |     },
 |     {
 |       "code": "only-in-b",
@@ -4070,7 +4070,7 @@ exit 1
 |       "code": "initial-differs",
 |       "severity": "error",
 |       "where": "initial",
-|       "message": "A starts in \"caf\u00e9\", B starts in \"closed\""
+|       "message": "A starts in \"café\", B starts in \"closed\""
 |     },
 |     {
 |       "code": "vars-differ",
@@ -4082,7 +4082,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 |q "<testsuite name=\"spine diff\" tests=\"16\" failures=\"16\"><testcase classname=\"spine diff\" name=\"only-in-a states\"><failure message=\"A has state &quot;back\\slash&quot;, B does not\">A has state \"back\\slash\", B does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-a states\"><failure message=\"A has state &quot;caf\u00e9&quot;, B does not\">A has state \"caf\u00e9\", B does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-a states\"><failure message=\"A has state &quot;emoji \U0001f642&quot;, B does not\">A has state \"emoji \U0001f642\", B does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-a states\"><failure message=\"A has state &quot;quote&quot;d&quot;, B does not\">A has state \"quote\"d\", B does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-a states\"><failure message=\"A has state &quot;tab&#09;name&quot;, B does not\">A has state \"tab\tname\", B does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-a states\"><failure message=\"A has state &quot;\x7f\u0085&quot;, B does not\">A has state \"\x7f\u0085\", B does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-a states\"><failure message=\"A has state &quot;\u65e5\u672c&quot;, B does not\">A has state \"\u65e5\u672c\", B does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-b states\"><failure message=\"B has state &quot;closed&quot;, A does not\">B has state \"closed\", A does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-b states\"><failure message=\"B has state &quot;gone&quot;, A does not\">B has state \"gone\", A does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-b states\"><failure message=\"B has state &quot;open&quot;, A does not\">B has state \"open\", A does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-a events\"><failure message=\"A has event &quot;ev&quot;q&quot;, B does not\">A has event \"ev\"q\", B does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-a events\"><failure message=\"A has event &quot;\u00fcber&quot;, B does not\">A has event \"\u00fcber\", B does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-b events\"><failure message=\"B has event &quot;open&quot;, A does not\">B has event \"open\", A does not</failure></testcase><testcase classname=\"spine diff\" name=\"only-in-b events\"><failure message=\"B has event &quot;remove&quot;, A does not\">B has event \"remove\", A does not</failure></testcase><testcase classname=\"spine diff\" name=\"initial-differs initial\"><failure message=\"A starts in &quot;caf\u00e9&quot;, B starts in &quot;closed&quot;\">A starts in \"caf\u00e9\", B starts in \"closed\"</failure></testcase><testcase classname=\"spine diff\" name=\"vars-differ vars\"><failure message=\"A and B declare different variables; case comparison skipped\">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>"
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT spines/unsound.yaml seeds/spine.yaml
 exit 1
@@ -4173,7 +4173,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="13" failures="13"><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;end&quot;, B does not">A has state "end", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;island&quot;, B does not">A has state "island", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;s&quot;, B does not">A has state "s", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;t&quot;, B does not">A has state "t", B does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;closed&quot;, A does not">B has state "closed", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;gone&quot;, A does not">B has state "gone", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;open&quot;, A does not">B has state "open", A does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;go&quot;, B does not">A has event "go", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;stop&quot;, B does not">A has event "stop", B does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;open&quot;, A does not">B has event "open", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;remove&quot;, A does not">B has event "remove", A does not</failure></testcase><testcase classname="spine diff" name="initial-differs initial"><failure message="A starts in &quot;s&quot;, B starts in &quot;closed&quot;">A starts in "s", B starts in "closed"</failure></testcase><testcase classname="spine diff" name="vars-differ vars"><failure message="A and B declare different variables; case comparison skipped">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff diff/door-b.yaml diff/door-c.yaml
 exit 1
@@ -4423,7 +4423,7 @@ exit 0
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml spines/key-twice.yaml
 exit 1
 --- stdout
-| error   spec-unreadable    spines/key-twice.yaml: key 'role' is given twice in one mapping, at lines 6 and 7
+| error   spec-unreadable    spines/key-twice.yaml: key "role" is given twice in one mapping, at lines 6 and 7
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml spines/names.yaml
@@ -4497,14 +4497,14 @@ exit 1
 |       "code": "spec-unreadable",
 |       "severity": "error",
 |       "where": "policies/key-twice.yaml",
-|       "message": "key 'builder' is given twice in one mapping, at lines 7 and 10"
+|       "message": "key \"builder\" is given twice in one mapping, at lines 7 and 10"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="spec-unreadable policies/key-twice.yaml"><failure message="key 'builder' is given twice in one mapping, at lines 7 and 10">key 'builder' is given twice in one mapping, at lines 7 and 10</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="spec-unreadable policies/key-twice.yaml"><failure message="key &quot;builder&quot; is given twice in one mapping, at lines 7 and 10">key "builder" is given twice in one mapping, at lines 7 and 10</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine guard --format json --junit REPORT policies/missing.yaml --branch build/x a
 exit 1
 --- stdout
@@ -4522,7 +4522,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="spec-unreadable policies/missing.yaml"><failure message="cannot be read: No such file or directory">cannot be read: No such file or directory</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine guard --format json --junit REPORT policies/patterns.yaml --branch feature/1x src/a1.py src/d.py x.h docs/a/b lib/]x abc a-c qz r]s rxs t-x tb u-x [ ]x u! src/a/secret/b.py src/[a].py *
 exit 1
@@ -4613,7 +4613,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="12" failures="12"><testcase classname="spine guard" name="path-not-allowed src/d.py"><failure message="no allow rule for the feature role covers this path">no allow rule for the feature role covers this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed qz"><failure message="no allow rule for the feature role covers this path">no allow rule for the feature role covers this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed r]s"><failure message="no allow rule for the feature role covers this path">no allow rule for the feature role covers this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed rxs"><failure message="no allow rule for the feature role covers this path">no allow rule for the feature role covers this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed t-x"><failure message="no allow rule for the feature role covers this path">no allow rule for the feature role covers this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed u-x"><failure message="no allow rule for the feature role covers this path">no allow rule for the feature role covers this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed ["><failure message="no allow rule for the feature role covers this path">no allow rule for the feature role covers this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed ]x"><failure message="no allow rule for the feature role covers this path">no allow rule for the feature role covers this path</failure></testcase><testcase classname="spine guard" name="path-denied u!"><failure message="the feature role may not change this path">the feature role may not change this path</failure></testcase><testcase classname="spine guard" name="path-denied src/a/secret/b.py"><failure message="the feature role may not change this path">the feature role may not change this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed src/[a].py"><failure message="no allow rule for the feature role covers this path">no allow rule for the feature role covers this path</failure></testcase><testcase classname="spine guard" name="path-denied *"><failure message="the feature role may not change this path">the feature role may not change this path</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine guard --format json --junit REPORT policies/patterns.yaml --branch release-1 anything/at/all
 exit 0
@@ -4632,7 +4632,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="1" failures="0"><testcase classname="spine guard" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine guard --format json --junit REPORT policies/patterns.yaml --branch release-10 a
 exit 1
@@ -4657,7 +4657,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="path-not-allowed a"><failure message="no allow rule for the other role covers this path">no allow rule for the other role covers this path</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine guard --format json --junit REPORT policies/patterns.yaml --branch xyz a
 exit 1
@@ -4676,7 +4676,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="unknown-role xyz"><failure message="no policy entry matches this branch">no policy entry matches this branch</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine guard --format json --junit REPORT policies/patterns.yaml --branch y a
 exit 1
@@ -4701,7 +4701,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="path-not-allowed a"><failure message="no allow rule for the other role covers this path">no allow rule for the other role covers this path</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine guard --format json --junit REPORT seeds/policy.yaml --branch build/x
 exit 0
@@ -4720,7 +4720,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="1" failures="0"><testcase classname="spine guard" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine guard --format json --junit REPORT seeds/policy.yaml --branch build/x < "src/a.py\r\n  spec/b.yaml  \n\n\u2028src/c.py\u0085\rtests/d.py"
 exit 1
@@ -4745,7 +4745,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="path-not-allowed spec/b.yaml"><failure message="no allow rule for the builder role covers this path">no allow rule for the builder role covers this path</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine guard --format json --junit REPORT seeds/policy.yaml --branch build/x src/a.py src/secret.py spec/b.yaml
 exit 1
@@ -4776,7 +4776,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="2" failures="2"><testcase classname="spine guard" name="path-denied src/secret.py"><failure message="the builder role may not change this path">the builder role may not change this path</failure></testcase><testcase classname="spine guard" name="path-not-allowed spec/b.yaml"><failure message="no allow rule for the builder role covers this path">no allow rule for the builder role covers this path</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine guard --format json --junit REPORT seeds/policy.yaml --branch main anything
 exit 0
@@ -4795,7 +4795,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="1" failures="0"><testcase classname="spine guard" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine guard --format json --junit REPORT seeds/spine.yaml --branch build/x a
 exit 1
@@ -4868,7 +4868,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="10" failures="10"><testcase classname="spine guard" name="unknown-key seeds/spine.yaml"><failure message="unknown policy key &quot;machine&quot;">unknown policy key "machine"</failure></testcase><testcase classname="spine guard" name="unknown-key seeds/spine.yaml"><failure message="unknown policy key &quot;section&quot;">unknown policy key "section"</failure></testcase><testcase classname="spine guard" name="unknown-key seeds/spine.yaml"><failure message="unknown policy key &quot;vars&quot;">unknown policy key "vars"</failure></testcase><testcase classname="spine guard" name="unknown-key seeds/spine.yaml"><failure message="unknown policy key &quot;states&quot;">unknown policy key "states"</failure></testcase><testcase classname="spine guard" name="unknown-key seeds/spine.yaml"><failure message="unknown policy key &quot;initial&quot;">unknown policy key "initial"</failure></testcase><testcase classname="spine guard" name="unknown-key seeds/spine.yaml"><failure message="unknown policy key &quot;events&quot;">unknown policy key "events"</failure></testcase><testcase classname="spine guard" name="unknown-key seeds/spine.yaml"><failure message="unknown policy key &quot;rules&quot;">unknown policy key "rules"</failure></testcase><testcase classname="spine guard" name="unknown-key seeds/spine.yaml"><failure message="unknown policy key &quot;examples&quot;">unknown policy key "examples"</failure></testcase><testcase classname="spine guard" name="missing-key seeds/spine.yaml"><failure message="the policy needs &quot;branches&quot;">the policy needs "branches"</failure></testcase><testcase classname="spine guard" name="missing-key seeds/spine.yaml"><failure message="the policy needs &quot;roles&quot;">the policy needs "roles"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine guard --format json --junit REPORT spines/not-utf8.yaml --branch build/x a
 exit 1
@@ -4887,12 +4887,12 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="spec-unreadable spines/not-utf8.yaml"><failure message="not UTF-8: byte 0xe9 at offset 32">not UTF-8: byte 0xe9 at offset 32</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine guard policies/key-twice.yaml --branch build/x src/a.py src/secret.py spec/b.yaml
 exit 1
 --- stdout
-| error   spec-unreadable    policies/key-twice.yaml: key 'builder' is given twice in one mapping, at lines 7 and 10
+| error   spec-unreadable    policies/key-twice.yaml: key "builder" is given twice in one mapping, at lines 7 and 10
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine guard policies/missing.yaml --branch build/x a
@@ -5004,7 +5004,7 @@ exit 1
 |       "code": "orphan-check",
 |       "severity": "error",
 |       "where": "checks/door/sub/test_more.txt",
-|       "message": "covers caf\u00e9/\u00fcber, which the spec no longer defines"
+|       "message": "covers café/über, which the spec no longer defines"
 |     },
 |     {
 |       "code": "orphan-check",
@@ -5100,7 +5100,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine stale" tests="16" failures="16"><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers café/über, which the spec no longer defines">covers café/über, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers a-b/c_d, which the spec no longer defines">covers a-b/c_d, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="stale-check checks/door/test_door.py"><failure message="covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers nowhere/open, which the spec no longer defines">covers nowhere/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/fly, which the spec no longer defines">covers closed/fly, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="bad-citation checks/door/test_door.py:4"><failure message="&quot;covers:closed/open@26CCABA33EA0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers:closed/open@26CCABA33EA0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/slips/test_slips.py:2"><failure message="&quot;covers closed/open@26ccaba33ea0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/slips/test_slips.py:3"><failure message="&quot;covers: closed/open @26ccaba33ea0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: closed/open @26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/slips/test_slips.py:4"><failure message="&quot;cover: closed/open@26ccaba33ea0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"cover: closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/slips/test_slips.py:5"><failure message="&quot;Covers: closed/open@26ccaba33ea0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"Covers: closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:2"><failure message="&quot;covers: spine@&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spine@" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:3"><failure message="&quot;covers: spine@XYZ&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spine@XYZ" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:4"><failure message="&quot;covers: spines@7ffd784dee4d&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spines@7ffd784dee4d" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:5"><failure message="&quot;covers: spine @7ffd784dee4d&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spine @7ffd784dee4d" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:7"><failure message="&quot;covers: spine@7FFD784DEE4D&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spine@7FFD784DEE4D" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="stale-check checks/spine-old/test_whole.py"><failure message="covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check">covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine stale --format json --junit REPORT seeds/spine.yaml checks/door
 exit 1
@@ -5113,7 +5113,7 @@ exit 1
 |       "code": "orphan-check",
 |       "severity": "error",
 |       "where": "checks/door/sub/test_more.txt",
-|       "message": "covers caf\u00e9/\u00fcber, which the spec no longer defines"
+|       "message": "covers café/über, which the spec no longer defines"
 |     },
 |     {
 |       "code": "orphan-check",
@@ -5155,7 +5155,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine stale" tests="6" failures="6"><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers café/über, which the spec no longer defines">covers café/über, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers a-b/c_d, which the spec no longer defines">covers a-b/c_d, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="stale-check checks/door/test_door.py"><failure message="covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check">covers open/open@000000000000, but that cell now hashes to 79e9a52da0fe: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers nowhere/open, which the spec no longer defines">covers nowhere/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/fly, which the spec no longer defines">covers closed/fly, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="bad-citation checks/door/test_door.py:4"><failure message="&quot;covers:closed/open@26CCABA33EA0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers:closed/open@26CCABA33EA0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine stale --format json --junit REPORT seeds/spine.yaml checks/none
 exit 0
@@ -5180,7 +5180,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine stale" tests="1" failures="0"><testcase classname="spine stale" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine stale --format json --junit REPORT seeds/spine.yaml checks/slips
 exit 1
@@ -5223,7 +5223,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine stale" tests="4" failures="4"><testcase classname="spine stale" name="bad-citation checks/slips/test_slips.py:2"><failure message="&quot;covers closed/open@26ccaba33ea0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/slips/test_slips.py:3"><failure message="&quot;covers: closed/open @26ccaba33ea0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: closed/open @26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/slips/test_slips.py:4"><failure message="&quot;cover: closed/open@26ccaba33ea0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"cover: closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/slips/test_slips.py:5"><failure message="&quot;Covers: closed/open@26ccaba33ea0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"Covers: closed/open@26ccaba33ea0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine stale --format json --junit REPORT seeds/spine.yaml checks/spine-current
 exit 0
@@ -5235,7 +5235,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine stale" tests="1" failures="0"><testcase classname="spine stale" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine stale --format json --junit REPORT seeds/spine.yaml checks/spine-malformed
 exit 1
@@ -5290,7 +5290,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine stale" tests="5" failures="5"><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:2"><failure message="&quot;covers: spine@&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spine@" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:3"><failure message="&quot;covers: spine@XYZ&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spine@XYZ" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:4"><failure message="&quot;covers: spines@7ffd784dee4d&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spines@7ffd784dee4d" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:5"><failure message="&quot;covers: spine @7ffd784dee4d&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spine @7ffd784dee4d" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase><testcase classname="spine stale" name="bad-citation checks/spine-malformed/test_whole.py:7"><failure message="&quot;covers: spine@7FFD784DEE4D&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers: spine@7FFD784DEE4D" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine stale --format json --junit REPORT seeds/spine.yaml checks/spine-old
 exit 1
@@ -5321,7 +5321,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine stale" tests="1" failures="1"><testcase classname="spine stale" name="stale-check checks/spine-old/test_whole.py"><failure message="covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check">covers spine@000000000000, but the spine now hashes to 7ffd784dee4d: re-ratify, then update the check</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine stale --format json --junit REPORT spines/names.yaml checks/door
 exit 1
@@ -5346,7 +5346,7 @@ exit 1
 |       "code": "stale-check",
 |       "severity": "error",
 |       "where": "checks/door/sub/test_more.txt",
-|       "message": "covers caf\u00e9/\u00fcber@1234, but that cell now hashes to 8be38720bae1: re-ratify, then update the check"
+|       "message": "covers café/über@1234, but that cell now hashes to 8be38720bae1: re-ratify, then update the check"
 |     },
 |     {
 |       "code": "orphan-check",
@@ -5387,19 +5387,19 @@ exit 1
 |     {
 |       "code": "uncovered",
 |       "severity": "info",
-|       "where": "back\\slash/\u00fcber",
+|       "where": "back\\slash/über",
 |       "message": "no check cites this transition; conformance still exercises it"
 |     },
 |     {
 |       "code": "uncovered",
 |       "severity": "info",
-|       "where": "caf\u00e9/ev\"q",
+|       "where": "café/ev\"q",
 |       "message": "no check cites this transition; conformance still exercises it"
 |     },
 |     {
 |       "code": "uncovered",
 |       "severity": "info",
-|       "where": "caf\u00e9/\u00fcber",
+|       "where": "café/über",
 |       "message": "no check cites this transition; conformance still exercises it"
 |     },
 |     {
@@ -5411,20 +5411,20 @@ exit 1
 |     {
 |       "code": "uncovered",
 |       "severity": "info",
-|       "where": "quote\"d/\u00fcber",
+|       "where": "quote\"d/über",
 |       "message": "no check cites this transition; conformance still exercises it"
 |     },
 |     {
 |       "code": "uncovered",
 |       "severity": "info",
-|       "where": "\u65e5\u672c/\u00fcber",
+|       "where": "日本/über",
 |       "message": "no check cites this transition; conformance still exercises it"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine stale" tests="9" failures="9"><testcase classname="spine stale" name="orphan-check checks/door/.hidden.py"><failure message="covers open/remove, which the spec no longer defines">covers open/remove, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers closed/open, which the spec no longer defines">covers closed/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="stale-check checks/door/sub/test_more.txt"><failure message="covers café/über@1234, but that cell now hashes to 8be38720bae1: re-ratify, then update the check">covers café/über@1234, but that cell now hashes to 8be38720bae1: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers a-b/c_d, which the spec no longer defines">covers a-b/c_d, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/open, which the spec no longer defines">covers closed/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers open/open, which the spec no longer defines">covers open/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers nowhere/open, which the spec no longer defines">covers nowhere/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/fly, which the spec no longer defines">covers closed/fly, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="bad-citation checks/door/test_door.py:4"><failure message="&quot;covers:closed/open@26CCABA33EA0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers:closed/open@26CCABA33EA0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine stale --format json --junit REPORT spines/unsound.yaml checks/door
 exit 1
@@ -5449,7 +5449,7 @@ exit 1
 |       "code": "orphan-check",
 |       "severity": "error",
 |       "where": "checks/door/sub/test_more.txt",
-|       "message": "covers caf\u00e9/\u00fcber, which the spec no longer defines"
+|       "message": "covers café/über, which the spec no longer defines"
 |     },
 |     {
 |       "code": "orphan-check",
@@ -5515,7 +5515,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine stale" tests="9" failures="9"><testcase classname="spine stale" name="orphan-check checks/door/.hidden.py"><failure message="covers open/remove, which the spec no longer defines">covers open/remove, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers closed/open, which the spec no longer defines">covers closed/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers café/über, which the spec no longer defines">covers café/über, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers a-b/c_d, which the spec no longer defines">covers a-b/c_d, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/open, which the spec no longer defines">covers closed/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers open/open, which the spec no longer defines">covers open/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers nowhere/open, which the spec no longer defines">covers nowhere/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/fly, which the spec no longer defines">covers closed/fly, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="bad-citation checks/door/test_door.py:4"><failure message="&quot;covers:closed/open@26CCABA33EA0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers:closed/open@26CCABA33EA0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine stale seeds/spine.yaml checks
 exit 1
@@ -5640,7 +5640,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine trace --format json --junit REPORT seeds/spine.yaml behaviors/door/invalid/bad-step.yaml
 exit 1
@@ -5683,7 +5683,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="5" failures="5"><testcase classname="spine trace" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 1 &quot;open role=nobody&quot;: &quot;nobody&quot; is not a value of &quot;role&quot;">step 1 "open role=nobody": "nobody" is not a value of "role"</failure></testcase><testcase classname="spine trace" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 2 &quot;open&quot;: no value for &quot;role&quot;">step 2 "open": no value for "role"</failure></testcase><testcase classname="spine trace" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 3 &quot;open role=owner role=owner&quot;: &quot;role&quot; is given twice">step 3 "open role=owner role=owner": "role" is given twice</failure></testcase><testcase classname="spine trace" name="bad-step behaviors/door/invalid/bad-step.yaml"><failure message="step 4 &quot;open role=owner colour=red&quot;: &quot;colour&quot; is not a declared variable">step 4 "open role=owner colour=red": "colour" is not a declared variable</failure></testcase><testcase classname="spine trace" name="spec-shape behaviors/door/invalid/bad-step.yaml"><failure message="&quot;expect&quot; must be text">"expect" must be text</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine trace --format json --junit REPORT seeds/spine.yaml behaviors/door/invalid/event-typo.yaml
 exit 1
@@ -5702,7 +5702,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="bad-step behaviors/door/invalid/event-typo.yaml"><failure message="step 1 &quot;opn role=owner&quot;: &quot;opn&quot; is not a declared event">step 1 "opn role=owner": "opn" is not a declared event</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine trace --format json --junit REPORT seeds/spine.yaml behaviors/door/invalid/expect-rejected.yaml
 exit 1
@@ -5721,7 +5721,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="bad-value behaviors/door/invalid/expect-rejected.yaml"><failure message="expect &quot;rejected&quot; is not a declared state">expect "rejected" is not a declared state</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine trace --format json --junit REPORT seeds/spine.yaml behaviors/door/invalid/expect-typo.yaml
 exit 1
@@ -5740,7 +5740,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="bad-value behaviors/door/invalid/expect-typo.yaml"><failure message="expect &quot;opn&quot; is not a declared state">expect "opn" is not a declared state</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine trace --format json --junit REPORT seeds/spine.yaml behaviors/door/invalid/list.yaml
 exit 1
@@ -5759,7 +5759,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-shape behaviors/door/invalid/list.yaml"><failure message="a behavior file must be a mapping with &quot;steps&quot; and an optional &quot;expect&quot;">a behavior file must be a mapping with "steps" and an optional "expect"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine trace --format json --junit REPORT seeds/spine.yaml behaviors/door/valid/opens.yaml
 exit 0
@@ -5771,7 +5771,7 @@ exit 0
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine trace --format json --junit REPORT seeds/spine.yaml behaviors/door/valid/refused.yaml
 exit 1
@@ -5790,7 +5790,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused behaviors/door/valid/refused.yaml"><failure message="step 1 &quot;open role=guest&quot; is rejected in state closed">step 1 "open role=guest" is rejected in state closed</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine trace --format json --junit REPORT seeds/spine.yaml behaviors/door/valid/wrong-end.yml
 exit 1
@@ -5809,7 +5809,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused behaviors/door/valid/wrong-end.yml"><failure message="ends in open, expected gone">ends in open, expected gone</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine trace --format json --junit REPORT seeds/spine.yaml behaviors/key-twice.yaml
 exit 1
@@ -5822,14 +5822,14 @@ exit 1
 |       "code": "spec-unreadable",
 |       "severity": "error",
 |       "where": "behaviors/key-twice.yaml",
-|       "message": "key 'steps' is given twice in one mapping, at lines 2 and 3"
+|       "message": "key \"steps\" is given twice in one mapping, at lines 2 and 3"
 |     }
 |   ]
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-unreadable behaviors/key-twice.yaml"><failure message="key 'steps' is given twice in one mapping, at lines 2 and 3">key 'steps' is given twice in one mapping, at lines 2 and 3</failure></testcase></testsuite>
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-unreadable behaviors/key-twice.yaml"><failure message="key &quot;steps&quot; is given twice in one mapping, at lines 2 and 3">key "steps" is given twice in one mapping, at lines 2 and 3</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine trace --format json --junit REPORT seeds/spine.yaml behaviors/missing.yaml
 exit 1
 --- stdout
@@ -5847,7 +5847,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-unreadable behaviors/missing.yaml"><failure message="cannot be read: No such file or directory">cannot be read: No such file or directory</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine trace --format json --junit REPORT seeds/spine.yaml seeds/spine.yaml
 exit 1
@@ -5914,7 +5914,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="9" failures="9"><testcase classname="spine trace" name="unknown-key seeds/spine.yaml"><failure message="unknown behavior key &quot;machine&quot;">unknown behavior key "machine"</failure></testcase><testcase classname="spine trace" name="unknown-key seeds/spine.yaml"><failure message="unknown behavior key &quot;section&quot;">unknown behavior key "section"</failure></testcase><testcase classname="spine trace" name="unknown-key seeds/spine.yaml"><failure message="unknown behavior key &quot;vars&quot;">unknown behavior key "vars"</failure></testcase><testcase classname="spine trace" name="unknown-key seeds/spine.yaml"><failure message="unknown behavior key &quot;states&quot;">unknown behavior key "states"</failure></testcase><testcase classname="spine trace" name="unknown-key seeds/spine.yaml"><failure message="unknown behavior key &quot;initial&quot;">unknown behavior key "initial"</failure></testcase><testcase classname="spine trace" name="unknown-key seeds/spine.yaml"><failure message="unknown behavior key &quot;events&quot;">unknown behavior key "events"</failure></testcase><testcase classname="spine trace" name="unknown-key seeds/spine.yaml"><failure message="unknown behavior key &quot;rules&quot;">unknown behavior key "rules"</failure></testcase><testcase classname="spine trace" name="unknown-key seeds/spine.yaml"><failure message="unknown behavior key &quot;examples&quot;">unknown behavior key "examples"</failure></testcase><testcase classname="spine trace" name="missing-key seeds/spine.yaml"><failure message="a behavior needs &quot;steps&quot;">a behavior needs "steps"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine trace --format json --junit REPORT seeds/spine.yaml spines/not-utf8.yaml
 exit 1
@@ -5933,7 +5933,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spec-unreadable spines/not-utf8.yaml"><failure message="not UTF-8: byte 0xe9 at offset 32">not UTF-8: byte 0xe9 at offset 32</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine trace --format json --junit REPORT spines/unsound.yaml seeds/behavior.yaml
 exit 1
@@ -5952,7 +5952,7 @@ exit 1
 | }
 |
 --- junit
-| <?xml version='1.0' encoding='utf-8'?>
+| <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="spine-unsound spec"><failure message="18 errors from spine check; run it for details">18 errors from spine check; run it for details</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine trace seeds/spine.yaml ./behaviors//door/valid/opens.yaml
 exit 0
@@ -6013,7 +6013,7 @@ exit 1
 === in tools/internal/spine/testdata: spine trace seeds/spine.yaml behaviors/key-twice.yaml
 exit 1
 --- stdout
-| error   spec-unreadable    behaviors/key-twice.yaml: key 'steps' is given twice in one mapping, at lines 2 and 3
+| error   spec-unreadable    behaviors/key-twice.yaml: key "steps" is given twice in one mapping, at lines 2 and 3
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine trace seeds/spine.yaml behaviors/missing.yaml

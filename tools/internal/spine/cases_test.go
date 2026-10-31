@@ -1,9 +1,8 @@
 package spine
 
 // The cases test (#27, #44): the Go spine runs on every input below, and each run must give
-// exactly what the record holds (record_test.go). The inputs are the ones the differential test
-// ran, which compared the Go spine with tools/spine.py until that retired; the record was written
-// while the two agreed. Between them, the inputs must produce every finding code the tool
+// exactly what the record holds (record_test.go). Between them, the inputs must produce every
+// finding code the tool
 // contract lists. JSON output must parse, and a JUnit report must parse and refer to no character
 // XML can't hold.
 //
@@ -196,7 +195,7 @@ type junitFailure struct {
 }
 
 // charRef is a character reference; encoding/xml accepts one to a character XML can't hold,
-// which strict parsers such as Python's refuse.
+// which strict parsers refuse.
 var charRef = regexp.MustCompile(`&#(x[0-9a-fA-F]+|[0-9]+);`)
 
 // badCharRef is the first reference in data to a character XML can't hold, or "".
@@ -568,7 +567,7 @@ func filesystemCases(t *testing.T, td, dir string) []spineCase {
 	for i, args := range cases {
 		out = append(out, spineCase{name: fmt.Sprintf("filesystem %d", i+1), dir: dir, args: args, mode: full})
 	}
-	// a changed file whose name isn't UTF-8, as tools/spine.py read stdin with surrogateescape
+	// changed files whose names aren't UTF-8
 	out = append(out, spineCase{name: "stdin not UTF-8", dir: dir, mode: full, stdin: "spec/\xff.py\nsrc/\xfe\n",
 		args: []string{"guard", filepath.Join(td, "seeds", "policy.yaml"), "--branch", "build/x"}})
 	return out

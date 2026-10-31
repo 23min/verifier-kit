@@ -1,38 +1,31 @@
 package spine
 
 import (
-	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 	"os"
+	"path/filepath"
 	"regexp"
 	"slices"
 	"sort"
 	"strings"
+	"unicode/utf8"
 
+	"crypto/sha256"
 	"github.com/23min/verifier-kit/tools/internal/program"
 )
 
-// ---------- the machine, as in tools/spine.py ----------
+// ---------- the machine ----------
 
 // Outcome is what one rule does: to (with a target), reject, ignore or stay.
 type Outcome struct{ Kind, Target string }
-
-// key is str() of the Python tuple, which decide() sorts by.
-func (o Outcome) key() string {
-	target := "None"
-	if o.Kind == "to" {
-		target = pyRepr(o.Target)
-	}
-	return "(" + pyRepr(o.Kind) + ", " + target + ")"
-}
 
 // Rule is one validated rule.
 type Rule struct {
 	From, Event string
 	Outcome     Outcome
 	When        *condition // nil when the rule has no when
-	canon       string     // json.dumps(rule, sort_keys=True), for the cell hash
+	canon       string     // the rule in the hashed form, for the cell hash
 }
 
 // Example is one validated worked example.
@@ -105,7 +98,53 @@ func newSpec(v *Value) *Spec {
 	return s
 }
 
-// canonJSON is json.dumps(rule, sort_keys=True) for a validated rule, whose values are text or true.
+// hashString is a text as the hashed form writes it, fixed since the hashes were first given out
+// (changing it would change every hash, and every citation would go stale): a JSON string in
+// ASCII, `\uXXXX` for anything else (a pair for a character past U+FFFF), and `\udcXX` for a byte
+// that isn't UTF-8.
+func hashString(s string) string {
+	var b strings.Builder
+	b.WriteByte('"')
+	for i := 0; i < len(s); {
+		r, size := utf8.DecodeRuneInString(s[i:])
+		if r == utf8.RuneError && size == 1 {
+			fmt.Fprintf(&b, `\udc%02x`, s[i])
+			i++
+			continue
+		}
+		i += size
+		switch r {
+		case '"':
+			b.WriteString(`\"`)
+		case '\\':
+			b.WriteString(`\\`)
+		case '\n':
+			b.WriteString(`\n`)
+		case '\r':
+			b.WriteString(`\r`)
+		case '\t':
+			b.WriteString(`\t`)
+		case '\b':
+			b.WriteString(`\b`)
+		case '\f':
+			b.WriteString(`\f`)
+		default:
+			switch {
+			case r >= ' ' && r <= '~':
+				b.WriteRune(r)
+			case r < 0x10000:
+				fmt.Fprintf(&b, `\u%04x`, r)
+			default:
+				r -= 0x10000
+				fmt.Fprintf(&b, `\u%04x\u%04x`, 0xd800+(r>>10), 0xdc00+(r&0x3ff))
+			}
+		}
+	}
+	b.WriteByte('"')
+	return b.String()
+}
+
+// canonJSON is a validated rule in the hashed form: its keys sorted, its values text or true.
 func canonJSON(m *Map) string {
 	type kv struct{ k, v string }
 	var pairs []kv
@@ -113,14 +152,14 @@ func canonJSON(m *Map) string {
 		v := m.Values[i]
 		val := "true"
 		if isText(v) {
-			val = pyJSONString(v.Str)
+			val = hashString(v.Str)
 		}
 		pairs = append(pairs, kv{k.Str, val})
 	}
 	sort.Slice(pairs, func(i, j int) bool { return pairs[i].k < pairs[j].k })
 	parts := make([]string, len(pairs))
 	for i, p := range pairs {
-		parts[i] = pyJSONString(p.k) + ": " + p.v
+		parts[i] = hashString(p.k) + ": " + p.v
 	}
 	return "{" + strings.Join(parts, ", ") + "}"
 }
@@ -171,7 +210,9 @@ func (s *Spec) decide(state, event string, env Env) []Outcome {
 			hits = append(hits, r.Outcome)
 		}
 	}
-	sort.Slice(hits, func(i, j int) bool { return hits[i].key() < hits[j].key() })
+	sort.Slice(hits, func(i, j int) bool {
+		return hits[i].Kind < hits[j].Kind || hits[i].Kind == hits[j].Kind && hits[i].Target < hits[j].Target
+	})
 	return hits
 }
 
@@ -357,7 +398,7 @@ func diff(a, b *Spec, depth int) Findings {
 	}
 
 	// Every sequence of up to depth steps, shortest first and in the order of steps within a
-	// length, as tools/spine.py's queue takes them; a sequence on which A and B end apart is a
+	// length; a sequence on which A and B end apart is a
 	// witness, and is not extended. Each sequence carries where A and B end, and where they
 	// ended one step earlier.
 	type stepCase struct {
@@ -466,18 +507,18 @@ func (s *Spec) cellHash(state, event string) string {
 func (s *Spec) spineHash() string {
 	var states, events, vars, rules []string
 	for _, st := range s.States {
-		states = append(states, fmt.Sprintf("[%s, %t]", pyJSONString(st), s.terminal[st]))
+		states = append(states, fmt.Sprintf("[%s, %t]", hashString(st), s.terminal[st]))
 	}
 	for _, e := range s.Events {
-		events = append(events, pyJSONString(e))
+		events = append(events, hashString(e))
 	}
 	for _, v := range s.Vars {
 		values := make([]string, len(v.Values))
 		for i, x := range v.Values {
-			values[i] = pyJSONString(x)
+			values[i] = hashString(x)
 		}
 		sort.Strings(values)
-		vars = append(vars, fmt.Sprintf("[%s, [%s]]", pyJSONString(v.Name), strings.Join(values, ", ")))
+		vars = append(vars, fmt.Sprintf("[%s, [%s]]", hashString(v.Name), strings.Join(values, ", ")))
 	}
 	for _, r := range s.Rules {
 		rules = append(rules, r.canon)
@@ -486,17 +527,16 @@ func (s *Spec) spineHash() string {
 		sort.Strings(list)
 	}
 	canon := fmt.Sprintf(`{"events": [%s], "initial": %s, "rules": [%s], "states": [%s], "vars": [%s]}`,
-		strings.Join(events, ", "), pyJSONString(s.Initial), strings.Join(rules, ", "),
+		strings.Join(events, ", "), hashString(s.Initial), strings.Join(rules, ", "),
 		strings.Join(states, ", "), strings.Join(vars, ", "))
 	sum := sha256.Sum256([]byte(canon))
 	return hex.EncodeToString(sum[:])[:12]
 }
 
 // meant is text meant as a citation (#64), on one line: the word cover or covers in any case, an
-// optional colon, at most one word, then @ and the word after it. citation is COVERS in
-// tools/spine.py, with Python's Unicode \s, less the line break, and \w spelled out, the whole
-// spine as `spine` where a cell would be (#59), and the hash ending where its word ends; whatever
-// meant finds that it isn't, is reported.
+// optional colon, at most one word, then @ and the word after it. citation is the one form that
+// is read: covers:, spaces on the line, a cell or the whole spine as `spine` (#59), @ and a hash
+// in lowercase that ends where its word ends; whatever meant finds that it isn't, is reported.
 var (
 	meant = regexp.MustCompile(`(?:^|[^\p{L}\p{N}_])((?i:covers?)(?:` + lineSpace + `*:` + lineSpace + `*` + word + `|` +
 		lineSpace + `+` + word + `|)` + lineSpace + `*@[\p{L}\p{N}_]*)`)
@@ -595,7 +635,7 @@ func behaviors(s *Spec, directory string) Findings {
 		name      string
 		mustAllow bool
 	}{{"valid", true}, {"invalid", false}} {
-		for _, path := range glob(pyJoin(directory, folder.name), "*.y*ml") {
+		for _, path := range glob(filepath.Join(directory, folder.name), "*.y*ml") {
 			counted++
 			b, problems := loadBehavior(path, s)
 			out = append(out, problems...)

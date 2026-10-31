@@ -2,6 +2,7 @@ package spine
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 	"unicode"
 )
@@ -83,11 +84,11 @@ func compileCondition(text string, variables map[string]bool) (*condition, error
 	p := &condParser{}
 	root, err := p.read(text)
 	if err != nil {
-		return nil, fmt.Errorf("cannot parse condition %s: %s", pyRepr(text), err)
+		return nil, fmt.Errorf("cannot parse condition %s: %s", strconv.Quote(text), err)
 	}
 	for _, name := range p.names {
 		if !variables[name] {
-			return nil, fmt.Errorf("condition %s uses undeclared variable \"%s\"", pyRepr(text), name)
+			return nil, fmt.Errorf("condition %s uses undeclared variable \"%s\"", strconv.Quote(text), name)
 		}
 	}
 	return &condition{root}, nil
@@ -102,7 +103,7 @@ type condToken struct {
 
 func (t condToken) String() string {
 	if t.kind == "text" {
-		return fmt.Sprintf("text %s at character %d", pyRepr(t.s), t.at)
+		return fmt.Sprintf("text %s at character %d", strconv.Quote(t.s), t.at)
 	}
 	return fmt.Sprintf("%q at character %d", t.s, t.at)
 }

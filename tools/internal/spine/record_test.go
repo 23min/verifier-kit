@@ -1,12 +1,11 @@
 package spine
 
-// The record (#44): what the Go spine gave on every input of the cases test, kept in
-// testdata/record/ as the Go spine's reference now that tools/spine.py is gone. For each
+// The record (#44): what spine gives on every input of the cases test, kept in testdata/record/
+// as its reference. For each
 // run it holds the exit code, the output, and in JSON runs the JUnit report, with the paths that
-// differ between machines written as $ROOT and $TMP. The Go spine must give exactly what is
-// recorded, and every entry must still have its case (tools/internal/record).
+// differ between machines written as $ROOT and $TMP. spine must give exactly what is recorded, and every entry must still have its case (tools/internal/record).
 //
-// `go -C tools test ./internal/spine/ -update` writes the record again from the Go spine.
+// `go -C tools test ./internal/spine/ -update` writes the record again from spine.
 // Review the diff before committing it: the record is the only reference.
 
 import (

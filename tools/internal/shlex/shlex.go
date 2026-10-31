@@ -1,4 +1,4 @@
-// Package shlex reads and writes command lines as Python's shlex module does: the toolkit's
+// Package shlex splits and quotes command lines by the shell's quoting rules: the toolkit's
 // one way to split a command line into words, shared by spine, for conform --adapter-cmd, and
 // verify, for every .cmd file.
 package shlex
@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// Split is shlex.split(s): POSIX rules, no comments. Its special characters are ASCII, so
+// Split splits s into words by the POSIX shell's quoting rules, without comments. Its special characters are ASCII, so
 // it reads bytes, and a byte that isn't UTF-8 reaches the program as it was given.
 func Split(s string) ([]string, error) {
 	const whitespace, quotes = " \t\r\n", `'"`
@@ -86,7 +86,7 @@ func Split(s string) ([]string, error) {
 	}
 }
 
-// Quote is shlex.quote(s): s as one word of a command line.
+// Quote is s as one word of a command line.
 func Quote(s string) string {
 	if s != "" && strings.Trim(s, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_@%+=:,./-") == "" {
 		return s

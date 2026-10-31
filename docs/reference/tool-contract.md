@@ -13,7 +13,7 @@ needs an issue and the owner's approval first (see `CLAUDE.md`).
   is given.
 - **Same input, same output.** Results are sorted and carry no timestamps or random ids.
 - **Exit codes:** `0` no errors, `1` at least one finding at error severity, `2` usage error.
-- **Output:** text by default; `--format json` for machines; `--junit FILE` additionally
+- **Output:** text by default; `--format json` for machines, in UTF-8; `--junit FILE` additionally
   writes a JUnit XML report (one test case per error, or one passing case). The report writes
   each character XML can't hold as an escape, such as `\x1b`, and a byte of a file name that isn't
   UTF-8 as `\xff`, so it always parses. `spine hash` is the exception: it prints hashes to copy,
@@ -58,9 +58,8 @@ are part of the contract: new codes may be added, existing codes are never renam
 | `guard` | `POLICY --branch NAME [FILES...]` | Maps the branch to a role and reports changed files that role may not touch; reads files from stdin when none are given |
 
 `spine` is `tools/bin/spine`, built from `tools/cmd/spine/` (`go -C tools build -o bin/spine
-./cmd/spine`); `./verify` builds it on every run. It replaced `tools/spine.py`, of which it is a
-port (`docs/adr/0004-go-spine.md`, `docs/adr/0006-retire-spine-py.md`). `go -C tools test ./...`
-checks it against a record of what it gave on every test input.
+./cmd/spine`); `./verify` builds it on every run. `go -C tools test ./...` checks it against a
+record of what it gives on every test input.
 
 All commands except `hash` accept `--format text|json` and `--junit FILE`. Every command that
 takes a spine validates it first and stops with the validation findings if it is invalid.

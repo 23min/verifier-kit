@@ -11,15 +11,14 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	yaml "go.yaml.in/yaml/v4"
-
 	"github.com/23min/verifier-kit/tools/internal/program"
+	yaml "go.yaml.in/yaml/v4"
 )
 
 // readYAML reads a file of the spine format: one YAML document in UTF-8. A file that can't be
 // read, isn't UTF-8 or isn't YAML adds a spec-unreadable finding and gives false.
 func readYAML(path string, out *Findings) (*Value, bool) {
-	data, err := os.ReadFile(pyPath(path)) // Python reads Path(path): "x.yaml/" is x.yaml
+	data, err := os.ReadFile(path)
 	if err != nil {
 		out.Add("spec-unreadable", path, "cannot be read: "+program.Strerror(err))
 		return nil, false
@@ -195,7 +194,7 @@ func value(n *yaml.Node, built map[*yaml.Node]*Value) (*Value, error) {
 // keyTwice is the error for a text key given twice in one mapping (#55).
 func keyTwice(key string, first, again int) error {
 	if first == again {
-		return fmt.Errorf("key %s is given twice in one mapping, on line %d", pyRepr(key), first)
+		return fmt.Errorf("key %s is given twice in one mapping, on line %d", strconv.Quote(key), first)
 	}
-	return fmt.Errorf("key %s is given twice in one mapping, at lines %d and %d", pyRepr(key), first, again)
+	return fmt.Errorf("key %s is given twice in one mapping, at lines %d and %d", strconv.Quote(key), first, again)
 }
