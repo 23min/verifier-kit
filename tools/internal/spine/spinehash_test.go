@@ -3,6 +3,8 @@ package spine
 import (
 	"strings"
 	"testing"
+
+	"github.com/23min/verifier-kit/tools/internal/yamldoc"
 )
 
 // The whole spine's hash (#59) covers what the machine does, and nothing else.
@@ -30,7 +32,7 @@ examples:
 
 func hashOf(t *testing.T, text string) string {
 	t.Helper()
-	v, err := loadYAML([]byte(text))
+	v, err := yamldoc.Load([]byte(text))
 	if err != nil {
 		t.Fatal(err)
 	}

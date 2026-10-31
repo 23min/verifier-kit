@@ -7087,14 +7087,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/closed",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0122.yaml
 exit 1
 --- stdout
@@ -7106,14 +7106,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/closed",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0123.yaml
 exit 1
 --- stdout
@@ -7125,14 +7125,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/closed",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0124.yaml
 exit 1
 --- stdout
@@ -7144,14 +7144,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/closed",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0125.yaml
 exit 1
 --- stdout
@@ -7163,14 +7163,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/closed",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0126.yaml
 exit 1
 --- stdout
@@ -7182,14 +7182,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/closed",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0127.yaml
 exit 1
 --- stdout
@@ -7201,14 +7201,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/closed",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0128.yaml
 exit 1
 --- stdout
@@ -7220,14 +7220,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/closed",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0129.yaml
 exit 1
 --- stdout
@@ -7239,14 +7239,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/closed",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0130.yaml
 exit 1
 --- stdout
@@ -7258,14 +7258,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/closed",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0131.yaml
 exit 1
 --- stdout
@@ -7277,14 +7277,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/closed",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0132.yaml
 exit 1
 --- stdout
@@ -7296,14 +7296,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/closed",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/closed"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0133.yaml
 exit 0
 --- stdout
@@ -7997,14 +7997,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/gone",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0170.yaml
 exit 1
 --- stdout
@@ -8016,14 +8016,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/gone",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0171.yaml
 exit 1
 --- stdout
@@ -8035,14 +8035,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/gone",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0172.yaml
 exit 1
 --- stdout
@@ -8054,14 +8054,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/gone",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0173.yaml
 exit 1
 --- stdout
@@ -8073,14 +8073,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/gone",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0174.yaml
 exit 1
 --- stdout
@@ -8092,14 +8092,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/gone",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0175.yaml
 exit 1
 --- stdout
@@ -8111,14 +8111,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/gone",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0176.yaml
 exit 1
 --- stdout
@@ -8130,14 +8130,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/gone",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0177.yaml
 exit 1
 --- stdout
@@ -8149,14 +8149,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/gone",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0178.yaml
 exit 1
 --- stdout
@@ -8168,14 +8168,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/gone",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0179.yaml
 exit 1
 --- stdout
@@ -8187,14 +8187,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/gone",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0180.yaml
 exit 1
 --- stdout
@@ -8206,14 +8206,14 @@ exit 1
 |       "code": "bad-value",
 |       "severity": "error",
 |       "where": "states/gone",
-|       "message": "kind must be one of ['design', 'fact', 'policy']"
+|       "message": "kind must be one of \"design\", \"fact\" and \"policy\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of ['design', 'fact', 'policy']">kind must be one of ['design', 'fact', 'policy']</failure></testcase></testsuite>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="bad-value states/gone"><failure message="kind must be one of &quot;design&quot;, &quot;fact&quot; and &quot;policy&quot;">kind must be one of "design", "fact" and "policy"</failure></testcase></testsuite>
 === in $TMP/spine: spine check --format json --junit REPORT v0181.yaml
 exit 1
 --- stdout

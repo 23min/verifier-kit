@@ -1,0 +1,2 @@
+steps: [open role=owner]
+expect: open

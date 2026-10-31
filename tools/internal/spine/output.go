@@ -1,51 +1,39 @@
 package spine
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
 	"unicode/utf8"
+
+	"github.com/23min/verifier-kit/tools/internal/finding"
 )
 
 // ---------- output ----------
 
 func emitText(w io.Writer, findings Findings) {
 	for _, f := range findings {
-		fmt.Fprintf(w, "%-7s %-18s %s: %s\n", f.Severity, f.Code, f.Where, f.Message)
+		fmt.Fprintln(w, finding.Line(f.Severity, f.Code, f.Where, f.Message))
 	}
 	fmt.Fprintf(w, "-- %d errors, %d findings\n", findings.Errors(), len(findings))
 }
 
 // emitJSON writes the findings as JSON, indented by two spaces.
 func emitJSON(w io.Writer, command string, findings Findings) {
-	var b strings.Builder
-	b.WriteString("{\n  \"tool\": \"spine\",\n  \"command\": " + jsonText(command) + ",\n  \"findings\": ")
-	if len(findings) == 0 {
-		b.WriteString("[]")
-	} else {
-		b.WriteString("[\n")
-		for i, f := range findings {
-			b.WriteString("    {\n")
-			fields := [][2]string{{"code", f.Code}, {"severity", f.Severity}, {"where", f.Where}, {"message", f.Message}}
-			for j, kv := range fields {
-				b.WriteString("      " + jsonText(kv[0]) + ": " + jsonText(kv[1]))
-				if j < len(fields)-1 {
-					b.WriteString(",")
-				}
-				b.WriteString("\n")
-			}
-			b.WriteString("    }")
-			if i < len(findings)-1 {
-				b.WriteString(",")
-			}
-			b.WriteString("\n")
-		}
-		b.WriteString("  ]")
+	if findings == nil {
+		findings = Findings{} // [] rather than null
 	}
-	b.WriteString("\n}\n")
-	io.WriteString(w, b.String())
+	enc := json.NewEncoder(w)
+	enc.SetEscapeHTML(false)
+	enc.SetIndent("", "  ")
+	enc.Encode(struct {
+		Tool     string   `json:"tool"`
+		Command  string   `json:"command"`
+		Findings Findings `json:"findings"`
+	}{"spine", command, findings})
 }
 
 // writeJUnit writes the JUnit XML report: one test case per error, or one passing case.
@@ -104,28 +92,11 @@ func xmlSafe(s string) string {
 	return b.String()
 }
 
-// jsonText is s as a JSON string in UTF-8: `"` and `\` escaped, and control characters as JSON
-// writes them; a byte that isn't UTF-8 becomes U+FFFD.
-func jsonText(s string) string {
+// jsonString is s as a JSON string, as encoding/json writes it, with <, > and & as they are.
+func jsonString(s string) string {
 	var b strings.Builder
-	b.WriteByte('"')
-	for _, r := range strings.ToValidUTF8(s, "\uFFFD") {
-		switch {
-		case r == '"' || r == '\\':
-			b.WriteRune('\\')
-			b.WriteRune(r)
-		case r == '\n':
-			b.WriteString(`\n`)
-		case r == '\r':
-			b.WriteString(`\r`)
-		case r == '\t':
-			b.WriteString(`\t`)
-		case r < 0x20:
-			fmt.Fprintf(&b, `\u%04x`, r)
-		default:
-			b.WriteRune(r)
-		}
-	}
-	b.WriteByte('"')
-	return b.String()
+	enc := json.NewEncoder(&b)
+	enc.SetEscapeHTML(false)
+	enc.Encode(s)
+	return strings.TrimSuffix(b.String(), "\n")
 }

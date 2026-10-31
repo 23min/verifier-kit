@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
-	"sync"
 )
 
 // Files and folders: listing them, and matching names against patterns.
@@ -20,21 +19,21 @@ func entries(dir string) []os.DirEntry {
 	return list
 }
 
-// glob is every entry of dir whose name matches pattern, in name order: hidden ones and broken
+// yamlFiles is every entry of dir named *.yaml or *.yml, in name order: hidden ones and broken
 // links included.
-func glob(dir, pattern string) []string {
+func yamlFiles(dir string) []string {
 	var out []string
 	for _, e := range entries(dir) {
-		if fnmatch(e.Name(), pattern) {
+		if strings.HasSuffix(e.Name(), ".yaml") || strings.HasSuffix(e.Name(), ".yml") {
 			out = append(out, filepath.Join(dir, e.Name()))
 		}
 	}
 	return out
 }
 
-// rglob is everything below dir, a folder before what it holds and each folder in name order,
+// below is everything below dir, a folder before what it holds and each folder in name order,
 // without following links to folders, and without what an unreadable folder holds.
-func rglob(dir string) []string {
+func below(dir string) []string {
 	var out []string
 	var walk func(string)
 	walk = func(d string) {
@@ -56,140 +55,63 @@ func isFile(p string) bool {
 	return err == nil && info.Mode().IsRegular()
 }
 
-var (
-	fnmatchMu    sync.Mutex
-	fnmatchCache = map[string]*regexp.Regexp{}
-)
-
-// fnmatch reports whether name matches a shell-style pattern: `*` matches any text, slashes
-// included, `?` one character, and `[...]` and `[!...]` one character in or not in a set.
-func fnmatch(name, pattern string) bool {
-	fnmatchMu.Lock()
-	re, ok := fnmatchCache[pattern]
-	if !ok {
-		re = regexp.MustCompile(`(?s)^` + translate(pattern) + `$`)
-		fnmatchCache[pattern] = re
-	}
-	fnmatchMu.Unlock()
-	return re.MatchString(name)
-}
-
-func runeClass(r rune) string { return fmt.Sprintf(`\x{%x}`, r) }
-
-// translate is a pattern as a Go regular expression, with every literal character escaped.
-func translate(pattern string) string {
-	pat := []rune(pattern)
-	var b strings.Builder
-	star := false
-	for i, n := 0, len(pat); i < n; {
-		c := pat[i]
-		i++
-		if c == '*' {
-			if !star { // consecutive stars are one
-				b.WriteString(`.*`)
-			}
-			star = true
-			continue
-		}
-		star = false
-		switch c {
+// matches reports whether name matches a shell-style pattern: `*` is any text, slashes included,
+// `?` one character, and `[...]` one character in a set or `[!...]` one not in it. In a set, `a-z`
+// is a range (a backwards one holds nothing), and `]` first or `-` first or last is itself; a `[`
+// that is never closed is itself.
+func matches(name, pattern string) bool {
+	var re strings.Builder
+	rs := []rune(pattern)
+	for i := 0; i < len(rs); i++ {
+		switch rs[i] {
+		case '*':
+			re.WriteString(`.*`)
 		case '?':
-			b.WriteString(`.`)
+			re.WriteString(`.`)
 		case '[':
-			j := i
-			if j < n && pat[j] == '!' {
-				j++
-			}
-			if j < n && pat[j] == ']' {
-				j++
-			}
-			for j < n && pat[j] != ']' {
-				j++
-			}
-			if j >= n {
-				b.WriteString(runeClass('['))
+			if set, end, ok := charSet(rs, i+1); ok {
+				re.WriteString(set)
+				i = end
 				continue
 			}
-			b.WriteString(charClass(pat, i, j))
-			i = j + 1
+			re.WriteString(literal('['))
 		default:
-			b.WriteString(runeClass(c))
+			re.WriteString(literal(rs[i]))
 		}
 	}
-	return b.String()
+	return regexp.MustCompile(`(?s)^` + re.String() + `$`).MatchString(name)
 }
 
-// charClass is the set fnmatch builds for pat[i:j], the text between [ and ]: its chunks
-// between range hyphens, with empty ranges removed, every character in them literal.
-func charClass(pat []rune, i, j int) string {
-	var chunks [][]rune
-	if !containsRune(pat[i:j], '-') {
-		chunks = [][]rune{pat[i:j]}
-	} else {
-		k := i + 1
-		if pat[i] == '!' {
-			k = i + 2
-		}
-		for {
-			k = indexRune(pat, '-', k, j)
-			if k < 0 {
-				break
-			}
-			chunks = append(chunks, pat[i:k])
-			i = k + 1
-			k = k + 3
-		}
-		if chunk := pat[i:j]; len(chunk) > 0 {
-			chunks = append(chunks, chunk)
-		} else {
-			last := len(chunks) - 1
-			chunks[last] = append(append([]rune(nil), chunks[last]...), '-')
-		}
-		for k := len(chunks) - 1; k > 0; k-- {
-			prev, cur := chunks[k-1], chunks[k]
-			if prev[len(prev)-1] > cur[0] {
-				chunks[k-1] = append(append([]rune(nil), prev[:len(prev)-1]...), cur[1:]...)
-				chunks = append(chunks[:k], chunks[k+1:]...)
-			}
-		}
+// charSet reads the set that starts at rs[i], just after its `[`: the set as a regular expression,
+// and where its `]` is; false when the set is never closed.
+func charSet(rs []rune, i int) (string, int, bool) {
+	negate := i < len(rs) && rs[i] == '!'
+	if negate {
+		i++
 	}
-	total := 0
-	for _, c := range chunks {
-		total += len(c)
+	var members strings.Builder
+	for start := i; i < len(rs) && (rs[i] != ']' || i == start); i++ {
+		if i+2 < len(rs) && rs[i+1] == '-' && rs[i+2] != ']' {
+			if rs[i] <= rs[i+2] {
+				members.WriteString(literal(rs[i]) + "-" + literal(rs[i+2]))
+			}
+			i += 2
+			continue
+		}
+		members.WriteString(literal(rs[i]))
 	}
 	switch {
-	case total == 0:
-		return `[^\x00-\x{10ffff}]` // an empty set never matches
-	case total == 1 && chunks[0][0] == '!' && len(chunks) == 1:
-		return `.` // a negated empty set matches any character
+	case i == len(rs):
+		return "", 0, false
+	case members.Len() == 0 && negate:
+		return `.`, i, true // nothing is excluded
+	case members.Len() == 0:
+		return `[^\x00-\x{10ffff}]`, i, true // nothing matches
+	case negate:
+		return "[^" + members.String() + "]", i, true
 	}
-	var b strings.Builder
-	b.WriteString("[")
-	if chunks[0][0] == '!' {
-		b.WriteString("^")
-		chunks[0] = chunks[0][1:]
-	}
-	for c, chunk := range chunks {
-		for x, r := range chunk {
-			switch {
-			case x == len(chunk)-1 && c < len(chunks)-1:
-				b.WriteString(runeClass(r) + "-") // the hyphen between chunks is a range
-			default:
-				b.WriteString(runeClass(r))
-			}
-		}
-	}
-	b.WriteString("]")
-	return b.String()
+	return "[" + members.String() + "]", i, true
 }
 
-func containsRune(rs []rune, r rune) bool { return indexRune(rs, r, 0, len(rs)) >= 0 }
-
-func indexRune(rs []rune, r rune, from, to int) int {
-	for k := from; k < to; k++ {
-		if rs[k] == r {
-			return k
-		}
-	}
-	return -1
-}
+// literal is r as a regular expression that matches only r.
+func literal(r rune) string { return fmt.Sprintf(`\x{%x}`, r) }

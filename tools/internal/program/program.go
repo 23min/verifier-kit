@@ -25,8 +25,6 @@ func Start(argv []string, attr *os.ProcAttr) (*os.Process, error) {
 			switch {
 			case dir == "":
 				candidates = append(candidates, argv[0])
-			case strings.HasSuffix(dir, "/"):
-				candidates = append(candidates, dir+argv[0])
 			default:
 				candidates = append(candidates, dir+"/"+argv[0])
 			}

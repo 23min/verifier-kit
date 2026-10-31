@@ -24,18 +24,10 @@ type adapterFailed struct{ msg string }
 
 func (e *adapterFailed) Error() string { return e.msg }
 
-// adapterError is an {"error": ...} reply: the exception the adapter reports, already described.
+// adapterError is an {"error": ...} reply: what the adapter says went wrong.
 type adapterError struct{ msg string }
 
 func (e *adapterError) Error() string { return e.msg }
-
-func stepsText(steps []parsedStep) string {
-	parts := make([]string, len(steps))
-	for i, st := range steps {
-		parts[i] = st.event + "(" + st.env.String() + ")"
-	}
-	return strings.Join(parts, " -> ")
-}
 
 // commandAdapter is an adapter program, spoken to in JSON lines.
 type commandAdapter struct {
@@ -97,9 +89,9 @@ func (a *commandAdapter) new() error {
 func (a *commandAdapter) apply(event string, env Env) (string, error) {
 	pairs := make([]string, len(env.Names))
 	for i, n := range env.Names {
-		pairs[i] = jsonText(n) + ": " + jsonText(env.Values[n])
+		pairs[i] = jsonString(n) + ": " + jsonString(env.Values[n])
 	}
-	return a.ask("apply", `{"op": "apply", "event": `+jsonText(event)+`, "env": {`+strings.Join(pairs, ", ")+`}}`)
+	return a.ask("apply", `{"op": "apply", "event": `+jsonString(event)+`, "env": {`+strings.Join(pairs, ", ")+`}}`)
 }
 
 func (a *commandAdapter) observe() (string, error) {
@@ -213,14 +205,8 @@ func callAdapter(name string, steps []parsedStep, err error) error {
 	return &adapterFailed{fmt.Sprintf("replied to %s with the error %s%s", name, strconv.Quote(err.Error()), after)}
 }
 
-// stepKey identifies a state, an event and the variables' values.
-func stepKey(state string, st parsedStep) string {
-	values := make([]string, len(st.env.Names))
-	for i, n := range st.env.Names {
-		values[i] = st.env.Values[n]
-	}
-	return fmt.Sprintf("%q %q %q", state, st.event, values)
-}
+// stepKey identifies a state and a step.
+func stepKey(state string, st parsedStep) string { return fmt.Sprintf("%q ", state) + st.key() }
 
 // replay runs one sequence against the spine and the code: the divergence or nil, the spine's
 // state afterwards, and the kind of the last outcome ("" before any).
@@ -299,13 +285,7 @@ func conform(s *Spec, command string, depth int) Findings {
 // compareCode replays every sequence up to depth, shortest first, and within a length in the
 // order of the events and values.
 func compareCode(s *Spec, a *commandAdapter, depth int, out *Findings) error {
-	envs := s.assignments()
-	var steps []parsedStep
-	for _, e := range s.Events {
-		for _, env := range envs {
-			steps = append(steps, parsedStep{e, env})
-		}
-	}
+	steps := stepsOf(s.Events, s.assignments())
 	exercised, reported, runs := map[string]bool{}, map[string]bool{}, 0
 	level := [][]parsedStep{nil}
 	for len(level) > 0 {

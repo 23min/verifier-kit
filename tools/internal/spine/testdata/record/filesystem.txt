@@ -4,7 +4,7 @@ exit 1
 | error   spec-unreadable    b/valid/broken.yaml: cannot be read: No such file or directory
 | error   spec-unreadable    b/valid/dir.yaml: cannot be read: Is a directory
 | error   spec-unreadable    b/invalid/locked.yaml: cannot be read: Permission denied
-| info    behaviors          b: 6 behavior files checked
+| info    behaviors          b: 5 behavior files checked
 | -- 3 errors, 4 findings
 |
 === in $TMP/fs: spine behaviors --format json --junit REPORT $ROOT/tools/internal/spine/testdata/seeds/spine.yaml b
@@ -36,7 +36,7 @@ exit 1
 |       "code": "behaviors",
 |       "severity": "info",
 |       "where": "b",
-|       "message": "6 behavior files checked"
+|       "message": "5 behavior files checked"
 |     }
 |   ]
 | }

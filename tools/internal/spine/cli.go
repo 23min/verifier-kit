@@ -106,12 +106,14 @@ type (
 func (h helpExit) Error() string   { return string(h) }
 func (u usageError) Error() string { return string(u) }
 
-// parsed is a command line read: the command, its arguments, the options given and the depth.
+// parsed is a command line read: the command, its arguments, and its options' values.
 type parsed struct {
-	command string
-	args    []string
-	options map[string]string
-	depth   int
+	command                    string
+	args                       []string
+	format, adapterCmd, branch string
+	junit                      string
+	junitGiven                 bool // --junit was given, even with an empty FILE
+	depth                      int
 }
 
 // parseArgs reads the arguments after the program name: a command, then its arguments and options
@@ -133,7 +135,8 @@ func parseArgs(argv []string) (*parsed, error) {
 		return usageError(fmt.Sprintf("spine %s: %s; spine %s --help describes it", c.name, fmt.Sprintf(format, a...), c.name))
 	}
 	rest := argv[1:]
-	p := &parsed{command: c.name, options: map[string]string{}, depth: 4}
+	p := &parsed{command: c.name, format: "text", depth: 4}
+	given := map[string]string{} // the options given, by name
 	onlyArgs := false
 	for i := 0; i < len(rest); i++ {
 		a := rest[i]
@@ -154,7 +157,7 @@ func parseArgs(argv []string) (*parsed, error) {
 		case !slices.Contains(c.options, name):
 			return nil, fail("unknown option %s", name)
 		}
-		if _, twice := p.options[name]; twice {
+		if _, twice := given[name]; twice {
 			return nil, fail("%s is given twice", name)
 		}
 		if !hasValue {
@@ -164,7 +167,7 @@ func parseArgs(argv []string) (*parsed, error) {
 			i++
 			value = rest[i]
 		}
-		p.options[name] = value
+		given[name] = value
 	}
 	fixed := c.args
 	if last := fixed[len(fixed)-1]; strings.HasSuffix(last, "...") {
@@ -176,14 +179,14 @@ func parseArgs(argv []string) (*parsed, error) {
 		return nil, fail("%s is missing", fixed[len(p.args)])
 	}
 	for _, o := range c.options {
-		if _, given := p.options[o]; optionHelp[o].required && !given {
+		if _, given := given[o]; optionHelp[o].required && !given {
 			return nil, fail("%s is required", o)
 		}
 	}
-	if f, given := p.options["--format"]; given && f != "text" && f != "json" {
+	if f, given := given["--format"]; given && f != "text" && f != "json" {
 		return nil, fail("--format must be text or json, not %q", f)
 	}
-	if d, given := p.options["--depth"]; given {
+	if d, given := given["--depth"]; given {
 		n, err := strconv.Atoi(d)
 		if errors.Is(err, strconv.ErrRange) {
 			n, err = math.MaxInt, nil // past an int, no depth can tell the difference
@@ -193,12 +196,17 @@ func parseArgs(argv []string) (*parsed, error) {
 		}
 		p.depth = n
 	}
+	p.adapterCmd, p.branch = given["--adapter-cmd"], given["--branch"]
+	if f, ok := given["--format"]; ok {
+		p.format = f
+	}
+	p.junit, p.junitGiven = given["--junit"]
 	return p, nil
 }
 
 // Main runs spine with the arguments after the program name, and gives the exit code.
 func Main(argv []string, stdin io.Reader, stdout, stderr io.Writer) int {
-	ns, err := parseArgs(argv)
+	cl, err := parseArgs(argv)
 	switch e := err.(type) {
 	case nil:
 	case helpExit:
@@ -208,32 +216,31 @@ func Main(argv []string, stdin io.Reader, stdout, stderr io.Writer) int {
 		fmt.Fprintln(stderr, e)
 		return 2
 	}
-	cmd := ns.command
-	str := func(k string) string { return ns.options[k] }
+	cmd := cl.command
 
 	out := bufio.NewWriter(stdout)
 	defer out.Flush()
 	var findings Findings
 	if cmd == "guard" {
 		var policy *Policy
-		policy, findings = loadPolicy(ns.args[0])
+		policy, findings = loadPolicy(cl.args[0])
 		if policy != nil {
-			files := ns.args[1:]
+			files := cl.args[1:]
 			if len(files) == 0 {
 				files = stdinLines(stdin)
 			}
-			findings = append(findings, guard(policy, str("--branch"), files)...)
+			findings = append(findings, guard(policy, cl.branch, files)...)
 		}
 	} else if cmd == "diff" {
-		a, problems := loadSpec(ns.args[0])
+		a, problems := loadSpec(cl.args[0])
 		findings = append(findings, problems...)
-		b, problems := loadSpec(ns.args[1])
+		b, problems := loadSpec(cl.args[1])
 		findings = append(findings, problems...)
 		if findings.Errors() == 0 {
-			findings = append(findings, diff(a, b, ns.depth)...)
+			findings = append(findings, diff(a, b, cl.depth)...)
 		}
 	} else {
-		spec, problems := loadSpec(ns.args[0])
+		spec, problems := loadSpec(cl.args[0])
 		findings = append(findings, problems...)
 		if findings.Errors() == 0 {
 			if cmd == "hash" {
@@ -251,24 +258,24 @@ func Main(argv []string, stdin io.Reader, stdout, stderr io.Writer) int {
 			case "check":
 				findings = append(findings, check(spec)...)
 			case "stale":
-				findings = append(findings, stale(spec, ns.args[1])...)
+				findings = append(findings, stale(spec, cl.args[1])...)
 			case "behaviors":
-				findings = append(findings, behaviors(spec, ns.args[1])...)
+				findings = append(findings, behaviors(spec, cl.args[1])...)
 			case "trace":
-				findings = append(findings, trace(spec, ns.args[1])...)
+				findings = append(findings, trace(spec, cl.args[1])...)
 			case "conform":
-				findings = append(findings, conform(spec, str("--adapter-cmd"), ns.depth)...)
+				findings = append(findings, conform(spec, cl.adapterCmd, cl.depth)...)
 			}
 		}
 	}
 
-	if str("--format") == "json" {
+	if cl.format == "json" {
 		emitJSON(out, cmd, findings)
 	} else {
 		emitText(out, findings)
 	}
-	if junit, ok := ns.options["--junit"]; ok {
-		if err := writeJUnit(junit, "spine "+cmd, findings); err != nil {
+	if cl.junitGiven {
+		if err := writeJUnit(cl.junit, "spine "+cmd, findings); err != nil {
 			out.Flush()
 			fmt.Fprintf(stderr, "spine: cannot write the JUnit report: %v\n", err)
 			return 1
