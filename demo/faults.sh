@@ -147,7 +147,7 @@ if scenario 9 "The service cannot be imported: it imports a module that does not
    "the adapter and the content checks each report it as a finding, not a traceback"; then
   echo "import no_such_module" >> "$W/examples/notes/src/notes_app.py"
   show ./verify examples/notes
-  expect 1 "adapter-failed     env PYTHONPATH=src adapter_shim.py conformance/adapter_notes.py: new() raised ModuleNotFoundError: No module named 'no_such_module'" \
+  expect 1 "adapter-failed     env PYTHONPATH=src adapter_shim.py conformance/adapter_notes.py: replied to new with the error \"ModuleNotFoundError: No module named 'no_such_module'\"" \
     "check-unloadable   checks/notes/test_content.py: cannot be imported: ModuleNotFoundError"
 fi
 

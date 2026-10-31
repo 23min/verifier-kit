@@ -1,8 +1,7 @@
-"""apply() returns a different kind of value for each case, so each shows in a divergence."""
-import math
+"""apply() returns a text close to what the spine expects, a different one at each of its four
+calls (every sequence diverges at its first event), so each shows in a divergence."""
 
-VALUES = [True, None, 1e16, 1e-5, -0.0, 10 ** 30, math.nan, math.inf, 0.1, 123456789.0,
-          "crashed (no)", "", "it's", [], {}, {"k": "v'\""}]
+VALUES = ["crashed (no)", "ok ", "OK", ""]
 count = [0]
 
 

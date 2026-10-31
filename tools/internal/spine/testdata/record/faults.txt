@@ -140,7 +140,7 @@ exit 1
 === in $TMP/faults: spine conform $ROOT/examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/9/src
 exit 1
 --- stdout
-| error   adapter-failed     python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py: new() raised ModuleNotFoundError: No module named 'no_such_module'
+| error   adapter-failed     python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py: replied to new with the error "ModuleNotFoundError: No module named 'no_such_module'"
 | -- 1 errors, 1 findings
 |
 === in $TMP/faults: spine conform --format json --junit REPORT $ROOT/examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/1/src
@@ -191,14 +191,14 @@ exit 1
 |       "code": "adapter-failed",
 |       "severity": "error",
 |       "where": "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py",
-|       "message": "new() raised ModuleNotFoundError: No module named 'no_such_module'"
+|       "message": "replied to new with the error \"ModuleNotFoundError: No module named 'no_such_module'\""
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version='1.0' encoding='utf-8'?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py"><failure message="new() raised ModuleNotFoundError: No module named 'no_such_module'">new() raised ModuleNotFoundError: No module named 'no_such_module'</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py"><failure message="replied to new with the error &quot;ModuleNotFoundError: No module named 'no_such_module'&quot;">replied to new with the error "ModuleNotFoundError: No module named 'no_such_module'"</failure></testcase></testsuite>
 === in $TMP/faults: spine conform --format json --junit REPORT 2/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/2/src
 exit 1
 --- stdout

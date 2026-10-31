@@ -132,9 +132,9 @@ An exception from `new()` or `observe()`, or while importing the file, is `adapt
 divergence: without a fresh instance or a reading of its state there is nothing to compare.
 
 The shim runs in a Python process of its own, the one its command line names. The adapter's
-printing goes to stderr, and what `apply()` and `observe()` return reaches `conform` as JSON: a
-tuple arrives as a list, and a value JSON can't encode, such as a set, makes the shim fail
-(`adapter-failed`).
+printing goes to stderr, and what `apply()` and `observe()` return reaches `conform` as JSON. It
+must be text: anything else is `adapter-failed`, as is a value JSON can't encode, such as a set,
+which makes the shim fail.
 
 The adapter translates and never decides whether an action is allowed.
 
@@ -144,8 +144,9 @@ The adapter translates and never decides whether an action is allowed.
 be in any language. COMMAND is one string, split by shell quoting rules and run without a shell
 (no pipes, variables or globs), in `conform`'s working directory and environment.
 
-`conform` writes one JSON request per line to the program's stdin and reads one JSON reply per
-line from its stdout, in UTF-8. The program must flush stdout after every reply. Its stderr is its own;
+`conform` writes one JSON request per line to the program's stdin and reads one reply per line
+from its stdout, a line ending at `\n` or at the end of the output. A reply is standard JSON
+(RFC 8259) in UTF-8. The program must flush stdout after every reply. Its stderr is its own;
 `conform` passes it through and never reads it.
 
 | Request | Reply | Same as |
@@ -161,9 +162,10 @@ There are no handles: a program holds one instance at a time. Any request may in
 
 `conform` starts the program once, before the first `new`, and closes its stdin when done; the
 program then exits. Each of these is `adapter-failed`, after which `conform` stops the program:
-it can't be started, it exits before replying, a reply is not JSON, or a reply has the wrong
-shape (other keys, more than one key, or anything but `true` for `ok`). There is no timeout: a
-program that never replies makes `conform` wait.
+it can't be started, it exits before replying, a reply is not UTF-8 or not JSON, or a reply has
+the wrong shape: other keys, more than one key, a key given twice, anything but `true` for `ok`,
+or anything but text for `result`, `state` and `error`. There is no timeout: a program that
+never replies makes `conform` wait.
 
 `tools/adapter_shim.py ADAPTER_FILE` serves a Python adapter over this protocol unchanged, for
 example `--adapter-cmd "python3 tools/adapter_shim.py conformance/adapter_notes.py"`. It sends
