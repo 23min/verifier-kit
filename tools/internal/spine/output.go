@@ -91,12 +91,3 @@ func xmlSafe(s string) string {
 	}
 	return b.String()
 }
-
-// jsonString is s as a JSON string, as encoding/json writes it, with <, > and & as they are.
-func jsonString(s string) string {
-	var b strings.Builder
-	enc := json.NewEncoder(&b)
-	enc.SetEscapeHTML(false)
-	enc.Encode(s)
-	return strings.TrimSuffix(b.String(), "\n")
-}

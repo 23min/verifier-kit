@@ -1,23 +1,16 @@
 package spine
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
-	"os"
 	"strconv"
 	"strings"
-	"syscall"
 	"unicode/utf8"
-
-	"github.com/23min/verifier-kit/tools/internal/program"
-	"github.com/23min/verifier-kit/tools/internal/shlex"
 )
 
-// ---------- conform ----------
+// ---------- conform: the adapter's requests and replies ----------
 
 // adapterFailed is a failure of the adapter itself: no comparison is possible past it.
 type adapterFailed struct{ msg string }
@@ -29,94 +22,55 @@ type adapterError struct{ msg string }
 
 func (e *adapterError) Error() string { return e.msg }
 
-// commandAdapter is an adapter program, spoken to in JSON lines.
-type commandAdapter struct {
-	proc   *os.Process
-	stdin  *os.File
-	stdout *bufio.Reader
-	ended  *string // how the program ended, once it has
+// reply is what the adapter program gave back to a request: a line, or, when it ended before
+// replying, how it ended.
+type reply struct {
+	line  []byte
+	ended string
 }
 
 var replies = map[string][2]string{
 	"new": {"ok", `{"ok": true}`}, "apply": {"result", `{"result": "..."}`}, "observe": {"state", `{"state": "..."}`},
 }
 
-// startAdapter starts the program, its argv split from command.
-func startAdapter(command string) (*commandAdapter, error) {
-	a := &commandAdapter{}
-	argv, err := shlex.Split(command)
-	if err != nil {
-		return nil, &adapterFailed{"cannot be split: " + err.Error()}
+const (
+	newRequest     = `{"op": "new"}`
+	observeRequest = `{"op": "observe"}`
+)
+
+// applyRequest is the request to apply a step.
+func applyRequest(st parsedStep) string {
+	pairs := make([]string, len(st.env.Names))
+	for i, n := range st.env.Names {
+		pairs[i] = jsonString(n) + ": " + jsonString(st.env.Values[n])
 	}
-	if len(argv) == 0 {
-		return nil, &adapterFailed{"the command is empty"}
-	}
-	stdinR, stdinW, err := os.Pipe()
-	if err != nil {
-		return nil, &adapterFailed{"cannot be started: " + err.Error()}
-	}
-	stdoutR, stdoutW, err := os.Pipe()
-	if err != nil {
-		return nil, &adapterFailed{"cannot be started: " + err.Error()}
-	}
-	proc, err := startProgram(argv, []*os.File{stdinR, stdoutW, os.Stderr})
-	stdinR.Close()
-	stdoutW.Close()
-	if err != nil {
-		stdinW.Close()
-		stdoutR.Close()
-		return nil, &adapterFailed{"cannot be started: " + err.Error()}
-	}
-	a.proc, a.stdin, a.stdout = proc, stdinW, bufio.NewReader(stdoutR)
-	return a, nil
+	return `{"op": "apply", "event": ` + jsonString(st.event) + `, "env": {` + strings.Join(pairs, ", ") + `}}`
 }
 
-// startProgram starts argv with files as its stdin, stdout and stderr; a failure names the
-// program and gives the system's reason.
-func startProgram(argv []string, files []*os.File) (*os.Process, error) {
-	proc, err := program.Start(argv, &os.ProcAttr{Files: files})
-	if err != nil {
-		return nil, fmt.Errorf("%s: %s", argv[0], program.Strerror(err))
-	}
-	return proc, nil
+// jsonString is s as a JSON string, as encoding/json writes it, with <, > and & as they are.
+func jsonString(s string) string {
+	var b strings.Builder
+	enc := json.NewEncoder(&b)
+	enc.SetEscapeHTML(false)
+	enc.Encode(s)
+	return strings.TrimSuffix(b.String(), "\n")
 }
 
-func (a *commandAdapter) new() error {
-	_, err := a.ask("new", `{"op": "new"}`)
-	return err
-}
-
-func (a *commandAdapter) apply(event string, env Env) (string, error) {
-	pairs := make([]string, len(env.Names))
-	for i, n := range env.Names {
-		pairs[i] = jsonString(n) + ": " + jsonString(env.Values[n])
+// parseReply reads the reply to op, a line ending at \n: a JSON object in UTF-8 with one key, the
+// op's key or "error", each given once. Its value is true for new's "ok", and text otherwise;
+// parseReply gives that text.
+func parseReply(op string, r reply) (string, error) {
+	if len(r.line) == 0 {
+		return "", &adapterFailed{fmt.Sprintf("%s before replying to %s", r.ended, op)}
 	}
-	return a.ask("apply", `{"op": "apply", "event": `+jsonString(event)+`, "env": {`+strings.Join(pairs, ", ")+`}}`)
-}
-
-func (a *commandAdapter) observe() (string, error) {
-	return a.ask("observe", `{"op": "observe"}`)
-}
-
-// ask sends one request and reads one reply, a line ending at \n: a JSON object in UTF-8 with
-// one key, the op's key or "error", each given once. Its value is true for new's "ok", and text
-// otherwise; ask gives that text.
-func (a *commandAdapter) ask(op, request string) (string, error) {
-	var line []byte
-	if _, err := io.WriteString(a.stdin, request+"\n"); err == nil {
-		line, _ = a.stdout.ReadBytes('\n')
-	}
-	if len(line) == 0 {
-		return "", a.exited(op)
-	}
-	text := strings.TrimRight(string(line), "\r\n")
-	if !utf8.Valid(line) {
+	text := strings.TrimRight(string(r.line), "\r\n")
+	if !utf8.Valid(r.line) {
 		return "", &adapterFailed{fmt.Sprintf("replied to %s with a line that is not UTF-8", op)}
 	}
-	if !json.Valid(line) {
+	if !json.Valid(r.line) {
 		return "", &adapterFailed{fmt.Sprintf("replied to %s with a line that is not JSON: %s", op, strconv.Quote(text))}
 	}
-	key, value, ok := oneKey(line)
+	key, value, ok := oneKey(r.line)
 	var said string
 	isText := ok && bytes.HasPrefix(value, []byte(`"`)) && json.Unmarshal(value, &said) == nil // null too reads as ""
 	want := replies[op]
@@ -155,42 +109,7 @@ func oneKey(line []byte) (string, json.RawMessage, bool) {
 	return keys[0], value, true
 }
 
-// exited is the failure when the program exits before replying to op.
-func (a *commandAdapter) exited(op string) error {
-	return &adapterFailed{fmt.Sprintf("%s before replying to %s", a.wait(), op)}
-}
-
-// wait waits for the program to end and says how it did: with an exit status, or by a signal.
-func (a *commandAdapter) wait() string {
-	if a.ended == nil {
-		ended := "exited with status 0"
-		if state, err := a.proc.Wait(); err == nil {
-			ws := state.Sys().(syscall.WaitStatus)
-			if ws.Signaled() {
-				ended = fmt.Sprintf("was ended by signal %d (%s)", int(ws.Signal()), ws.Signal())
-			} else {
-				ended = fmt.Sprintf("exited with status %d", ws.ExitStatus())
-			}
-		}
-		a.ended = &ended
-	}
-	return *a.ended
-}
-
-func (a *commandAdapter) close(kill bool) {
-	if kill && a.ended == nil {
-		a.proc.Kill()
-	}
-	a.stdin.Close() // the end of input ends the adapter
-	a.wait()
-}
-
-// ---------- replaying sequences ----------
-
-// divergence is where code and spine first disagree on one sequence.
-type divergence struct {
-	key, where, message string
-}
+// ---------- the search ----------
 
 // callAdapter makes an error reply to new or observe the adapter's failure.
 func callAdapter(name string, steps []parsedStep, err error) error {
@@ -216,157 +135,223 @@ func caseWhere(state string, st parsedStep) string {
 // stepKey identifies a state and a step.
 func stepKey(state string, st parsedStep) string { return fmt.Sprintf("%q ", state) + st.key() }
 
-// replay runs one sequence against the spine and the code: the divergence or nil, the spine's
-// state afterwards, and the kind of the last outcome ("" before any).
-func replay(s *Spec, a *commandAdapter, seq []parsedStep, exercised map[string]bool) (*divergence, string, string, error) {
-	if err := a.new(); err != nil {
-		return nil, "", "", callAdapter("new", nil, err)
-	}
-	state := s.Initial
-	observed, err := a.observe()
-	if err != nil {
-		return nil, "", "", callAdapter("observe", nil, err)
-	}
-	if observed != state {
-		return &divergence{"start", "start", fmt.Sprintf("spine starts in %s, code starts in %s", state, observed)}, state, "", nil
-	}
-	kind := ""
-	for i, st := range seq {
-		hits := s.decide(state, st.event, st.env)
-		if len(hits) != 1 {
-			return nil, state, "undefined", nil // spine check reports these; nothing to compare
-		}
-		kind = hits[0].Kind
-		exercised[stepKey(state, st)] = true
-		expectResult, expectState := "ok", state
-		if kind == "reject" {
-			expectResult = "rejected"
-		}
-		if kind == "to" {
-			expectState = hits[0].Target
-		}
-		result, err := a.apply(st.event, st.env)
-		var failed *adapterFailed
-		if errors.As(err, &failed) {
-			return nil, "", "", err
-		}
-		resultOK, resultText := false, ""
-		if err != nil { // a crash is a divergence too
-			resultText = "crashed (" + err.Error() + ")"
-			resultOK = resultText == expectResult
-		} else {
-			resultOK, resultText = result == expectResult, result
-		}
-		got, err := a.observe()
-		if err != nil {
-			return nil, "", "", callAdapter("observe", seq[:i+1], err)
-		}
-		if !resultOK || got != expectState {
-			return &divergence{
-				stepKey(state, st),
-				caseWhere(state, st),
-				fmt.Sprintf("after %s: spine expects %s in %s, code gave %s in %s",
-					stepsText(seq[:i+1]), expectResult, expectState, resultText, got),
-			}, state, kind, nil
-		}
-		state = expectState
-	}
-	return nil, state, kind, nil
+// run is one sequence to replay against the spine and the code.
+type run struct {
+	seq   []parsedStep
+	extra int // steps past the shortest path it extends
 }
 
-// conform compares code with the spine through an adapter program, started from command.
-func conform(s *Spec, command string, margin int) Findings {
-	var out Findings
-	a, err := startAdapter(command)
-	if err != nil {
-		out.Add("adapter-failed", command, err.Error())
-		return out
-	}
-	err = compareCode(s, a, margin, &out)
-	if err != nil { // keep what was found; past this, nothing compares
-		out.Add("adapter-failed", command, err.Error())
-	}
-	a.close(err != nil)
-	return out
-}
-
-// compareCode tries every case of every live state: from the first shortest path to the state, it
-// runs every sequence of 1 to margin+1 further steps, each once and shortest first, stopping at a
+// search is conform's search as a step function: next takes the adapter's reply to the last
+// request and gives the next request, until it gives none; out then holds the findings. It never
+// talks to the adapter itself.
+//
+// It tries every case of every live state: from the first shortest path to the state, it runs
+// every sequence of 1 to margin+1 further steps, each once and shortest first, stopping at a
 // terminal state, a refusal or a divergence. A case the spine decides that no run tried is
 // untried-case.
-func compareCode(s *Spec, a *commandAdapter, margin int, out *Findings) error {
-	steps := stepsOf(s.Events, s.assignments())
-	paths := s.shortestPaths(steps)
-	type run struct {
-		seq   []parsedStep
-		extra int // steps past the shortest path it extends
+type search struct {
+	s        *Spec
+	command  string // the adapter's command, where its failure is reported
+	margin   int
+	steps    []parsedStep
+	paths    []statePath
+	byLength map[int][]*run
+	queued   map[string]bool
+	longest  int
+
+	n, started int     // runs of n steps are replaying; started of them have begun
+	run        *run    // the run replaying
+	at         int     // the step of the run being compared
+	state      string  // the spine's state before that step
+	want       Outcome // what the spine does at that step; of kind "undefined" when it doesn't say
+	result     string  // what the code gave for the step: its result, or how it crashed
+	waiting    string  // the reply next answers: "new", "start", "apply" or "observe"; none at the end
+
+	exercised, reported map[string]bool
+	runs                int
+	wrongStart          string
+	failed              bool // the adapter failed, so the shell kills it rather than closing it
+	out                 Findings
+}
+
+// newSearch queues the first runs: each step from the first shortest path to each live state.
+// command names the adapter in its findings.
+func newSearch(s *Spec, command string, margin int) *search {
+	c := &search{s: s, command: command, margin: margin, n: 1,
+		byLength: map[int][]*run{}, queued: map[string]bool{}, exercised: map[string]bool{}, reported: map[string]bool{}}
+	c.steps = stepsOf(s.Events, s.assignments())
+	c.paths = s.shortestPaths(c.steps)
+	for _, p := range c.paths {
+		for _, st := range c.steps {
+			c.queue(append(p.steps[:len(p.steps):len(p.steps)], st), 1)
+		}
+		c.longest = max(c.longest, len(p.steps)+1)
 	}
-	byLength := map[int][]*run{}
-	queued := map[string]bool{}
-	queue := func(seq []parsedStep, extra int) {
-		keys := make([]string, len(seq))
-		for i, st := range seq {
-			keys[i] = st.key()
-		}
-		key := strings.Join(keys, " ")
-		if queued[key] { // a state's start, queued first, that extends another state's run
-			return
-		}
-		queued[key] = true
-		byLength[len(seq)] = append(byLength[len(seq)], &run{seq, extra})
+	return c
+}
+
+// queue adds a run, unless the same sequence is queued: a state's start, queued first, that
+// extends another state's run.
+func (c *search) queue(seq []parsedStep, extra int) {
+	keys := make([]string, len(seq))
+	for i, st := range seq {
+		keys[i] = st.key()
 	}
-	longest := 0
-	for _, p := range paths {
-		for _, st := range steps {
-			queue(append(p.steps[:len(p.steps):len(p.steps)], st), 1)
-		}
-		longest = max(longest, len(p.steps)+1)
+	key := strings.Join(keys, " ")
+	if c.queued[key] {
+		return
 	}
-	exercised, reported, runs, wrongStart := map[string]bool{}, map[string]bool{}, 0, ""
-	for n := 1; n <= longest; n++ {
-		for _, r := range byLength[n] {
-			runs++
-			d, state, kind, err := replay(s, a, r.seq, exercised)
-			if err != nil {
-				return err
-			}
-			if d != nil {
-				if !reported[d.key] {
-					reported[d.key] = true
-					out.Add("diverges", d.where, d.message)
-				}
-				if d.key == "start" {
-					wrongStart = "not tried: the code doesn't start in " + s.Initial
-				}
-				continue
-			}
-			if r.extra <= margin && !s.terminal[state] && kind != "reject" && kind != "undefined" {
-				for _, st := range steps {
-					queue(append(r.seq[:len(r.seq):len(r.seq)], st), r.extra+1)
-				}
-				longest = max(longest, n+1)
-			}
+	c.queued[key] = true
+	c.byLength[len(seq)] = append(c.byLength[len(seq)], &run{seq, extra})
+}
+
+// first is the first request, or none when there is nothing to run.
+func (c *search) first() string { return c.nextRun() }
+
+// next takes the reply to the last request and gives the next request.
+func (c *search) next(r reply) string {
+	switch c.waiting {
+	case "new":
+		if _, err := parseReply("new", r); err != nil {
+			return c.fail(callAdapter("new", nil, err))
 		}
+		return c.await("start", observeRequest)
+	case "start":
+		observed, err := parseReply("observe", r)
+		if err != nil {
+			return c.fail(callAdapter("observe", nil, err))
+		}
+		if observed != c.state {
+			c.diverged("start", "start", fmt.Sprintf("spine starts in %s, code starts in %s", c.state, observed))
+			return c.nextRun()
+		}
+		return c.nextStep()
+	case "apply":
+		result, err := parseReply("apply", r)
+		var failed *adapterFailed
+		if errors.As(err, &failed) {
+			return c.fail(err)
+		}
+		c.result = result
+		if err != nil { // a crash is a divergence too
+			c.result = "crashed (" + err.Error() + ")"
+		}
+		return c.await("observe", observeRequest)
+	case "observe":
+		seq := c.run.seq[:c.at+1]
+		got, err := parseReply("observe", r)
+		if err != nil {
+			return c.fail(callAdapter("observe", seq, err))
+		}
+		wantResult, wantState := "ok", c.state
+		if c.want.Kind == "reject" {
+			wantResult = "rejected"
+		}
+		if c.want.Kind == "to" {
+			wantState = c.want.Target
+		}
+		if c.result != wantResult || got != wantState {
+			st := seq[c.at]
+			c.diverged(stepKey(c.state, st), caseWhere(c.state, st), fmt.Sprintf("after %s: spine expects %s in %s, code gave %s in %s",
+				stepsText(seq), wantResult, wantState, c.result, got))
+			return c.nextRun()
+		}
+		c.state = wantState
+		c.at++
+		return c.nextStep()
+	}
+	panic("spine: next with no request waiting for its reply")
+}
+
+// await gives a request, and notes which reply answers it.
+func (c *search) await(waiting, request string) string {
+	c.waiting = waiting
+	return request
+}
+
+// nextRun starts the next run, shortest first, and gives its first request. When every run is
+// done, it reports each case the spine decides that no run tried, and the coverage, and gives
+// none.
+func (c *search) nextRun() string {
+	for c.n <= c.longest {
+		if c.started < len(c.byLength[c.n]) {
+			c.run = c.byLength[c.n][c.started]
+			c.started++
+			c.runs++
+			c.state, c.want, c.at = c.s.Initial, Outcome{}, 0
+			return c.await("new", newRequest)
+		}
+		c.n, c.started = c.n+1, 0
 	}
 	cases := 0
-	for _, p := range paths {
-		for _, st := range steps {
-			if len(s.decide(p.state, st.event, st.env)) != 1 {
+	for _, p := range c.paths {
+		for _, st := range c.steps {
+			if len(c.s.decide(p.state, st.event, st.env)) != 1 {
 				continue // a case the spine leaves undecided, which spine check reports
 			}
 			cases++
-			if !exercised[stepKey(p.state, st)] {
+			if !c.exercised[stepKey(p.state, st)] {
 				why := "not tried: the code diverged on the way to " + p.state
-				if wrongStart != "" {
-					why = wrongStart
+				if c.wrongStart != "" {
+					why = c.wrongStart
 				}
-				out.Add("untried-case", caseWhere(p.state, st), why)
+				c.out.Add("untried-case", caseWhere(p.state, st), why)
 			}
 		}
 	}
-	out.AddSeverity("coverage", fmt.Sprintf("%d sequences, margin %d", runs, margin),
-		fmt.Sprintf("%d of %d state/event/variable cases exercised", len(exercised), cases), "info")
-	return nil
+	c.out.AddSeverity("coverage", fmt.Sprintf("%d sequences, margin %d", c.runs, c.margin),
+		fmt.Sprintf("%d of %d state/event/variable cases exercised", len(c.exercised), cases), "info")
+	c.waiting = ""
+	return ""
+}
+
+// nextStep gives the request that applies the run's next step. The run ends after its last step,
+// or at a case the spine leaves undecided, which spine check reports and nothing compares.
+func (c *search) nextStep() string {
+	if c.at == len(c.run.seq) {
+		return c.ended()
+	}
+	st := c.run.seq[c.at]
+	hits := c.s.decide(c.state, st.event, st.env)
+	if len(hits) != 1 {
+		c.want = Outcome{Kind: "undefined"}
+		return c.ended()
+	}
+	c.want = hits[0]
+	c.exercised[stepKey(c.state, st)] = true
+	return c.await("apply", applyRequest(st))
+}
+
+// ended extends a run that ended with code and spine agreeing by every step, while it is within
+// the margin and the code can go on: not at a terminal state, after a refusal or at an undecided
+// case. It gives the next run's first request.
+func (c *search) ended() string {
+	if c.run.extra <= c.margin && !c.s.terminal[c.state] && c.want.Kind != "reject" && c.want.Kind != "undefined" {
+		seq := c.run.seq
+		for _, st := range c.steps {
+			c.queue(append(seq[:len(seq):len(seq)], st), c.run.extra+1)
+		}
+		c.longest = max(c.longest, c.n+1)
+	}
+	return c.nextRun()
+}
+
+// diverged reports where code and spine first disagree, once for each case.
+func (c *search) diverged(key, where, message string) {
+	if !c.reported[key] {
+		c.reported[key] = true
+		c.out.Add("diverges", where, message)
+	}
+	if key == "start" {
+		c.wrongStart = "not tried: the code doesn't start in " + c.s.Initial
+	}
+}
+
+// fail reports the adapter's failure, past which nothing compares, and ends the search.
+func (c *search) fail(err error) string {
+	c.failed, c.waiting = true, ""
+	c.out.Add("adapter-failed", c.command, err.Error())
+	return ""
 }
 
 // statePath is a live state and the first shortest sequence of steps that reaches it.
