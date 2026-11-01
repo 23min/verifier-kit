@@ -3931,13 +3931,13 @@ exit 1
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "dark/drop",
-|       "message": ": A says -> broken, B says nothing (no rule matches)"
+|       "message": "this case: A says -> broken, B says nothing (no rule matches)"
 |     },
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "lit/press",
-|       "message": ": A says -> dark, B says -> broken"
+|       "message": "this case: A says -> dark, B says -> broken"
 |     },
 |     {
 |       "code": "behavior-differs",
@@ -3956,7 +3956,7 @@ exit 1
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine diff" tests="4" failures="4"><testcase classname="spine diff" name="case-disagrees dark/drop"><failure message=": A says -&gt; broken, B says nothing (no rule matches)">: A says -&gt; broken, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees lit/press"><failure message=": A says -&gt; dark, B says -&gt; broken">: A says -&gt; dark, B says -&gt; broken</failure></testcase><testcase classname="spine diff" name="behavior-differs drop()"><failure message="A ends broken, B ends undefined">A ends broken, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs press() -&gt; press()"><failure message="A ends dark, B ends broken">A ends dark, B ends broken</failure></testcase></testsuite>
+| <testsuite name="spine diff" tests="4" failures="4"><testcase classname="spine diff" name="case-disagrees dark/drop"><failure message="this case: A says -&gt; broken, B says nothing (no rule matches)">this case: A says -&gt; broken, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees lit/press"><failure message="this case: A says -&gt; dark, B says -&gt; broken">this case: A says -&gt; dark, B says -&gt; broken</failure></testcase><testcase classname="spine diff" name="behavior-differs drop()"><failure message="A ends broken, B ends undefined">A ends broken, B ends undefined</failure></testcase><testcase classname="spine diff" name="behavior-differs press() -&gt; press()"><failure message="A ends dark, B ends broken">A ends dark, B ends broken</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/plain-b.yaml diff/plain-a.yaml --depth 5
 exit 1
 --- stdout
@@ -3968,13 +3968,13 @@ exit 1
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "dark/drop",
-|       "message": ": A says nothing (no rule matches), B says -> broken"
+|       "message": "this case: A says nothing (no rule matches), B says -> broken"
 |     },
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "lit/press",
-|       "message": ": A says -> broken, B says -> dark"
+|       "message": "this case: A says -> broken, B says -> dark"
 |     },
 |     {
 |       "code": "behavior-differs",
@@ -3993,7 +3993,7 @@ exit 1
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine diff" tests="4" failures="4"><testcase classname="spine diff" name="case-disagrees dark/drop"><failure message=": A says nothing (no rule matches), B says -&gt; broken">: A says nothing (no rule matches), B says -&gt; broken</failure></testcase><testcase classname="spine diff" name="case-disagrees lit/press"><failure message=": A says -&gt; broken, B says -&gt; dark">: A says -&gt; broken, B says -&gt; dark</failure></testcase><testcase classname="spine diff" name="behavior-differs drop()"><failure message="A ends undefined, B ends broken">A ends undefined, B ends broken</failure></testcase><testcase classname="spine diff" name="behavior-differs press() -&gt; press()"><failure message="A ends broken, B ends dark">A ends broken, B ends dark</failure></testcase></testsuite>
+| <testsuite name="spine diff" tests="4" failures="4"><testcase classname="spine diff" name="case-disagrees dark/drop"><failure message="this case: A says nothing (no rule matches), B says -&gt; broken">this case: A says nothing (no rule matches), B says -&gt; broken</failure></testcase><testcase classname="spine diff" name="case-disagrees lit/press"><failure message="this case: A says -&gt; broken, B says -&gt; dark">this case: A says -&gt; broken, B says -&gt; dark</failure></testcase><testcase classname="spine diff" name="behavior-differs drop()"><failure message="A ends undefined, B ends broken">A ends undefined, B ends broken</failure></testcase><testcase classname="spine diff" name="behavior-differs press() -&gt; press()"><failure message="A ends broken, B ends dark">A ends broken, B ends dark</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/stop-a.yaml diff/stop-a.yaml --depth 1000000000000000000000000000000
 exit 0
 --- stdout
@@ -4081,32 +4081,32 @@ exit 1
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "rejected/go",
-|       "message": ": A says -> later, B says -> start"
+|       "message": "this case: A says -> later, B says -> start"
 |     },
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "start/go",
-|       "message": ": A says -> rejected, B says reject"
+|       "message": "this case: A says -> rejected, B says reject"
 |     },
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "start/wait",
-|       "message": ": A says -> undefined, B says nothing (no rule matches)"
+|       "message": "this case: A says -> undefined, B says nothing (no rule matches)"
 |     },
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "undefined/go",
-|       "message": ": A says -> later, B says -> start"
+|       "message": "this case: A says -> later, B says -> start"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine diff" tests="4" failures="4"><testcase classname="spine diff" name="case-disagrees rejected/go"><failure message=": A says -&gt; later, B says -&gt; start">: A says -&gt; later, B says -&gt; start</failure></testcase><testcase classname="spine diff" name="case-disagrees start/go"><failure message=": A says -&gt; rejected, B says reject">: A says -&gt; rejected, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees start/wait"><failure message=": A says -&gt; undefined, B says nothing (no rule matches)">: A says -&gt; undefined, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees undefined/go"><failure message=": A says -&gt; later, B says -&gt; start">: A says -&gt; later, B says -&gt; start</failure></testcase></testsuite>
+| <testsuite name="spine diff" tests="4" failures="4"><testcase classname="spine diff" name="case-disagrees rejected/go"><failure message="this case: A says -&gt; later, B says -&gt; start">this case: A says -&gt; later, B says -&gt; start</failure></testcase><testcase classname="spine diff" name="case-disagrees start/go"><failure message="this case: A says -&gt; rejected, B says reject">this case: A says -&gt; rejected, B says reject</failure></testcase><testcase classname="spine diff" name="case-disagrees start/wait"><failure message="this case: A says -&gt; undefined, B says nothing (no rule matches)">this case: A says -&gt; undefined, B says nothing (no rule matches)</failure></testcase><testcase classname="spine diff" name="case-disagrees undefined/go"><failure message="this case: A says -&gt; later, B says -&gt; start">this case: A says -&gt; later, B says -&gt; start</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/verdicts-b.yaml diff/verdicts-a.yaml --depth 3
 exit 1
 --- stdout
@@ -4118,32 +4118,32 @@ exit 1
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "rejected/go",
-|       "message": ": A says -> start, B says -> later"
+|       "message": "this case: A says -> start, B says -> later"
 |     },
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "start/go",
-|       "message": ": A says reject, B says -> rejected"
+|       "message": "this case: A says reject, B says -> rejected"
 |     },
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "start/wait",
-|       "message": ": A says nothing (no rule matches), B says -> undefined"
+|       "message": "this case: A says nothing (no rule matches), B says -> undefined"
 |     },
 |     {
 |       "code": "case-disagrees",
 |       "severity": "error",
 |       "where": "undefined/go",
-|       "message": ": A says -> start, B says -> later"
+|       "message": "this case: A says -> start, B says -> later"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine diff" tests="4" failures="4"><testcase classname="spine diff" name="case-disagrees rejected/go"><failure message=": A says -&gt; start, B says -&gt; later">: A says -&gt; start, B says -&gt; later</failure></testcase><testcase classname="spine diff" name="case-disagrees start/go"><failure message=": A says reject, B says -&gt; rejected">: A says reject, B says -&gt; rejected</failure></testcase><testcase classname="spine diff" name="case-disagrees start/wait"><failure message=": A says nothing (no rule matches), B says -&gt; undefined">: A says nothing (no rule matches), B says -&gt; undefined</failure></testcase><testcase classname="spine diff" name="case-disagrees undefined/go"><failure message=": A says -&gt; start, B says -&gt; later">: A says -&gt; start, B says -&gt; later</failure></testcase></testsuite>
+| <testsuite name="spine diff" tests="4" failures="4"><testcase classname="spine diff" name="case-disagrees rejected/go"><failure message="this case: A says -&gt; start, B says -&gt; later">this case: A says -&gt; start, B says -&gt; later</failure></testcase><testcase classname="spine diff" name="case-disagrees start/go"><failure message="this case: A says reject, B says -&gt; rejected">this case: A says reject, B says -&gt; rejected</failure></testcase><testcase classname="spine diff" name="case-disagrees start/wait"><failure message="this case: A says nothing (no rule matches), B says -&gt; undefined">this case: A says nothing (no rule matches), B says -&gt; undefined</failure></testcase><testcase classname="spine diff" name="case-disagrees undefined/go"><failure message="this case: A says -&gt; start, B says -&gt; later">this case: A says -&gt; start, B says -&gt; later</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml diff/door-b.yaml
 exit 1
 --- stdout
@@ -4897,8 +4897,8 @@ exit 1
 === in tools/internal/spine/testdata: spine diff diff/plain-a.yaml diff/plain-b.yaml
 exit 1
 --- stdout
-| error   case-disagrees     dark/drop: : A says -> broken, B says nothing (no rule matches)
-| error   case-disagrees     lit/press: : A says -> dark, B says -> broken
+| error   case-disagrees     dark/drop: this case: A says -> broken, B says nothing (no rule matches)
+| error   case-disagrees     lit/press: this case: A says -> dark, B says -> broken
 | error   behavior-differs   drop(): A ends broken, B ends undefined
 | error   behavior-differs   press() -> press(): A ends dark, B ends broken
 | -- 4 errors, 4 findings
@@ -4906,8 +4906,8 @@ exit 1
 === in tools/internal/spine/testdata: spine diff diff/plain-b.yaml diff/plain-a.yaml --depth 5
 exit 1
 --- stdout
-| error   case-disagrees     dark/drop: : A says nothing (no rule matches), B says -> broken
-| error   case-disagrees     lit/press: : A says -> broken, B says -> dark
+| error   case-disagrees     dark/drop: this case: A says nothing (no rule matches), B says -> broken
+| error   case-disagrees     lit/press: this case: A says -> broken, B says -> dark
 | error   behavior-differs   drop(): A ends undefined, B ends broken
 | error   behavior-differs   press() -> press(): A ends broken, B ends dark
 | -- 4 errors, 4 findings
@@ -4945,19 +4945,19 @@ exit 1
 === in tools/internal/spine/testdata: spine diff diff/verdicts-a.yaml diff/verdicts-b.yaml
 exit 1
 --- stdout
-| error   case-disagrees     rejected/go: : A says -> later, B says -> start
-| error   case-disagrees     start/go: : A says -> rejected, B says reject
-| error   case-disagrees     start/wait: : A says -> undefined, B says nothing (no rule matches)
-| error   case-disagrees     undefined/go: : A says -> later, B says -> start
+| error   case-disagrees     rejected/go: this case: A says -> later, B says -> start
+| error   case-disagrees     start/go: this case: A says -> rejected, B says reject
+| error   case-disagrees     start/wait: this case: A says -> undefined, B says nothing (no rule matches)
+| error   case-disagrees     undefined/go: this case: A says -> later, B says -> start
 | -- 4 errors, 4 findings
 |
 === in tools/internal/spine/testdata: spine diff diff/verdicts-b.yaml diff/verdicts-a.yaml --depth 3
 exit 1
 --- stdout
-| error   case-disagrees     rejected/go: : A says -> start, B says -> later
-| error   case-disagrees     start/go: : A says reject, B says -> rejected
-| error   case-disagrees     start/wait: : A says nothing (no rule matches), B says -> undefined
-| error   case-disagrees     undefined/go: : A says -> start, B says -> later
+| error   case-disagrees     rejected/go: this case: A says -> start, B says -> later
+| error   case-disagrees     start/go: this case: A says reject, B says -> rejected
+| error   case-disagrees     start/wait: this case: A says nothing (no rule matches), B says -> undefined
+| error   case-disagrees     undefined/go: this case: A says -> start, B says -> later
 | -- 4 errors, 4 findings
 |
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml

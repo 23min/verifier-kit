@@ -419,7 +419,7 @@ func diff(a, b *Spec, depth int) Findings {
 			for _, env := range envs {
 				oa, ob := a.decide(s, e, env), b.decide(s, e, env)
 				if !slices.Equal(oa, ob) {
-					out.Add("case-disagrees", s+"/"+e, fmt.Sprintf("%s: A says %s, B says %s", env, show(oa), show(ob)))
+					out.Add("case-disagrees", s+"/"+e, fmt.Sprintf("%s: A says %s, B says %s", orThisCase(env.String()), show(oa), show(ob)))
 				}
 			}
 		}
