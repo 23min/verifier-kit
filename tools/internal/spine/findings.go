@@ -1,6 +1,10 @@
 // Package spine is the toolkit's spine: its commands, findings and exit codes are the tool
 // contract's (docs/reference/tool-contract.md). The cases test in this package checks it
 // against a record of its output.
+//
+// Its core decides without reading a file, starting a program or printing (ADR 0007, decision
+// 1); a few shell files do those around it. The core test names the shell's files and checks
+// what the others import.
 package spine
 
 // Finding is one result line: a code from the contract, its severity, where it applies and why.
