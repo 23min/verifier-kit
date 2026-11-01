@@ -51,7 +51,7 @@ src/job.ex                         the lifecycle and the job                    
 
 | What | How | Bound |
 |---|---|---|
-| The lifecycle matches the spine | `spine conform` through `adapter_job.cmd`, on `Job.Lifecycle.transition/3` | every sequence up to 4 events |
+| The lifecycle matches the spine | `spine conform` through `adapter_job.cmd`, on `Job.Lifecycle.transition/3` | every case, margin 1: 60 sequences |
 | Scenarios J01-J07 end as the chapter says | `checks/job/job_test.exs` | one run each |
 | J1 and J2: attempts are counted, bounded and retried until the limit | the same file, over every reachable job | maximum attempts 1 to 4 |
 

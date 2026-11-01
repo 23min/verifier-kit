@@ -11,7 +11,7 @@ the change says why (see `CLAUDE.md`).
   models, that disagree in 15 cases (`spine diff` on `spec/notes/readings/`). Each is a
   question for the chapter's owner; the ratified spine answers them.
 - A spine for one machine with one variable (`role`).
-- Conformance of a small Python service to the spine through an adapter, up to 4 events.
+- Conformance of a small Python service to the spine through an adapter: every case, margin 1.
 - Content checks for what the spine cannot see (a note's text), each citing its spine cell.
 - Five hand-picked mutants, one of which only the content checks can catch.
 
@@ -47,7 +47,7 @@ demo/notes_app_as_written.py     the service as first written, with two bugs
 
 | What | How | Bound |
 |---|---|---|
-| The service matches the spine | `spine conform` through `adapter_notes.cmd` | every sequence up to 4 events |
+| The service matches the spine | `spine conform` through `adapter_notes.cmd` | every case, margin 1: 180 sequences |
 | The runs that must be allowed or refused | `spine behaviors` on `spec/notes/behaviors/` | 2 valid, 3 invalid |
 | A note's text is kept through edit, trash and restore | `checks/notes/test_content.py` | one run each |
 
@@ -73,4 +73,5 @@ text it survives, as `demo/faults.sh` scenario 6 shows.
   sharing affect each other is not checked.
 - **Who may share.** The service lets only the owner share; the spine has no `share` event,
   and no check covers it.
-- **Beyond the bound:** sequences longer than 4 events.
+- **Beyond the margin:** hidden state that shows only more than two steps past a state's shortest
+  path, or that only a refusal changes (`docs/adr/0008-conform-margin.md`).

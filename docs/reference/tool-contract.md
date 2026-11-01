@@ -54,7 +54,7 @@ are part of the contract: new codes may be added, existing codes are never renam
 | `stale` | `SPEC CHECKS_DIR` | Finds `covers: state/event@hash` and `covers: spine@hash` citations in the files under `CHECKS_DIR`, except binary ones (a file holding a NUL byte, such as Python's compiled `__pycache__` files), and reports stale, orphaned and uncovered cells, and text meant as a citation that isn't one. A check that cites the current whole spine counts every transition as cited |
 | `behaviors` | `SPEC DIR` | Replays every `.yaml` or `.yml` file in `DIR/valid/` (must be allowed) and `DIR/invalid/` (must be refused) |
 | `trace` | `SPEC FILE` | Replays one behavior file; for callers that run a validator once per fixture |
-| `conform` | `SPEC --adapter-cmd COMMAND [--depth N]` | Runs every event sequence up to N steps (default 4) against the spine and against the code through the adapter, and reports where they differ. The adapter is a program that speaks the adapter protocol (below); a Python adapter's command runs it through `tools/adapter_shim.py` |
+| `conform` | `SPEC --adapter-cmd COMMAND [--margin K]` | Tries every case of every live state against the spine and against the code through the adapter, and reports where they differ: from the first shortest path to each state, every sequence of 1 to K+1 further steps (K is 1 unless given), each once, ending at a terminal state, a refusal or a divergence (`docs/adr/0008-conform-margin.md`). The adapter is a program that speaks the adapter protocol (below); a Python adapter's command runs it through `tools/adapter_shim.py` |
 | `guard` | `POLICY --branch NAME [FILES...]` | Maps the branch to a role and reports changed files that role may not touch; reads files from stdin when none are given |
 
 `spine` is `tools/bin/spine`, built from `tools/cmd/spine/` (`go -C tools build -o bin/spine
@@ -68,9 +68,9 @@ The command comes first; its arguments and options follow in any order. An optio
 `--name value` or `--name=value`, spelled in full and given at most once. Every argument that
 starts with `-`, other than `-` alone, is an option, except after `--`, where everything is an
 argument; so a value that starts with `-` is given as `--name=value`. `--depth` is a whole
-number of 1 or more, in the digits 0 to 9. `-h` or `--help` prints a command's help and exits 0.
-Anything else is a usage error: one line on stderr, naming the command and what is wrong, and
-exit 2.
+number of 1 or more and `--margin` one of 0 or more, in the digits 0 to 9; the cost of a margin
+grows exponentially with it. `-h` or `--help` prints a command's help and exits 0. Anything else
+is a usage error: one line on stderr, naming the command and what is wrong, and exit 2.
 
 ### Finding codes
 
@@ -110,7 +110,8 @@ exit 2.
 | `refused` | error | `trace` | the behavior is refused |
 | `spine-unsound` | error | `trace` | the spine fails `check` |
 | `diverges` | error | `conform` | code and spine disagree; the message carries the sequence |
-| `coverage` | info | `conform` | sequences run and cases exercised |
+| `untried-case` | error | `conform` | a case no run tried, because the code diverged on the way to its state |
+| `coverage` | info | `conform` | sequences run, the margin, and cases exercised |
 | `adapter-failed` | error | `conform` | the adapter command can't be started, exits before replying, breaks the protocol, or replies `{"error": ...}` to `new` or `observe`; the shim does when a Python adapter's `new()` or `observe()` raised, and exits before replying when the file can't be imported or lacks a function. `conform` stops there |
 | `path-denied` | error | `guard` | a deny pattern for the role matches a changed file |
 | `path-not-allowed` | error | `guard` | no allow pattern for the role matches a changed file |

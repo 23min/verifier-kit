@@ -67,7 +67,7 @@ pushes into the spine's events; the explorer and the Git checks drive it.
 
 | What | How | Bound |
 |---|---|---|
-| The lifecycle matches the spine | `spine conform` on `transition()` | every sequence up to 4 events |
+| The lifecycle matches the spine | `spine conform` on `transition()` | every case, margin 1: 81 sequences |
 | S1-S5, S7 in every reachable world; each scenario's outcome | `test_protocol.py`, C01-C06 | below |
 | The checks catch a broken tip (S4) and a false confirmation (S5) | C07, C08 on worlds made by hand | |
 | Git refuses a push that is not a fast-forward; the client's Git remote reports it | `test_git_ref.py`, C09 | one repository |

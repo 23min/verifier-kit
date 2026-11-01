@@ -157,6 +157,28 @@ lines over stdin and stdout (`docs/adr/0003-adapter-protocol.md`), named by a co
 served that way by `tools/adapter_shim.py`, which its line calls; an adapter in any other
 language is its own program. Details in `docs/reference/tool-contract.md`.
 
+### What conform guarantees
+
+`spine conform` tries every case of every live state, every event with every combination of
+variable values: it reaches each state by the first shortest path to it, then runs every sequence
+of up to K+1 further steps, K being the margin, 1 unless `--margin` says otherwise
+(`docs/adr/0008-conform-margin.md`). A case it couldn't try, because the code diverged on the
+way there, is an `untried-case` error. That catches every implementation with up to K states the
+spine doesn't have (Vasilevskii 1973, Chow 1978, Lee and Yannakakis 1996), given what the method
+assumes:
+
+- **`new()` starts afresh,** so that each sequence begins in the spine's initial state with no
+  trace of the last one.
+- **`observe()` reads the true state** from the code's real data, not from what the adapter
+  remembers it did.
+- **The code is deterministic:** the same sequence gives the same results.
+- **Hidden state that only a refusal changes** goes unseen at any margin, as a run ends at a
+  refusal; a lockout after three refused attempts is such a case. State the adapter can't see at
+  all, such as a note's text, is for the content checks.
+
+The cost grows with the spine's size and with K, exponentially in K: on notes, margin 1 takes 180
+runs and margin 4 takes 14,130.
+
 ### Checking the checker
 
 Red first; mutation (planted bugs must be caught); a positive control (a known-good
@@ -274,6 +296,9 @@ tests derived from verified claims and run against the real implementation.
 
 ## Key sources
 
+- Vasilevskii, Failure diagnosis of automata (1973); Chow, Testing software design modeled by
+  finite-state machines (1978); Lee and Yannakakis, Principles and methods of testing finite
+  state machines, a survey (1996)
 - Bornholt et al., lightweight formal methods for S3 ShardStore (SOSP '21)
 - Heitmeyer, applying the SCR requirements method
 - Parnas and Clements, A Rational Design Process: How and Why to Fake It

@@ -1,0 +1,7 @@
+# The initial state is terminal: no state is live, so conform tries nothing.
+machine: termini
+states: {s: {terminal: true}}
+initial: s
+events: [e]
+rules:
+  - {from: s, event: e, reject: true}

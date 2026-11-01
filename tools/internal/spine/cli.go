@@ -37,8 +37,8 @@ var commands = []command{
 		"Replays every file in DIR/valid/, which must be allowed, and DIR/invalid/, which must be refused."},
 	{"trace", []string{"SPEC", "FILE"}, []string{"--format", "--junit"},
 		"Replays one behavior file."},
-	{"conform", []string{"SPEC"}, []string{"--adapter-cmd", "--format", "--junit", "--depth"},
-		"Runs every event sequence up to the depth against the spine and against the code, through the\n" +
+	{"conform", []string{"SPEC"}, []string{"--adapter-cmd", "--format", "--junit", "--margin"},
+		"Tries every state/event/variable case against the spine and against the code, through the\n" +
 			"adapter, and reports where they differ."},
 	{"guard", []string{"POLICY", "FILES..."}, []string{"--branch", "--format", "--junit"},
 		"Maps the branch to a role and reports changed files that role may not touch. Without FILES, it\n" +
@@ -55,6 +55,7 @@ var optionHelp = map[string]struct {
 	"--format":      {"text|json", "how the findings are printed; text unless given", false},
 	"--junit":       {"FILE", "also write the findings as a JUnit XML report", false},
 	"--depth":       {"N", "the longest event sequence tried, 1 or more; 4 unless given", false},
+	"--margin":      {"K", "how many more steps follow each case tried, 0 or more; 1 unless given", false},
 }
 
 func (c *command) usage() string {
@@ -113,7 +114,7 @@ type parsed struct {
 	format, adapterCmd, branch string
 	junit                      string
 	junitGiven                 bool // --junit was given, even with an empty FILE
-	depth                      int
+	depth, margin              int
 }
 
 // parseArgs reads the arguments after the program name: a command, then its arguments and options
@@ -135,7 +136,7 @@ func parseArgs(argv []string) (*parsed, error) {
 		return usageError(fmt.Sprintf("spine %s: %s; spine %s --help describes it", c.name, fmt.Sprintf(format, a...), c.name))
 	}
 	rest := argv[1:]
-	p := &parsed{command: c.name, format: "text", depth: 4}
+	p := &parsed{command: c.name, format: "text", depth: 4, margin: 1}
 	given := map[string]string{} // the options given, by name
 	onlyArgs := false
 	for i := 0; i < len(rest); i++ {
@@ -186,15 +187,23 @@ func parseArgs(argv []string) (*parsed, error) {
 	if f, given := given["--format"]; given && f != "text" && f != "json" {
 		return nil, fail("--format must be text or json, not %q", f)
 	}
-	if d, given := given["--depth"]; given {
-		n, err := strconv.Atoi(d)
+	for _, o := range []struct {
+		name  string
+		least int
+		into  *int
+	}{{"--depth", 1, &p.depth}, {"--margin", 0, &p.margin}} {
+		v, ok := given[o.name]
+		if !ok {
+			continue
+		}
+		n, err := strconv.Atoi(v)
 		if errors.Is(err, strconv.ErrRange) {
-			n, err = math.MaxInt, nil // past an int, no depth can tell the difference
+			n, err = math.MaxInt, nil // past an int, no run can tell the difference
 		}
-		if err != nil || n < 1 || strings.Trim(d, "0123456789") != "" {
-			return nil, fail("--depth must be a whole number of 1 or more, not %q", d)
+		if err != nil || n < o.least || strings.Trim(v, "0123456789") != "" {
+			return nil, fail("%s must be a whole number of %d or more, not %q", o.name, o.least, v)
 		}
-		p.depth = n
+		*o.into = n
 	}
 	p.adapterCmd, p.branch = given["--adapter-cmd"], given["--branch"]
 	if f, ok := given["--format"]; ok {
@@ -264,7 +273,7 @@ func Main(argv []string, stdin io.Reader, stdout, stderr io.Writer) int {
 			case "trace":
 				findings = append(findings, trace(spec, cl.args[1])...)
 			case "conform":
-				findings = append(findings, conform(spec, cl.adapterCmd, cl.depth)...)
+				findings = append(findings, conform(spec, cl.adapterCmd, cl.margin)...)
 			}
 		}
 	}

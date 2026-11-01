@@ -134,7 +134,7 @@ exit 1
 | error   diverges           draft/trash role=owner: after trash(role=owner): spine expects rejected in draft, code gave ok in trashed
 | error   diverges           trashed/edit role=owner: after publish(role=owner) -> trash(role=owner) -> edit(role=owner): spine expects rejected in trashed, code gave ok in trashed
 | error   diverges           trashed/edit role=editor: after publish(role=owner) -> trash(role=owner) -> edit(role=editor): spine expects rejected in trashed, code gave ok in trashed
-| info    coverage           1426 sequences up to 4 steps: 45 of 45 state/event/variable cases exercised
+| info    coverage           180 sequences, margin 1: 45 of 45 state/event/variable cases exercised
 | -- 3 errors, 4 findings
 |
 === in $TMP/faults: spine conform $ROOT/examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 $ROOT/tools/adapter_shim.py $ROOT/examples/notes/conformance/adapter_notes.py" with PYTHONPATH=$TMP/faults/9/src
@@ -171,7 +171,7 @@ exit 1
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "1426 sequences up to 4 steps",
+|       "where": "180 sequences, margin 1",
 |       "message": "45 of 45 state/event/variable cases exercised"
 |     }
 |   ]
@@ -215,7 +215,7 @@ exit 1
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "1426 sequences up to 4 steps",
+|       "where": "180 sequences, margin 1",
 |       "message": "45 of 45 state/event/variable cases exercised"
 |     }
 |   ]
@@ -228,7 +228,7 @@ exit 1
 exit 1
 --- stdout
 | error   diverges           trashed/restore role=editor: after publish(role=owner) -> trash(role=owner) -> restore(role=editor): spine expects ok in active, code gave rejected in trashed
-| info    coverage           1426 sequences up to 4 steps: 45 of 45 state/event/variable cases exercised
+| info    coverage           180 sequences, margin 1: 45 of 45 state/event/variable cases exercised
 | -- 1 errors, 2 findings
 |
 === in $TMP/faults: spine guard $ROOT/policy.yaml --branch build/purge-confirmation examples/notes/src/notes_app.py examples/notes/spec/notes/spine.yaml

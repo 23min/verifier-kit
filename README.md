@@ -131,7 +131,7 @@ well.
 | spine is sound | `spine check` | unknown keys, YAML slips (`on:` read as `true`), cases no rule covers, overlapping rules, unreachable states, failing worked examples | a spine that is complete but wrong |
 | behaviors match spine | `spine behaviors` | the spine drifting from the example runs you agreed on | |
 | checks cite current spine | `spine stale` | content checks that cite a spine cell, or the whole spine, which has since changed, and citations written wrongly | checks that never cite anything (listed as info) |
-| code conforms to spine | `spine conform`, with the command in `adapter_<machine>.cmd` | any state/event/role case where the code allows, refuses or ends up somewhere other than the spine says, with the shortest sequence that shows it | anything beyond 4 steps; data the adapter does not observe |
+| code conforms to spine | `spine conform`, with the command in `adapter_<machine>.cmd` | any state/event/role case where the code allows, refuses or ends up somewhere other than the spine says, with the shortest sequence that shows it; every case is tried, and one it couldn't try is an error | hidden state beyond the margin, or that only a refusal changes; data the adapter does not observe |
 | content checks | the command in `checks/run.cmd` | wrong text, values, formats | whatever no check asserts |
 | mutants killed (`--full`) | each mutant in `mutation/mutants.yaml`, on a copy, through conform and the content checks; and the command in each `mutation/mutate_*.cmd` | an oracle too weak to notice a planted bug | bugs unlike the planted ones |
 
@@ -207,8 +207,10 @@ and fails with `no-adapter` until the line exists. The content checks are a comm
 
 ## Limits
 
-- **Bounded, not proven.** Conformance replays every sequence up to 4 steps. That finds most
-  logic slips in small machines (the small-scope hypothesis), but it is testing, not proof.
+- **Bounded, not proven.** Conformance reaches each state by a shortest path and tries every
+  sequence of up to two more steps from it, so every case is tried; that catches code with one
+  state more than the spine shows, and `--margin` tries further (`docs/adr/0008-conform-margin.md`).
+  It is testing, not proof.
 - **Concurrency needs checks of its own.** `spine conform` runs one lifecycle at a time. The
   ref_sync example adds an explorer for two clients in its own `checks/`; the toolkit has no
   general one.
@@ -217,7 +219,7 @@ and fails with `no-adapter` until the line exists. The content checks are a comm
 - **Every adapter is a program.** `spine conform` runs the program named in
   `adapter_<machine>.cmd`, speaking JSON lines over stdin and stdout; a Python adapter's line
   runs it through `tools/adapter_shim.py`. Each request is
-  a round trip between processes, about 0.2 ms here, so notes' 1,426 sequences take about 2 s.
+  a round trip between processes, about 0.2 ms here, so notes' 180 sequences take about 0.2 s.
 - **The adapter is part of the oracle.** It must only translate, never decide; a person
   reviews it like the spine.
 - **One machine, one variable.** Real features have several interacting machines and more

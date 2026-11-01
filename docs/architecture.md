@@ -122,7 +122,7 @@ flowchart LR
   chapter -->|"read by two interpreters"| readings
   readings -->|"spine diff; a person ratifies"| spineY
   behav -->|"spine behaviors replays them"| spineY
-  spineY -->|"spine conform: every sequence up to 4 events"| adapter
+  spineY -->|"spine conform: every case, margin 1"| adapter
   adapter -->|"imports and calls"| app
   checks -->|"imports"| app
   checks -.->|"cite cells as covers: state/event@hash"| spineY
@@ -162,7 +162,7 @@ flowchart LR
   chapter -->|"read by two interpreters"| readings
   readings -->|"spine diff; a person ratifies"| spineY
   behav -->|"spine behaviors replays them"| spineY
-  spineY -->|"spine conform: every sequence up to 4 events"| adapter
+  spineY -->|"spine conform: every case, margin 1"| adapter
   adapter -->|"calls transition"| client
   proto --> explore
   proto --> world
@@ -201,7 +201,7 @@ flowchart LR
   chapter -->|"read by two interpreters"| readings
   readings -->|"spine diff; a person ratifies"| spineY
   behav -->|"spine behaviors replays them"| spineY
-  spineY -->|"spine conform: every sequence up to 4 events"| adapter
+  spineY -->|"spine conform: every case, margin 1"| adapter
   adapter -->|"calls Job.Lifecycle.transition/3"| job
   checks -->|"J01-J07, J1 and J2 in every reachable job"| job
   mutate -->|"verify makes each in a copy"| job
