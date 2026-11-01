@@ -199,14 +199,46 @@ func listedTwice(xs []string, where string, out *Findings) {
 	}
 }
 
+// file is a file as the shell read it: its path, and its contents or why they couldn't be read.
+type file struct {
+	path       string
+	data       []byte
+	unreadable string // the system's reason it couldn't be read; empty when it was read
+}
+
+// contents is the file's contents; a file that couldn't be read adds a spec-unreadable finding
+// and gives false.
+func (f file) contents(out *Findings) ([]byte, bool) {
+	if f.unreadable != "" {
+		out.Add("spec-unreadable", f.path, "cannot be read: "+f.unreadable)
+		return nil, false
+	}
+	return f.data, true
+}
+
+// parseYAML parses a file of the spine format: one YAML document in UTF-8. A file that couldn't
+// be read, isn't UTF-8 or isn't YAML adds a spec-unreadable finding and gives false.
+func parseYAML(f file, out *Findings) (*yamldoc.Value, bool) {
+	data, ok := f.contents(out)
+	if !ok {
+		return nil, false
+	}
+	v, err := yamldoc.Load(data)
+	if err != nil {
+		out.Add("spec-unreadable", f.path, strings.SplitN(err.Error(), "\n", 2)[0])
+		return nil, false
+	}
+	return v, true
+}
+
 // loadSpec loads and validates a spine file. The spec is nil when there are errors.
-func loadSpec(path string) (*Spec, Findings) {
+func loadSpec(f file) (*Spec, Findings) {
 	var out Findings
-	v, ok := readYAML(path, &out)
+	v, ok := parseYAML(f, &out)
 	if !ok {
 		return nil, out
 	}
-	out = validate(v, path)
+	out = validate(v, f.path)
 	if out.Errors() > 0 {
 		return nil, out
 	}
@@ -221,13 +253,13 @@ type Behavior struct {
 
 // loadBehavior loads and validates a behavior file for a valid spine. The behavior is nil when
 // there are errors.
-func loadBehavior(path string, s *Spec) (*Behavior, Findings) {
+func loadBehavior(f file, s *Spec) (*Behavior, Findings) {
 	var out Findings
-	v, ok := readYAML(path, &out)
+	v, ok := parseYAML(f, &out)
 	if !ok {
 		return nil, out
 	}
-	where := path
+	where := f.path
 	if !isMap(v) {
 		out.Add("spec-shape", where, `a behavior file must be a mapping with "steps" and an optional "expect"`)
 		return nil, out
@@ -264,12 +296,13 @@ type BranchRole struct{ Pattern, Role string }
 type Role struct{ Allow, Deny []string }
 
 // loadPolicy loads and validates a policy file. The policy is nil when there are errors.
-func loadPolicy(path string) (*Policy, Findings) {
+func loadPolicy(f file) (*Policy, Findings) {
 	var out Findings
-	v, ok := readYAML(path, &out)
+	v, ok := parseYAML(f, &out)
 	if !ok {
 		return nil, out
 	}
+	path := f.path
 	if !isMap(v) {
 		out.Add("spec-shape", path, `the policy must be a mapping with "branches" and "roles"`)
 		return nil, out

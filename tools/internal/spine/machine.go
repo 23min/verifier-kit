@@ -5,15 +5,12 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-	"os"
-	"path/filepath"
 	"regexp"
 	"slices"
 	"sort"
 	"strings"
 	"unicode/utf8"
 
-	"github.com/23min/verifier-kit/tools/internal/program"
 	"github.com/23min/verifier-kit/tools/internal/yamldoc"
 )
 
@@ -567,16 +564,12 @@ const (
 	word       = `[^@\n` + lineSpaces + `]*`
 )
 
-func stale(s *Spec, checksDir string) Findings {
+func stale(s *Spec, checks []file) Findings {
 	var out Findings
 	covered, whole := map[string]bool{}, false
-	for _, path := range below(checksDir) {
-		if !isFile(path) {
-			continue
-		}
-		data, err := os.ReadFile(path)
-		if err != nil {
-			out.Add("spec-unreadable", path, "cannot be read: "+program.Strerror(err))
+	for _, f := range checks {
+		data, ok := f.contents(&out)
+		if !ok {
 			continue
 		}
 		if bytes.IndexByte(data, 0) >= 0 {
@@ -586,14 +579,14 @@ func stale(s *Spec, checksDir string) Findings {
 		for _, at := range meant.FindAllStringSubmatchIndex(text, -1) {
 			m := citation.FindStringSubmatch(text[at[2]:at[3]])
 			if m == nil {
-				where := fmt.Sprintf("%s:%d", path, 1+strings.Count(text[:at[2]], "\n"))
+				where := fmt.Sprintf("%s:%d", f.path, 1+strings.Count(text[:at[2]], "\n"))
 				out.Add("bad-citation", where, fmt.Sprintf(
 					"%q is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase", text[at[2]:at[3]]))
 				continue
 			}
 			if m[3] != "" {
 				if h := s.spineHash(); m[4] != h {
-					out.Add("stale-check", path, fmt.Sprintf(
+					out.Add("stale-check", f.path, fmt.Sprintf(
 						"covers spine@%s, but the spine now hashes to %s: re-ratify, then update the check", m[4], h))
 				} else {
 					whole = true
@@ -604,9 +597,9 @@ func stale(s *Spec, checksDir string) Findings {
 			cell := st + "/" + e
 			switch {
 			case !s.stateSet[st] || !slices.Contains(s.Events, e) || len(s.rulesFor(st, e)) == 0:
-				out.Add("orphan-check", path, fmt.Sprintf("covers %s, which the spec no longer defines", cell))
+				out.Add("orphan-check", f.path, fmt.Sprintf("covers %s, which the spec no longer defines", cell))
 			case s.cellHash(st, e) != h:
-				out.Add("stale-check", path, fmt.Sprintf(
+				out.Add("stale-check", f.path, fmt.Sprintf(
 					"covers %s@%s, but that cell now hashes to %s: re-ratify, then update the check", cell, h, s.cellHash(st, e)))
 			default:
 				covered[cell] = true
@@ -649,16 +642,18 @@ func replayBehavior(s *Spec, b *Behavior) (bool, string) {
 	return true, "allowed, ends in " + state
 }
 
-func behaviors(s *Spec, directory string) Findings {
+// behaviors judges the behavior files of directory: those in its valid/ folder, which the spine
+// must allow, and those in invalid/, which it must refuse.
+func behaviors(s *Spec, directory string, valid, invalid []file) Findings {
 	var out Findings
 	counted, checked := 0, 0
 	for _, folder := range []struct {
-		name      string
+		files     []file
 		mustAllow bool
-	}{{"valid", true}, {"invalid", false}} {
-		for _, path := range yamlFiles(filepath.Join(directory, folder.name)) {
+	}{{valid, true}, {invalid, false}} {
+		for _, f := range folder.files {
 			counted++
-			b, problems := loadBehavior(path, s)
+			b, problems := loadBehavior(f, s)
 			out = append(out, problems...)
 			if b == nil {
 				continue
@@ -666,9 +661,9 @@ func behaviors(s *Spec, directory string) Findings {
 			checked++
 			allowed, why := replayBehavior(s, b)
 			if folder.mustAllow && !allowed {
-				out.Add("behavior-refused", path, "marked valid, but the spine refuses it: "+why)
+				out.Add("behavior-refused", f.path, "marked valid, but the spine refuses it: "+why)
 			} else if !folder.mustAllow && allowed {
-				out.Add("behavior-allowed", path, "marked invalid, but the spine allows it ("+why+")")
+				out.Add("behavior-allowed", f.path, "marked invalid, but the spine allows it ("+why+")")
 			}
 		}
 	}
@@ -680,19 +675,23 @@ func behaviors(s *Spec, directory string) Findings {
 	return out
 }
 
-func trace(s *Spec, path string) Findings {
+// unsound is a spine-unsound finding when spine check finds errors: trace replays a file only
+// through a sound spine.
+func unsound(s *Spec) Findings {
 	var out Findings
 	if n := check(s).Errors(); n > 0 {
 		out.Add("spine-unsound", "spec", fmt.Sprintf("%d errors from spine check; run it for details", n))
-		return out
 	}
-	b, problems := loadBehavior(path, s)
-	out = append(out, problems...)
+	return out
+}
+
+func trace(s *Spec, f file) Findings {
+	b, out := loadBehavior(f, s)
 	if b == nil {
 		return out
 	}
 	if allowed, why := replayBehavior(s, b); !allowed {
-		out.Add("refused", path, why)
+		out.Add("refused", f.path, why)
 	}
 	return out
 }
@@ -732,3 +731,64 @@ func anyMatch(name string, patterns []string) bool {
 	}
 	return false
 }
+
+// matches reports whether name matches a shell-style pattern: `*` is any text, slashes included,
+// `?` one character, and `[...]` one character in a set or `[!...]` one not in it. In a set, `a-z`
+// is a range (a backwards one holds nothing), and `]` first or `-` first or last is itself; a `[`
+// that is never closed is itself.
+func matches(name, pattern string) bool {
+	var re strings.Builder
+	rs := []rune(pattern)
+	for i := 0; i < len(rs); i++ {
+		switch rs[i] {
+		case '*':
+			re.WriteString(`.*`)
+		case '?':
+			re.WriteString(`.`)
+		case '[':
+			if set, end, ok := charSet(rs, i+1); ok {
+				re.WriteString(set)
+				i = end
+				continue
+			}
+			re.WriteString(literal('['))
+		default:
+			re.WriteString(literal(rs[i]))
+		}
+	}
+	return regexp.MustCompile(`(?s)^` + re.String() + `$`).MatchString(name)
+}
+
+// charSet reads the set that starts at rs[i], just after its `[`: the set as a regular expression,
+// and where its `]` is; false when the set is never closed.
+func charSet(rs []rune, i int) (string, int, bool) {
+	negate := i < len(rs) && rs[i] == '!'
+	if negate {
+		i++
+	}
+	var members strings.Builder
+	for start := i; i < len(rs) && (rs[i] != ']' || i == start); i++ {
+		if i+2 < len(rs) && rs[i+1] == '-' && rs[i+2] != ']' {
+			if rs[i] <= rs[i+2] {
+				members.WriteString(literal(rs[i]) + "-" + literal(rs[i+2]))
+			}
+			i += 2
+			continue
+		}
+		members.WriteString(literal(rs[i]))
+	}
+	switch {
+	case i == len(rs):
+		return "", 0, false
+	case members.Len() == 0 && negate:
+		return `.`, i, true // nothing is excluded
+	case members.Len() == 0:
+		return `[^\x00-\x{10ffff}]`, i, true // nothing matches
+	case negate:
+		return "[^" + members.String() + "]", i, true
+	}
+	return "[" + members.String() + "]", i, true
+}
+
+// literal is r as a regular expression that matches only r.
+func literal(r rune) string { return fmt.Sprintf(`\x{%x}`, r) }

@@ -1,14 +1,23 @@
 package spine
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strings"
+
+	"github.com/23min/verifier-kit/tools/internal/program"
 )
 
-// Files and folders: listing them, and matching names against patterns.
+// Files and folders: listing them and reading them, for the core to judge.
+
+// readFile reads the file at path, or says why it can't.
+func readFile(path string) file {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return file{path: path, unreadable: program.Strerror(err)}
+	}
+	return file{path: path, data: data}
+}
 
 // entries lists a folder's entries in name order, or none when it can't be read.
 func entries(dir string) []os.DirEntry {
@@ -19,16 +28,21 @@ func entries(dir string) []os.DirEntry {
 	return list
 }
 
-// yamlFiles is every entry of dir named *.yaml or *.yml, in name order: hidden ones and broken
+// yamlFiles reads every entry of dir named *.yaml or *.yml, in name order: hidden ones and broken
 // links included.
-func yamlFiles(dir string) []string {
-	var out []string
+func yamlFiles(dir string) []file {
+	var out []file
 	for _, e := range entries(dir) {
 		if strings.HasSuffix(e.Name(), ".yaml") || strings.HasSuffix(e.Name(), ".yml") {
-			out = append(out, filepath.Join(dir, e.Name()))
+			out = append(out, readFile(filepath.Join(dir, e.Name())))
 		}
 	}
 	return out
+}
+
+// behaviorFiles reads the behavior files of dir: those in its valid/ folder, and those in invalid/.
+func behaviorFiles(dir string) (valid, invalid []file) {
+	return yamlFiles(filepath.Join(dir, "valid")), yamlFiles(filepath.Join(dir, "invalid"))
 }
 
 // below is everything below dir, a folder before what it holds and each folder in name order,
@@ -49,69 +63,13 @@ func below(dir string) []string {
 	return out
 }
 
-// isFile reports whether p is a regular file, following links.
-func isFile(p string) bool {
-	info, err := os.Stat(p)
-	return err == nil && info.Mode().IsRegular()
-}
-
-// matches reports whether name matches a shell-style pattern: `*` is any text, slashes included,
-// `?` one character, and `[...]` one character in a set or `[!...]` one not in it. In a set, `a-z`
-// is a range (a backwards one holds nothing), and `]` first or `-` first or last is itself; a `[`
-// that is never closed is itself.
-func matches(name, pattern string) bool {
-	var re strings.Builder
-	rs := []rune(pattern)
-	for i := 0; i < len(rs); i++ {
-		switch rs[i] {
-		case '*':
-			re.WriteString(`.*`)
-		case '?':
-			re.WriteString(`.`)
-		case '[':
-			if set, end, ok := charSet(rs, i+1); ok {
-				re.WriteString(set)
-				i = end
-				continue
-			}
-			re.WriteString(literal('['))
-		default:
-			re.WriteString(literal(rs[i]))
+// filesBelow reads every regular file below dir, in below's order, following links.
+func filesBelow(dir string) []file {
+	var out []file
+	for _, p := range below(dir) {
+		if info, err := os.Stat(p); err == nil && info.Mode().IsRegular() {
+			out = append(out, readFile(p))
 		}
 	}
-	return regexp.MustCompile(`(?s)^` + re.String() + `$`).MatchString(name)
+	return out
 }
-
-// charSet reads the set that starts at rs[i], just after its `[`: the set as a regular expression,
-// and where its `]` is; false when the set is never closed.
-func charSet(rs []rune, i int) (string, int, bool) {
-	negate := i < len(rs) && rs[i] == '!'
-	if negate {
-		i++
-	}
-	var members strings.Builder
-	for start := i; i < len(rs) && (rs[i] != ']' || i == start); i++ {
-		if i+2 < len(rs) && rs[i+1] == '-' && rs[i+2] != ']' {
-			if rs[i] <= rs[i+2] {
-				members.WriteString(literal(rs[i]) + "-" + literal(rs[i+2]))
-			}
-			i += 2
-			continue
-		}
-		members.WriteString(literal(rs[i]))
-	}
-	switch {
-	case i == len(rs):
-		return "", 0, false
-	case members.Len() == 0 && negate:
-		return `.`, i, true // nothing is excluded
-	case members.Len() == 0:
-		return `[^\x00-\x{10ffff}]`, i, true // nothing matches
-	case negate:
-		return "[^" + members.String() + "]", i, true
-	}
-	return "[" + members.String() + "]", i, true
-}
-
-// literal is r as a regular expression that matches only r.
-func literal(r rune) string { return fmt.Sprintf(`\x{%x}`, r) }

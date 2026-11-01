@@ -232,7 +232,7 @@ func Main(argv []string, stdin io.Reader, stdout, stderr io.Writer) int {
 	var findings Findings
 	if cmd == "guard" {
 		var policy *Policy
-		policy, findings = loadPolicy(cl.args[0])
+		policy, findings = loadPolicy(readFile(cl.args[0]))
 		if policy != nil {
 			files := cl.args[1:]
 			if len(files) == 0 {
@@ -241,15 +241,15 @@ func Main(argv []string, stdin io.Reader, stdout, stderr io.Writer) int {
 			findings = append(findings, guard(policy, cl.branch, files)...)
 		}
 	} else if cmd == "diff" {
-		a, problems := loadSpec(cl.args[0])
+		a, problems := loadSpec(readFile(cl.args[0]))
 		findings = append(findings, problems...)
-		b, problems := loadSpec(cl.args[1])
+		b, problems := loadSpec(readFile(cl.args[1]))
 		findings = append(findings, problems...)
 		if findings.Errors() == 0 {
 			findings = append(findings, diff(a, b, cl.depth)...)
 		}
 	} else {
-		spec, problems := loadSpec(cl.args[0])
+		spec, problems := loadSpec(readFile(cl.args[0]))
 		findings = append(findings, problems...)
 		if findings.Errors() == 0 {
 			if cmd == "hash" {
@@ -267,11 +267,14 @@ func Main(argv []string, stdin io.Reader, stdout, stderr io.Writer) int {
 			case "check":
 				findings = append(findings, check(spec)...)
 			case "stale":
-				findings = append(findings, stale(spec, cl.args[1])...)
+				findings = append(findings, stale(spec, filesBelow(cl.args[1]))...)
 			case "behaviors":
-				findings = append(findings, behaviors(spec, cl.args[1])...)
+				valid, invalid := behaviorFiles(cl.args[1])
+				findings = append(findings, behaviors(spec, cl.args[1], valid, invalid)...)
 			case "trace":
-				findings = append(findings, trace(spec, cl.args[1])...)
+				if findings = append(findings, unsound(spec)...); findings.Errors() == 0 {
+					findings = append(findings, trace(spec, readFile(cl.args[1]))...)
+				}
 			case "conform":
 				findings = append(findings, conform(spec, cl.adapterCmd, cl.margin)...)
 			}
