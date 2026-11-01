@@ -97,6 +97,13 @@ nothing (`docs/adr/0007-no-language-built-in.md`, decision 1). `verify` runs `sp
 program. The two share what both need: `tools/internal/shlex`, which splits a command line, and
 `tools/internal/program`, which starts one and words the system's errors.
 
+`spine` (`tools/cmd/spine/`, `tools/internal/spine/`) is split into a core and a shell too, by
+files (#94). Four files are the shell: `files.go` reads the files, `adapter.go` starts the
+adapter and carries its lines, `cli.go` reads the arguments and runs the command, and `output.go`
+prints. The others are the core: they validate what was read, check the spine, judge citations,
+behaviors and paths, and run `conform`'s search. The search is a step function: given the
+adapter's reply to its last request, it gives the next request, or the findings when it is done.
+
 A step that cannot run because a piece is missing is an error, not a skip, reported per root:
 no spine at all (`no-machines`), no adapter for a machine (`no-adapter`), no `checks/run.cmd`
 (`no-checks`), or no mutants under `--full` (`no-mutation`). So is a `.cmd` file that
@@ -298,7 +305,8 @@ written by `record_test.go` beside it, in the format `tools/internal/record` rea
 its exit code and output, the message on standard error of a usage error, and in JSON runs the
 JUnit report, with the paths that differ between machines written as `$ROOT` and `$TMP` (#44).
 `go -C tools test ./internal/spine/ -update` writes the record again; its diff is what a
-reviewer reads.
+reviewer reads. Beside it, `conform_test.go` drives `conform`'s search with a fake adapter in Go,
+with no program, and `core_test.go` checks what `spine`'s core imports.
 
 `go test` also holds the record of `./verify` (`tools/internal/verify/record_test.go`, #68).
 It copies `verify` and `tools/` into fixture projects, as a project does, and runs `./verify`
