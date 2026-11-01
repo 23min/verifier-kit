@@ -164,6 +164,7 @@
 ["conform", "seeds/spine.yaml", "--adapter-cmd", "python3 adapters/protocol.py exit-after-new"]
 ["conform", "seeds/spine.yaml", "--adapter-cmd", "python3 adapters/protocol.py signal"]
 ["conform", "seeds/spine.yaml", "--adapter-cmd", "python3 adapters/protocol.py no-reply"]
+["conform", "seeds/spine.yaml", "--adapter-cmd", "python3 adapters/protocol.py close-stdout"]
 ["conform", "seeds/spine.yaml", "--adapter-cmd", "python3 adapters/protocol.py mixed-endings"]
 ["conform", "seeds/spine.yaml", "--adapter-cmd", "python3 adapters/protocol.py \"o\\k\"", "--margin", "0"]
 ["conform", "seeds/spine.yaml", "--adapter-cmd", "python3 adapters/protocol.py o\\\nk", "--margin", "0"]

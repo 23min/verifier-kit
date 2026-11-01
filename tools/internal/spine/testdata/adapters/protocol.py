@@ -68,7 +68,7 @@ BENT = {
     "bad-utf8": ("observe", 2, b'{"state": "op\xff\xfeen\xe2\x82\xff\xed\xa0\x80"}'),
     "bad-utf8-outside": ("observe", 1, b'{"state": "closed"}\xff'),
     "crlf": None, "cr-split": None, "cr-at-exit": None, "exit-3": None, "exit-after-new": None, "signal": None,
-    "echo-apply": None, "no-reply": None, "mixed-endings": None, "ok": None,
+    "echo-apply": None, "no-reply": None, "close-stdout": None, "mixed-endings": None, "ok": None,
 }
 
 
@@ -87,6 +87,9 @@ def main():
             os.kill(os.getpid(), signal.SIGTERM)
         if MODE == "no-reply" and op == "observe" and counts[op] == 2:
             return 0
+        if MODE == "close-stdout" and op == "new":
+            os.close(1)  # no reply can come, but read on until the input ends
+            continue
         global state
         if op == "new":
             state = "closed"
