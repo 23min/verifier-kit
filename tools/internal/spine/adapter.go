@@ -78,13 +78,15 @@ func startProgram(argv []string, files []*os.File) (*os.Process, error) {
 }
 
 // exchange sends one request and reads one reply, a line ending at \n; when the program ends
-// first, the reply says how.
+// first, the reply says how. A program whose output has ended can't reply, but may still be
+// running, so its input is closed first: the end of its input lets it end.
 func (a *commandAdapter) exchange(request string) reply {
 	var line []byte
 	if _, err := io.WriteString(a.stdin, request+"\n"); err == nil {
 		line, _ = a.stdout.ReadBytes('\n')
 	}
 	if len(line) == 0 {
+		a.stdin.Close()
 		return reply{ended: a.wait()}
 	}
 	return reply{line: line}

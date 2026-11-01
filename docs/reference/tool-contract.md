@@ -164,7 +164,9 @@ There are no handles: a program holds one instance at a time. Any request may in
 `adapter-failed`. A program replies `{"error": ...}` to a request it does not recognize.
 
 `conform` starts the program once, before the first `new`, and closes its stdin when done; the
-program then exits. Each of these is `adapter-failed`, after which `conform` stops the program:
+program then exits. When the program's output ends before a reply, which then can't come,
+`conform` closes its stdin too, and waits for it to exit, so that its own exit status is
+reported. Each of these is `adapter-failed`, after which `conform` stops the program:
 it can't be started, it exits before replying, a reply is not UTF-8 or not JSON, or a reply has
 the wrong shape: other keys, more than one key, a key given twice, anything but `true` for `ok`,
 or anything but text for `result`, `state` and `error`. There is no timeout: a program that
