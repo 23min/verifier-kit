@@ -192,7 +192,9 @@ Guidance for whoever writes the system under test:
 - **Functional core, imperative shell:** decisions in pure functions, I/O in a thin shell. The
   biggest lever.
 - **Ports and adapters:** the app runs without UI or database, so the adapter attaches at a port.
-- **Observable state:** the adapter can name the spine state from real data.
+- **Observable state:** the adapter can name the spine state from real data. It is what lets
+  conform's short runs stand for runs of every length: what conform can miss is behavior that
+  depends on state the code keeps and the adapter can't see ("What conform guarantees").
 - **Deterministic seams:** clock, randomness and ids are injected; a flaky check counts as failing.
 - **Dependency rules from day one.**
 - **Illegal states unrepresentable** in types and schemas.
