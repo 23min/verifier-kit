@@ -664,7 +664,7 @@ exit 0
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "1426 sequences up to 4 steps",
+|       "where": "180 sequences, margin 1",
 |       "message": "45 of 45 state/event/variable cases exercised"
 |     }
 |   ]
@@ -683,7 +683,7 @@ exit 0
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "352 sequences up to 4 steps",
+|       "where": "81 sequences, margin 1",
 |       "message": "27 of 27 state/event/variable cases exercised"
 |     }
 |   ]
@@ -701,13 +701,13 @@ exit 1
 === in .: spine conform examples/notes/spec/notes/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/notes/conformance/adapter_notes.py" with PYTHONPATH=examples/notes/src
 exit 0
 --- stdout
-| info    coverage           1426 sequences up to 4 steps: 45 of 45 state/event/variable cases exercised
+| info    coverage           180 sequences, margin 1: 45 of 45 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
 === in .: spine conform examples/ref_sync/spec/ref_sync/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/ref_sync/conformance/adapter_ref_sync.py" with PYTHONPATH=examples/ref_sync/src
 exit 0
 --- stdout
-| info    coverage           352 sequences up to 4 steps: 27 of 27 state/event/variable cases exercised
+| info    coverage           81 sequences, margin 1: 27 of 27 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
 === in .: spine diff --format json --junit REPORT examples/elixir_job/spec/job/readings/reading-a.yaml examples/elixir_job/spec/job/readings/reading-a.yaml

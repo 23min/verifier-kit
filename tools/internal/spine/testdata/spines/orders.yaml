@@ -1,0 +1,38 @@
+# #89's reproduction: six states in a row, the last terminal, and five events; each live state
+# takes the one event that moves it on and refuses the other four. delivered is four events out.
+machine: orders
+states:
+  created: {}
+  paid: {}
+  packed: {}
+  shipped: {}
+  delivered: {}
+  returned: {terminal: true}
+initial: created
+events: [pay, pack, ship, deliver, return_item]
+rules:
+  - {from: created, event: pay, to: paid}
+  - {from: created, event: pack, reject: true}
+  - {from: created, event: ship, reject: true}
+  - {from: created, event: deliver, reject: true}
+  - {from: created, event: return_item, reject: true}
+  - {from: paid, event: pay, reject: true}
+  - {from: paid, event: pack, to: packed}
+  - {from: paid, event: ship, reject: true}
+  - {from: paid, event: deliver, reject: true}
+  - {from: paid, event: return_item, reject: true}
+  - {from: packed, event: pay, reject: true}
+  - {from: packed, event: pack, reject: true}
+  - {from: packed, event: ship, to: shipped}
+  - {from: packed, event: deliver, reject: true}
+  - {from: packed, event: return_item, reject: true}
+  - {from: shipped, event: pay, reject: true}
+  - {from: shipped, event: pack, reject: true}
+  - {from: shipped, event: ship, reject: true}
+  - {from: shipped, event: deliver, to: delivered}
+  - {from: shipped, event: return_item, reject: true}
+  - {from: delivered, event: pay, reject: true}
+  - {from: delivered, event: pack, reject: true}
+  - {from: delivered, event: ship, reject: true}
+  - {from: delivered, event: deliver, reject: true}
+  - {from: delivered, event: return_item, to: returned}

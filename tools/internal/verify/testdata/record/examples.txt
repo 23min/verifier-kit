@@ -58,7 +58,7 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | FAIL  lamp: code conforms to spine
-|       error   diverges           lit/press : after press() -> press(): spine expects ok in dark, code gave ok in lit
+|       error   diverges           lit/press: after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 2 findings
 | FAIL  content checks
 |       error   check-failed       checks/lamp/test_lamp.py::test_a_second_press_darkens_it: AssertionError: lit
@@ -70,7 +70,7 @@ exit 1
 | skip  lamp: behaviors match spine (no examples/failingcommands/spec/lamp/behaviors/)
 | skip  lamp: checks cite current spine (no examples/failingcommands/checks/lamp/)
 | FAIL  lamp: code conforms to spine
-|       error   diverges           lit/press : after press() -> press(): spine expects ok in dark, code gave ok in lit
+|       error   diverges           lit/press: after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 2 findings
 | FAIL  content checks
 |       1 of 2 checks failed
@@ -211,21 +211,21 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | FAIL  lamp: code conforms to spine
-|       error   diverges           lit/press : after press() -> press(): spine expects ok in dark, code gave ok in lit
+|       error   diverges           lit/press: after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 2 findings
 | FAIL  content checks
 |       error   check-failed       checks/lamp/test_lamp.py::test_a_second_press_darkens_it: AssertionError: lit
 |       error   check-unloadable   checks/lamp/test_unloadable.py: cannot be imported: ModuleNotFoundError: No module named 'no_such_module'
 |       -- 2 errors, 2 checks run
 | FAIL  mutants killed (mutants.yaml)
-|       error   oracle-fails       examples/failing/mutation/mutants.yaml: on the code as it is, lamp: code conforms to spine, content checks failed; first: error diverges lit/press : after press() -> press(): spine expects ok in dark, code gave ok in lit
+|       error   oracle-fails       examples/failing/mutation/mutants.yaml: on the code as it is, lamp: code conforms to spine, content checks failed; first: error diverges lit/press: after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 0 mutants
 | == examples/failingcommands
 | ok    lamp: spine is sound
 | skip  lamp: behaviors match spine (no examples/failingcommands/spec/lamp/behaviors/)
 | skip  lamp: checks cite current spine (no examples/failingcommands/checks/lamp/)
 | FAIL  lamp: code conforms to spine
-|       error   diverges           lit/press : after press() -> press(): spine expects ok in dark, code gave ok in lit
+|       error   diverges           lit/press: after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 2 findings
 | FAIL  content checks
 |       1 of 2 checks failed
@@ -450,14 +450,14 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | FAIL  lamp: code conforms to spine
-|       error   diverges           lit/press : after press() -> press(): spine expects ok in dark, code gave ok in lit
+|       error   diverges           lit/press: after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 2 findings
 | FAIL  content checks
 |       error   check-failed       checks/lamp/test_lamp.py::test_a_second_press_darkens_it: AssertionError: lit
 |       error   check-unloadable   checks/lamp/test_unloadable.py: cannot be imported: ModuleNotFoundError: No module named 'no_such_module'
 |       -- 2 errors, 2 checks run
 | FAIL  mutants killed (mutants.yaml)
-|       error   oracle-fails       examples/failing/mutation/mutants.yaml: on the code as it is, lamp: code conforms to spine, content checks failed; first: error diverges lit/press : after press() -> press(): spine expects ok in dark, code gave ok in lit
+|       error   oracle-fails       examples/failing/mutation/mutants.yaml: on the code as it is, lamp: code conforms to spine, content checks failed; first: error diverges lit/press: after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 0 mutants
 | -- 3 step(s) failed: examples/failing: lamp: code conforms to spine, examples/failing: content checks, examples/failing: mutants killed (mutants.yaml)
 |
@@ -472,7 +472,7 @@ exit 1
 | skip  lamp: behaviors match spine (no examples/failingcommands/spec/lamp/behaviors/)
 | skip  lamp: checks cite current spine (no examples/failingcommands/checks/lamp/)
 | FAIL  lamp: code conforms to spine
-|       error   diverges           lit/press : after press() -> press(): spine expects ok in dark, code gave ok in lit
+|       error   diverges           lit/press: after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 2 findings
 | FAIL  content checks
 |       1 of 2 checks failed
@@ -568,13 +568,13 @@ exit 0
 |       info    uncovered          lit/press: no check cites this transition; conformance still exercises it
 |       -- 0 errors, 4 findings
 | ok    lamp: code conforms to spine
-|       info    coverage           15 sequences up to 4 steps: 6 of 6 state/event/variable cases exercised
+|       info    coverage           10 sequences, margin 1: 6 of 6 state/event/variable cases exercised
 |       -- 0 errors, 1 findings
 | ok    content checks
 |       -- 0 errors, 1 checks run
 | ok    mutants killed (mutants.yaml)
-|       info    mutant-killed      a second press leaves it lit: caught by lamp: code conforms to spine; first: error diverges lit/press : after press() -> press(): spine expects ok in dark, code gave ok in lit
-|       info    mutant-killed      a dropped lamp still works: caught by lamp: code conforms to spine; first: error diverges dark/drop : after drop(): spine expects ok in broken, code gave ok in dark
+|       info    mutant-killed      a second press leaves it lit: caught by lamp: code conforms to spine; first: error diverges lit/press: after press() -> press(): spine expects ok in dark, code gave ok in lit
+|       info    mutant-killed      a dropped lamp still works: caught by lamp: code conforms to spine; first: error diverges dark/drop: after drop(): spine expects ok in broken, code gave ok in dark
 |       -- 0 errors, 2 mutants
 | -- all steps passed
 |

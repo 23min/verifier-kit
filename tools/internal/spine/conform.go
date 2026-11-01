@@ -205,6 +205,14 @@ func callAdapter(name string, steps []parsedStep, err error) error {
 	return &adapterFailed{fmt.Sprintf("replied to %s with the error %s%s", name, strconv.Quote(err.Error()), after)}
 }
 
+// caseWhere names a case: state/event, then the variables' values when there are any.
+func caseWhere(state string, st parsedStep) string {
+	if len(st.env.Names) == 0 {
+		return state + "/" + st.event
+	}
+	return fmt.Sprintf("%s/%s %s", state, st.event, st.env)
+}
+
 // stepKey identifies a state and a step.
 func stepKey(state string, st parsedStep) string { return fmt.Sprintf("%q ", state) + st.key() }
 
@@ -256,7 +264,7 @@ func replay(s *Spec, a *commandAdapter, seq []parsedStep, exercised map[string]b
 		if !resultOK || got != expectState {
 			return &divergence{
 				stepKey(state, st),
-				fmt.Sprintf("%s/%s %s", state, st.event, st.env),
+				caseWhere(state, st),
 				fmt.Sprintf("after %s: spine expects %s in %s, code gave %s in %s",
 					stepsText(seq[:i+1]), expectResult, expectState, resultText, got),
 			}, state, kind, nil
@@ -267,14 +275,14 @@ func replay(s *Spec, a *commandAdapter, seq []parsedStep, exercised map[string]b
 }
 
 // conform compares code with the spine through an adapter program, started from command.
-func conform(s *Spec, command string, depth int) Findings {
+func conform(s *Spec, command string, margin int) Findings {
 	var out Findings
 	a, err := startAdapter(command)
 	if err != nil {
 		out.Add("adapter-failed", command, err.Error())
 		return out
 	}
-	err = compareCode(s, a, depth, &out)
+	err = compareCode(s, a, margin, &out)
 	if err != nil { // keep what was found; past this, nothing compares
 		out.Add("adapter-failed", command, err.Error())
 	}
@@ -282,17 +290,43 @@ func conform(s *Spec, command string, depth int) Findings {
 	return out
 }
 
-// compareCode replays every sequence up to depth, shortest first, and within a length in the
-// order of the events and values.
-func compareCode(s *Spec, a *commandAdapter, depth int, out *Findings) error {
+// compareCode tries every case of every live state: from the first shortest path to the state, it
+// runs every sequence of 1 to margin+1 further steps, each once and shortest first, stopping at a
+// terminal state, a refusal or a divergence. A case the spine decides that no run tried is
+// untried-case.
+func compareCode(s *Spec, a *commandAdapter, margin int, out *Findings) error {
 	steps := stepsOf(s.Events, s.assignments())
-	exercised, reported, runs := map[string]bool{}, map[string]bool{}, 0
-	level := [][]parsedStep{nil}
-	for len(level) > 0 {
-		var next [][]parsedStep
-		for _, seq := range level {
+	paths := s.shortestPaths(steps)
+	type run struct {
+		seq   []parsedStep
+		extra int // steps past the shortest path it extends
+	}
+	byLength := map[int][]*run{}
+	queued := map[string]bool{}
+	queue := func(seq []parsedStep, extra int) {
+		keys := make([]string, len(seq))
+		for i, st := range seq {
+			keys[i] = st.key()
+		}
+		key := strings.Join(keys, " ")
+		if queued[key] { // a state's start, queued first, that extends another state's run
+			return
+		}
+		queued[key] = true
+		byLength[len(seq)] = append(byLength[len(seq)], &run{seq, extra})
+	}
+	longest := 0
+	for _, p := range paths {
+		for _, st := range steps {
+			queue(append(p.steps[:len(p.steps):len(p.steps)], st), 1)
+		}
+		longest = max(longest, len(p.steps)+1)
+	}
+	exercised, reported, runs, wrongStart := map[string]bool{}, map[string]bool{}, 0, ""
+	for n := 1; n <= longest; n++ {
+		for _, r := range byLength[n] {
 			runs++
-			d, state, kind, err := replay(s, a, seq, exercised)
+			d, state, kind, err := replay(s, a, r.seq, exercised)
 			if err != nil {
 				return err
 			}
@@ -301,23 +335,64 @@ func compareCode(s *Spec, a *commandAdapter, depth int, out *Findings) error {
 					reported[d.key] = true
 					out.Add("diverges", d.where, d.message)
 				}
+				if d.key == "start" {
+					wrongStart = "not tried: the code doesn't start in " + s.Initial
+				}
 				continue
 			}
-			if len(seq) < depth && !s.terminal[state] && kind != "reject" && kind != "undefined" {
+			if r.extra <= margin && !s.terminal[state] && kind != "reject" && kind != "undefined" {
 				for _, st := range steps {
-					next = append(next, append(seq[:len(seq):len(seq)], st))
+					queue(append(r.seq[:len(r.seq):len(r.seq)], st), r.extra+1)
 				}
+				longest = max(longest, n+1)
 			}
 		}
-		level = next
 	}
-	live := 0
-	for _, st := range s.States {
-		if !s.terminal[st] {
-			live++
+	cases := 0
+	for _, p := range paths {
+		for _, st := range steps {
+			if len(s.decide(p.state, st.event, st.env)) != 1 {
+				continue // a case the spine leaves undecided, which spine check reports
+			}
+			cases++
+			if !exercised[stepKey(p.state, st)] {
+				why := "not tried: the code diverged on the way to " + p.state
+				if wrongStart != "" {
+					why = wrongStart
+				}
+				out.Add("untried-case", caseWhere(p.state, st), why)
+			}
 		}
 	}
-	out.AddSeverity("coverage", fmt.Sprintf("%d sequences up to %d steps", runs, depth),
-		fmt.Sprintf("%d of %d state/event/variable cases exercised", len(exercised), live*len(steps)), "info")
+	out.AddSeverity("coverage", fmt.Sprintf("%d sequences, margin %d", runs, margin),
+		fmt.Sprintf("%d of %d state/event/variable cases exercised", len(exercised), cases), "info")
 	return nil
+}
+
+// statePath is a live state and the first shortest sequence of steps that reaches it.
+type statePath struct {
+	state string
+	steps []parsedStep
+}
+
+// shortestPaths is every live state with the first shortest path to it, found breadth first from
+// initial in the order of steps; initial comes first, with no steps, unless it is terminal.
+func (s *Spec) shortestPaths(steps []parsedStep) []statePath {
+	if s.terminal[s.Initial] {
+		return nil
+	}
+	paths := []statePath{{state: s.Initial}}
+	found := map[string]bool{s.Initial: true}
+	for i := 0; i < len(paths); i++ {
+		p := paths[i]
+		for _, st := range steps {
+			next, verdict := s.step(p.state, st.event, st.env)
+			if verdict != "" || found[next] || s.terminal[next] {
+				continue
+			}
+			found[next] = true
+			paths = append(paths, statePath{next, append(p.steps[:len(p.steps):len(p.steps)], st)})
+		}
+	}
+	return paths
 }

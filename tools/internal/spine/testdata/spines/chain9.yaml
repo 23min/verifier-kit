@@ -1,0 +1,73 @@
+# #89's nine-state chain: nine live states, then a terminal one; per state the owner moves on,
+# the owner and the editor edit, and the owner touches it, a no-op; anything else is refused.
+machine: chain
+vars:
+  role: [owner, editor, viewer]
+states:
+  s1: {}
+  s2: {}
+  s3: {}
+  s4: {}
+  s5: {}
+  s6: {}
+  s7: {}
+  s8: {}
+  s9: {}
+  done: {terminal: true}
+initial: s1
+events: [next, edit, touch]
+rules:
+  - {from: s1, event: next, when: "role == 'owner'", to: s2}
+  - {from: s1, event: next, when: "role != 'owner'", reject: true}
+  - {from: s1, event: edit, when: "role != 'viewer'", stay: true}
+  - {from: s1, event: edit, when: "role == 'viewer'", reject: true}
+  - {from: s1, event: touch, when: "role == 'owner'", ignore: true}
+  - {from: s1, event: touch, when: "role != 'owner'", reject: true}
+  - {from: s2, event: next, when: "role == 'owner'", to: s3}
+  - {from: s2, event: next, when: "role != 'owner'", reject: true}
+  - {from: s2, event: edit, when: "role != 'viewer'", stay: true}
+  - {from: s2, event: edit, when: "role == 'viewer'", reject: true}
+  - {from: s2, event: touch, when: "role == 'owner'", ignore: true}
+  - {from: s2, event: touch, when: "role != 'owner'", reject: true}
+  - {from: s3, event: next, when: "role == 'owner'", to: s4}
+  - {from: s3, event: next, when: "role != 'owner'", reject: true}
+  - {from: s3, event: edit, when: "role != 'viewer'", stay: true}
+  - {from: s3, event: edit, when: "role == 'viewer'", reject: true}
+  - {from: s3, event: touch, when: "role == 'owner'", ignore: true}
+  - {from: s3, event: touch, when: "role != 'owner'", reject: true}
+  - {from: s4, event: next, when: "role == 'owner'", to: s5}
+  - {from: s4, event: next, when: "role != 'owner'", reject: true}
+  - {from: s4, event: edit, when: "role != 'viewer'", stay: true}
+  - {from: s4, event: edit, when: "role == 'viewer'", reject: true}
+  - {from: s4, event: touch, when: "role == 'owner'", ignore: true}
+  - {from: s4, event: touch, when: "role != 'owner'", reject: true}
+  - {from: s5, event: next, when: "role == 'owner'", to: s6}
+  - {from: s5, event: next, when: "role != 'owner'", reject: true}
+  - {from: s5, event: edit, when: "role != 'viewer'", stay: true}
+  - {from: s5, event: edit, when: "role == 'viewer'", reject: true}
+  - {from: s5, event: touch, when: "role == 'owner'", ignore: true}
+  - {from: s5, event: touch, when: "role != 'owner'", reject: true}
+  - {from: s6, event: next, when: "role == 'owner'", to: s7}
+  - {from: s6, event: next, when: "role != 'owner'", reject: true}
+  - {from: s6, event: edit, when: "role != 'viewer'", stay: true}
+  - {from: s6, event: edit, when: "role == 'viewer'", reject: true}
+  - {from: s6, event: touch, when: "role == 'owner'", ignore: true}
+  - {from: s6, event: touch, when: "role != 'owner'", reject: true}
+  - {from: s7, event: next, when: "role == 'owner'", to: s8}
+  - {from: s7, event: next, when: "role != 'owner'", reject: true}
+  - {from: s7, event: edit, when: "role != 'viewer'", stay: true}
+  - {from: s7, event: edit, when: "role == 'viewer'", reject: true}
+  - {from: s7, event: touch, when: "role == 'owner'", ignore: true}
+  - {from: s7, event: touch, when: "role != 'owner'", reject: true}
+  - {from: s8, event: next, when: "role == 'owner'", to: s9}
+  - {from: s8, event: next, when: "role != 'owner'", reject: true}
+  - {from: s8, event: edit, when: "role != 'viewer'", stay: true}
+  - {from: s8, event: edit, when: "role == 'viewer'", reject: true}
+  - {from: s8, event: touch, when: "role == 'owner'", ignore: true}
+  - {from: s8, event: touch, when: "role != 'owner'", reject: true}
+  - {from: s9, event: next, when: "role == 'owner'", to: done}
+  - {from: s9, event: next, when: "role != 'owner'", reject: true}
+  - {from: s9, event: edit, when: "role != 'viewer'", stay: true}
+  - {from: s9, event: edit, when: "role == 'viewer'", reject: true}
+  - {from: s9, event: touch, when: "role == 'owner'", ignore: true}
+  - {from: s9, event: touch, when: "role != 'owner'", reject: true}

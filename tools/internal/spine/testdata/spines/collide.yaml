@@ -1,0 +1,11 @@
+# Values whose steps print alike: e(a=1, b=2, b=3) is a=1 with b="2, b=3", and a="1, b=2" with
+# b=3. conform must tell the runs apart, and try all four cases.
+machine: collide
+vars:
+  a: ["1", "1, b=2"]
+  b: ["3", "2, b=3"]
+states: {s: {}}
+initial: s
+events: [e]
+rules:
+  - {from: s, event: e, stay: true}

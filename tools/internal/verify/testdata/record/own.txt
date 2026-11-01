@@ -154,7 +154,7 @@ exit 0
 |       info    uncovered          lit/press: no check cites this transition; conformance still exercises it
 |       -- 0 errors, 4 findings
 | ok    lamp: code conforms to spine
-|       info    coverage           15 sequences up to 4 steps: 6 of 6 state/event/variable cases exercised
+|       info    coverage           10 sequences, margin 1: 6 of 6 state/event/variable cases exercised
 |       -- 0 errors, 1 findings
 | ok    content checks
 |       -- 0 errors, 1 checks run

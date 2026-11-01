@@ -727,36 +727,29 @@ exit 1
 |     {
 |       "code": "diverges",
 |       "severity": "error",
-|       "where": "lit/press ",
+|       "where": "lit/press",
 |       "message": "after press() -> press(): spine expects ok in dark, code gave ok in lit"
 |     },
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "9 sequences up to 4 steps",
-|       "message": "5 of 6 state/event/variable cases exercised"
+|       "where": "8 sequences, margin 1",
+|       "message": "5 of 5 state/event/variable cases exercised"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges lit/press "><failure message="after press() -&gt; press(): spine expects ok in dark, code gave ok in lit">after press() -&gt; press(): spine expects ok in dark, code gave ok in lit</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --depth -1
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges lit/press"><failure message="after press() -&gt; press(): spine expects ok in dark, code gave ok in lit">after press() -&gt; press(): spine expects ok in dark, code gave ok in lit</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --margin -1
 exit 2
 --- stdout
 |
 --- stderr
-| spine conform: --depth needs a value; spine conform --help describes it
+| spine conform: --margin needs a value; spine conform --help describes it
 |
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --depth 0
-exit 2
---- stdout
-|
---- stderr
-| spine conform: --depth must be a whole number of 1 or more, not "0"; spine conform --help describes it
-|
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --depth 9999999999999999999999999999999
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --margin 0
 exit 0
 --- stdout
 | {
@@ -766,7 +759,26 @@ exit 0
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "3 sequences up to 9223372036854775807 steps",
+|       "where": "2 sequences, margin 0",
+|       "message": "2 of 2 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --margin 9999999999999999999999999999999
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "2 sequences, margin 9223372036854775807",
 |       "message": "2 of 2 state/event/variable cases exercised"
 |     }
 |   ]
@@ -851,7 +863,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed 'unclosed"><failure message="cannot be split: no closing quotation">cannot be split: no closing quotation</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 'adapters/protocol.py' \"ok\" " --depth 1
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 'adapters/protocol.py' \"ok\" " --margin 0
 exit 0
 --- stdout
 | {
@@ -861,8 +873,8 @@ exit 0
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "5 sequences up to 1 steps",
-|       "message": "4 of 8 state/event/variable cases exercised"
+|       "where": "8 sequences, margin 0",
+|       "message": "8 of 8 state/event/variable cases exercised"
 |     }
 |   ]
 | }
@@ -918,7 +930,7 @@ exit 0
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "89 sequences up to 4 steps",
+|       "where": "24 sequences, margin 1",
 |       "message": "8 of 8 state/event/variable cases exercised"
 |     }
 |   ]
@@ -927,7 +939,7 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_bugs.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_bugs.py"
 exit 1
 --- stdout
 | {
@@ -967,7 +979,7 @@ exit 1
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "9 sequences up to 2 steps",
+|       "where": "8 sequences, margin 1",
 |       "message": "8 of 8 state/event/variable cases exercised"
 |     }
 |   ]
@@ -976,7 +988,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="5" failures="5"><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave ok in open">after open(role=guest): spine expects rejected in closed, code gave ok in open</failure></testcase><testcase classname="spine conform" name="diverges open/open role=owner"><failure message="after open(role=owner) -&gt; open(role=owner): spine expects ok in open, code gave done in open">after open(role=owner) -&gt; open(role=owner): spine expects ok in open, code gave done in open</failure></testcase><testcase classname="spine conform" name="diverges open/open role=guest"><failure message="after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave done in open">after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave done in open</failure></testcase><testcase classname="spine conform" name="diverges open/remove role=owner"><failure message="after open(role=owner) -&gt; remove(role=owner): spine expects ok in open, code gave ok in gone">after open(role=owner) -&gt; remove(role=owner): spine expects ok in open, code gave ok in gone</failure></testcase><testcase classname="spine conform" name="diverges open/remove role=guest"><failure message="after open(role=owner) -&gt; remove(role=guest): spine expects ok in open, code gave ok in gone">after open(role=owner) -&gt; remove(role=guest): spine expects ok in open, code gave ok in gone</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_crash.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_crash.py"
 exit 1
 --- stdout
 | {
@@ -1010,7 +1022,7 @@ exit 1
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "9 sequences up to 2 steps",
+|       "where": "16 sequences, margin 1",
 |       "message": "8 of 8 state/event/variable cases exercised"
 |     }
 |   ]
@@ -1019,7 +1031,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="4" failures="4"><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave crashed (ValueError: guests can't open) in closed">after open(role=guest): spine expects rejected in closed, code gave crashed (ValueError: guests can't open) in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave crashed (ValueError: guests can't remove) in closed">after remove(role=guest): spine expects ok in gone, code gave crashed (ValueError: guests can't remove) in closed</failure></testcase><testcase classname="spine conform" name="diverges open/open role=guest"><failure message="after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't open) in open">after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't open) in open</failure></testcase><testcase classname="spine conform" name="diverges open/remove role=guest"><failure message="after open(role=owner) -&gt; remove(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't remove) in open">after open(role=owner) -&gt; remove(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't remove) in open</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_exit.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_exit.py"
 exit 1
 --- stdout
 | {
@@ -1038,7 +1050,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_exit.py"><failure message="was ended by signal 9 (killed) before replying to apply">was ended by signal 9 (killed) before replying to apply</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_import.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_import.py"
 exit 1
 --- stdout
 | {
@@ -1057,7 +1069,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_import.py"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_missing.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_missing.py"
 exit 1
 --- stdout
 | {
@@ -1076,7 +1088,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_missing.py"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_new_raises.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_new_raises.py"
 exit 1
 --- stdout
 | {
@@ -1095,7 +1107,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_new_raises.py"><failure message="replied to new with the error &quot;RuntimeError: no database&quot;">replied to new with the error "RuntimeError: no database"</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_observe_raises.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_observe_raises.py"
 exit 1
 --- stdout
 | {
@@ -1114,7 +1126,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_observe_raises.py"><failure message="replied to observe with the error &quot;KeyError: 'gone'&quot; after remove(role=owner)">replied to observe with the error "KeyError: 'gone'" after remove(role=owner)</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_set.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_set.py"
 exit 1
 --- stdout
 | {
@@ -1133,7 +1145,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_set.py"><failure message="exited with status 1 before replying to observe">exited with status 1 before replying to observe</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_start.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_start.py"
 exit 1
 --- stdout
 | {
@@ -1147,9 +1159,57 @@ exit 1
 |       "message": "spine starts in closed, code starts in open"
 |     },
 |     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "closed/open role=owner",
+|       "message": "not tried: the code doesn't start in closed"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "closed/open role=guest",
+|       "message": "not tried: the code doesn't start in closed"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "closed/remove role=owner",
+|       "message": "not tried: the code doesn't start in closed"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "closed/remove role=guest",
+|       "message": "not tried: the code doesn't start in closed"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "open/open role=owner",
+|       "message": "not tried: the code doesn't start in closed"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "open/open role=guest",
+|       "message": "not tried: the code doesn't start in closed"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "open/remove role=owner",
+|       "message": "not tried: the code doesn't start in closed"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "open/remove role=guest",
+|       "message": "not tried: the code doesn't start in closed"
+|     },
+|     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "1 sequences up to 2 steps",
+|       "where": "8 sequences, margin 1",
 |       "message": "0 of 8 state/event/variable cases exercised"
 |     }
 |   ]
@@ -1157,8 +1217,8 @@ exit 1
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges start"><failure message="spine starts in closed, code starts in open">spine starts in closed, code starts in open</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_values.py" --depth 2
+| <testsuite name="spine conform" tests="9" failures="9"><testcase classname="spine conform" name="diverges start"><failure message="spine starts in closed, code starts in open">spine starts in closed, code starts in open</failure></testcase><testcase classname="spine conform" name="untried-case closed/open role=owner"><failure message="not tried: the code doesn't start in closed">not tried: the code doesn't start in closed</failure></testcase><testcase classname="spine conform" name="untried-case closed/open role=guest"><failure message="not tried: the code doesn't start in closed">not tried: the code doesn't start in closed</failure></testcase><testcase classname="spine conform" name="untried-case closed/remove role=owner"><failure message="not tried: the code doesn't start in closed">not tried: the code doesn't start in closed</failure></testcase><testcase classname="spine conform" name="untried-case closed/remove role=guest"><failure message="not tried: the code doesn't start in closed">not tried: the code doesn't start in closed</failure></testcase><testcase classname="spine conform" name="untried-case open/open role=owner"><failure message="not tried: the code doesn't start in closed">not tried: the code doesn't start in closed</failure></testcase><testcase classname="spine conform" name="untried-case open/open role=guest"><failure message="not tried: the code doesn't start in closed">not tried: the code doesn't start in closed</failure></testcase><testcase classname="spine conform" name="untried-case open/remove role=owner"><failure message="not tried: the code doesn't start in closed">not tried: the code doesn't start in closed</failure></testcase><testcase classname="spine conform" name="untried-case open/remove role=guest"><failure message="not tried: the code doesn't start in closed">not tried: the code doesn't start in closed</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_values.py"
 exit 1
 --- stdout
 | {
@@ -1190,9 +1250,33 @@ exit 1
 |       "message": "after remove(role=guest): spine expects ok in gone, code gave crashed (no) in closed"
 |     },
 |     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "open/open role=owner",
+|       "message": "not tried: the code diverged on the way to open"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "open/open role=guest",
+|       "message": "not tried: the code diverged on the way to open"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "open/remove role=owner",
+|       "message": "not tried: the code diverged on the way to open"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "open/remove role=guest",
+|       "message": "not tried: the code diverged on the way to open"
+|     },
+|     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "5 sequences up to 2 steps",
+|       "where": "8 sequences, margin 1",
 |       "message": "4 of 8 state/event/variable cases exercised"
 |     }
 |   ]
@@ -1200,8 +1284,8 @@ exit 1
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine conform" tests="4" failures="4"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave ok  in closed">after open(role=owner): spine expects ok in open, code gave ok  in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave OK in closed">after open(role=guest): spine expects rejected in closed, code gave OK in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok in gone, code gave  in closed">after remove(role=owner): spine expects ok in gone, code gave  in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave crashed (no) in closed">after remove(role=guest): spine expects ok in gone, code gave crashed (no) in closed</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_values.py" --depth 3
+| <testsuite name="spine conform" tests="8" failures="8"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave ok  in closed">after open(role=owner): spine expects ok in open, code gave ok  in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave OK in closed">after open(role=guest): spine expects rejected in closed, code gave OK in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok in gone, code gave  in closed">after remove(role=owner): spine expects ok in gone, code gave  in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave crashed (no) in closed">after remove(role=guest): spine expects ok in gone, code gave crashed (no) in closed</failure></testcase><testcase classname="spine conform" name="untried-case open/open role=owner"><failure message="not tried: the code diverged on the way to open">not tried: the code diverged on the way to open</failure></testcase><testcase classname="spine conform" name="untried-case open/open role=guest"><failure message="not tried: the code diverged on the way to open">not tried: the code diverged on the way to open</failure></testcase><testcase classname="spine conform" name="untried-case open/remove role=owner"><failure message="not tried: the code diverged on the way to open">not tried: the code diverged on the way to open</failure></testcase><testcase classname="spine conform" name="untried-case open/remove role=guest"><failure message="not tried: the code diverged on the way to open">not tried: the code diverged on the way to open</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_values.py" --margin 2
 exit 1
 --- stdout
 | {
@@ -1233,9 +1317,33 @@ exit 1
 |       "message": "after remove(role=guest): spine expects ok in gone, code gave crashed (no) in closed"
 |     },
 |     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "open/open role=owner",
+|       "message": "not tried: the code diverged on the way to open"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "open/open role=guest",
+|       "message": "not tried: the code diverged on the way to open"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "open/remove role=owner",
+|       "message": "not tried: the code diverged on the way to open"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "open/remove role=guest",
+|       "message": "not tried: the code diverged on the way to open"
+|     },
+|     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "5 sequences up to 3 steps",
+|       "where": "8 sequences, margin 2",
 |       "message": "4 of 8 state/event/variable cases exercised"
 |     }
 |   ]
@@ -1243,7 +1351,7 @@ exit 1
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine conform" tests="4" failures="4"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave ok  in closed">after open(role=owner): spine expects ok in open, code gave ok  in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave OK in closed">after open(role=guest): spine expects rejected in closed, code gave OK in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok in gone, code gave  in closed">after remove(role=owner): spine expects ok in gone, code gave  in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave crashed (no) in closed">after remove(role=guest): spine expects ok in gone, code gave crashed (no) in closed</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="8" failures="8"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave ok  in closed">after open(role=owner): spine expects ok in open, code gave ok  in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave OK in closed">after open(role=guest): spine expects rejected in closed, code gave OK in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok in gone, code gave  in closed">after remove(role=owner): spine expects ok in gone, code gave  in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave crashed (no) in closed">after remove(role=guest): spine expects ok in gone, code gave crashed (no) in closed</failure></testcase><testcase classname="spine conform" name="untried-case open/open role=owner"><failure message="not tried: the code diverged on the way to open">not tried: the code diverged on the way to open</failure></testcase><testcase classname="spine conform" name="untried-case open/open role=guest"><failure message="not tried: the code diverged on the way to open">not tried: the code diverged on the way to open</failure></testcase><testcase classname="spine conform" name="untried-case open/remove role=owner"><failure message="not tried: the code diverged on the way to open">not tried: the code diverged on the way to open</failure></testcase><testcase classname="spine conform" name="untried-case open/remove role=guest"><failure message="not tried: the code diverged on the way to open">not tried: the code diverged on the way to open</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/missing.py"
 exit 1
 --- stdout
@@ -1282,7 +1390,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/not-python.txt"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/proto\\col.py ok" --depth 1
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/proto\\col.py ok" --margin 0
 exit 0
 --- stdout
 | {
@@ -1292,8 +1400,8 @@ exit 0
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "5 sequences up to 1 steps",
-|       "message": "4 of 8 state/event/variable cases exercised"
+|       "where": "8 sequences, margin 0",
+|       "message": "8 of 8 state/event/variable cases exercised"
 |     }
 |   ]
 | }
@@ -1301,7 +1409,7 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py \"o\\k\"" --depth 1
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py \"o\\k\"" --margin 0
 exit 1
 --- stdout
 | {
@@ -1320,7 +1428,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py &quot;o\k&quot;"><failure message="exited with status 2 before replying to new">exited with status 2 before replying to new</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-escape" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-escape"
 exit 1
 --- stdout
 | {
@@ -1339,7 +1447,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py bad-escape"><failure message="replied to observe with a line that is not JSON: &quot;{\&quot;state\&quot;: \&quot;a\\x\&quot;}&quot;">replied to observe with a line that is not JSON: "{\"state\": \"a\\x\"}"</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-utf8" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-utf8"
 exit 1
 --- stdout
 | {
@@ -1358,7 +1466,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py bad-utf8"><failure message="replied to observe with a line that is not UTF-8">replied to observe with a line that is not UTF-8</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-utf8-outside" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-utf8-outside"
 exit 1
 --- stdout
 | {
@@ -1377,7 +1485,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py bad-utf8-outside"><failure message="replied to observe with a line that is not UTF-8">replied to observe with a line that is not UTF-8</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bom" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bom"
 exit 1
 --- stdout
 | {
@@ -1396,7 +1504,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py bom"><failure message="replied to new with a line that is not JSON: &quot;\ufeff{\&quot;ok\&quot;: true}&quot;">replied to new with a line that is not JSON: "\ufeff{\"ok\": true}"</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py compact" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py compact"
 exit 0
 --- stdout
 | {
@@ -1406,7 +1514,7 @@ exit 0
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "9 sequences up to 2 steps",
+|       "where": "24 sequences, margin 1",
 |       "message": "8 of 8 state/event/variable cases exercised"
 |     }
 |   ]
@@ -1415,7 +1523,7 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py control-char" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py control-char"
 exit 1
 --- stdout
 | {
@@ -1434,7 +1542,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py control-char"><failure message="replied to observe with a line that is not JSON: &quot;{\&quot;state\&quot;: \&quot;a\tb\&quot;}&quot;">replied to observe with a line that is not JSON: "{\"state\": \"a\tb\"}"</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py cr-at-exit" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py cr-at-exit"
 exit 1
 --- stdout
 | {
@@ -1453,7 +1561,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py cr-at-exit"><failure message="exited with status 0 before replying to observe">exited with status 0 before replying to observe</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py cr-split" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py cr-split"
 exit 1
 --- stdout
 | {
@@ -1472,7 +1580,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py cr-split"><failure message="replied to new with a line that is not JSON: &quot;{\&quot;ok\&quot;: true}\r{\&quot;state\&quot;: \&quot;closed\&quot;}&quot;">replied to new with a line that is not JSON: "{\"ok\": true}\r{\"state\": \"closed\"}"</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py crlf" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py crlf"
 exit 0
 --- stdout
 | {
@@ -1482,7 +1590,7 @@ exit 0
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "9 sequences up to 2 steps",
+|       "where": "24 sequences, margin 1",
 |       "message": "8 of 8 state/event/variable cases exercised"
 |     }
 |   ]
@@ -1491,7 +1599,7 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py dup-keys" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py dup-keys"
 exit 1
 --- stdout
 | {
@@ -1510,7 +1618,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py dup-keys"><failure message="replied to observe with &quot;{\&quot;state\&quot;: \&quot;open\&quot;, \&quot;state\&quot;: \&quot;closed\&quot;}&quot;, not {&quot;state&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to observe with "{\"state\": \"open\", \"state\": \"closed\"}", not {"state": "..."} or {"error": "..."}</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py echo-apply" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py echo-apply"
 exit 1
 --- stdout
 | {
@@ -1542,9 +1650,33 @@ exit 1
 |       "message": "after remove(role=guest): spine expects ok in gone, code gave crashed ({\"op\": \"apply\", \"event\": \"remove\", \"env\": {\"role\": \"guest\"}}) in gone"
 |     },
 |     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "open/open role=owner",
+|       "message": "not tried: the code diverged on the way to open"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "open/open role=guest",
+|       "message": "not tried: the code diverged on the way to open"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "open/remove role=owner",
+|       "message": "not tried: the code diverged on the way to open"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "open/remove role=guest",
+|       "message": "not tried: the code diverged on the way to open"
+|     },
+|     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "5 sequences up to 2 steps",
+|       "where": "8 sequences, margin 1",
 |       "message": "4 of 8 state/event/variable cases exercised"
 |     }
 |   ]
@@ -1552,8 +1684,8 @@ exit 1
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine conform" tests="4" failures="4"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave crashed ({&quot;op&quot;: &quot;apply&quot;, &quot;event&quot;: &quot;open&quot;, &quot;env&quot;: {&quot;role&quot;: &quot;owner&quot;}}) in open">after open(role=owner): spine expects ok in open, code gave crashed ({"op": "apply", "event": "open", "env": {"role": "owner"}}) in open</failure></testcase><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave crashed ({&quot;op&quot;: &quot;apply&quot;, &quot;event&quot;: &quot;open&quot;, &quot;env&quot;: {&quot;role&quot;: &quot;guest&quot;}}) in closed">after open(role=guest): spine expects rejected in closed, code gave crashed ({"op": "apply", "event": "open", "env": {"role": "guest"}}) in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok in gone, code gave crashed ({&quot;op&quot;: &quot;apply&quot;, &quot;event&quot;: &quot;remove&quot;, &quot;env&quot;: {&quot;role&quot;: &quot;owner&quot;}}) in gone">after remove(role=owner): spine expects ok in gone, code gave crashed ({"op": "apply", "event": "remove", "env": {"role": "owner"}}) in gone</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave crashed ({&quot;op&quot;: &quot;apply&quot;, &quot;event&quot;: &quot;remove&quot;, &quot;env&quot;: {&quot;role&quot;: &quot;guest&quot;}}) in gone">after remove(role=guest): spine expects ok in gone, code gave crashed ({"op": "apply", "event": "remove", "env": {"role": "guest"}}) in gone</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py empty" --depth 2
+| <testsuite name="spine conform" tests="8" failures="8"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave crashed ({&quot;op&quot;: &quot;apply&quot;, &quot;event&quot;: &quot;open&quot;, &quot;env&quot;: {&quot;role&quot;: &quot;owner&quot;}}) in open">after open(role=owner): spine expects ok in open, code gave crashed ({"op": "apply", "event": "open", "env": {"role": "owner"}}) in open</failure></testcase><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave crashed ({&quot;op&quot;: &quot;apply&quot;, &quot;event&quot;: &quot;open&quot;, &quot;env&quot;: {&quot;role&quot;: &quot;guest&quot;}}) in closed">after open(role=guest): spine expects rejected in closed, code gave crashed ({"op": "apply", "event": "open", "env": {"role": "guest"}}) in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok in gone, code gave crashed ({&quot;op&quot;: &quot;apply&quot;, &quot;event&quot;: &quot;remove&quot;, &quot;env&quot;: {&quot;role&quot;: &quot;owner&quot;}}) in gone">after remove(role=owner): spine expects ok in gone, code gave crashed ({"op": "apply", "event": "remove", "env": {"role": "owner"}}) in gone</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok in gone, code gave crashed ({&quot;op&quot;: &quot;apply&quot;, &quot;event&quot;: &quot;remove&quot;, &quot;env&quot;: {&quot;role&quot;: &quot;guest&quot;}}) in gone">after remove(role=guest): spine expects ok in gone, code gave crashed ({"op": "apply", "event": "remove", "env": {"role": "guest"}}) in gone</failure></testcase><testcase classname="spine conform" name="untried-case open/open role=owner"><failure message="not tried: the code diverged on the way to open">not tried: the code diverged on the way to open</failure></testcase><testcase classname="spine conform" name="untried-case open/open role=guest"><failure message="not tried: the code diverged on the way to open">not tried: the code diverged on the way to open</failure></testcase><testcase classname="spine conform" name="untried-case open/remove role=owner"><failure message="not tried: the code diverged on the way to open">not tried: the code diverged on the way to open</failure></testcase><testcase classname="spine conform" name="untried-case open/remove role=guest"><failure message="not tried: the code diverged on the way to open">not tried: the code diverged on the way to open</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py empty"
 exit 1
 --- stdout
 | {
@@ -1572,7 +1704,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py empty"><failure message="replied to new with a line that is not JSON: &quot;&quot;">replied to new with a line that is not JSON: ""</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py empty-object" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py empty-object"
 exit 1
 --- stdout
 | {
@@ -1591,7 +1723,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py empty-object"><failure message="replied to new with &quot;{}&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "{}", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-and-more" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-and-more"
 exit 1
 --- stdout
 | {
@@ -1610,7 +1742,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py error-and-more"><failure message="replied to new with &quot;{\&quot;error\&quot;: \&quot;boom\&quot;, \&quot;ok\&quot;: true}&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "{\"error\": \"boom\", \"ok\": true}", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-apply" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-apply"
 exit 1
 --- stdout
 | {
@@ -1626,8 +1758,8 @@ exit 1
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "5 sequences up to 2 steps",
-|       "message": "4 of 8 state/event/variable cases exercised"
+|       "where": "24 sequences, margin 1",
+|       "message": "8 of 8 state/event/variable cases exercised"
 |     }
 |   ]
 | }
@@ -1635,7 +1767,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave crashed (ValueError: no) in open">after open(role=owner): spine expects ok in open, code gave crashed (ValueError: no) in open</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-new" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-new"
 exit 1
 --- stdout
 | {
@@ -1654,7 +1786,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py error-new"><failure message="replied to new with the error &quot;boom&quot;">replied to new with the error "boom"</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-null" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-null"
 exit 1
 --- stdout
 | {
@@ -1673,7 +1805,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py error-null"><failure message="replied to observe with &quot;{\&quot;error\&quot;: null}&quot;, not {&quot;state&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to observe with "{\"error\": null}", not {"state": "..."} or {"error": "..."}</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-observe" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-observe"
 exit 1
 --- stdout
 | {
@@ -1692,7 +1824,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py error-observe"><failure message="replied to observe with &quot;{\&quot;error\&quot;: {\&quot;a\&quot;: [1, 2.0, null, true], \&quot;b\&quot;: \&quot;it's\&quot;}}&quot;, not {&quot;state&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to observe with "{\"error\": {\"a\": [1, 2.0, null, true], \"b\": \"it's\"}}", not {"state": "..."} or {"error": "..."}</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py escaped-key" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py escaped-key"
 exit 0
 --- stdout
 | {
@@ -1702,7 +1834,7 @@ exit 0
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "9 sequences up to 2 steps",
+|       "where": "24 sequences, margin 1",
 |       "message": "8 of 8 state/event/variable cases exercised"
 |     }
 |   ]
@@ -1711,7 +1843,7 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py escapes" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py escapes"
 exit 1
 --- stdout
 | {
@@ -1721,23 +1853,23 @@ exit 1
 |     {
 |       "code": "diverges",
 |       "severity": "error",
-|       "where": "start",
-|       "message": "spine starts in closed, code starts in é😀\n\t\"\\/"
+|       "where": "closed/open role=owner",
+|       "message": "after open(role=owner): spine expects ok in open, code gave ok in é😀\n\t\"\\/"
 |     },
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "5 sequences up to 2 steps",
-|       "message": "3 of 8 state/event/variable cases exercised"
+|       "where": "24 sequences, margin 1",
+|       "message": "8 of 8 state/event/variable cases exercised"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges start"><failure message="spine starts in closed, code starts in é😀&#10;&#09;&quot;\/">spine starts in closed, code starts in é😀
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges closed/open role=owner"><failure message="after open(role=owner): spine expects ok in open, code gave ok in é😀&#10;&#09;&quot;\/">after open(role=owner): spine expects ok in open, code gave ok in é😀
 | 	"\/</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py exit-3" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py exit-3"
 exit 1
 --- stdout
 | {
@@ -1756,7 +1888,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py exit-3"><failure message="exited with status 3 before replying to new">exited with status 3 before replying to new</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py exit-after-new" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py exit-after-new"
 exit 1
 --- stdout
 | {
@@ -1775,7 +1907,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py exit-after-new"><failure message="exited with status 0 before replying to observe">exited with status 0 before replying to observe</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ideographic-space" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ideographic-space"
 exit 1
 --- stdout
 | {
@@ -1794,7 +1926,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py ideographic-space"><failure message="replied to new with a line that is not JSON: &quot;{\&quot;ok\&quot;: true}\u3000&quot;">replied to new with a line that is not JSON: "{\"ok\": true}\u3000"</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py infinity" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py infinity"
 exit 1
 --- stdout
 | {
@@ -1813,7 +1945,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py infinity"><failure message="replied to apply with a line that is not JSON: &quot;{\&quot;result\&quot;: -Infinity}&quot;">replied to apply with a line that is not JSON: "{\"result\": -Infinity}"</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py list" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py list"
 exit 1
 --- stdout
 | {
@@ -1832,7 +1964,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py list"><failure message="replied to new with &quot;[]&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "[]", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py mixed-endings" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py mixed-endings"
 exit 0
 --- stdout
 | {
@@ -1842,7 +1974,7 @@ exit 0
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "9 sequences up to 2 steps",
+|       "where": "24 sequences, margin 1",
 |       "message": "8 of 8 state/event/variable cases exercised"
 |     }
 |   ]
@@ -1851,7 +1983,7 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py nan" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py nan"
 exit 1
 --- stdout
 | {
@@ -1870,7 +2002,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py nan"><failure message="replied to apply with a line that is not JSON: &quot;{\&quot;result\&quot;: NaN}&quot;">replied to apply with a line that is not JSON: "{\"result\": NaN}"</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py no-reply" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py no-reply"
 exit 1
 --- stdout
 | {
@@ -1908,7 +2040,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py nosuchmode"><failure message="exited with status 2 before replying to new">exited with status 2 before replying to new</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py notjson" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py notjson"
 exit 1
 --- stdout
 | {
@@ -1927,7 +2059,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py notjson"><failure message="replied to new with a line that is not JSON: &quot;hello&quot;">replied to new with a line that is not JSON: "hello"</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py o\\\nk" --depth 1
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py o\\\nk" --margin 0
 exit 0
 --- stdout
 | {
@@ -1937,8 +2069,8 @@ exit 0
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "5 sequences up to 1 steps",
-|       "message": "4 of 8 state/event/variable cases exercised"
+|       "where": "8 sequences, margin 0",
+|       "message": "8 of 8 state/event/variable cases exercised"
 |     }
 |   ]
 | }
@@ -1956,7 +2088,7 @@ exit 0
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "89 sequences up to 4 steps",
+|       "where": "24 sequences, margin 1",
 |       "message": "8 of 8 state/event/variable cases exercised"
 |     }
 |   ]
@@ -1965,7 +2097,7 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-1" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-1"
 exit 1
 --- stdout
 | {
@@ -1984,7 +2116,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py ok-1"><failure message="replied to new with &quot;{\&quot;ok\&quot;: 1}&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "{\"ok\": 1}", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-false" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-false"
 exit 1
 --- stdout
 | {
@@ -2003,7 +2135,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py ok-false"><failure message="replied to new with &quot;{\&quot;ok\&quot;: false}&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "{\"ok\": false}", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-twice" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-twice"
 exit 1
 --- stdout
 | {
@@ -2022,7 +2154,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py ok-twice"><failure message="replied to new with &quot;{\&quot;ok\&quot;: true, \&quot;ok\&quot;: true}&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "{\"ok\": true, \"ok\": true}", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py result-for-new" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py result-for-new"
 exit 1
 --- stdout
 | {
@@ -2041,7 +2173,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py result-for-new"><failure message="replied to new with &quot;{\&quot;result\&quot;: \&quot;ok\&quot;}&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "{\"result\": \"ok\"}", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py result-null" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py result-null"
 exit 1
 --- stdout
 | {
@@ -2060,7 +2192,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py result-null"><failure message="replied to apply with &quot;{\&quot;result\&quot;: null}&quot;, not {&quot;result&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to apply with "{\"result\": null}", not {"result": "..."} or {"error": "..."}</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py signal" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py signal"
 exit 1
 --- stdout
 | {
@@ -2079,7 +2211,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py signal"><failure message="was ended by signal 15 (terminated) before replying to apply">was ended by signal 15 (terminated) before replying to apply</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py spaced" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py spaced"
 exit 0
 --- stdout
 | {
@@ -2089,7 +2221,7 @@ exit 0
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "9 sequences up to 2 steps",
+|       "where": "24 sequences, margin 1",
 |       "message": "8 of 8 state/event/variable cases exercised"
 |     }
 |   ]
@@ -2098,7 +2230,7 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py state-number" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py state-number"
 exit 1
 --- stdout
 | {
@@ -2117,7 +2249,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py state-number"><failure message="replied to observe with &quot;{\&quot;state\&quot;: 1}&quot;, not {&quot;state&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to observe with "{\"state\": 1}", not {"state": "..."} or {"error": "..."}</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py string" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py string"
 exit 1
 --- stdout
 | {
@@ -2136,7 +2268,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py string"><failure message="replied to new with &quot;\&quot;ok\&quot;&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "\"ok\"", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py trailing" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py trailing"
 exit 1
 --- stdout
 | {
@@ -2155,7 +2287,7 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py trailing"><failure message="replied to new with a line that is not JSON: &quot;{\&quot;ok\&quot;: true} x&quot;">replied to new with a line that is not JSON: "{\"ok\": true} x"</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py two-keys" --depth 2
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py two-keys"
 exit 1
 --- stdout
 | {
@@ -2364,7 +2496,358 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed tool"><failure message="cannot be started: tool: Permission denied">cannot be started: tool: Permission denied</failure></testcase></testsuite>
-=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/unsound.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --depth 1
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/chain9.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/chain9.py"
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "324 sequences, margin 1",
+|       "message": "81 of 81 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/chain9.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/chain9_twice.py"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s1/edit role=owner",
+|       "message": "after edit(role=owner): spine expects ok in s1, code gave rejected in s1"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s1/edit role=editor",
+|       "message": "after edit(role=owner) -> edit(role=editor): spine expects ok in s1, code gave rejected in s1"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s2/edit role=owner",
+|       "message": "after next(role=owner) -> edit(role=owner) -> edit(role=owner): spine expects ok in s2, code gave rejected in s2"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s2/edit role=editor",
+|       "message": "after next(role=owner) -> edit(role=owner) -> edit(role=editor): spine expects ok in s2, code gave rejected in s2"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s3/edit role=owner",
+|       "message": "after next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=owner): spine expects ok in s3, code gave rejected in s3"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s3/edit role=editor",
+|       "message": "after next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=editor): spine expects ok in s3, code gave rejected in s3"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s4/edit role=owner",
+|       "message": "after next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=owner): spine expects ok in s4, code gave rejected in s4"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s4/edit role=editor",
+|       "message": "after next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=editor): spine expects ok in s4, code gave rejected in s4"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s5/edit role=owner",
+|       "message": "after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=owner): spine expects ok in s5, code gave rejected in s5"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s5/edit role=editor",
+|       "message": "after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=editor): spine expects ok in s5, code gave rejected in s5"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s6/edit role=owner",
+|       "message": "after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=owner): spine expects ok in s6, code gave rejected in s6"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s6/edit role=editor",
+|       "message": "after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=editor): spine expects ok in s6, code gave rejected in s6"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s7/edit role=owner",
+|       "message": "after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=owner): spine expects ok in s7, code gave rejected in s7"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s7/edit role=editor",
+|       "message": "after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=editor): spine expects ok in s7, code gave rejected in s7"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s8/edit role=owner",
+|       "message": "after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=owner): spine expects ok in s8, code gave rejected in s8"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s8/edit role=editor",
+|       "message": "after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=editor): spine expects ok in s8, code gave rejected in s8"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s9/edit role=owner",
+|       "message": "after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=owner): spine expects ok in s9, code gave rejected in s9"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "s9/edit role=editor",
+|       "message": "after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=editor): spine expects ok in s9, code gave rejected in s9"
+|     },
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "324 sequences, margin 1",
+|       "message": "81 of 81 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="18" failures="18"><testcase classname="spine conform" name="diverges s1/edit role=owner"><failure message="after edit(role=owner): spine expects ok in s1, code gave rejected in s1">after edit(role=owner): spine expects ok in s1, code gave rejected in s1</failure></testcase><testcase classname="spine conform" name="diverges s1/edit role=editor"><failure message="after edit(role=owner) -&gt; edit(role=editor): spine expects ok in s1, code gave rejected in s1">after edit(role=owner) -&gt; edit(role=editor): spine expects ok in s1, code gave rejected in s1</failure></testcase><testcase classname="spine conform" name="diverges s2/edit role=owner"><failure message="after next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=owner): spine expects ok in s2, code gave rejected in s2">after next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=owner): spine expects ok in s2, code gave rejected in s2</failure></testcase><testcase classname="spine conform" name="diverges s2/edit role=editor"><failure message="after next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=editor): spine expects ok in s2, code gave rejected in s2">after next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=editor): spine expects ok in s2, code gave rejected in s2</failure></testcase><testcase classname="spine conform" name="diverges s3/edit role=owner"><failure message="after next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=owner): spine expects ok in s3, code gave rejected in s3">after next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=owner): spine expects ok in s3, code gave rejected in s3</failure></testcase><testcase classname="spine conform" name="diverges s3/edit role=editor"><failure message="after next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=editor): spine expects ok in s3, code gave rejected in s3">after next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=editor): spine expects ok in s3, code gave rejected in s3</failure></testcase><testcase classname="spine conform" name="diverges s4/edit role=owner"><failure message="after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=owner): spine expects ok in s4, code gave rejected in s4">after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=owner): spine expects ok in s4, code gave rejected in s4</failure></testcase><testcase classname="spine conform" name="diverges s4/edit role=editor"><failure message="after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=editor): spine expects ok in s4, code gave rejected in s4">after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=editor): spine expects ok in s4, code gave rejected in s4</failure></testcase><testcase classname="spine conform" name="diverges s5/edit role=owner"><failure message="after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=owner): spine expects ok in s5, code gave rejected in s5">after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=owner): spine expects ok in s5, code gave rejected in s5</failure></testcase><testcase classname="spine conform" name="diverges s5/edit role=editor"><failure message="after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=editor): spine expects ok in s5, code gave rejected in s5">after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=editor): spine expects ok in s5, code gave rejected in s5</failure></testcase><testcase classname="spine conform" name="diverges s6/edit role=owner"><failure message="after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=owner): spine expects ok in s6, code gave rejected in s6">after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=owner): spine expects ok in s6, code gave rejected in s6</failure></testcase><testcase classname="spine conform" name="diverges s6/edit role=editor"><failure message="after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=editor): spine expects ok in s6, code gave rejected in s6">after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=editor): spine expects ok in s6, code gave rejected in s6</failure></testcase><testcase classname="spine conform" name="diverges s7/edit role=owner"><failure message="after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=owner): spine expects ok in s7, code gave rejected in s7">after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=owner): spine expects ok in s7, code gave rejected in s7</failure></testcase><testcase classname="spine conform" name="diverges s7/edit role=editor"><failure message="after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=editor): spine expects ok in s7, code gave rejected in s7">after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=editor): spine expects ok in s7, code gave rejected in s7</failure></testcase><testcase classname="spine conform" name="diverges s8/edit role=owner"><failure message="after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=owner): spine expects ok in s8, code gave rejected in s8">after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=owner): spine expects ok in s8, code gave rejected in s8</failure></testcase><testcase classname="spine conform" name="diverges s8/edit role=editor"><failure message="after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=editor): spine expects ok in s8, code gave rejected in s8">after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=editor): spine expects ok in s8, code gave rejected in s8</failure></testcase><testcase classname="spine conform" name="diverges s9/edit role=owner"><failure message="after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=owner): spine expects ok in s9, code gave rejected in s9">after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=owner): spine expects ok in s9, code gave rejected in s9</failure></testcase><testcase classname="spine conform" name="diverges s9/edit role=editor"><failure message="after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=editor): spine expects ok in s9, code gave rejected in s9">after next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; next(role=owner) -&gt; edit(role=owner) -&gt; edit(role=editor): spine expects ok in s9, code gave rejected in s9</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/chain9.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/chain9_twice.py" --margin 0
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "81 sequences, margin 0",
+|       "message": "81 of 81 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/collide.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stays.py" --margin 0
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "4 sequences, margin 0",
+|       "message": "4 of 4 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/orders.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/orders.py"
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "25 sequences, margin 1",
+|       "message": "25 of 25 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/orders.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/orders.py" --margin 0
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "25 sequences, margin 0",
+|       "message": "25 of 25 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/orders.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/orders_bug.py"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "delivered/return_item",
+|       "message": "after pay() -> pack() -> ship() -> deliver() -> return_item(): spine expects ok in returned, code gave rejected in delivered"
+|     },
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "25 sequences, margin 1",
+|       "message": "25 of 25 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges delivered/return_item"><failure message="after pay() -&gt; pack() -&gt; ship() -&gt; deliver() -&gt; return_item(): spine expects ok in returned, code gave rejected in delivered">after pay() -&gt; pack() -&gt; ship() -&gt; deliver() -&gt; return_item(): spine expects ok in returned, code gave rejected in delivered</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/orders.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/orders_stuck.py"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "packed/ship",
+|       "message": "after pay() -> pack() -> ship(): spine expects ok in shipped, code gave rejected in packed"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "shipped/pay",
+|       "message": "not tried: the code diverged on the way to shipped"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "shipped/pack",
+|       "message": "not tried: the code diverged on the way to shipped"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "shipped/ship",
+|       "message": "not tried: the code diverged on the way to shipped"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "shipped/deliver",
+|       "message": "not tried: the code diverged on the way to shipped"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "shipped/return_item",
+|       "message": "not tried: the code diverged on the way to shipped"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "delivered/pay",
+|       "message": "not tried: the code diverged on the way to delivered"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "delivered/pack",
+|       "message": "not tried: the code diverged on the way to delivered"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "delivered/ship",
+|       "message": "not tried: the code diverged on the way to delivered"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "delivered/deliver",
+|       "message": "not tried: the code diverged on the way to delivered"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "delivered/return_item",
+|       "message": "not tried: the code diverged on the way to delivered"
+|     },
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "25 sequences, margin 1",
+|       "message": "15 of 25 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="11" failures="11"><testcase classname="spine conform" name="diverges packed/ship"><failure message="after pay() -&gt; pack() -&gt; ship(): spine expects ok in shipped, code gave rejected in packed">after pay() -&gt; pack() -&gt; ship(): spine expects ok in shipped, code gave rejected in packed</failure></testcase><testcase classname="spine conform" name="untried-case shipped/pay"><failure message="not tried: the code diverged on the way to shipped">not tried: the code diverged on the way to shipped</failure></testcase><testcase classname="spine conform" name="untried-case shipped/pack"><failure message="not tried: the code diverged on the way to shipped">not tried: the code diverged on the way to shipped</failure></testcase><testcase classname="spine conform" name="untried-case shipped/ship"><failure message="not tried: the code diverged on the way to shipped">not tried: the code diverged on the way to shipped</failure></testcase><testcase classname="spine conform" name="untried-case shipped/deliver"><failure message="not tried: the code diverged on the way to shipped">not tried: the code diverged on the way to shipped</failure></testcase><testcase classname="spine conform" name="untried-case shipped/return_item"><failure message="not tried: the code diverged on the way to shipped">not tried: the code diverged on the way to shipped</failure></testcase><testcase classname="spine conform" name="untried-case delivered/pay"><failure message="not tried: the code diverged on the way to delivered">not tried: the code diverged on the way to delivered</failure></testcase><testcase classname="spine conform" name="untried-case delivered/pack"><failure message="not tried: the code diverged on the way to delivered">not tried: the code diverged on the way to delivered</failure></testcase><testcase classname="spine conform" name="untried-case delivered/ship"><failure message="not tried: the code diverged on the way to delivered">not tried: the code diverged on the way to delivered</failure></testcase><testcase classname="spine conform" name="untried-case delivered/deliver"><failure message="not tried: the code diverged on the way to delivered">not tried: the code diverged on the way to delivered</failure></testcase><testcase classname="spine conform" name="untried-case delivered/return_item"><failure message="not tried: the code diverged on the way to delivered">not tried: the code diverged on the way to delivered</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/terminal-start.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stays.py"
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "0 sequences, margin 1",
+|       "message": "0 of 0 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/unsound.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --margin 0
 exit 1
 --- stdout
 | {
@@ -2378,42 +2861,101 @@ exit 1
 |       "message": "spine starts in s, code starts in closed"
 |     },
 |     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "s/go mode=b, role=owner",
+|       "message": "not tried: the code doesn't start in s"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "t/go mode=a, role=owner",
+|       "message": "not tried: the code doesn't start in s"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "t/go mode=a, role=guest",
+|       "message": "not tried: the code doesn't start in s"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "t/go mode=a, role=édi tor",
+|       "message": "not tried: the code doesn't start in s"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "t/stop mode=a, role=owner",
+|       "message": "not tried: the code doesn't start in s"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "t/stop mode=a, role=guest",
+|       "message": "not tried: the code doesn't start in s"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "t/stop mode=a, role=édi tor",
+|       "message": "not tried: the code doesn't start in s"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "t/stop mode=b, role=owner",
+|       "message": "not tried: the code doesn't start in s"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "t/stop mode=b, role=guest",
+|       "message": "not tried: the code doesn't start in s"
+|     },
+|     {
+|       "code": "untried-case",
+|       "severity": "error",
+|       "where": "t/stop mode=b, role=édi tor",
+|       "message": "not tried: the code doesn't start in s"
+|     },
+|     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "1 sequences up to 1 steps",
-|       "message": "0 of 36 state/event/variable cases exercised"
+|       "where": "24 sequences, margin 0",
+|       "message": "0 of 10 state/event/variable cases exercised"
 |     }
 |   ]
 | }
 |
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
-| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges start"><failure message="spine starts in s, code starts in closed">spine starts in s, code starts in closed</failure></testcase></testsuite>
+| <testsuite name="spine conform" tests="11" failures="11"><testcase classname="spine conform" name="diverges start"><failure message="spine starts in s, code starts in closed">spine starts in s, code starts in closed</failure></testcase><testcase classname="spine conform" name="untried-case s/go mode=b, role=owner"><failure message="not tried: the code doesn't start in s">not tried: the code doesn't start in s</failure></testcase><testcase classname="spine conform" name="untried-case t/go mode=a, role=owner"><failure message="not tried: the code doesn't start in s">not tried: the code doesn't start in s</failure></testcase><testcase classname="spine conform" name="untried-case t/go mode=a, role=guest"><failure message="not tried: the code doesn't start in s">not tried: the code doesn't start in s</failure></testcase><testcase classname="spine conform" name="untried-case t/go mode=a, role=édi tor"><failure message="not tried: the code doesn't start in s">not tried: the code doesn't start in s</failure></testcase><testcase classname="spine conform" name="untried-case t/stop mode=a, role=owner"><failure message="not tried: the code doesn't start in s">not tried: the code doesn't start in s</failure></testcase><testcase classname="spine conform" name="untried-case t/stop mode=a, role=guest"><failure message="not tried: the code doesn't start in s">not tried: the code doesn't start in s</failure></testcase><testcase classname="spine conform" name="untried-case t/stop mode=a, role=édi tor"><failure message="not tried: the code doesn't start in s">not tried: the code doesn't start in s</failure></testcase><testcase classname="spine conform" name="untried-case t/stop mode=b, role=owner"><failure message="not tried: the code doesn't start in s">not tried: the code doesn't start in s</failure></testcase><testcase classname="spine conform" name="untried-case t/stop mode=b, role=guest"><failure message="not tried: the code doesn't start in s">not tried: the code doesn't start in s</failure></testcase><testcase classname="spine conform" name="untried-case t/stop mode=b, role=édi tor"><failure message="not tried: the code doesn't start in s">not tried: the code doesn't start in s</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform diff/plain-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/lamp.py"
 exit 1
 --- stdout
-| error   diverges           lit/press : after press() -> press(): spine expects ok in dark, code gave ok in lit
-| info    coverage           9 sequences up to 4 steps: 5 of 6 state/event/variable cases exercised
+| error   diverges           lit/press: after press() -> press(): spine expects ok in dark, code gave ok in lit
+| info    coverage           8 sequences, margin 1: 5 of 5 state/event/variable cases exercised
 | -- 1 errors, 2 findings
 |
-=== in tools/internal/spine/testdata: spine conform diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --depth -1
+=== in tools/internal/spine/testdata: spine conform diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --margin -1
 exit 2
 --- stdout
 |
 --- stderr
-| spine conform: --depth needs a value; spine conform --help describes it
+| spine conform: --margin needs a value; spine conform --help describes it
 |
-=== in tools/internal/spine/testdata: spine conform diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --depth 0
-exit 2
---- stdout
-|
---- stderr
-| spine conform: --depth must be a whole number of 1 or more, not "0"; spine conform --help describes it
-|
-=== in tools/internal/spine/testdata: spine conform diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --depth 9999999999999999999999999999999
+=== in tools/internal/spine/testdata: spine conform diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --margin 0
 exit 0
 --- stdout
-| info    coverage           3 sequences up to 9223372036854775807 steps: 2 of 2 state/event/variable cases exercised
+| info    coverage           2 sequences, margin 0: 2 of 2 state/event/variable cases exercised
+| -- 0 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform diff/stop-a.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stop.py" --margin 9999999999999999999999999999999
+exit 0
+--- stdout
+| info    coverage           2 sequences, margin 9223372036854775807: 2 of 2 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform diff/unreadable.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py"
@@ -2440,10 +2982,10 @@ exit 1
 | error   adapter-failed     'unclosed: cannot be split: no closing quotation
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 'adapters/protocol.py' \"ok\" " --depth 1
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 'adapters/protocol.py' \"ok\" " --margin 0
 exit 0
 --- stdout
-| info    coverage           5 sequences up to 1 steps: 4 of 8 state/event/variable cases exercised
+| info    coverage           8 sequences, margin 0: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py ''"
@@ -2461,10 +3003,10 @@ exit 1
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py"
 exit 0
 --- stdout
-| info    coverage           89 sequences up to 4 steps: 8 of 8 state/event/variable cases exercised
+| info    coverage           24 sequences, margin 1: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_bugs.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_bugs.py"
 exit 1
 --- stdout
 | error   diverges           closed/open role=guest: after open(role=guest): spine expects rejected in closed, code gave ok in open
@@ -2472,81 +3014,97 @@ exit 1
 | error   diverges           open/open role=guest: after open(role=owner) -> open(role=guest): spine expects ok in open, code gave done in open
 | error   diverges           open/remove role=owner: after open(role=owner) -> remove(role=owner): spine expects ok in open, code gave ok in gone
 | error   diverges           open/remove role=guest: after open(role=owner) -> remove(role=guest): spine expects ok in open, code gave ok in gone
-| info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
+| info    coverage           8 sequences, margin 1: 8 of 8 state/event/variable cases exercised
 | -- 5 errors, 6 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_crash.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_crash.py"
 exit 1
 --- stdout
 | error   diverges           closed/open role=guest: after open(role=guest): spine expects rejected in closed, code gave crashed (ValueError: guests can't open) in closed
 | error   diverges           closed/remove role=guest: after remove(role=guest): spine expects ok in gone, code gave crashed (ValueError: guests can't remove) in closed
 | error   diverges           open/open role=guest: after open(role=owner) -> open(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't open) in open
 | error   diverges           open/remove role=guest: after open(role=owner) -> remove(role=guest): spine expects ok in open, code gave crashed (ValueError: guests can't remove) in open
-| info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
+| info    coverage           16 sequences, margin 1: 8 of 8 state/event/variable cases exercised
 | -- 4 errors, 5 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_exit.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_exit.py"
 exit 1
 --- stdout
 | error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_exit.py: was ended by signal 9 (killed) before replying to apply
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_import.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_import.py"
 exit 1
 --- stdout
 | error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_import.py: exited with status 1 before replying to new
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_missing.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_missing.py"
 exit 1
 --- stdout
 | error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_missing.py: exited with status 1 before replying to new
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_new_raises.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_new_raises.py"
 exit 1
 --- stdout
 | error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_new_raises.py: replied to new with the error "RuntimeError: no database"
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_observe_raises.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_observe_raises.py"
 exit 1
 --- stdout
 | error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_observe_raises.py: replied to observe with the error "KeyError: 'gone'" after remove(role=owner)
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_set.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_set.py"
 exit 1
 --- stdout
 | error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_set.py: exited with status 1 before replying to observe
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_start.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_start.py"
 exit 1
 --- stdout
 | error   diverges           start: spine starts in closed, code starts in open
-| info    coverage           1 sequences up to 2 steps: 0 of 8 state/event/variable cases exercised
-| -- 1 errors, 2 findings
+| error   untried-case       closed/open role=owner: not tried: the code doesn't start in closed
+| error   untried-case       closed/open role=guest: not tried: the code doesn't start in closed
+| error   untried-case       closed/remove role=owner: not tried: the code doesn't start in closed
+| error   untried-case       closed/remove role=guest: not tried: the code doesn't start in closed
+| error   untried-case       open/open role=owner: not tried: the code doesn't start in closed
+| error   untried-case       open/open role=guest: not tried: the code doesn't start in closed
+| error   untried-case       open/remove role=owner: not tried: the code doesn't start in closed
+| error   untried-case       open/remove role=guest: not tried: the code doesn't start in closed
+| info    coverage           8 sequences, margin 1: 0 of 8 state/event/variable cases exercised
+| -- 9 errors, 10 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_values.py" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_values.py"
 exit 1
 --- stdout
 | error   diverges           closed/open role=owner: after open(role=owner): spine expects ok in open, code gave ok  in closed
 | error   diverges           closed/open role=guest: after open(role=guest): spine expects rejected in closed, code gave OK in closed
 | error   diverges           closed/remove role=owner: after remove(role=owner): spine expects ok in gone, code gave  in closed
 | error   diverges           closed/remove role=guest: after remove(role=guest): spine expects ok in gone, code gave crashed (no) in closed
-| info    coverage           5 sequences up to 2 steps: 4 of 8 state/event/variable cases exercised
-| -- 4 errors, 5 findings
+| error   untried-case       open/open role=owner: not tried: the code diverged on the way to open
+| error   untried-case       open/open role=guest: not tried: the code diverged on the way to open
+| error   untried-case       open/remove role=owner: not tried: the code diverged on the way to open
+| error   untried-case       open/remove role=guest: not tried: the code diverged on the way to open
+| info    coverage           8 sequences, margin 1: 4 of 8 state/event/variable cases exercised
+| -- 8 errors, 9 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_values.py" --depth 3
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_values.py" --margin 2
 exit 1
 --- stdout
 | error   diverges           closed/open role=owner: after open(role=owner): spine expects ok in open, code gave ok  in closed
 | error   diverges           closed/open role=guest: after open(role=guest): spine expects rejected in closed, code gave OK in closed
 | error   diverges           closed/remove role=owner: after remove(role=owner): spine expects ok in gone, code gave  in closed
 | error   diverges           closed/remove role=guest: after remove(role=guest): spine expects ok in gone, code gave crashed (no) in closed
-| info    coverage           5 sequences up to 3 steps: 4 of 8 state/event/variable cases exercised
-| -- 4 errors, 5 findings
+| error   untried-case       open/open role=owner: not tried: the code diverged on the way to open
+| error   untried-case       open/open role=guest: not tried: the code diverged on the way to open
+| error   untried-case       open/remove role=owner: not tried: the code diverged on the way to open
+| error   untried-case       open/remove role=guest: not tried: the code diverged on the way to open
+| info    coverage           8 sequences, margin 2: 4 of 8 state/event/variable cases exercised
+| -- 8 errors, 9 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/missing.py"
 exit 1
@@ -2560,188 +3118,192 @@ exit 1
 | error   adapter-failed     python3 ../../../adapter_shim.py adapters/not-python.txt: exited with status 1 before replying to new
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/proto\\col.py ok" --depth 1
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/proto\\col.py ok" --margin 0
 exit 0
 --- stdout
-| info    coverage           5 sequences up to 1 steps: 4 of 8 state/event/variable cases exercised
+| info    coverage           8 sequences, margin 0: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py \"o\\k\"" --depth 1
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py \"o\\k\"" --margin 0
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py "o\k": exited with status 2 before replying to new
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-escape" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-escape"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py bad-escape: replied to observe with a line that is not JSON: "{\"state\": \"a\\x\"}"
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-utf8" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-utf8"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py bad-utf8: replied to observe with a line that is not UTF-8
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-utf8-outside" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bad-utf8-outside"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py bad-utf8-outside: replied to observe with a line that is not UTF-8
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bom" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py bom"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py bom: replied to new with a line that is not JSON: "\ufeff{\"ok\": true}"
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py compact" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py compact"
 exit 0
 --- stdout
-| info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
+| info    coverage           24 sequences, margin 1: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py control-char" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py control-char"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py control-char: replied to observe with a line that is not JSON: "{\"state\": \"a\tb\"}"
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py cr-at-exit" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py cr-at-exit"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py cr-at-exit: exited with status 0 before replying to observe
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py cr-split" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py cr-split"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py cr-split: replied to new with a line that is not JSON: "{\"ok\": true}\r{\"state\": \"closed\"}"
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py crlf" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py crlf"
 exit 0
 --- stdout
-| info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
+| info    coverage           24 sequences, margin 1: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py dup-keys" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py dup-keys"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py dup-keys: replied to observe with "{\"state\": \"open\", \"state\": \"closed\"}", not {"state": "..."} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py echo-apply" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py echo-apply"
 exit 1
 --- stdout
 | error   diverges           closed/open role=owner: after open(role=owner): spine expects ok in open, code gave crashed ({"op": "apply", "event": "open", "env": {"role": "owner"}}) in open
 | error   diverges           closed/open role=guest: after open(role=guest): spine expects rejected in closed, code gave crashed ({"op": "apply", "event": "open", "env": {"role": "guest"}}) in closed
 | error   diverges           closed/remove role=owner: after remove(role=owner): spine expects ok in gone, code gave crashed ({"op": "apply", "event": "remove", "env": {"role": "owner"}}) in gone
 | error   diverges           closed/remove role=guest: after remove(role=guest): spine expects ok in gone, code gave crashed ({"op": "apply", "event": "remove", "env": {"role": "guest"}}) in gone
-| info    coverage           5 sequences up to 2 steps: 4 of 8 state/event/variable cases exercised
-| -- 4 errors, 5 findings
+| error   untried-case       open/open role=owner: not tried: the code diverged on the way to open
+| error   untried-case       open/open role=guest: not tried: the code diverged on the way to open
+| error   untried-case       open/remove role=owner: not tried: the code diverged on the way to open
+| error   untried-case       open/remove role=guest: not tried: the code diverged on the way to open
+| info    coverage           8 sequences, margin 1: 4 of 8 state/event/variable cases exercised
+| -- 8 errors, 9 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py empty" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py empty"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py empty: replied to new with a line that is not JSON: ""
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py empty-object" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py empty-object"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py empty-object: replied to new with "{}", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-and-more" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-and-more"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py error-and-more: replied to new with "{\"error\": \"boom\", \"ok\": true}", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-apply" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-apply"
 exit 1
 --- stdout
 | error   diverges           closed/open role=owner: after open(role=owner): spine expects ok in open, code gave crashed (ValueError: no) in open
-| info    coverage           5 sequences up to 2 steps: 4 of 8 state/event/variable cases exercised
+| info    coverage           24 sequences, margin 1: 8 of 8 state/event/variable cases exercised
 | -- 1 errors, 2 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-new" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-new"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py error-new: replied to new with the error "boom"
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-null" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-null"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py error-null: replied to observe with "{\"error\": null}", not {"state": "..."} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-observe" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py error-observe"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py error-observe: replied to observe with "{\"error\": {\"a\": [1, 2.0, null, true], \"b\": \"it's\"}}", not {"state": "..."} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py escaped-key" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py escaped-key"
 exit 0
 --- stdout
-| info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
+| info    coverage           24 sequences, margin 1: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py escapes" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py escapes"
 exit 1
 --- stdout
-| error   diverges           start: spine starts in closed, code starts in é😀
+| error   diverges           closed/open role=owner: after open(role=owner): spine expects ok in open, code gave ok in é😀
 | 	"\/
-| info    coverage           5 sequences up to 2 steps: 3 of 8 state/event/variable cases exercised
+| info    coverage           24 sequences, margin 1: 8 of 8 state/event/variable cases exercised
 | -- 1 errors, 2 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py exit-3" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py exit-3"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py exit-3: exited with status 3 before replying to new
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py exit-after-new" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py exit-after-new"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py exit-after-new: exited with status 0 before replying to observe
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ideographic-space" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ideographic-space"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py ideographic-space: replied to new with a line that is not JSON: "{\"ok\": true}\u3000"
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py infinity" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py infinity"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py infinity: replied to apply with a line that is not JSON: "{\"result\": -Infinity}"
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py list" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py list"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py list: replied to new with "[]", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py mixed-endings" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py mixed-endings"
 exit 0
 --- stdout
-| info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
+| info    coverage           24 sequences, margin 1: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py nan" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py nan"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py nan: replied to apply with a line that is not JSON: "{\"result\": NaN}"
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py no-reply" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py no-reply"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py no-reply: exited with status 0 before replying to observe
@@ -2753,85 +3315,85 @@ exit 1
 | error   adapter-failed     python3 adapters/protocol.py nosuchmode: exited with status 2 before replying to new
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py notjson" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py notjson"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py notjson: replied to new with a line that is not JSON: "hello"
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py o\\\nk" --depth 1
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py o\\\nk" --margin 0
 exit 0
 --- stdout
-| info    coverage           5 sequences up to 1 steps: 4 of 8 state/event/variable cases exercised
+| info    coverage           8 sequences, margin 0: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok"
 exit 0
 --- stdout
-| info    coverage           89 sequences up to 4 steps: 8 of 8 state/event/variable cases exercised
+| info    coverage           24 sequences, margin 1: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-1" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-1"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py ok-1: replied to new with "{\"ok\": 1}", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-false" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-false"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py ok-false: replied to new with "{\"ok\": false}", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-twice" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py ok-twice"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py ok-twice: replied to new with "{\"ok\": true, \"ok\": true}", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py result-for-new" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py result-for-new"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py result-for-new: replied to new with "{\"result\": \"ok\"}", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py result-null" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py result-null"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py result-null: replied to apply with "{\"result\": null}", not {"result": "..."} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py signal" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py signal"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py signal: was ended by signal 15 (terminated) before replying to apply
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py spaced" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py spaced"
 exit 0
 --- stdout
-| info    coverage           9 sequences up to 2 steps: 8 of 8 state/event/variable cases exercised
+| info    coverage           24 sequences, margin 1: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py state-number" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py state-number"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py state-number: replied to observe with "{\"state\": 1}", not {"state": "..."} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py string" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py string"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py string: replied to new with "\"ok\"", not {"ok": true} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py trailing" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py trailing"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py trailing: replied to new with a line that is not JSON: "{\"ok\": true} x"
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py two-keys" --depth 2
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py two-keys"
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py two-keys: replied to new with "{\"ok\": true, \"extra\": 1}", not {"ok": true} or {"error": "..."}
@@ -2897,12 +3459,106 @@ exit 1
 | error   adapter-failed     tool: cannot be started: tool: Permission denied
 | -- 1 errors, 1 findings
 |
-=== in tools/internal/spine/testdata: spine conform spines/unsound.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --depth 1
+=== in tools/internal/spine/testdata: spine conform spines/chain9.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/chain9.py"
+exit 0
+--- stdout
+| info    coverage           324 sequences, margin 1: 81 of 81 state/event/variable cases exercised
+| -- 0 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform spines/chain9.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/chain9_twice.py"
+exit 1
+--- stdout
+| error   diverges           s1/edit role=owner: after edit(role=owner): spine expects ok in s1, code gave rejected in s1
+| error   diverges           s1/edit role=editor: after edit(role=owner) -> edit(role=editor): spine expects ok in s1, code gave rejected in s1
+| error   diverges           s2/edit role=owner: after next(role=owner) -> edit(role=owner) -> edit(role=owner): spine expects ok in s2, code gave rejected in s2
+| error   diverges           s2/edit role=editor: after next(role=owner) -> edit(role=owner) -> edit(role=editor): spine expects ok in s2, code gave rejected in s2
+| error   diverges           s3/edit role=owner: after next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=owner): spine expects ok in s3, code gave rejected in s3
+| error   diverges           s3/edit role=editor: after next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=editor): spine expects ok in s3, code gave rejected in s3
+| error   diverges           s4/edit role=owner: after next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=owner): spine expects ok in s4, code gave rejected in s4
+| error   diverges           s4/edit role=editor: after next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=editor): spine expects ok in s4, code gave rejected in s4
+| error   diverges           s5/edit role=owner: after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=owner): spine expects ok in s5, code gave rejected in s5
+| error   diverges           s5/edit role=editor: after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=editor): spine expects ok in s5, code gave rejected in s5
+| error   diverges           s6/edit role=owner: after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=owner): spine expects ok in s6, code gave rejected in s6
+| error   diverges           s6/edit role=editor: after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=editor): spine expects ok in s6, code gave rejected in s6
+| error   diverges           s7/edit role=owner: after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=owner): spine expects ok in s7, code gave rejected in s7
+| error   diverges           s7/edit role=editor: after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=editor): spine expects ok in s7, code gave rejected in s7
+| error   diverges           s8/edit role=owner: after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=owner): spine expects ok in s8, code gave rejected in s8
+| error   diverges           s8/edit role=editor: after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=editor): spine expects ok in s8, code gave rejected in s8
+| error   diverges           s9/edit role=owner: after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=owner): spine expects ok in s9, code gave rejected in s9
+| error   diverges           s9/edit role=editor: after next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> next(role=owner) -> edit(role=owner) -> edit(role=editor): spine expects ok in s9, code gave rejected in s9
+| info    coverage           324 sequences, margin 1: 81 of 81 state/event/variable cases exercised
+| -- 18 errors, 19 findings
+|
+=== in tools/internal/spine/testdata: spine conform spines/chain9.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/chain9_twice.py" --margin 0
+exit 0
+--- stdout
+| info    coverage           81 sequences, margin 0: 81 of 81 state/event/variable cases exercised
+| -- 0 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform spines/collide.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stays.py" --margin 0
+exit 0
+--- stdout
+| info    coverage           4 sequences, margin 0: 4 of 4 state/event/variable cases exercised
+| -- 0 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform spines/orders.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/orders.py"
+exit 0
+--- stdout
+| info    coverage           25 sequences, margin 1: 25 of 25 state/event/variable cases exercised
+| -- 0 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform spines/orders.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/orders.py" --margin 0
+exit 0
+--- stdout
+| info    coverage           25 sequences, margin 0: 25 of 25 state/event/variable cases exercised
+| -- 0 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform spines/orders.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/orders_bug.py"
+exit 1
+--- stdout
+| error   diverges           delivered/return_item: after pay() -> pack() -> ship() -> deliver() -> return_item(): spine expects ok in returned, code gave rejected in delivered
+| info    coverage           25 sequences, margin 1: 25 of 25 state/event/variable cases exercised
+| -- 1 errors, 2 findings
+|
+=== in tools/internal/spine/testdata: spine conform spines/orders.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/orders_stuck.py"
+exit 1
+--- stdout
+| error   diverges           packed/ship: after pay() -> pack() -> ship(): spine expects ok in shipped, code gave rejected in packed
+| error   untried-case       shipped/pay: not tried: the code diverged on the way to shipped
+| error   untried-case       shipped/pack: not tried: the code diverged on the way to shipped
+| error   untried-case       shipped/ship: not tried: the code diverged on the way to shipped
+| error   untried-case       shipped/deliver: not tried: the code diverged on the way to shipped
+| error   untried-case       shipped/return_item: not tried: the code diverged on the way to shipped
+| error   untried-case       delivered/pay: not tried: the code diverged on the way to delivered
+| error   untried-case       delivered/pack: not tried: the code diverged on the way to delivered
+| error   untried-case       delivered/ship: not tried: the code diverged on the way to delivered
+| error   untried-case       delivered/deliver: not tried: the code diverged on the way to delivered
+| error   untried-case       delivered/return_item: not tried: the code diverged on the way to delivered
+| info    coverage           25 sequences, margin 1: 15 of 25 state/event/variable cases exercised
+| -- 11 errors, 12 findings
+|
+=== in tools/internal/spine/testdata: spine conform spines/terminal-start.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stays.py"
+exit 0
+--- stdout
+| info    coverage           0 sequences, margin 1: 0 of 0 state/event/variable cases exercised
+| -- 0 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform spines/unsound.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --margin 0
 exit 1
 --- stdout
 | error   diverges           start: spine starts in s, code starts in closed
-| info    coverage           1 sequences up to 1 steps: 0 of 36 state/event/variable cases exercised
-| -- 1 errors, 2 findings
+| error   untried-case       s/go mode=b, role=owner: not tried: the code doesn't start in s
+| error   untried-case       t/go mode=a, role=owner: not tried: the code doesn't start in s
+| error   untried-case       t/go mode=a, role=guest: not tried: the code doesn't start in s
+| error   untried-case       t/go mode=a, role=édi tor: not tried: the code doesn't start in s
+| error   untried-case       t/stop mode=a, role=owner: not tried: the code doesn't start in s
+| error   untried-case       t/stop mode=a, role=guest: not tried: the code doesn't start in s
+| error   untried-case       t/stop mode=a, role=édi tor: not tried: the code doesn't start in s
+| error   untried-case       t/stop mode=b, role=owner: not tried: the code doesn't start in s
+| error   untried-case       t/stop mode=b, role=guest: not tried: the code doesn't start in s
+| error   untried-case       t/stop mode=b, role=édi tor: not tried: the code doesn't start in s
+| info    coverage           24 sequences, margin 0: 0 of 10 state/event/variable cases exercised
+| -- 11 errors, 12 findings
 |
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT diff/door-b.yaml diff/door-c.yaml
 exit 1

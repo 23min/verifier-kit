@@ -10,6 +10,30 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/chain9.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/collide.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/event-twice.yaml
 exit 1
 --- stdout
@@ -110,6 +134,30 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="3" failures="3"><testcase classname="spine check" name="yaml-boolean-key rules[1]"><failure message="rule key read as true; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it">rule key read as true; YAML reads keys such as `on`, `off`, `yes` and `no` as true or false; spell the key as `event` or quote it</failure></testcase><testcase classname="spine check" name="missing-key rules[1]"><failure message="rule needs &quot;event&quot;">rule needs "event"</failure></testcase><testcase classname="spine check" name="yaml-boolean-value rules[2]"><failure message="&quot;to&quot; was read as true or false; quote it">"to" was read as true or false; quote it</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/orders.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/terminal-start.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/typos.yaml
 exit 1
 --- stdout
@@ -304,6 +352,16 @@ exit 0
 --- stdout
 | -- 0 errors, 0 findings
 |
+=== in tools/internal/spine/testdata: spine check spines/chain9.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in tools/internal/spine/testdata: spine check spines/collide.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
 === in tools/internal/spine/testdata: spine check spines/event-twice.yaml
 exit 1
 --- stdout
@@ -334,6 +392,16 @@ exit 1
 | error   missing-key        rules[1]: rule needs "event"
 | error   yaml-boolean-value rules[2]: "to" was read as true or false; quote it
 | -- 3 errors, 3 findings
+|
+=== in tools/internal/spine/testdata: spine check spines/orders.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in tools/internal/spine/testdata: spine check spines/terminal-start.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
 |
 === in tools/internal/spine/testdata: spine check spines/typos.yaml
 exit 1
@@ -387,6 +455,44 @@ exit 0
 | open/open@79e9a52da0fe
 | open/remove@6c6a6ee2ab96
 |
+=== in tools/internal/spine/testdata: spine hash spines/chain9.yaml
+exit 0
+--- stdout
+| spine@3b89b14c7291
+| s1/next@06e49f9586c1
+| s1/edit@93367babbb7a
+| s1/touch@2f9d16312362
+| s2/next@a44d988f1460
+| s2/edit@46a957b5bce2
+| s2/touch@d37123e712a4
+| s3/next@8017b1c5f37b
+| s3/edit@04f067ef09ca
+| s3/touch@eb4812a92a2d
+| s4/next@4dfe94b669b8
+| s4/edit@59fc1e3dfed9
+| s4/touch@52ad1af08b37
+| s5/next@a53e7bea1790
+| s5/edit@c9a396636344
+| s5/touch@e77fecf444de
+| s6/next@c73c5c3881e2
+| s6/edit@a201791c2ad4
+| s6/touch@1b23af2e0710
+| s7/next@027b0152f59b
+| s7/edit@22dc50f0042b
+| s7/touch@ad23a905284c
+| s8/next@3ccf245cc0f4
+| s8/edit@ad40ae278cf6
+| s8/touch@9d58dc2f15f7
+| s9/next@9ccbc38772ab
+| s9/edit@cd114542fcfb
+| s9/touch@9c089dee33af
+|
+=== in tools/internal/spine/testdata: spine hash spines/collide.yaml
+exit 0
+--- stdout
+| spine@9a96388a92f6
+| s/e@82978d799646
+|
 === in tools/internal/spine/testdata: spine hash spines/event-twice.yaml
 exit 1
 --- stdout
@@ -429,6 +535,42 @@ exit 1
 | error   missing-key        rules[1]: rule needs "event"
 | error   yaml-boolean-value rules[2]: "to" was read as true or false; quote it
 | -- 3 errors, 3 findings
+|
+=== in tools/internal/spine/testdata: spine hash spines/orders.yaml
+exit 0
+--- stdout
+| spine@625974a0dd38
+| created/pay@8a33e5dbfd72
+| created/pack@56f6c712c762
+| created/ship@1ca0b184f500
+| created/deliver@dc2ff72f37ed
+| created/return_item@6f900cf2af57
+| paid/pay@e270dd751e65
+| paid/pack@1a2441709802
+| paid/ship@69a33e1ef0f3
+| paid/deliver@bf4409579ab3
+| paid/return_item@3f0271f9b043
+| packed/pay@7a37908965fe
+| packed/pack@39e407241563
+| packed/ship@387131c97e3b
+| packed/deliver@784e64afc07a
+| packed/return_item@44acd9b9bf8d
+| shipped/pay@e90a37587286
+| shipped/pack@b59ee3082c25
+| shipped/ship@6981129e7558
+| shipped/deliver@ed940274f460
+| shipped/return_item@1b7ebd2e9651
+| delivered/pay@3efcbdb2793c
+| delivered/pack@93a380d065c4
+| delivered/ship@ee96b2fc537e
+| delivered/deliver@5050ad6e053e
+| delivered/return_item@806cd64f4186
+|
+=== in tools/internal/spine/testdata: spine hash spines/terminal-start.yaml
+exit 0
+--- stdout
+| spine@8d00474ecf99
+| s/e@d095514ba081
 |
 === in tools/internal/spine/testdata: spine hash spines/typos.yaml
 exit 1

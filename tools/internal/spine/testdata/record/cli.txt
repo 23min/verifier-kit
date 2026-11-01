@@ -33,7 +33,7 @@ exit 0
 |   spine stale SPEC CHECKS_DIR [--format text|json] [--junit FILE]
 |   spine behaviors SPEC DIR [--format text|json] [--junit FILE]
 |   spine trace SPEC FILE [--format text|json] [--junit FILE]
-|   spine conform SPEC --adapter-cmd COMMAND [--format text|json] [--junit FILE] [--depth N]
+|   spine conform SPEC --adapter-cmd COMMAND [--format text|json] [--junit FILE] [--margin K]
 |   spine guard POLICY [FILES ...] --branch NAME [--format text|json] [--junit FILE]
 |
 | spine COMMAND --help describes one command.
@@ -52,7 +52,7 @@ exit 0
 |   spine stale SPEC CHECKS_DIR [--format text|json] [--junit FILE]
 |   spine behaviors SPEC DIR [--format text|json] [--junit FILE]
 |   spine trace SPEC FILE [--format text|json] [--junit FILE]
-|   spine conform SPEC --adapter-cmd COMMAND [--format text|json] [--junit FILE] [--depth N]
+|   spine conform SPEC --adapter-cmd COMMAND [--format text|json] [--junit FILE] [--margin K]
 |   spine guard POLICY [FILES ...] --branch NAME [--format text|json] [--junit FILE]
 |
 | spine COMMAND --help describes one command.
@@ -71,7 +71,7 @@ exit 0
 |   spine stale SPEC CHECKS_DIR [--format text|json] [--junit FILE]
 |   spine behaviors SPEC DIR [--format text|json] [--junit FILE]
 |   spine trace SPEC FILE [--format text|json] [--junit FILE]
-|   spine conform SPEC --adapter-cmd COMMAND [--format text|json] [--junit FILE] [--depth N]
+|   spine conform SPEC --adapter-cmd COMMAND [--format text|json] [--junit FILE] [--margin K]
 |   spine guard POLICY [FILES ...] --branch NAME [--format text|json] [--junit FILE]
 |
 | spine COMMAND --help describes one command.
@@ -431,10 +431,10 @@ exit 2
 --- stderr
 | spine conform: SPEC is missing; spine conform --help describes it
 |
-=== in tools/internal/spine/testdata: spine conform --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" seeds/spine.yaml --depth 1
+=== in tools/internal/spine/testdata: spine conform --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" seeds/spine.yaml --margin 0
 exit 0
 --- stdout
-| info    coverage           5 sequences up to 1 steps: 4 of 8 state/event/variable cases exercised
+| info    coverage           8 sequences, margin 0: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform --adapter-cmd a
@@ -454,31 +454,31 @@ exit 2
 === in tools/internal/spine/testdata: spine conform --help
 exit 0
 --- stdout
-| usage: spine conform SPEC --adapter-cmd COMMAND [--format text|json] [--junit FILE] [--depth N]
+| usage: spine conform SPEC --adapter-cmd COMMAND [--format text|json] [--junit FILE] [--margin K]
 |
-| Runs every event sequence up to the depth against the spine and against the code, through the
+| Tries every state/event/variable case against the spine and against the code, through the
 | adapter, and reports where they differ.
 |
 | options:
 |   --adapter-cmd COMMAND    the adapter's command line, split as a shell would and run without one
 |   --format text|json       how the findings are printed; text unless given
 |   --junit FILE             also write the findings as a JUnit XML report
-|   --depth N                the longest event sequence tried, 1 or more; 4 unless given
+|   --margin K               how many more steps follow each case tried, 0 or more; 1 unless given
 |   -h, --help               show this help
 |
 === in tools/internal/spine/testdata: spine conform -h
 exit 0
 --- stdout
-| usage: spine conform SPEC --adapter-cmd COMMAND [--format text|json] [--junit FILE] [--depth N]
+| usage: spine conform SPEC --adapter-cmd COMMAND [--format text|json] [--junit FILE] [--margin K]
 |
-| Runs every event sequence up to the depth against the spine and against the code, through the
+| Tries every state/event/variable case against the spine and against the code, through the
 | adapter, and reports where they differ.
 |
 | options:
 |   --adapter-cmd COMMAND    the adapter's command line, split as a shell would and run without one
 |   --format text|json       how the findings are printed; text unless given
 |   --junit FILE             also write the findings as a JUnit XML report
-|   --depth N                the longest event sequence tried, 1 or more; 4 unless given
+|   --margin K               how many more steps follow each case tried, 0 or more; 1 unless given
 |   -h, --help               show this help
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml
@@ -488,10 +488,10 @@ exit 2
 --- stderr
 | spine conform: --adapter-cmd is required; spine conform --help describes it
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml "--adapter-cmd=python3 ../../../adapter_shim.py adapters/door.py" --depth=1
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml "--adapter-cmd=python3 ../../../adapter_shim.py adapters/door.py" --margin=0
 exit 0
 --- stdout
-| info    coverage           5 sequences up to 1 steps: 4 of 8 state/event/variable cases exercised
+| info    coverage           8 sequences, margin 0: 8 of 8 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --ad x
@@ -522,19 +522,19 @@ exit 2
 --- stderr
 | spine conform: --adapter-cmd needs a value; spine conform --help describes it
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_start.py" --depth 1
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_start.py" --margin 0
 exit 2
 --- stdout
 |
 --- stderr
 | spine conform: --adapter-cmd is given twice; spine conform --help describes it
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --depth x
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --margin x
 exit 2
 --- stdout
 |
 --- stderr
-| spine conform: --depth must be a whole number of 1 or more, not "x"; spine conform --help describes it
+| spine conform: --margin must be a whole number of 0 or more, not "x"; spine conform --help describes it
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" extra
 exit 2
@@ -550,7 +550,14 @@ exit 2
 --- stderr
 | spine conform: --adapter-cmd needs a value; spine conform --help describes it
 |
-=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --depth 1
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd true --depth 2
+exit 2
+--- stdout
+|
+--- stderr
+| spine conform: unknown option --depth; spine conform --help describes it
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --margin 0
 exit 2
 --- stdout
 |
