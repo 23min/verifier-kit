@@ -207,10 +207,15 @@ and fails with `no-adapter` until the line exists. The content checks are a comm
 
 ## Limits
 
-- **Bounded, not proven.** Conformance reaches each state by a shortest path and tries every
-  sequence of up to two more steps from it, so every case is tried; that catches code with one
-  state more than the spine shows, and `--margin` tries further (`docs/adr/0008-conform-margin.md`).
-  It is testing, not proof.
+- **Bounded by what the adapter sees, not by length.** `spine conform` tries every
+  state/event/variable case, from a shortest path to each state, and a case it can't try is an
+  error. When every case agrees, code and spine agree on runs of any length, provided the code is
+  deterministic and what `observe()` reports decides what it does next. What it can miss is
+  behavior that depends on state the code keeps but the adapter can't see, such as a counter.
+  Each step of `--margin` rules out one more such hidden state, at about four times the runs: a
+  third-restore bug in notes needs margin 4, 14,130 runs where the default takes 180. Keeping that
+  state observable rules it out by design, and state that only a refusal changes needs it, as no
+  margin reaches it (`docs/adr/0008-conform-margin.md`).
 - **Concurrency needs checks of its own.** `spine conform` runs one lifecycle at a time. The
   ref_sync example adds an explorer for two clients in its own `checks/`; the toolkit has no
   general one.
