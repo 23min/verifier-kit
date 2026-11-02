@@ -2,9 +2,10 @@
 # A live builder run with Claude Code, in a scratch project built from the notes example.
 #
 # The scratch project is laid out as an adopting project would be: the notes example's
-# spec/, checks/, conformance/, src/ and mutation/ at its root, plus the toolkit (verify,
-# tools/) and the Claude Code integration, whose settings are used unchanged. policy.yaml is
-# left out: it is written for this repo's layout, and the path guard does not run here.
+# spec/, checks/, conformance/, src/ and mutation/ at its root, plus the toolkit, installed by
+# install.sh from this checkout (verify, .verifier-kit/), and the Claude Code integration, whose
+# settings are used unchanged. policy.yaml is left out: it is written for this repo's layout, and
+# the path guard does not run here.
 #
 # The service starts as first written (two bugs). The builder is told about one bug only
 # and cannot run shell commands, so it cannot run ./verify itself. The Stop hook from
@@ -21,8 +22,9 @@ MODEL="${MODEL:-sonnet}"
 
 mkdir -p "$W/.claude"
 cp -r "$ROOT/examples/notes/." "$W/"
-cp -r "$ROOT/verify" "$ROOT/tools" "$ROOT/integrations" "$W/"
+cp -r "$ROOT/integrations" "$W/"
 cd "$W"
+bash "$ROOT/install.sh" --from "$ROOT" >/dev/null
 find . -name __pycache__ -prune -exec rm -rf {} +
 cp demo/notes_app_as_written.py src/notes_app.py
 cp integrations/claude-code/settings.json .claude/settings.json
