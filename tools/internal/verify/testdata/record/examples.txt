@@ -302,17 +302,18 @@ exit 0
 |
 | The adapter and the content checks are .cmd files holding one command line, in any language:
 | conformance/adapter_<machine>.cmd, checks/run.cmd. A command runs from its root, without a
-| shell, with tools/ first on its PATH, so a line can name a helper such as adapter_shim.py or
-| run_checks.py, and with VERIFY_SPINE set to the command line that runs spine; checks pass
-| when it exits 0.
+| shell, with the toolkit's folder first on its PATH, so a line can name a helper such as
+| adapter_shim.py or run_checks.py, and with VERIFY_SPINE set to the command line that runs
+| spine; checks pass when it exits 0.
 |
 | The mutants are mutation/mutants.yaml, a list of edits to src/, each a name, file, find and
 | replace. With --full, each mutant is made in a copy of the root, and the oracle must catch it:
 | conform or the content checks must fail there, though they pass on the code as it is. A
 | mutation tool's command, mutation/mutate_<name>.cmd, runs as well, and passes when it exits 0.
 |
-| Every run builds spine and verify from tools/ into tools/bin/ with Go; Go's build cache makes
-| that quick when nothing changed. Without Go, nothing runs.
+| Every run builds spine and verify with Go, from the toolkit's folder next to ./verify into its
+| bin/: .verifier-kit/ in a project, tools/ in the toolkit's own repo. Go's build cache makes that
+| quick when nothing changed. Without Go, nothing runs.
 |
 | Environment:
 |   VERIFY_BASE     commit to diff against; turns on the path guard (CI sets this)

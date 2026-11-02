@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 # One entry point for every gate: CI, git hooks and agent hooks all call this script and
-# nothing else, so they cannot drift apart. It builds spine and verify from tools/ into
-# tools/bin/ with Go, then runs verify with its arguments; ./verify --help says what they do.
+# nothing else, so they cannot drift apart. It builds spine and verify with Go, from the
+# toolkit's folder next to it into that folder's bin/, then runs verify with its arguments;
+# ./verify --help says what they do. The folder is .verifier-kit/ in a project, where
+# install.sh puts it, and tools/ in the toolkit's own repo. GOWORK=off keeps a Go project's own
+# go.work out of the build.
 set -uo pipefail
 here="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd -P)" || exit 2
+kit=.verifier-kit
+[ -d "$here/$kit" ] || kit=tools
 if ! command -v go >/dev/null; then
-  out="go not found: ./verify builds spine and verify from tools/ with Go"
-elif out="$(go -C "$here/tools" build -trimpath -o bin/ ./cmd/spine ./cmd/verify 2>&1)"; then
-  exec "$here/tools/bin/verify" "$@"
+  out="go not found: ./verify builds spine and verify from $kit/ with Go"
+elif out="$(GOWORK=off go -C "$here/$kit" build -trimpath -o bin/ ./cmd/spine ./cmd/verify 2>&1)"; then
+  exec "$here/$kit/bin/verify" "$@"
 fi
 printf 'FAIL  spine and verify built\n'
 printf '%s\n' "$out" | sed 's/^/      /'

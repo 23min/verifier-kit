@@ -26,12 +26,12 @@ jobs:
           fetch-depth: 0            # the path guard diffs against the base commit
 
       # Set up the languages your project's pieces are written in here: for a Python project,
-      # actions/setup-python, as its .cmd lines call tools/run_checks.py and tools/adapter_shim.py.
+      # actions/setup-python, as its .cmd lines call run_checks.py and adapter_shim.py.
 
-      - uses: actions/setup-go@v7       # ./verify builds spine and verify from tools/
+      - uses: actions/setup-go@v7       # ./verify builds spine and verify from .verifier-kit/
         with:
-          go-version-file: tools/go.mod
-          cache-dependency-path: tools/go.sum
+          go-version-file: .verifier-kit/go.mod
+          cache-dependency-path: .verifier-kit/go.sum
 
       - name: verify
         shell: bash                 # bash with -e and pipefail, so tee keeps the exit code

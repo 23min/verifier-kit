@@ -8,7 +8,7 @@
 /checks/         @you
 /conformance/    @you
 /mutation/       @you
-/tools/          @you
+/.verifier-kit/  @you
 /verify          @you
 /policy.yaml     @you
 /integrations/   @you

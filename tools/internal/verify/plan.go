@@ -42,8 +42,8 @@ func parseArgs(args []string) (options, error) {
 	return o, nil
 }
 
-// prefix is what goes in front of spec/, checks/ ... for the root at abs: nothing for the
-// toolkit's folder here, a relative path for a folder inside it, the absolute path otherwise.
+// prefix is what goes in front of spec/, checks/ ... for the root at abs: nothing for the folder
+// ./verify is in, here, a relative path for a folder inside it, the absolute path otherwise.
 func prefix(abs, here string) string {
 	switch rel, inside := strings.CutPrefix(abs, here+"/"); {
 	case abs == here:
@@ -55,8 +55,8 @@ func prefix(abs, here string) string {
 	}
 }
 
-// roots are the prefixes of the roots to check when no ROOT is given: the toolkit's folder when
-// it has spec/ or no examples, otherwise every examples/<name>/ in the order given.
+// roots are the prefixes of the roots to check when no ROOT is given: the folder ./verify is in
+// when it has spec/ or no examples, otherwise every examples/<name>/ in the order given.
 func roots(hasSpec bool, examples []string) []string {
 	if hasSpec || len(examples) == 0 {
 		return []string{""}
@@ -111,8 +111,8 @@ func (c config) junit(name string) []string {
 // command is a program a step runs.
 type command struct {
 	argv   []string
-	dir    string // the folder it runs from: a root's prefix, empty for the toolkit's folder
-	inRoot bool   // with tools/ first on PATH and VERIFY_SPINE set, as a root's commands run
+	dir    string // the folder it runs from: a root's prefix, empty for the folder ./verify is in
+	inRoot bool   // with the toolkit's folder first on PATH and VERIFY_SPINE set, as a root's commands run
 	stdin  *string
 	shown  string // the .cmd file the command came from, or empty for spine
 }

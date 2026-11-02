@@ -4,10 +4,15 @@ Every tool in this repo follows the rules below. They are what let the tools plu
 agent harness, git hook or CI system without knowing about it. Changing anything on this page
 needs an issue and the owner's approval first (see `CLAUDE.md`).
 
+The tools live in the toolkit's folder, next to `verify`: `tools/` in this repo, and
+`.verifier-kit/` in a project, where `install.sh` puts them (below). A path under `tools/` on
+this page names a file in that folder.
+
 ## Rules for every tool
 
 - **Input is files in the repo.** No network access, no model calls. The one planned
-  exception is `interpret`, whose output is files that `spine diff` then judges.
+  exception is `interpret`, whose output is files that `spine diff` then judges. `install.sh`
+  is not one of the tools: it installs them, and downloads them to do so (below).
 - **No knowledge of callers.** A tool never calls aiwf, a CI API, an agent or another tool's
   internals. Callers call tools, and a tool runs no program but the adapter command `conform`
   is given.
@@ -208,10 +213,11 @@ relative ROOT is taken from the caller's working directory. Without ROOT, the ro
 `examples/*/`; otherwise the root is that folder itself.
 
 `./verify` is a short Bash script. First it builds the toolkit's `spine` and `verify`, from the
-`tools/` next to it: `go -C tools build -trimpath -o bin/ ./cmd/spine ./cmd/verify`. Every step
-below runs that `spine`. When the build fails, or Go is missing, it prints
-`FAIL  spine and verify built` with the reason and exits 1 before any other step. Otherwise it
-runs `tools/bin/verify` with its arguments, which does the rest.
+toolkit's folder next to it, `.verifier-kit/` when there is one and `tools/` otherwise:
+`GOWORK=off go -C <folder> build -trimpath -o bin/ ./cmd/spine ./cmd/verify`, so that a Go
+project's own `go.work` leaves it alone. Every step below runs that `spine`. When the build fails, or Go is missing, it prints `FAIL  spine and verify built` with
+the reason and exits 1 before any other step. Otherwise it runs `bin/verify` in that folder with
+its arguments, which does the rest.
 
 Runs, per `spec/<machine>/spine.yaml`: `check`, then `behaviors` over `spec/<machine>/behaviors`,
 `stale` over `checks/<machine>`, and `conform` with the machine's adapter. Then the content
@@ -228,8 +234,8 @@ A `.cmd` file holds one command line, read as `--adapter-cmd` reads one: split b
 rules and run without a shell. One line ending, `\n` or `\r\n`, may follow it. A file that can't
 be read, is empty, holds a second line, or can't be split is `bad-command`, and so is a checks or
 mutation command whose program can't be started; an adapter's is `conform`'s `adapter-failed`.
-The command runs from the root, with `./verify`'s environment, with the `tools/` next to
-`verify` first on `PATH`, so that a line can name a helper such as `adapter_shim.py` or
+The command runs from the root, with `./verify`'s environment, with the toolkit's folder first
+on `PATH`, so that a line can name a helper such as `adapter_shim.py` or
 `run_checks.py` alone, and with `VERIFY_SPINE`, the command line that runs the toolkit's
 `spine` (absolute paths, quoted by shell rules). It sets nothing for any language: a Python
 line puts `src/` on the import path itself, for example
@@ -302,6 +308,30 @@ exception's last line, and `check-unloadable` (error) for a `test_*.py` file it 
 then runs the other files, and `no-checks` when it finds no checks at all, as a checks command
 must. It takes one argument, the folder, `checks` when none is given; a Python example's
 `checks/run.cmd` is `env PYTHONPATH=src run_checks.py checks`.
+
+## Installing
+
+`install.sh`, run in a project's root, installs the toolkit or updates it:
+`curl -fsSL https://raw.githubusercontent.com/23min/verifier-kit/main/install.sh | bash`.
+
+- **What it installs:** the latest release, a tag `vX.Y.Z`, unless it is given one, or a commit:
+  `... | bash -s -- v0.2.0`. `bash install.sh --from DIR` installs from a checkout instead, with
+  no network.
+- **What it writes:** `verify` at the root, and `.verifier-kit/` beside it: `tools/` without its
+  tests, their inputs, its built programs and Python's caches, plus a `.gitignore` for those
+  and `VERSION`: the release and its commit, the commit, or `checkout DIR`. Nothing else
+  changes. A project commits both, so that its gates run the toolkit it holds.
+- **An update** replaces `verify` and `.verifier-kit/` whole, so a file gone from the toolkit
+  goes from the project too, and says from which version to which. If it fails part way, the
+  old ones stay.
+- **It refuses,** and changes nothing, when `verify` or `.verifier-kit/` is already there
+  without a `.verifier-kit/VERSION`: something else put it there.
+- **The network:** `git` lists the tags at `https://github.com/23min/verifier-kit`, and curl
+  downloads one commit's archive from `https://codeload.github.com`. It needs Bash, curl, tar,
+  gzip and `git`, and is the one part of the toolkit that downloads. A commit is installed as
+  given: GitHub serves a fork's commits at the same address, so name a release unless you know
+  the commit.
+- **Exit codes:** `0` installed or updated, `1` refused or failed, `2` misuse.
 
 ## Known gaps
 

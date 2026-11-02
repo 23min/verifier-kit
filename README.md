@@ -68,10 +68,28 @@ guidance (`~/.guidance`): those are the author's own rules for AI assistants, pu
 would apply to every project on your machine. If you'd rather not share these folders, use a
 local Python.
 
+## Using it in your own project
+
+In the project's root:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/23min/verifier-kit/main/install.sh | bash
+```
+
+It writes `verify` at the root and the toolkit in `.verifier-kit/` beside it, from the latest
+release; `... | bash -s -- v0.2.0` installs a given release or commit instead, and the same line
+updates. Commit both, so that CI and the hooks run the toolkit the project holds. To read the
+script before it runs, download it first
+(`curl -fsSLO https://raw.githubusercontent.com/23min/verifier-kit/main/install.sh`), then run
+`bash install.sh`. It needs Bash, curl, tar and `git`; `./verify` then needs Go 1.27, and its
+first build downloads one Go module, `go.yaml.in/yaml/v4`. What it writes, refuses and records is
+in the tool contract's "Installing".
+
 ## Layout and who owns what
 
 ```
 verify                           the single entry point: builds spine and verify, then runs verify
+install.sh                       installs the toolkit into a project, or updates it
 tools/cmd/, tools/internal/      spine and verify, in Go, and their tests (no knowledge of any CI or agent)
 tools/run_checks.py              runs Python content checks; a Python project's checks/run.cmd calls it
 tools/adapter_shim.py            serves a Python adapter over the adapter protocol; an adapter line calls it
@@ -101,11 +119,12 @@ demo/notes_app_as_written.py     the service as first written (two bugs)
 README.md                        what the example shows and how to run it
 ```
 
-A project that uses the toolkit has the same folders at its own root, next to `verify` and
-`tools/`. In any language, the adapter and the content checks are `.cmd` files, each holding one
-command line that `./verify` runs (`docs/reference/tool-contract.md`,
-`docs/adr/0007-no-language-built-in.md`). A Python project's lines call the helpers in `tools/`
-and put `src/` on Python's import path themselves, as notes' do. The mutants are data,
+A project that uses the toolkit has the same folders at its own root, next to `verify` and the
+toolkit's folder, `.verifier-kit/`, which `install.sh` puts there. In any language, the adapter
+and the content checks are `.cmd` files, each holding one command line that `./verify` runs
+(`docs/reference/tool-contract.md`, `docs/adr/0007-no-language-built-in.md`). A Python project's
+lines call the toolkit's helpers by name, as `./verify` puts the toolkit's folder first on their
+`PATH`, and put `src/` on Python's import path themselves, as notes' do. The mutants are data,
 `mutation/mutants.yaml`, which `./verify --full` makes one at a time in a copy of the root (#58);
 a project with a mutation tool gives its command as `mutation/mutate_<name>.cmd` instead, or as
 well.
@@ -223,7 +242,7 @@ and fails with `no-adapter` until the line exists. The content checks are a comm
   ordinary checks; the mutation step exists to show where that gap is.
 - **Every adapter is a program.** `spine conform` runs the program named in
   `adapter_<machine>.cmd`, speaking JSON lines over stdin and stdout; a Python adapter's line
-  runs it through `tools/adapter_shim.py`. Each request is
+  runs it through the toolkit's `adapter_shim.py`. Each request is
   a round trip between processes, about 0.2 ms here, so notes' 180 sequences take about 0.2 s.
 - **The adapter is part of the oracle.** It must only translate, never decide; a person
   reviews it like the spine.
