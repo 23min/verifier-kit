@@ -15,7 +15,7 @@ exit 1
 exit 1
 --- stdout
 | FAIL  spine and verify built
-|       go not found: ./verify builds spine and verify from tools/ with Go
+|       go not found: ./verify builds spine and verify from .verifier-kit/ with Go
 | -- 1 step(s) failed: spine and verify built
 |
 --- stderr

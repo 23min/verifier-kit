@@ -5,7 +5,7 @@
       "Edit(/checks/**)",
       "Edit(/conformance/**)",
       "Edit(/mutation/**)",
-      "Edit(/tools/**)",
+      "Edit(/.verifier-kit/**)",
       "Edit(/integrations/**)",
       "Edit(/verify)",
       "Edit(/policy.yaml)",

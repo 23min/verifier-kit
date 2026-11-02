@@ -3,9 +3,10 @@ package verify
 // The record of ./verify (#68): what ./verify gives on fixture projects that between them reach
 // every path through it, kept in testdata/record/ as the reference. It was written from the Bash
 // ./verify; the Go verify that replaced it (#70) gives the same, except where #69 and #70 say.
-// Each fixture is a project laid out like one that uses the toolkit: verify and tools/ copied in
-// beside its own folders. For each run the record holds the exit code, standard output, standard
-// error and every JUnit report the run wrote, with the test's temporary folder written as $TMP.
+// Each fixture is a project laid out like one that uses the toolkit: install.sh puts verify and
+// .verifier-kit/ beside its own folders. For each run the record holds the exit code, standard
+// output, standard error and every JUnit report the run wrote, with the test's temporary folder
+// written as $TMP.
 //
 // ./verify runs as its callers run it, so the test needs what ./verify needs, Bash, Go and git,
 // and Python 3 for the fixtures' commands. The fixtures need no Elixir. Every run is in the C
@@ -18,7 +19,6 @@ import (
 	"bytes"
 	"errors"
 	"flag"
-	"io/fs"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -112,7 +112,7 @@ def test_a_press_lights_it():
     assert lamp.state == "lit"
 `
 
-// pythonLamp is a root in Python, each piece a command line that calls a helper in tools/.
+// pythonLamp is a root in Python, each piece a command line that calls a helper in the toolkit.
 func pythonLamp(stuck bool) files {
 	f := pythonNames(stuck)
 	f["conformance/adapter_lamp.cmd"] = "env PYTHONPATH=src adapter_shim.py conformance/adapter_lamp.py\n"
@@ -148,13 +148,13 @@ func pythonNames(stuck bool) files {
 	}
 }
 
-// commandLamp is a root whose lines name their programs by path, two folders below tools/.
+// commandLamp is a root whose lines name their programs by path, two folders below the toolkit.
 func commandLamp() files {
 	return files{
 		"spec/lamp/spine.yaml":         lampSpine,
 		"src/lamp.py":                  lampCode(false),
 		"conformance/lamp.py":          "import os, sys\nsys.path.insert(0, os.path.join(os.path.dirname(__file__), \"..\", \"src\"))\n" + lampAdapter,
-		"conformance/adapter_lamp.cmd": "python3 ../../tools/adapter_shim.py conformance/lamp.py\n",
+		"conformance/adapter_lamp.cmd": "python3 ../../.verifier-kit/adapter_shim.py conformance/lamp.py\n",
 		"checks/run.cmd":               "sh -c \"echo 1 check ran\"\n",
 		"mutation/mutate_lamp.cmd":     "sh -c \"echo -- 0 errors, 1 mutants\"\r\n",
 	}
@@ -323,44 +323,6 @@ func projects(tmp string) []project {
 	}
 }
 
-// copyToolkit copies verify and tools/ into dir, as a project does: tools/ without its tests,
-// its test inputs, its built programs and Python's caches.
-func copyToolkit(t *testing.T, repo, dir string) {
-	t.Helper()
-	copyFile(t, filepath.Join(repo, "verify"), filepath.Join(dir, "verify"))
-	tools := filepath.Join(repo, "tools")
-	err := filepath.WalkDir(tools, func(p string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		switch {
-		case d.IsDir() && (d.Name() == "testdata" || d.Name() == "bin" || d.Name() == "__pycache__"):
-			return filepath.SkipDir
-		case d.IsDir() || strings.HasSuffix(p, "_test.go"):
-			return nil
-		}
-		rel, _ := filepath.Rel(repo, p)
-		copyFile(t, p, filepath.Join(dir, rel))
-		return nil
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
-}
-
-func copyFile(t *testing.T, from, to string) {
-	t.Helper()
-	data, err := os.ReadFile(from)
-	if err != nil {
-		t.Fatal(err)
-	}
-	info, err := os.Stat(from)
-	if err != nil {
-		t.Fatal(err)
-	}
-	writeFile(t, to, string(data), info.Mode().Perm())
-}
-
 func writeFile(t *testing.T, path, content string, mode os.FileMode) {
 	t.Helper()
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
@@ -385,7 +347,12 @@ func git(t *testing.T, dir string, args ...string) {
 // src/ and spec/, on the branch build/lamp.
 func makeProject(t *testing.T, repo, dir string, p project) {
 	t.Helper()
-	copyToolkit(t, repo, dir)
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if out, code := install(t, repo, dir, "--from", repo); code != 0 {
+		t.Fatalf("install.sh: exit %d: %s", code, out)
+	}
 	for path, content := range p.files {
 		writeFile(t, filepath.Join(dir, path), content, 0o644)
 	}

@@ -3,15 +3,15 @@
 Nothing in this repo needs aiwf. If a project already uses aiwf, its contracts can call
 `spine` the same way CI does. This snippet comes from an earlier demo that was run against
 aiwf at commit 9db8775; it is not exercised by this repo.
-`tools/bin/spine` is there once `./verify` has run, or after
-`go -C tools build -o bin/spine ./cmd/spine`.
+`.verifier-kit/bin/spine` is there once `./verify` has run, or after
+`GOWORK=off go -C .verifier-kit build -o bin/spine ./cmd/spine`.
 
 ```yaml
 # aiwf.yaml
 contracts:
   validators:
     spine-trace:                       # one behavior file per call
-      command: tools/bin/spine
+      command: .verifier-kit/bin/spine
       args: [trace, "{{schema}}", "{{fixture}}"]
   entries:
     - id: C-0001

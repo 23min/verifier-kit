@@ -24,11 +24,11 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
 - **The spine format and the tool contract are fixed** (`docs/reference/`). Changing them,
   including exit codes, JSON shape or finding codes, needs a GitHub issue the owner has
   approved. New finding codes may be added; existing ones are never renamed or reused.
-- **Tools stay standalone:** files in, findings out. No network, no model calls (the planned
-  `interpret` tool is the one exception), no knowledge of who calls them, no aiwf or other
-  workflow tool. Python standard library plus PyYAML unless an issue says otherwise; the Go
-  `spine` and `verify` (`tools/cmd/`, `tools/internal/`) use the Go standard library plus
-  `go.yaml.in/yaml/v4`.
+- **Tools stay standalone:** files in, findings out. No network and no model calls, except in
+  the planned `interpret` tool; `install.sh`, which installs the tools rather than being one,
+  downloads them (#99). No knowledge of who calls them, no aiwf or other workflow tool. Python
+  standard library plus PyYAML unless an issue says otherwise; the Go `spine` and `verify`
+  (`tools/cmd/`, `tools/internal/`) use the Go standard library plus `go.yaml.in/yaml/v4`.
 - **Docs move with code.** A change to a tool updates `docs/reference/` in the same commit;
   `docs/design.md` changes with the code it describes.
 - **Keep it clean.** A change leaves no second copy of anything, no code or file that nothing

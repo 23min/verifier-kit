@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """Serve a Python adapter over the adapter protocol, so `spine conform --adapter-cmd` can drive it.
 
-  spine conform SPEC --adapter-cmd "python3 tools/adapter_shim.py conformance/adapter_notes.py"
+  env PYTHONPATH=src adapter_shim.py conformance/adapter_notes.py
+
+as a line in conformance/adapter_notes.cmd, which ./verify runs with the toolkit's folder, where
+this file is, first on PATH.
 
 Reads one JSON request per line on stdin and writes one JSON reply per line on stdout, flushed
 (docs/reference/tool-contract.md, "The adapter protocol"). The adapter's own printing goes to

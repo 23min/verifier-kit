@@ -88,13 +88,14 @@ language (`docs/adr/0007-no-language-built-in.md`), and so is a mutation tool's 
 `mutation/mutate_<name>.cmd`. How `./verify` runs them, and what it gives them, is in the
 contract's section on `./verify` (`docs/reference/tool-contract.md`).
 
-`./verify` is a short Bash script. Before anything else it builds `spine` and `verify` into
-`tools/bin/` with Go, then runs `verify` with its arguments, and `verify` does all of the above
-(`tools/cmd/verify/`, `tools/internal/verify/`). Its decisions are pure functions, in
-`plan.go`: reading the arguments, planning each root's steps from what the root holds, and what
-each step prints. `verify.go` reads the files and starts the programs around them, and decides
-nothing (`docs/adr/0007-no-language-built-in.md`, decision 1). `verify` runs `spine` only as a
-program. The two share what both need: `tools/internal/shlex`, which splits a command line, and
+`./verify` is a short Bash script. Before anything else it builds `spine` and `verify` with Go,
+into the `bin/` of the toolkit's folder next to it: `tools/` here, and `.verifier-kit/` in a
+project, which gets both from `install.sh`. Then it runs `verify` with its arguments, and
+`verify` does all of the above (`tools/cmd/verify/`, `tools/internal/verify/`). Its decisions are
+pure functions, in `plan.go`: reading the arguments, planning each root's steps from what the
+root holds, and what each step prints. `verify.go` reads the files and starts the programs around
+them, and decides nothing (`docs/adr/0007-no-language-built-in.md`, decision 1). `verify` runs
+`spine` only as a program. The two share what both need: `tools/internal/shlex`, which splits a command line, and
 `tools/internal/program`, which starts one and words the system's errors.
 
 `spine` (`tools/cmd/spine/`, `tools/internal/spine/`) is split into a core and a shell too, by
@@ -309,8 +310,8 @@ reviewer reads. Beside it, `conform_test.go` drives `conform`'s search with a fa
 with no program, and `core_test.go` checks what `spine`'s core imports.
 
 `go test` also holds the record of `./verify` (`tools/internal/verify/record_test.go`, #68).
-It copies `verify` and `tools/` into fixture projects, as a project does, and runs `./verify`
-in them as its callers do. Between them the fixtures reach every path through it: misuse, a
+It installs the toolkit into fixture projects with `install.sh --from`, as a project does, and
+runs `./verify` in them as its callers do. Between them the fixtures reach every path through it: misuse, a
 failed build, which roots run, the guard, every skip, each piece as a command line, passing and
 failing, each missing piece, each `bad-command`, and a root that gives its pieces only by
 Python file names. Each run must give exactly what

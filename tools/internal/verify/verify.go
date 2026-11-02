@@ -33,17 +33,18 @@ error.
 
 The adapter and the content checks are .cmd files holding one command line, in any language:
 conformance/adapter_<machine>.cmd, checks/run.cmd. A command runs from its root, without a
-shell, with tools/ first on its PATH, so a line can name a helper such as adapter_shim.py or
-run_checks.py, and with VERIFY_SPINE set to the command line that runs spine; checks pass
-when it exits 0.
+shell, with the toolkit's folder first on its PATH, so a line can name a helper such as
+adapter_shim.py or run_checks.py, and with VERIFY_SPINE set to the command line that runs
+spine; checks pass when it exits 0.
 
 The mutants are mutation/mutants.yaml, a list of edits to src/, each a name, file, find and
 replace. With --full, each mutant is made in a copy of the root, and the oracle must catch it:
 conform or the content checks must fail there, though they pass on the code as it is. A
 mutation tool's command, mutation/mutate_<name>.cmd, runs as well, and passes when it exits 0.
 
-Every run builds spine and verify from tools/ into tools/bin/ with Go; Go's build cache makes
-that quick when nothing changed. Without Go, nothing runs.
+Every run builds spine and verify with Go, from the toolkit's folder next to ./verify into its
+bin/: .verifier-kit/ in a project, tools/ in the toolkit's own repo. Go's build cache makes that
+quick when nothing changed. Without Go, nothing runs.
 
 Environment:
   VERIFY_BASE     commit to diff against; turns on the path guard (CI sets this)
@@ -54,8 +55,8 @@ Environment:
 Exit 0 when everything passes, 1 when any step fails, 2 when ./verify is misused.
 `
 
-// Main runs verify with its arguments and returns its exit code. It is tools/bin/verify, so the
-// toolkit's folder is the one two above it.
+// Main runs verify with its arguments and returns its exit code. It is bin/verify in the
+// toolkit's folder, which is next to ./verify.
 func Main(args []string, stdout, stderr io.Writer) int {
 	o, err := parseArgs(args)
 	if err != nil {
@@ -87,7 +88,7 @@ func Main(args []string, stdout, stderr io.Writer) int {
 	if reports != "" && !filepath.IsAbs(reports) {
 		reports = sh.here + "/" + reports
 	}
-	c := config{spine: filepath.Join(sh.here, "tools", "bin", "spine"), reports: reports, full: o.full}
+	c := config{spine: sh.spine, reports: reports, full: o.full}
 
 	if base := os.Getenv("VERIFY_BASE"); base == "" {
 		sh.do(step{name: "guard", skip: "VERIFY_BASE not set"}, "")
@@ -127,7 +128,8 @@ func Main(args []string, stdout, stderr io.Writer) int {
 
 // shell runs the steps and prints them.
 type shell struct {
-	here     string // the toolkit's folder, where ./verify is
+	here     string // the folder ./verify is in
+	spine    string // the toolkit's spine
 	stdout   io.Writer
 	verbose  bool
 	rootEnv  []string // the environment of a root's commands
@@ -142,16 +144,16 @@ func newShell(stdout io.Writer) (*shell, error) {
 	if err != nil {
 		return nil, fmt.Errorf("cannot find the toolkit's folder: %v", err)
 	}
-	here := filepath.Dir(filepath.Dir(filepath.Dir(exe)))
-	spine := filepath.Join(here, "tools", "bin", "spine")
+	kit := filepath.Dir(filepath.Dir(exe)) // this program is bin/verify in it
+	spine := filepath.Join(kit, "bin", "spine")
 	var env []string
 	for _, e := range os.Environ() {
 		if !strings.HasPrefix(e, "PATH=") && !strings.HasPrefix(e, "VERIFY_SPINE=") {
 			env = append(env, e)
 		}
 	}
-	env = append(env, "PATH="+filepath.Join(here, "tools")+":"+os.Getenv("PATH"), "VERIFY_SPINE="+shlex.Quote(spine))
-	return &shell{here: here, stdout: stdout, verbose: os.Getenv("VERIFY_VERBOSE") == "1", rootEnv: env}, nil
+	env = append(env, "PATH="+kit+":"+os.Getenv("PATH"), "VERIFY_SPINE="+shlex.Quote(spine))
+	return &shell{here: filepath.Dir(kit), spine: spine, stdout: stdout, verbose: os.Getenv("VERIFY_VERBOSE") == "1", rootEnv: env}, nil
 }
 
 // do runs one step, prints it, and says whether it passed.
@@ -242,7 +244,7 @@ func (sh *shell) start(argv []string, dir string, env []string, stdin *string, b
 	return string(data), state.Success(), nil
 }
 
-// git runs git from the toolkit's folder and gives its output without the line endings after
+// git runs git from the folder ./verify is in and gives its output without the line endings after
 // it, with its standard error too when both is set.
 func (sh *shell) git(both bool, args ...string) (string, bool, error) {
 	out, ok, err := sh.start(append([]string{"git"}, args...), sh.here, nil, nil, both)

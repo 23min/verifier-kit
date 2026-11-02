@@ -1,7 +1,8 @@
 # 0006. `tools/spine.py` retires; the Go `spine` lives in `tools/`, and `./verify` builds it
 
 - Status: accepted; the end of decision 3 reversed by `0007-no-language-built-in.md`
-  (`./verify` no longer exports `PYTHON`)
+  (`./verify` no longer exports `PYTHON`); how a project gets the toolkit, in decision 2,
+  superseded by #99 (`install.sh`, `.verifier-kit/`)
 - Date: 2026-10-18
 - Issue: #44
 
@@ -25,6 +26,9 @@ in any language. #44 retires `spine.py`. The owner decided its three open questi
    nothing new lands at its root. A project written in Go is unaffected: its own module leaves
    the nested `tools/go.mod` alone. This supersedes the module's place in ADR 0004's decision 1.
    The `go` commands run with `-C tools`.
+   (Superseded on 2026-11-02: a project installs the toolkit with `install.sh`, into
+   `.verifier-kit/`, while this repo keeps `tools/`; `./verify` builds with `GOWORK=off`, so a
+   Go project's `go.work` leaves it alone too. See #99 and the tool contract's "Installing".)
 3. **`VERIFY_SPINE` names the Go `spine`, for Python mutation scripts too** (OQ2). notes' and
    ref_sync's mutation scripts run whatever it names, as elixir_job's does, and find `tools/`
    by `run_checks.py`. This extends ADR 0005's decision 6. It changes
