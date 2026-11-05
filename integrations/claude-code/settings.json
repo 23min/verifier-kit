@@ -9,7 +9,8 @@
       "Edit(/integrations/**)",
       "Edit(/verify)",
       "Edit(/policy.yaml)",
-      "Edit(/.claude/**)"
+      "Edit(/.claude/**)",
+      "Edit(/.github/**)"
     ]
   },
   "hooks": {

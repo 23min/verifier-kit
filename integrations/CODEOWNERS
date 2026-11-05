@@ -12,3 +12,5 @@
 /verify          @you
 /policy.yaml     @you
 /integrations/   @you
+/.claude/        @you
+/.github/        @you
