@@ -19,8 +19,10 @@ replies and crashes up to a bound, and against real Git. The third,
 written in Elixir: its adapter and content checks are commands, as every example's are, so it
 shows the toolkit checking a project in another language.
 
-The design is in [`docs/design.md`](docs/design.md); the exact tool contract and spine format
-are in [`docs/reference/`](docs/reference/). Rules for agents working here are in
+To use it in your own project, start with [`docs/guide.md`](docs/guide.md): one line installs
+it, and the guide goes step by step from there, saying what an LLM can do at each step and what
+you do. The design is in [`docs/design.md`](docs/design.md); the exact tool contract and spine
+format are in [`docs/reference/`](docs/reference/). Rules for agents working here are in
 [`CLAUDE.md`](CLAUDE.md). Work is tracked in GitHub issues.
 
 ## Try it
@@ -70,20 +72,8 @@ local Python.
 
 ## Using it in your own project
 
-In the project's root:
-
-```sh
-curl -fsSL https://raw.githubusercontent.com/23min/verifier-kit/main/install.sh | bash
-```
-
-It writes `verify` at the root and the toolkit in `.verifier-kit/` beside it, from the latest
-release; `... | bash -s -- v0.2.0` installs a given release or commit instead, and the same line
-updates. Commit both, so that CI and the hooks run the toolkit the project holds. To read the
-script before it runs, download it first
-(`curl -fsSLO https://raw.githubusercontent.com/23min/verifier-kit/main/install.sh`), then run
-`bash install.sh`. It needs Bash, curl, tar and `git`; `./verify` then needs Go 1.27, and its
-first build downloads one Go module, `go.yaml.in/yaml/v4`. What it writes, refuses and records is
-in the tool contract's "Installing".
+[`docs/guide.md`](docs/guide.md) takes a project from installing the toolkit, with one line, to
+gated builds.
 
 ## Layout and who owns what
 
