@@ -1,0 +1,6 @@
+# No events: there is no case to try, so conform checks only the start.
+machine: still
+states: {s: {kind: fact}}
+initial: s
+events: []
+rules: []

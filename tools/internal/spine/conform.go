@@ -175,9 +175,11 @@ type search struct {
 }
 
 // newSearch queues the first runs: each step from the first shortest path to each live state.
-// command names the adapter in its findings.
+// When there is none, because the initial state is terminal or there are no events, it queues
+// the empty sequence, which still checks that the adapter answers and that the code starts in
+// initial (#93). command names the adapter in its findings.
 func newSearch(s *Spec, command string, margin int) *search {
-	c := &search{s: s, command: command, margin: margin, n: 1,
+	c := &search{s: s, command: command, margin: margin,
 		byLength: map[int][]*run{}, queued: map[string]bool{}, exercised: map[string]bool{}, reported: map[string]bool{}}
 	c.steps = stepsOf(s.Events, s.assignments())
 	c.paths = s.shortestPaths(c.steps)
@@ -186,6 +188,9 @@ func newSearch(s *Spec, command string, margin int) *search {
 			c.queue(append(p.steps[:len(p.steps):len(p.steps)], st), 1)
 		}
 		c.longest = max(c.longest, len(p.steps)+1)
+	}
+	if len(c.queued) == 0 {
+		c.queue(nil, 0)
 	}
 	return c
 }
@@ -205,7 +210,7 @@ func (c *search) queue(seq []parsedStep, extra int) {
 	c.byLength[len(seq)] = append(c.byLength[len(seq)], &run{seq, extra})
 }
 
-// first is the first request, or none when there is nothing to run.
+// first is the first request; there is always one, if only the empty sequence's.
 func (c *search) first() string { return c.nextRun() }
 
 // next takes the reply to the last request and gives the next request.

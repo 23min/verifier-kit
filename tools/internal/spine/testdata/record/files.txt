@@ -84,6 +84,18 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/no-events.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/not-utf8.yaml
 exit 1
 --- stdout
@@ -379,6 +391,11 @@ exit 0
 --- stdout
 | -- 0 errors, 0 findings
 |
+=== in tools/internal/spine/testdata: spine check spines/no-events.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
 === in tools/internal/spine/testdata: spine check spines/not-utf8.yaml
 exit 1
 --- stdout
@@ -521,6 +538,11 @@ exit 0
 | tab	name/ev"q@c0204794eeec
 |q "\x7f\u0085/\u00fcber@e31e9d4cc612"
 |q "\x7f\u0085/ev\"q@547ffcf8486c"
+|
+=== in tools/internal/spine/testdata: spine hash spines/no-events.yaml
+exit 0
+--- stdout
+| spine@78c5ef54290f
 |
 === in tools/internal/spine/testdata: spine hash spines/not-utf8.yaml
 exit 1
