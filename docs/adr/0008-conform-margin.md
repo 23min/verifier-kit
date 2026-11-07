@@ -1,6 +1,6 @@
 # 0008. Conform tries every case: a shortest path to each state, then a margin
 
-- Status: accepted
+- Status: accepted; decision 1 extended by #93 (the empty sequence when there is no case to try)
 - Date: 2026-11-01
 - Issue: #89
 
@@ -37,6 +37,9 @@ every stop.
    events and variable values, then runs every sequence of 1 to K+1 further steps. A run stops at
    a terminal state, after a refusal, or where the code diverges. A sequence two states share runs
    once. K is the margin.
+   (Extended on 2026-11-07, #93: when there is no case to try, because the initial state is
+   terminal or there are no events, conform runs the empty sequence once, `new` then `observe`,
+   so that a broken adapter or a wrong start still fails.)
 2. **`--margin K` replaces `--depth N` on `conform`:** a whole number, 0 or more, 1 unless given.
    `spine diff --depth` stays: its case-by-case comparison already covers every case.
 3. **A case left untried is an error,** `untried-case`, one per case, naming it. Every case is
@@ -53,7 +56,9 @@ every sequence of up to k+1 inputs from there. When the state can be read direct
 `observe()` reads it, this catches every implementation that has up to k states the spec doesn't,
 provided the code is deterministic and `new()` starts it afresh. The margin is the same at every
 state, and the cost grows with the spine's size, not exponentially with its depth. The old search
-ran a superset of these sequences, with its margin set by its furthest state.
+ran a superset of these sequences, with its margin set by its furthest state. (Corrected on
+2026-11-07, #93: only where depth 4 reached past each state's margin. That held for the three
+examples, but not for the nine-state chain, as the table below shows: 36 of its 81 cases.)
 
 | Spine | Depth 4 before | Margin 1 | Margin 0 (every case once) |
 |---|---|---|---|

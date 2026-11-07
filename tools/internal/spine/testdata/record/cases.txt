@@ -2699,6 +2699,31 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/no-events.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_start.py"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "start",
+|       "message": "spine starts in s, code starts in open"
+|     },
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "1 sequences, margin 1",
+|       "message": "0 of 0 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges start"><failure message="spine starts in s, code starts in open">spine starts in s, code starts in open</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/orders.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/orders.py"
 exit 0
 --- stdout
@@ -2847,6 +2872,50 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="11" failures="11"><testcase classname="spine conform" name="diverges packed/ship"><failure message="after pay() -&gt; pack() -&gt; ship(): spine expects ok in shipped, code gave rejected in packed">after pay() -&gt; pack() -&gt; ship(): spine expects ok in shipped, code gave rejected in packed</failure></testcase><testcase classname="spine conform" name="untried-case shipped/pay"><failure message="not tried: the code diverged on the way to shipped">not tried: the code diverged on the way to shipped</failure></testcase><testcase classname="spine conform" name="untried-case shipped/pack"><failure message="not tried: the code diverged on the way to shipped">not tried: the code diverged on the way to shipped</failure></testcase><testcase classname="spine conform" name="untried-case shipped/ship"><failure message="not tried: the code diverged on the way to shipped">not tried: the code diverged on the way to shipped</failure></testcase><testcase classname="spine conform" name="untried-case shipped/deliver"><failure message="not tried: the code diverged on the way to shipped">not tried: the code diverged on the way to shipped</failure></testcase><testcase classname="spine conform" name="untried-case shipped/return_item"><failure message="not tried: the code diverged on the way to shipped">not tried: the code diverged on the way to shipped</failure></testcase><testcase classname="spine conform" name="untried-case delivered/pay"><failure message="not tried: the code diverged on the way to delivered">not tried: the code diverged on the way to delivered</failure></testcase><testcase classname="spine conform" name="untried-case delivered/pack"><failure message="not tried: the code diverged on the way to delivered">not tried: the code diverged on the way to delivered</failure></testcase><testcase classname="spine conform" name="untried-case delivered/ship"><failure message="not tried: the code diverged on the way to delivered">not tried: the code diverged on the way to delivered</failure></testcase><testcase classname="spine conform" name="untried-case delivered/deliver"><failure message="not tried: the code diverged on the way to delivered">not tried: the code diverged on the way to delivered</failure></testcase><testcase classname="spine conform" name="untried-case delivered/return_item"><failure message="not tried: the code diverged on the way to delivered">not tried: the code diverged on the way to delivered</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/terminal-start.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_start.py"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "start",
+|       "message": "spine starts in s, code starts in open"
+|     },
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "1 sequences, margin 1",
+|       "message": "0 of 0 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="diverges start"><failure message="spine starts in s, code starts in open">spine starts in s, code starts in open</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/terminal-start.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/no_such_adapter.py"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 ../../../adapter_shim.py adapters/no_such_adapter.py",
+|       "message": "exited with status 1 before replying to new"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/no_such_adapter.py"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT spines/terminal-start.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stays.py"
 exit 0
 --- stdout
@@ -2857,7 +2926,7 @@ exit 0
 |     {
 |       "code": "coverage",
 |       "severity": "info",
-|       "where": "0 sequences, margin 1",
+|       "where": "1 sequences, margin 1",
 |       "message": "0 of 0 state/event/variable cases exercised"
 |     }
 |   ]
@@ -3526,6 +3595,13 @@ exit 0
 | info    coverage           4 sequences, margin 0: 4 of 4 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
+=== in tools/internal/spine/testdata: spine conform spines/no-events.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_start.py"
+exit 1
+--- stdout
+| error   diverges           start: spine starts in s, code starts in open
+| info    coverage           1 sequences, margin 1: 0 of 0 state/event/variable cases exercised
+| -- 1 errors, 2 findings
+|
 === in tools/internal/spine/testdata: spine conform spines/orders.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/orders.py"
 exit 0
 --- stdout
@@ -3562,10 +3638,23 @@ exit 1
 | info    coverage           25 sequences, margin 1: 15 of 25 state/event/variable cases exercised
 | -- 11 errors, 12 findings
 |
+=== in tools/internal/spine/testdata: spine conform spines/terminal-start.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_start.py"
+exit 1
+--- stdout
+| error   diverges           start: spine starts in s, code starts in open
+| info    coverage           1 sequences, margin 1: 0 of 0 state/event/variable cases exercised
+| -- 1 errors, 2 findings
+|
+=== in tools/internal/spine/testdata: spine conform spines/terminal-start.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/no_such_adapter.py"
+exit 1
+--- stdout
+| error   adapter-failed     python3 ../../../adapter_shim.py adapters/no_such_adapter.py: exited with status 1 before replying to new
+| -- 1 errors, 1 findings
+|
 === in tools/internal/spine/testdata: spine conform spines/terminal-start.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/stays.py"
 exit 0
 --- stdout
-| info    coverage           0 sequences, margin 1: 0 of 0 state/event/variable cases exercised
+| info    coverage           1 sequences, margin 1: 0 of 0 state/event/variable cases exercised
 | -- 0 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform spines/unsound.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py" --margin 0

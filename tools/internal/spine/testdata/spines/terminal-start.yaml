@@ -1,4 +1,5 @@
-# The initial state is terminal: no state is live, so conform tries nothing.
+# The initial state is terminal: no state is live, so conform tries no case and checks only the
+# start.
 machine: termini
 states: {s: {terminal: true}}
 initial: s
