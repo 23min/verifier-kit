@@ -20,10 +20,53 @@ written in Elixir: its adapter and content checks are commands, as every example
 shows the toolkit checking a project in another language.
 
 To use it in your own project, start with [`docs/guide.md`](docs/guide.md): one line installs
-it, and the guide goes step by step from there, saying what an LLM can do at each step and what
-you do. The design is in [`docs/design.md`](docs/design.md); the exact tool contract and spine
-format are in [`docs/reference/`](docs/reference/). Rules for agents working here are in
+it, and the guide goes step by step from there. The design is in
+[`docs/design.md`](docs/design.md); the exact tool contract and spine format are in
+[`docs/reference/`](docs/reference/). Rules for agents working here are in
 [`CLAUDE.md`](CLAUDE.md). Work is tracked in GitHub issues.
+
+## Why use it
+
+A coding agent writes code quickly, and it also writes the tests that pass it. When a test
+fails, it can change the test instead of the code, and agents have been seen doing exactly that
+(ImpossibleBench). verifier-kit splits the two jobs: you decide what the system must do, the
+builder writes the code, and a program decides whether they agree.
+
+- **The builder can't grade its own work.** The oracle is yours: the spine, the checks, the
+  adapter and the mutants. Deny rules keep the agent's file tools out of it, a Stop hook runs
+  `./verify` whenever the agent tries to finish, and CI with a required check and the path guard
+  is the gate ([Jacking it in](#jacking-it-in)). The agent never has to choose to check its own
+  work; in [the live run](#a-live-run) it didn't, and the hook did.
+- **Every case is decided before the code exists.** A spine has exactly one rule for each state,
+  event and combination of values, and `spine check` names any case no rule decides. Two
+  independent readings of your prose, compared by `spine diff`, turn each ambiguity into a
+  question with a concrete run ([The three loops](#the-three-loops)). Gaps reach you as
+  questions, not as bugs later.
+- **A guarantee you can read, not a coverage percentage.** `spine conform` tries every case
+  against the real code, from a shortest path to each state plus a margin: the classic method
+  for testing state machines (Chow, 1978). A case it couldn't try is an error, and what it can
+  miss is written down under [Limits](#limits).
+- **It checks its own checks.** `./verify --full` plants bugs and fails if the oracle misses one,
+  and a check that cites a spine cell is reported stale when that cell's rule changes.
+- **Any language, any agent, any CI.** The code is reached through an adapter that speaks JSON
+  lines, so the examples are in Python and Elixir. Every gate calls one script, `./verify`,
+  which makes no network or model calls and gives the same output every time.
+- **An LLM does nearly all the writing.** [The guide](docs/guide.md) says, step by step, which
+  parts it drafts and what stays with you.
+
+How it compares, as of November 2026:
+
+| If you use | It gives you | verifier-kit adds |
+|---|---|---|
+| Spec-driven tools: [Spec Kit](https://github.com/github/spec-kit), [Kiro](https://kiro.dev/blog/general-availability/) | Markdown specs that guide the agent; after implementation, an agent compares the code with the spec (Spec Kit), or property-based tests are generated from the requirements (Kiro) | a spec that a program checks for completeness, and an oracle the builder can neither write nor change, judged by a program |
+| Property-based testing: [Hypothesis](https://hypothesis.readthedocs.io/), [QuickCheck](https://hackage.haskell.org/package/QuickCheck) | random runs that find surprising bugs, content included | every case tried, and a stated bound on what is missed |
+| Model-based testing: [XState](https://stately.ai/docs/xstate-test), [Quint Connect](https://quint-lang.org/docs/model-based-testing) | tests generated from a model; Quint has a full specification language | any language, the gates that keep the builder out, and checks of the checks |
+| Model checkers: [TLA+](https://lamport.azurewebsites.net/tla/tla.html) | a design checked exhaustively, concurrency included | the real code checked, not a model of it |
+
+Use something else when your logic is mostly computation or content, where property-based tests
+fit better, since a spine sees only states and permissions; or when clients race each other,
+which needs a model checker. verifier-kit is at v0.1, and no project outside this repo uses it
+yet.
 
 ## Try it
 
