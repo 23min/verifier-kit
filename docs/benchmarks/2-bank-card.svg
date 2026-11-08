@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 940" width="1100" height="940">
+  <title>ASN bank card, Maestro application (Aarts, de Ruiter and Poll, 2013)</title>
+  <style>
+    :root {
+      --surface: #ffffff; --node: #e4e4e4; --ink: #141414; --ink-2: #333333; --muted: #6a6a6a; --rule: #b4b4b4;
+      --serif: "Latin Modern Roman", "CMU Serif", "Times New Roman", Times, serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --surface: #161616; --node: #2c2c2c; --ink: #ececec; --ink-2: #cfcfcf; --muted: #9d9d9d; --rule: #4a4a4a; }
+    }
+    .bg { fill: var(--surface); }
+    .st { fill: var(--node); stroke: var(--ink); stroke-width: 1.4; }
+    .e { fill: none; stroke: var(--ink-2); stroke-width: 1.15; }
+    .mk { fill: var(--ink-2); }
+    .sn { font: italic 400 19px var(--serif); fill: var(--ink); }
+    .sub { font-style: normal; font-size: 13px; }
+    .lb { font: 400 13px var(--serif); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+    .ti { font: 400 17px var(--serif); fill: var(--ink); }
+    .nt { font: 400 12.5px var(--serif); fill: var(--muted); }
+    .kh { font: 400 12.5px var(--serif); fill: var(--ink); }
+    .rule { stroke: var(--rule); stroke-width: 1; }
+  </style>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 8" refX="10" refY="4" markerWidth="10" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+      <path class="mk" d="M0,0 L10,4 L0,8 z"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1100" height="940"/>
+  <text class="ti" x="24" y="34">ASN bank card, Maestro application (Aarts, de Ruiter and Poll, 2013)</text>
+  <path class="e" d="M36.0,380.0 L75.0,380.0" marker-end="url(#arr)"/>
+  <path class="e" d="M89.6,358.4 C44.6,316.8 155.4,316.8 110.9,357.5" marker-end="url(#arr)"/>
+  <text class="lb" x="100" y="282" text-anchor="middle"><tspan x="100" dy="0">GD, GD′ / 6A88</tspan><tspan x="100" dy="16">RR, RR′, IA / 6E00</tspan><tspan x="100" dy="16">other / 6D00</tspan></text>
+  <path class="e" d="M124.0,380.0 Q215.0,380.0 305.0,380.0" marker-end="url(#arr)"/>
+  <text class="lb" x="215" y="370" text-anchor="middle"><tspan x="215" dy="0">SELECT / 9000</tspan></text>
+  <path class="e" d="M322.1,402.7 C324.5,463.8 246.2,385.5 306.4,388.2" marker-end="url(#arr)"/>
+  <text class="lb" x="284" y="439" text-anchor="end"><tspan x="284" dy="0">GD, RR, SELECT / 9000</tspan><tspan x="284" dy="16">GD′ / 6A88</tspan><tspan x="284" dy="16">RR′ / 6A82</tspan><tspan x="284" dy="16">other / 6985</tspan></text>
+  <path class="e" d="M353.3,374.3 Q445.0,352.0 535.7,374.1" marker-end="url(#arr)"/>
+  <text class="lb" x="445" y="340" text-anchor="middle"><tspan x="445" dy="0">GPO / 9000</tspan></text>
+  <path class="e" d="M536.7,385.7 Q445.0,408.0 354.3,385.9" marker-end="url(#arr)"/>
+  <text class="lb" x="445" y="432" text-anchor="middle"><tspan x="445" dy="0">AC2(AAC, TC, ARQC) / 6700</tspan><tspan x="445" dy="16">GPO, GPO′ / 6985</tspan><tspan x="445" dy="16">GD′ / 6A88</tspan><tspan x="445" dy="16">RR′ / 6A82</tspan><tspan x="445" dy="16">SELECT / 9000</tspan></text>
+  <path class="e" d="M549.6,358.4 C504.6,316.8 615.4,316.8 570.9,357.5" marker-end="url(#arr)"/>
+  <text class="lb" x="560" y="314" text-anchor="middle"><tspan x="560" dy="0">GD, RR / 9000</tspan></text>
+  <path class="e" d="M584.0,380.0 Q780.0,380.0 975.0,380.0" marker-end="url(#arr)"/>
+  <text class="lb" x="680" y="370" text-anchor="middle"><tspan x="680" dy="0">AC1(AAC) / 900000</tspan></text>
+  <path class="e" d="M579.7,366.3 Q675.0,300.0 769.5,234.3" marker-end="url(#arr)"/>
+  <text class="lb" x="660" y="270" text-anchor="end"><tspan x="660" dy="0">AC1(TC, ARQC) / 900080</tspan></text>
+  <path class="e" d="M579.7,393.7 Q675.0,460.0 769.5,525.7" marker-end="url(#arr)"/>
+  <text class="lb" x="660" y="488" text-anchor="end"><tspan x="660" dy="0">IA / 9000</tspan></text>
+  <path class="e" d="M809.1,234.5 Q895.0,300.0 980.1,364.8" marker-end="url(#arr)"/>
+  <text class="lb" x="912" y="268" text-anchor="start"><tspan x="912" dy="0">AC2(TC, AAC) /</tspan><tspan x="912" dy="16">900000</tspan></text>
+  <path class="e" d="M809.1,525.5 Q895.0,460.0 980.1,395.2" marker-end="url(#arr)"/>
+  <text class="lb" x="846" y="548" text-anchor="start"><tspan x="846" dy="0">AC1(AAC) / 900000</tspan></text>
+  <path class="e" d="M790.0,516.0 Q790.0,380.0 790.0,245.0" marker-end="url(#arr)"/>
+  <text class="lb" x="778" y="330" text-anchor="end"><tspan x="778" dy="0">AC1(TC, ARQC) /</tspan><tspan x="778" dy="16">900080</tspan></text>
+  <path class="e" d="M800.4,561.6 C845.4,603.2 734.6,603.2 779.1,562.5" marker-end="url(#arr)"/>
+  <text class="lb" x="790" y="617" text-anchor="middle"><tspan x="790" dy="0">GD, RR / 9000</tspan></text>
+  <path class="e" d="M766.2,216.7 Q519.3,182.9 347.3,362.0" marker-end="url(#arr)"/>
+  <text class="lb" x="500" y="152" text-anchor="middle"><tspan x="500" dy="0">AC1(ARQC), AC2(ARQC) / 6A86</tspan><tspan x="500" dy="16">AC1(AAC, TC) / 6700</tspan><tspan x="500" dy="16">SELECT / 9000</tspan><tspan x="500" dy="16">other / 6985</tspan></text>
+  <path class="e" d="M770.2,553.6 C600.0,670.0 360.0,650.0 332.8,404.8" marker-end="url(#arr)"/>
+  <text class="lb" x="566" y="652" text-anchor="middle"><tspan x="566" dy="0">AC2(AAC, TC, ARQC) / 6700</tspan><tspan x="566" dy="16">GPO, GPO′, IA / 6985</tspan><tspan x="566" dy="16">GD′ / 6A88</tspan><tspan x="566" dy="16">RR′ / 6A82</tspan><tspan x="566" dy="16">SELECT / 9000</tspan></text>
+  <path class="e" d="M1000.0,404.0 C1000.0,900.0 300.0,900.0 328.6,405.0" marker-end="url(#arr)"/>
+  <text class="lb" x="660" y="812" text-anchor="middle"><tspan x="660" dy="0">SELECT / 9000</tspan><tspan x="660" dy="16">other / 6985</tspan></text>
+  <circle class="st" cx="100" cy="380" r="24"/>
+  <text class="sn" x="99" y="386" text-anchor="middle">s<tspan class="sub" dy="4">0</tspan></text>
+  <circle class="st" cx="330" cy="380" r="24"/>
+  <text class="sn" x="329" y="386" text-anchor="middle">s<tspan class="sub" dy="4">1</tspan></text>
+  <circle class="st" cx="560" cy="380" r="24"/>
+  <text class="sn" x="559" y="386" text-anchor="middle">s<tspan class="sub" dy="4">2</tspan></text>
+  <circle class="st" cx="790" cy="220" r="24"/>
+  <text class="sn" x="789" y="226" text-anchor="middle">s<tspan class="sub" dy="4">4</tspan></text>
+  <circle class="st" cx="790" cy="540" r="24"/>
+  <text class="sn" x="789" y="546" text-anchor="middle">s<tspan class="sub" dy="4">5</tspan></text>
+  <circle class="st" cx="1000" cy="380" r="24"/>
+  <text class="sn" x="999" y="386" text-anchor="middle">s<tspan class="sub" dy="4">3</tspan></text>
+  <text class="nt" x="24" y="866" text-anchor="start"><tspan x="24" dy="0">SELECT = selectApplication · GPO = getProcessingOptions · GPO′ = getProcessingOptionsInvalid · GD = getValidData · GD′ = getInvalidData</tspan><tspan x="24" dy="17">RR = readValidRecord · RR′ = readInvalidRecord · IA = internalAuthenticate · AC1(x) = generateACFirstx · AC2(x) = generateACSecondx</tspan><tspan x="24" dy="17">other: every input that no other edge from the same state names. Outputs are the card&#x27;s status words.</tspan></text>
+</svg>
