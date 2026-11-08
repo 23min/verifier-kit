@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 1030" width="1100" height="1030">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 1030" width="860" height="1030">
   <title>Mosquitto MQTT broker, one client (Tappler, Aichernig and Bloem, 2017)</title>
   <style>
     :root {
@@ -12,12 +12,12 @@
     .st { fill: var(--node); stroke: var(--ink); stroke-width: 1.4; }
     .e { fill: none; stroke: var(--ink-2); stroke-width: 1.15; }
     .mk { fill: var(--ink-2); }
-    .sn { font: italic 400 19px var(--serif); fill: var(--ink); }
-    .sub { font-style: normal; font-size: 13px; }
-    .lb { font: 400 13px var(--serif); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+    .sn { font: italic 400 20px var(--serif); fill: var(--ink); }
+    .sub { font-style: normal; font-size: 14px; }
+    .lb { font: 400 14px var(--serif); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
     .ti { font: 400 17px var(--serif); fill: var(--ink); }
-    .nt { font: 400 12.5px var(--serif); fill: var(--muted); }
-    .kh { font: 400 12.5px var(--serif); fill: var(--ink); }
+    .nt { font: 400 13px var(--serif); fill: var(--muted); }
+    .kh { font: 400 13px var(--serif); fill: var(--ink); }
     .rule { stroke: var(--rule); stroke-width: 1; }
   </style>
   <defs>
@@ -25,167 +25,167 @@
       <path class="mk" d="M0,0 L10,4 L0,8 z"/>
     </marker>
   </defs>
-  <rect class="bg" x="0" y="0" width="1100" height="1030"/>
+  <rect class="bg" x="0" y="0" width="860" height="1030"/>
   <text class="ti" x="24" y="34">Mosquitto MQTT broker, one client (Tappler, Aichernig and Bloem, 2017)</text>
-  <path class="e" d="M136.0,760.0 L175.0,760.0" marker-end="url(#arr)"/>
-  <path class="e" d="M223.9,127.9 Q450.0,108.0 675.1,127.8" marker-end="url(#arr)"/>
-  <text class="lb" x="450" y="104" text-anchor="middle"><tspan x="450" dy="0">S / SubAck</tspan></text>
-  <path class="e" d="M676.1,132.1 Q450.0,152.0 224.9,132.2" marker-end="url(#arr)"/>
-  <text class="lb" x="450" y="168" text-anchor="middle"><tspan x="450" dy="0">U / UnSubAck</tspan></text>
-  <path class="e" d="M223.9,592.1 Q450.0,612.0 675.1,592.2" marker-end="url(#arr)"/>
-  <text class="lb" x="450" y="632" text-anchor="middle"><tspan x="450" dy="0">S / SubAck</tspan></text>
-  <path class="e" d="M676.1,587.9 Q450.0,568.0 224.9,587.8" marker-end="url(#arr)"/>
-  <text class="lb" x="450" y="566" text-anchor="middle"><tspan x="450" dy="0">U / UnSubAck</tspan></text>
-  <path class="e" d="M373.6,265.7 Q450.0,252.0 525.4,265.6" marker-end="url(#arr)"/>
-  <text class="lb" x="450" y="250" text-anchor="middle"><tspan x="450" dy="0">S / SubAck</tspan></text>
-  <path class="e" d="M526.4,274.3 Q450.0,288.0 374.6,274.4" marker-end="url(#arr)"/>
-  <text class="lb" x="450" y="302" text-anchor="middle"><tspan x="450" dy="0">U / UnSubAck</tspan></text>
-  <path class="e" d="M373.6,454.3 Q450.0,468.0 525.4,454.4" marker-end="url(#arr)"/>
-  <text class="lb" x="450" y="488" text-anchor="middle"><tspan x="450" dy="0">S / SubAck</tspan></text>
-  <path class="e" d="M526.4,445.7 Q450.0,432.0 374.6,445.6" marker-end="url(#arr)"/>
-  <text class="lb" x="450" y="436" text-anchor="middle"><tspan x="450" dy="0">U / UnSubAck</tspan></text>
-  <path class="e" d="M197.7,566.1 Q178.0,360.0 197.6,154.9" marker-end="url(#arr)"/>
-  <text class="lb" x="184" y="330" text-anchor="end"><tspan x="184" dy="0">SR / SubAck</tspan></text>
-  <path class="e" d="M202.3,153.9 Q222.0,360.0 202.4,565.1" marker-end="url(#arr)"/>
-  <text class="lb" x="216" y="420" text-anchor="start"><tspan x="216" dy="0">UR / UnSubAck</tspan></text>
-  <path class="e" d="M702.3,566.1 Q722.0,360.0 702.4,154.9" marker-end="url(#arr)"/>
-  <text class="lb" x="716" y="330" text-anchor="start"><tspan x="716" dy="0">SR / SubAck</tspan></text>
-  <path class="e" d="M697.7,153.9 Q678.0,360.0 697.6,565.1" marker-end="url(#arr)"/>
-  <text class="lb" x="684" y="420" text-anchor="end"><tspan x="684" dy="0">UR / UnSubAck</tspan></text>
-  <path class="e" d="M345.3,426.5 Q332.0,360.0 345.1,294.5" marker-end="url(#arr)"/>
-  <text class="lb" x="336" y="336" text-anchor="end"><tspan x="336" dy="0">SR / SubAck+r</tspan></text>
-  <path class="e" d="M354.7,293.5 Q368.0,360.0 354.9,425.5" marker-end="url(#arr)"/>
-  <text class="lb" x="364" y="372" text-anchor="start"><tspan x="364" dy="0">UR / UnSubAck</tspan></text>
-  <path class="e" d="M545.3,426.5 Q532.0,360.0 545.1,294.5" marker-end="url(#arr)"/>
-  <text class="lb" x="536" y="396" text-anchor="end"><tspan x="536" dy="0">SR / SubAck+r</tspan></text>
-  <path class="e" d="M554.7,293.5 Q568.0,360.0 554.9,425.5" marker-end="url(#arr)"/>
-  <text class="lb" x="564" y="336" text-anchor="start"><tspan x="564" dy="0">UR / UnSubAck</tspan></text>
-  <path class="e" d="M214.5,149.2 Q262.7,213.2 329.1,256.4" marker-end="url(#arr)"/>
-  <text class="lb" x="300" y="182" text-anchor="start"><tspan x="300" dy="0">PR / r+PubAck</tspan></text>
-  <path class="e" d="M335.5,250.8 Q287.3,186.8 220.9,143.6" marker-end="url(#arr)"/>
-  <text class="lb" x="214" y="264" text-anchor="start"><tspan x="214" dy="0">DR / e+PubAck</tspan></text>
-  <path class="e" d="M685.5,149.2 Q637.3,213.2 570.9,256.4" marker-end="url(#arr)"/>
-  <text class="lb" x="600" y="182" text-anchor="end"><tspan x="600" dy="0">PR / r+PubAck</tspan></text>
-  <path class="e" d="M564.5,250.8 Q612.7,186.8 679.1,143.6" marker-end="url(#arr)"/>
-  <text class="lb" x="686" y="264" text-anchor="end"><tspan x="686" dy="0">DR / e+PubAck</tspan></text>
-  <path class="e" d="M214.5,570.8 Q262.7,506.8 329.1,463.6" marker-end="url(#arr)"/>
-  <text class="lb" x="214" y="500" text-anchor="start"><tspan x="214" dy="0">PR / PubAck</tspan></text>
-  <path class="e" d="M335.5,469.2 Q287.3,533.2 220.9,576.4" marker-end="url(#arr)"/>
-  <text class="lb" x="304" y="548" text-anchor="start"><tspan x="304" dy="0">DR / PubAck</tspan></text>
-  <path class="e" d="M685.5,570.8 Q637.3,506.8 570.9,463.6" marker-end="url(#arr)"/>
-  <text class="lb" x="686" y="500" text-anchor="end"><tspan x="686" dy="0">PR / PubAck</tspan></text>
-  <path class="e" d="M564.5,469.2 Q612.7,533.2 679.1,576.4" marker-end="url(#arr)"/>
-  <text class="lb" x="596" y="548" text-anchor="end"><tspan x="596" dy="0">DR / PubAck</tspan></text>
-  <path class="e" d="M200.0,736.0 Q200.0,675.0 200.0,615.0" marker-end="url(#arr)"/>
-  <text class="lb" x="212" y="692" text-anchor="start"><tspan x="212" dy="0">C / ConnAck</tspan></text>
-  <path class="e" d="M210.4,781.6 C255.4,823.2 144.6,823.2 189.1,782.5" marker-end="url(#arr)"/>
-  <text class="lb" x="200" y="837" text-anchor="middle"><tspan x="200" dy="0">other / ConnectionClosed</tspan></text>
-  <path class="e" d="M910.4,381.6 C955.4,423.2 844.6,423.2 889.1,382.5" marker-end="url(#arr)"/>
-  <text class="lb" x="900" y="437" text-anchor="middle"><tspan x="900" dy="0">any input /</tspan><tspan x="900" dy="16">ConnectionClosed</tspan></text>
-  <circle class="st" cx="200" cy="130" r="24"/>
-  <text class="sn" x="199" y="136" text-anchor="middle">s<tspan class="sub" dy="4">5</tspan></text>
-  <circle class="st" cx="700" cy="130" r="24"/>
-  <text class="sn" x="699" y="136" text-anchor="middle">s<tspan class="sub" dy="4">6</tspan></text>
-  <circle class="st" cx="200" cy="590" r="24"/>
-  <text class="sn" x="199" y="596" text-anchor="middle">s<tspan class="sub" dy="4">1</tspan></text>
-  <circle class="st" cx="700" cy="590" r="24"/>
-  <text class="sn" x="699" y="596" text-anchor="middle">s<tspan class="sub" dy="4">3</tspan></text>
-  <circle class="st" cx="350" cy="270" r="24"/>
-  <text class="sn" x="349" y="276" text-anchor="middle">s<tspan class="sub" dy="4">8</tspan></text>
-  <circle class="st" cx="550" cy="270" r="24"/>
-  <text class="sn" x="549" y="276" text-anchor="middle">s<tspan class="sub" dy="4">9</tspan></text>
-  <circle class="st" cx="350" cy="450" r="24"/>
-  <text class="sn" x="349" y="456" text-anchor="middle">s<tspan class="sub" dy="4">4</tspan></text>
-  <circle class="st" cx="550" cy="450" r="24"/>
-  <text class="sn" x="549" y="456" text-anchor="middle">s<tspan class="sub" dy="4">7</tspan></text>
-  <circle class="st" cx="200" cy="760" r="24"/>
-  <text class="sn" x="199" y="766" text-anchor="middle">s<tspan class="sub" dy="4">0</tspan></text>
-  <circle class="st" cx="900" cy="360" r="24"/>
-  <text class="sn" x="899" y="366" text-anchor="middle">s<tspan class="sub" dy="4">2</tspan></text>
-  <path class="e" stroke-dasharray="4 4" d="M900,236 L900.0,335.0" marker-end="url(#arr)"/>
-  <text class="nt" x="912" y="248" text-anchor="start"><tspan x="912" dy="0">C, D, DT /</tspan><tspan x="912" dy="16">ConnectionClosed</tspan><tspan x="912" dy="16">from s1 and s3 to s9</tspan></text>
-  <text class="nt" x="24" y="930" text-anchor="start"><tspan x="24" dy="0">C = Connect · D = Disconnect · DT = DisconnectTCP · P0, P1 = PublishQoS0, PublishQoS1 · PR = PublishRetain · DR = DeleteRetained</tspan><tspan x="24" dy="17">S, U = Subscribe, UnSubScribe · SR, UR = SubscribeRetained, UnSubScribeRetained · m0, m1 = Pub(my_topic,messageQos0), Pub(my_topic,messageQos1)</tspan><tspan x="24" dy="17">r = Pub(my_topic/retained,retained_message) · e = Pub(my_topic/retained,) · x+y: x, then y (the model writes x__y)</tspan><tspan x="24" dy="17">Not drawn: C, D and DT lead every state but s0 and s2 to s2, answering ConnectionClosed. other: every input that no other edge from s0 names.</tspan></text>
-  <text class="kh" x="330" y="700">Inputs that stay, and their outputs:</text>
-  <text class="kh" x="330" y="726" font-style="italic">state</text>
-  <text class="kh" x="376" y="726">P0</text>
-  <text class="kh" x="462" y="726">P1</text>
-  <text class="kh" x="548" y="726">PR</text>
-  <text class="kh" x="634" y="726">DR</text>
-  <text class="kh" x="720" y="726">S</text>
-  <text class="kh" x="806" y="726">U</text>
-  <text class="kh" x="892" y="726">SR</text>
-  <text class="kh" x="978" y="726">UR</text>
-  <line class="rule" x1="330" y1="733" x2="1064" y2="733"/>
-  <text class="kh" x="330" y="747" font-style="italic">s<tspan font-style="normal" font-size="10" dy="3">1</tspan></text>
-  <text class="nt" x="376" y="747">Empty</text>
-  <text class="nt" x="462" y="747">PubAck</text>
-  <text class="nt" x="548" y="747"></text>
-  <text class="nt" x="634" y="747">PubAck</text>
-  <text class="nt" x="720" y="747"></text>
-  <text class="nt" x="806" y="747">UnSubAck</text>
-  <text class="nt" x="892" y="747"></text>
-  <text class="nt" x="978" y="747">UnSubAck</text>
-  <text class="kh" x="330" y="768" font-style="italic">s<tspan font-style="normal" font-size="10" dy="3">3</tspan></text>
-  <text class="nt" x="376" y="768">m0</text>
-  <text class="nt" x="462" y="768">m1+PubAck</text>
-  <text class="nt" x="548" y="768"></text>
-  <text class="nt" x="634" y="768">PubAck</text>
-  <text class="nt" x="720" y="768">SubAck</text>
-  <text class="nt" x="806" y="768"></text>
-  <text class="nt" x="892" y="768"></text>
-  <text class="nt" x="978" y="768">UnSubAck</text>
-  <text class="kh" x="330" y="789" font-style="italic">s<tspan font-style="normal" font-size="10" dy="3">4</tspan></text>
-  <text class="nt" x="376" y="789">Empty</text>
-  <text class="nt" x="462" y="789">PubAck</text>
-  <text class="nt" x="548" y="789">PubAck</text>
-  <text class="nt" x="634" y="789"></text>
-  <text class="nt" x="720" y="789"></text>
-  <text class="nt" x="806" y="789">UnSubAck</text>
-  <text class="nt" x="892" y="789"></text>
-  <text class="nt" x="978" y="789">UnSubAck</text>
-  <text class="kh" x="330" y="810" font-style="italic">s<tspan font-style="normal" font-size="10" dy="3">5</tspan></text>
-  <text class="nt" x="376" y="810">Empty</text>
-  <text class="nt" x="462" y="810">PubAck</text>
-  <text class="nt" x="548" y="810"></text>
-  <text class="nt" x="634" y="810">e+PubAck</text>
-  <text class="nt" x="720" y="810"></text>
-  <text class="nt" x="806" y="810">UnSubAck</text>
-  <text class="nt" x="892" y="810">SubAck</text>
-  <text class="nt" x="978" y="810"></text>
-  <text class="kh" x="330" y="831" font-style="italic">s<tspan font-style="normal" font-size="10" dy="3">6</tspan></text>
-  <text class="nt" x="376" y="831">m0</text>
-  <text class="nt" x="462" y="831">m1+PubAck</text>
-  <text class="nt" x="548" y="831"></text>
-  <text class="nt" x="634" y="831">e+PubAck</text>
-  <text class="nt" x="720" y="831">SubAck</text>
-  <text class="nt" x="806" y="831"></text>
-  <text class="nt" x="892" y="831">SubAck</text>
-  <text class="nt" x="978" y="831"></text>
-  <text class="kh" x="330" y="852" font-style="italic">s<tspan font-style="normal" font-size="10" dy="3">7</tspan></text>
-  <text class="nt" x="376" y="852">m0</text>
-  <text class="nt" x="462" y="852">m1+PubAck</text>
-  <text class="nt" x="548" y="852">PubAck</text>
-  <text class="nt" x="634" y="852"></text>
-  <text class="nt" x="720" y="852">SubAck</text>
-  <text class="nt" x="806" y="852"></text>
-  <text class="nt" x="892" y="852"></text>
-  <text class="nt" x="978" y="852">UnSubAck</text>
-  <text class="kh" x="330" y="873" font-style="italic">s<tspan font-style="normal" font-size="10" dy="3">8</tspan></text>
-  <text class="nt" x="376" y="873">Empty</text>
-  <text class="nt" x="462" y="873">PubAck</text>
-  <text class="nt" x="548" y="873">r+PubAck</text>
-  <text class="nt" x="634" y="873"></text>
-  <text class="nt" x="720" y="873"></text>
-  <text class="nt" x="806" y="873">UnSubAck</text>
-  <text class="nt" x="892" y="873">SubAck+r</text>
-  <text class="nt" x="978" y="873"></text>
-  <text class="kh" x="330" y="894" font-style="italic">s<tspan font-style="normal" font-size="10" dy="3">9</tspan></text>
-  <text class="nt" x="376" y="894">m0</text>
-  <text class="nt" x="462" y="894">m1+PubAck</text>
-  <text class="nt" x="548" y="894">r+PubAck</text>
-  <text class="nt" x="634" y="894"></text>
-  <text class="nt" x="720" y="894">SubAck</text>
-  <text class="nt" x="806" y="894"></text>
-  <text class="nt" x="892" y="894">SubAck+r</text>
-  <text class="nt" x="978" y="894"></text>
+  <path class="e" d="M36.0,720.0 L75.0,720.0" marker-end="url(#arr)"/>
+  <path class="e" d="M123.9,118.0 Q340.0,100.0 555.1,117.9" marker-end="url(#arr)"/>
+  <text class="lb" x="340" y="98" text-anchor="middle"><tspan x="340" dy="0">S / SubAck</tspan></text>
+  <path class="e" d="M556.1,122.0 Q340.0,140.0 124.9,122.1" marker-end="url(#arr)"/>
+  <text class="lb" x="340" y="156" text-anchor="middle"><tspan x="340" dy="0">U / UnSubAck</tspan></text>
+  <path class="e" d="M123.9,582.0 Q340.0,600.0 555.1,582.1" marker-end="url(#arr)"/>
+  <text class="lb" x="340" y="612" text-anchor="middle"><tspan x="340" dy="0">S / SubAck</tspan></text>
+  <path class="e" d="M556.1,578.0 Q340.0,560.0 124.9,577.9" marker-end="url(#arr)"/>
+  <text class="lb" x="340" y="556" text-anchor="middle"><tspan x="340" dy="0">U / UnSubAck</tspan></text>
+  <path class="e" d="M283.5,260.3 Q340.0,249.0 395.5,260.1" marker-end="url(#arr)"/>
+  <text class="lb" x="340" y="246" text-anchor="middle"><tspan x="340" dy="0">S / SubAck</tspan></text>
+  <path class="e" d="M396.5,269.7 Q340.0,281.0 284.5,269.9" marker-end="url(#arr)"/>
+  <text class="lb" x="340" y="292" text-anchor="middle"><tspan x="340" dy="0">U / UnSubAck</tspan></text>
+  <path class="e" d="M283.5,439.7 Q340.0,451.0 395.5,439.9" marker-end="url(#arr)"/>
+  <text class="lb" x="340" y="464" text-anchor="middle"><tspan x="340" dy="0">S / SubAck</tspan></text>
+  <path class="e" d="M396.5,430.3 Q340.0,419.0 284.5,430.1" marker-end="url(#arr)"/>
+  <text class="lb" x="340" y="416" text-anchor="middle"><tspan x="340" dy="0">U / UnSubAck</tspan></text>
+  <path class="e" d="M97.9,556.1 Q80.0,350.0 97.8,144.9" marker-end="url(#arr)"/>
+  <text class="lb" x="114" y="304" text-anchor="start"><tspan x="114" dy="0">SR / SubAck</tspan></text>
+  <path class="e" d="M102.1,143.9 Q120.0,350.0 102.2,555.1" marker-end="url(#arr)"/>
+  <text class="lb" x="114" y="392" text-anchor="start"><tspan x="114" dy="0">UR / UnSubAck</tspan></text>
+  <path class="e" d="M582.1,556.1 Q600.0,350.0 582.2,144.9" marker-end="url(#arr)"/>
+  <text class="lb" x="596" y="350" text-anchor="start"><tspan x="596" dy="0">SR / SubAck</tspan></text>
+  <path class="e" d="M577.9,143.9 Q560.0,350.0 577.8,555.1" marker-end="url(#arr)"/>
+  <text class="lb" x="566" y="392" text-anchor="end"><tspan x="566" dy="0">UR / UnSubAck</tspan></text>
+  <path class="e" d="M255.6,411.4 Q244.0,350.0 255.4,289.6" marker-end="url(#arr)"/>
+  <text class="lb" x="248" y="330" text-anchor="end"><tspan x="248" dy="0">SR / SubAck+r</tspan></text>
+  <path class="e" d="M264.4,288.6 Q276.0,350.0 264.6,410.4" marker-end="url(#arr)"/>
+  <text class="lb" x="272" y="377" text-anchor="start"><tspan x="272" dy="0">UR / UnSubAck</tspan></text>
+  <path class="e" d="M415.6,411.4 Q404.0,350.0 415.4,289.6" marker-end="url(#arr)"/>
+  <text class="lb" x="408" y="348" text-anchor="end"><tspan x="408" dy="0">SR / SubAck+r</tspan></text>
+  <path class="e" d="M424.4,288.6 Q436.0,350.0 424.6,410.4" marker-end="url(#arr)"/>
+  <text class="lb" x="432" y="330" text-anchor="start"><tspan x="432" dy="0">UR / UnSubAck</tspan></text>
+  <path class="e" d="M115.2,138.5 Q169.3,204.4 239.2,251.1" marker-end="url(#arr)"/>
+  <text class="lb" x="190" y="180" text-anchor="start"><tspan x="190" dy="0">PR / r+PubAck</tspan></text>
+  <path class="e" d="M244.8,246.5 Q190.7,180.6 120.8,133.9" marker-end="url(#arr)"/>
+  <text class="lb" x="122" y="264" text-anchor="start"><tspan x="122" dy="0">DR / e+PubAck</tspan></text>
+  <path class="e" d="M564.8,138.5 Q510.7,204.4 440.8,251.1" marker-end="url(#arr)"/>
+  <text class="lb" x="490" y="180" text-anchor="end"><tspan x="490" dy="0">PR / r+PubAck</tspan></text>
+  <path class="e" d="M435.2,246.5 Q489.3,180.6 559.2,133.9" marker-end="url(#arr)"/>
+  <text class="lb" x="558" y="264" text-anchor="end"><tspan x="558" dy="0">DR / e+PubAck</tspan></text>
+  <path class="e" d="M115.2,561.5 Q169.3,495.6 239.2,448.9" marker-end="url(#arr)"/>
+  <text class="lb" x="122" y="474" text-anchor="start"><tspan x="122" dy="0">PR / PubAck</tspan></text>
+  <path class="e" d="M244.8,453.5 Q190.7,519.4 120.8,566.1" marker-end="url(#arr)"/>
+  <text class="lb" x="222" y="524" text-anchor="start"><tspan x="222" dy="0">DR / PubAck</tspan></text>
+  <path class="e" d="M564.8,561.5 Q510.7,495.6 440.8,448.9" marker-end="url(#arr)"/>
+  <text class="lb" x="558" y="474" text-anchor="end"><tspan x="558" dy="0">PR / PubAck</tspan></text>
+  <path class="e" d="M435.2,453.5 Q489.3,519.4 559.2,566.1" marker-end="url(#arr)"/>
+  <text class="lb" x="458" y="524" text-anchor="end"><tspan x="458" dy="0">DR / PubAck</tspan></text>
+  <path class="e" d="M100.0,696.0 Q100.0,650.0 100.0,605.0" marker-end="url(#arr)"/>
+  <text class="lb" x="112" y="655" text-anchor="start"><tspan x="112" dy="0">C / ConnAck</tspan></text>
+  <path class="e" d="M110.4,741.6 C155.4,783.2 44.6,783.2 89.1,742.5" marker-end="url(#arr)"/>
+  <text class="lb" x="100" y="797" text-anchor="middle"><tspan x="100" dy="0">other /</tspan><tspan x="100" dy="17">ConnectionClosed</tspan></text>
+  <path class="e" d="M770.4,371.6 C815.4,413.2 704.6,413.2 749.1,372.5" marker-end="url(#arr)"/>
+  <text class="lb" x="760" y="427" text-anchor="middle"><tspan x="760" dy="0">any input /</tspan><tspan x="760" dy="17">ConnectionClosed</tspan></text>
+  <circle class="st" cx="100" cy="120" r="24"/>
+  <text class="sn" x="99" y="126" text-anchor="middle">s<tspan class="sub" dy="4">5</tspan></text>
+  <circle class="st" cx="580" cy="120" r="24"/>
+  <text class="sn" x="579" y="126" text-anchor="middle">s<tspan class="sub" dy="4">6</tspan></text>
+  <circle class="st" cx="100" cy="580" r="24"/>
+  <text class="sn" x="99" y="586" text-anchor="middle">s<tspan class="sub" dy="4">1</tspan></text>
+  <circle class="st" cx="580" cy="580" r="24"/>
+  <text class="sn" x="579" y="586" text-anchor="middle">s<tspan class="sub" dy="4">3</tspan></text>
+  <circle class="st" cx="260" cy="265" r="24"/>
+  <text class="sn" x="259" y="271" text-anchor="middle">s<tspan class="sub" dy="4">8</tspan></text>
+  <circle class="st" cx="420" cy="265" r="24"/>
+  <text class="sn" x="419" y="271" text-anchor="middle">s<tspan class="sub" dy="4">9</tspan></text>
+  <circle class="st" cx="260" cy="435" r="24"/>
+  <text class="sn" x="259" y="441" text-anchor="middle">s<tspan class="sub" dy="4">4</tspan></text>
+  <circle class="st" cx="420" cy="435" r="24"/>
+  <text class="sn" x="419" y="441" text-anchor="middle">s<tspan class="sub" dy="4">7</tspan></text>
+  <circle class="st" cx="100" cy="720" r="24"/>
+  <text class="sn" x="99" y="726" text-anchor="middle">s<tspan class="sub" dy="4">0</tspan></text>
+  <circle class="st" cx="760" cy="350" r="24"/>
+  <text class="sn" x="759" y="356" text-anchor="middle">s<tspan class="sub" dy="4">2</tspan></text>
+  <path class="e" stroke-dasharray="4 4" d="M760,240 L760.0,325.0" marker-end="url(#arr)"/>
+  <text class="nt" x="748" y="252" text-anchor="end"><tspan x="748" dy="0">C, D, DT /</tspan><tspan x="748" dy="17">ConnectionClosed</tspan><tspan x="748" dy="17">from s1 and s3 to s9</tspan></text>
+  <text class="nt" x="24" y="912" text-anchor="start"><tspan x="24" dy="0">C = Connect · D = Disconnect · DT = DisconnectTCP · P0, P1 = PublishQoS0, PublishQoS1 · PR = PublishRetain</tspan><tspan x="24" dy="17">DR = DeleteRetained · S, U = Subscribe, UnSubScribe · SR, UR = SubscribeRetained, UnSubScribeRetained</tspan><tspan x="24" dy="17">m0, m1 = Pub(my_topic,messageQos0), Pub(my_topic,messageQos1) · r = Pub(my_topic/retained,retained_message)</tspan><tspan x="24" dy="17">e = Pub(my_topic/retained,) · x+y: x, then y (the model writes x__y)</tspan><tspan x="24" dy="17">Not drawn: C, D and DT lead every state but s0 and s2 to s2, answering ConnectionClosed.</tspan><tspan x="24" dy="17">other: every input that no other edge from s0 names.</tspan></text>
+  <text class="kh" x="196" y="680">Inputs that stay, and their outputs:</text>
+  <text class="kh" x="196" y="706" font-style="italic">state</text>
+  <text class="kh" x="236" y="706">P0</text>
+  <text class="kh" x="288" y="706">P1</text>
+  <text class="kh" x="380" y="706">PR</text>
+  <text class="kh" x="458" y="706">DR</text>
+  <text class="kh" x="536" y="706">S</text>
+  <text class="kh" x="600" y="706">U</text>
+  <text class="kh" x="676" y="706">SR</text>
+  <text class="kh" x="754" y="706">UR</text>
+  <line class="rule" x1="196" y1="713" x2="824" y2="713"/>
+  <text class="kh" x="196" y="727" font-style="italic">s<tspan font-style="normal" font-size="10" dy="3">1</tspan></text>
+  <text class="nt" x="236" y="727">Empty</text>
+  <text class="nt" x="288" y="727">PubAck</text>
+  <text class="nt" x="380" y="727"></text>
+  <text class="nt" x="458" y="727">PubAck</text>
+  <text class="nt" x="536" y="727"></text>
+  <text class="nt" x="600" y="727">UnSubAck</text>
+  <text class="nt" x="676" y="727"></text>
+  <text class="nt" x="754" y="727">UnSubAck</text>
+  <text class="kh" x="196" y="748" font-style="italic">s<tspan font-style="normal" font-size="10" dy="3">3</tspan></text>
+  <text class="nt" x="236" y="748">m0</text>
+  <text class="nt" x="288" y="748">m1+PubAck</text>
+  <text class="nt" x="380" y="748"></text>
+  <text class="nt" x="458" y="748">PubAck</text>
+  <text class="nt" x="536" y="748">SubAck</text>
+  <text class="nt" x="600" y="748"></text>
+  <text class="nt" x="676" y="748"></text>
+  <text class="nt" x="754" y="748">UnSubAck</text>
+  <text class="kh" x="196" y="769" font-style="italic">s<tspan font-style="normal" font-size="10" dy="3">4</tspan></text>
+  <text class="nt" x="236" y="769">Empty</text>
+  <text class="nt" x="288" y="769">PubAck</text>
+  <text class="nt" x="380" y="769">PubAck</text>
+  <text class="nt" x="458" y="769"></text>
+  <text class="nt" x="536" y="769"></text>
+  <text class="nt" x="600" y="769">UnSubAck</text>
+  <text class="nt" x="676" y="769"></text>
+  <text class="nt" x="754" y="769">UnSubAck</text>
+  <text class="kh" x="196" y="790" font-style="italic">s<tspan font-style="normal" font-size="10" dy="3">5</tspan></text>
+  <text class="nt" x="236" y="790">Empty</text>
+  <text class="nt" x="288" y="790">PubAck</text>
+  <text class="nt" x="380" y="790"></text>
+  <text class="nt" x="458" y="790">e+PubAck</text>
+  <text class="nt" x="536" y="790"></text>
+  <text class="nt" x="600" y="790">UnSubAck</text>
+  <text class="nt" x="676" y="790">SubAck</text>
+  <text class="nt" x="754" y="790"></text>
+  <text class="kh" x="196" y="811" font-style="italic">s<tspan font-style="normal" font-size="10" dy="3">6</tspan></text>
+  <text class="nt" x="236" y="811">m0</text>
+  <text class="nt" x="288" y="811">m1+PubAck</text>
+  <text class="nt" x="380" y="811"></text>
+  <text class="nt" x="458" y="811">e+PubAck</text>
+  <text class="nt" x="536" y="811">SubAck</text>
+  <text class="nt" x="600" y="811"></text>
+  <text class="nt" x="676" y="811">SubAck</text>
+  <text class="nt" x="754" y="811"></text>
+  <text class="kh" x="196" y="832" font-style="italic">s<tspan font-style="normal" font-size="10" dy="3">7</tspan></text>
+  <text class="nt" x="236" y="832">m0</text>
+  <text class="nt" x="288" y="832">m1+PubAck</text>
+  <text class="nt" x="380" y="832">PubAck</text>
+  <text class="nt" x="458" y="832"></text>
+  <text class="nt" x="536" y="832">SubAck</text>
+  <text class="nt" x="600" y="832"></text>
+  <text class="nt" x="676" y="832"></text>
+  <text class="nt" x="754" y="832">UnSubAck</text>
+  <text class="kh" x="196" y="853" font-style="italic">s<tspan font-style="normal" font-size="10" dy="3">8</tspan></text>
+  <text class="nt" x="236" y="853">Empty</text>
+  <text class="nt" x="288" y="853">PubAck</text>
+  <text class="nt" x="380" y="853">r+PubAck</text>
+  <text class="nt" x="458" y="853"></text>
+  <text class="nt" x="536" y="853"></text>
+  <text class="nt" x="600" y="853">UnSubAck</text>
+  <text class="nt" x="676" y="853">SubAck+r</text>
+  <text class="nt" x="754" y="853"></text>
+  <text class="kh" x="196" y="874" font-style="italic">s<tspan font-style="normal" font-size="10" dy="3">9</tspan></text>
+  <text class="nt" x="236" y="874">m0</text>
+  <text class="nt" x="288" y="874">m1+PubAck</text>
+  <text class="nt" x="380" y="874">r+PubAck</text>
+  <text class="nt" x="458" y="874"></text>
+  <text class="nt" x="536" y="874">SubAck</text>
+  <text class="nt" x="600" y="874"></text>
+  <text class="nt" x="676" y="874">SubAck+r</text>
+  <text class="nt" x="754" y="874"></text>
 </svg>
