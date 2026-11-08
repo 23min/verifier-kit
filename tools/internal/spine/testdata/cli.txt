@@ -122,3 +122,8 @@
 ["conform", "seeds/spine.yaml", "--adapter-cmd"]
 ["conform", "seeds/spine.yaml", "--margin", "0"]
 ["conform", "seeds/spine.yaml", "--adapter-cmd", "true", "--depth", "2"]
+["draw"]
+["draw", "seeds/spine.yaml"]
+["draw", "--help"]
+["draw", "seeds/spine.yaml", "drawings/door.yaml", "extra"]
+["draw", "--format", "json", "seeds/spine.yaml", "drawings/door.yaml"]

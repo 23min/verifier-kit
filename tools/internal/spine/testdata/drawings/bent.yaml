@@ -1,0 +1,9 @@
+# Every key: a bend to the right of travel takes the label with it, here under the other edge.
+states:
+  closed: [120, 220]
+  open:   [460, 220]
+  gone:   [460, 420]
+edges:
+  closed:
+    open: {bend: -40}
+    gone: {bend: 30, label: [240, 360]}

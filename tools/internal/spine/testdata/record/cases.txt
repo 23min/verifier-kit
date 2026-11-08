@@ -5235,6 +5235,403 @@ exit 1
 | error   vars-differ        vars: A and B declare different variables; case comparison skipped
 | -- 13 errors, 13 findings
 |
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/bent.yaml
+exit 0
+--- stdout
+| <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 641" width="860" height="641">
+|   <title>Machine door, section 1.2</title>
+|   <style>
+|     :root {
+|       --surface: #ffffff; --ink: #141414; --ink-2: #333333; --muted: #6a6a6a; --rule: #c4c4c4;
+|       --fact: #b4b4b4; --policy: #dadada; --design: #f2f2f2;
+|       --serif: "Latin Modern Roman", "CMU Serif", "Times New Roman", Times, serif;
+|     }
+|     @media (prefers-color-scheme: dark) {
+|       :root { --surface: #161616; --ink: #ececec; --ink-2: #cfcfcf; --muted: #9d9d9d; --rule: #444444;
+|               --fact: #5a5a5a; --policy: #3a3a3a; --design: #242424; }
+|     }
+|     .bg, .none { fill: var(--surface); }
+|     .fact { fill: var(--fact); } .policy { fill: var(--policy); } .design { fill: var(--design); }
+|     .st { stroke: var(--ink); stroke-width: 1.4; }
+|     .ring { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+|     .e { fill: none; stroke: var(--ink-2); stroke-width: 1.15; }
+|     .mk { fill: var(--ink-2); }
+|     .rule { stroke: var(--rule); stroke-width: 1; }
+|     .sn { font: italic 400 18px var(--serif); fill: var(--ink); }
+|     .lb { font: 400 14px var(--serif); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+|     .ti { font: 400 17px var(--serif); fill: var(--ink); }
+|     .tx { font: 400 14px var(--serif); fill: var(--ink); }
+|     .it { font-style: italic; }
+|     .nt { font: 400 13px var(--serif); fill: var(--muted); }
+|   </style>
+|   <defs>
+|     <marker id="arr" viewBox="0 0 10 8" refX="10" refY="4" markerWidth="10" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+|       <path class="mk" d="M0,0 L10,4 L0,8 z"/>
+|     </marker>
+|   </defs>
+|   <rect class="bg" x="0" y="0" width="860" height="641"/>
+|   <text class="ti" x="24" y="34" text-anchor="start"><tspan x="24" dy="0">Machine door, section 1.2</tspan></text>
+|   <text class="tx" x="24" y="58" text-anchor="start"><tspan x="24" dy="0">role ∈ {owner, guest}</tspan></text>
+|   <circle class="st fact" cx="587" cy="52" r="8"/>
+|   <text class="nt" x="603" y="56" text-anchor="start"><tspan x="603" dy="0">fact: irreversible in the world</tspan></text>
+|   <circle class="st design" cx="587" cy="74" r="8"/>
+|   <text class="nt" x="603" y="78" text-anchor="start"><tspan x="603" dy="0">design: an implementation choice</tspan></text>
+|   <circle class="st none" cx="587" cy="96" r="8"/>
+|   <text class="nt" x="603" y="100" text-anchor="start"><tspan x="603" dy="0">no kind</tspan></text>
+|   <path class="e" d="M35,220 L79,220" marker-end="url(#arr)"/>
+|   <g class="move"><title>closed → open</title>
+|   <path class="e" d="M156.2,237 Q290,300 422.9,237.5" marker-end="url(#arr)"/>
+|   <text class="lb" x="289.8" y="288.6" text-anchor="middle"><tspan x="289.8" dy="0">open</tspan><tspan x="289.8" dy="18">[role == 'owner']</tspan></text>
+|   </g>
+|   <g class="move"><title>closed → gone</title>
+|   <path class="e" d="M158.9,229.4 Q320.4,268.3 428.9,386.1" marker-end="url(#arr)"/>
+|   <text class="lb" x="240" y="365" text-anchor="middle"><tspan x="240" dy="0">remove</tspan></text>
+|   </g>
+|   <ellipse class="st fact" cx="120" cy="220" rx="40" ry="40"/>
+|   <text class="sn" x="120" y="226" text-anchor="middle">closed</text>
+|   <ellipse class="st none" cx="460" cy="220" rx="40" ry="40"/>
+|   <text class="sn" x="460" y="226" text-anchor="middle">open</text>
+|   <ellipse class="st design" cx="460" cy="420" rx="40" ry="40"/>
+|   <ellipse class="ring" cx="460" cy="420" rx="45" ry="45"/>
+|   <text class="sn" x="460" y="426" text-anchor="middle">gone</text>
+|   <text class="nt" x="24" y="505" text-anchor="start"><tspan x="24" dy="0">Every rule that doesn't change the state, by event and state. The moves are the edges above.</tspan><tspan x="24" dy="18">gone is terminal and has no rules.</tspan></text>
+|   <text class="tx it" x="24" y="553">event</text>
+|   <text class="tx it" x="95" y="553">closed</text>
+|   <text class="tx it" x="465.5" y="553">open</text>
+|   <line class="rule" x1="24" y1="561" x2="836" y2="561"/>
+|   <text class="tx" x="24" y="581">open</text>
+|   <g class="rules"><title>closed/open</title>
+|   <text class="tx" x="95" y="581">reject [role != 'owner']</text>
+|   </g>
+|   <g class="rules"><title>open/open</title>
+|   <text class="tx" x="465.5" y="581">stay</text>
+|   </g>
+|   <line class="rule" x1="24" y1="589" x2="836" y2="589"/>
+|   <text class="tx" x="24" y="609">remove</text>
+|   <g class="rules"><title>open/remove</title>
+|   <text class="tx" x="465.5" y="609">ignore</text>
+|   </g>
+| </svg>
+|
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/crowded.yaml
+exit 0
+--- stdout
+| <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 641" width="860" height="641">
+|   <title>Machine door, section 1.2</title>
+|   <style>
+|     :root {
+|       --surface: #ffffff; --ink: #141414; --ink-2: #333333; --muted: #6a6a6a; --rule: #c4c4c4;
+|       --fact: #b4b4b4; --policy: #dadada; --design: #f2f2f2;
+|       --serif: "Latin Modern Roman", "CMU Serif", "Times New Roman", Times, serif;
+|     }
+|     @media (prefers-color-scheme: dark) {
+|       :root { --surface: #161616; --ink: #ececec; --ink-2: #cfcfcf; --muted: #9d9d9d; --rule: #444444;
+|               --fact: #5a5a5a; --policy: #3a3a3a; --design: #242424; }
+|     }
+|     .bg, .none { fill: var(--surface); }
+|     .fact { fill: var(--fact); } .policy { fill: var(--policy); } .design { fill: var(--design); }
+|     .st { stroke: var(--ink); stroke-width: 1.4; }
+|     .ring { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+|     .e { fill: none; stroke: var(--ink-2); stroke-width: 1.15; }
+|     .mk { fill: var(--ink-2); }
+|     .rule { stroke: var(--rule); stroke-width: 1; }
+|     .sn { font: italic 400 18px var(--serif); fill: var(--ink); }
+|     .lb { font: 400 14px var(--serif); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+|     .ti { font: 400 17px var(--serif); fill: var(--ink); }
+|     .tx { font: 400 14px var(--serif); fill: var(--ink); }
+|     .it { font-style: italic; }
+|     .nt { font: 400 13px var(--serif); fill: var(--muted); }
+|   </style>
+|   <defs>
+|     <marker id="arr" viewBox="0 0 10 8" refX="10" refY="4" markerWidth="10" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+|       <path class="mk" d="M0,0 L10,4 L0,8 z"/>
+|     </marker>
+|   </defs>
+|   <rect class="bg" x="0" y="0" width="860" height="641"/>
+|   <text class="ti" x="24" y="34" text-anchor="start"><tspan x="24" dy="0">Machine door, section 1.2</tspan></text>
+|   <text class="tx" x="24" y="58" text-anchor="start"><tspan x="24" dy="0">role ∈ {owner, guest}</tspan></text>
+|   <circle class="st fact" cx="587" cy="52" r="8"/>
+|   <text class="nt" x="603" y="56" text-anchor="start"><tspan x="603" dy="0">fact: irreversible in the world</tspan></text>
+|   <circle class="st design" cx="587" cy="74" r="8"/>
+|   <text class="nt" x="603" y="78" text-anchor="start"><tspan x="603" dy="0">design: an implementation choice</tspan></text>
+|   <circle class="st none" cx="587" cy="96" r="8"/>
+|   <text class="nt" x="603" y="100" text-anchor="start"><tspan x="603" dy="0">no kind</tspan></text>
+|   <path class="e" d="M-55,220 L-11,220" marker-end="url(#arr)"/>
+|   <g class="move"><title>closed → open</title>
+|   <path class="e" d="M63.3,242.2 Q45,230 25.9,217.3" marker-end="url(#arr)"/>
+|   <text class="lb" x="700" y="74" text-anchor="middle"><tspan x="700" dy="0">open</tspan><tspan x="700" dy="18">[role == 'owner']</tspan></text>
+|   </g>
+|   <g class="move"><title>closed → gone</title>
+|   <path class="e" d="M68.9,229.5 Q440,320 805.3,409.1" marker-end="url(#arr)"/>
+|   <text class="lb" x="900" y="15" text-anchor="middle"><tspan x="900" dy="0">remove</tspan></text>
+|   </g>
+|   <ellipse class="st fact" cx="30" cy="220" rx="40" ry="40"/>
+|   <text class="sn" x="30" y="226" text-anchor="middle">closed</text>
+|   <ellipse class="st none" cx="60" cy="240" rx="40" ry="40"/>
+|   <text class="sn" x="60" y="246" text-anchor="middle">open</text>
+|   <ellipse class="st design" cx="850" cy="420" rx="40" ry="40"/>
+|   <ellipse class="ring" cx="850" cy="420" rx="45" ry="45"/>
+|   <text class="sn" x="850" y="426" text-anchor="middle">gone</text>
+|   <text class="nt" x="24" y="505" text-anchor="start"><tspan x="24" dy="0">Every rule that doesn't change the state, by event and state. The moves are the edges above.</tspan><tspan x="24" dy="18">gone is terminal and has no rules.</tspan></text>
+|   <text class="tx it" x="24" y="553">event</text>
+|   <text class="tx it" x="95" y="553">closed</text>
+|   <text class="tx it" x="465.5" y="553">open</text>
+|   <line class="rule" x1="24" y1="561" x2="836" y2="561"/>
+|   <text class="tx" x="24" y="581">open</text>
+|   <g class="rules"><title>closed/open</title>
+|   <text class="tx" x="95" y="581">reject [role != 'owner']</text>
+|   </g>
+|   <g class="rules"><title>open/open</title>
+|   <text class="tx" x="465.5" y="581">stay</text>
+|   </g>
+|   <line class="rule" x1="24" y1="589" x2="836" y2="589"/>
+|   <text class="tx" x="24" y="609">remove</text>
+|   <g class="rules"><title>open/remove</title>
+|   <text class="tx" x="465.5" y="609">ignore</text>
+|   </g>
+| </svg>
+|
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/door.yaml
+exit 0
+--- stdout
+| <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 641" width="860" height="641">
+|   <title>Machine door, section 1.2</title>
+|   <style>
+|     :root {
+|       --surface: #ffffff; --ink: #141414; --ink-2: #333333; --muted: #6a6a6a; --rule: #c4c4c4;
+|       --fact: #b4b4b4; --policy: #dadada; --design: #f2f2f2;
+|       --serif: "Latin Modern Roman", "CMU Serif", "Times New Roman", Times, serif;
+|     }
+|     @media (prefers-color-scheme: dark) {
+|       :root { --surface: #161616; --ink: #ececec; --ink-2: #cfcfcf; --muted: #9d9d9d; --rule: #444444;
+|               --fact: #5a5a5a; --policy: #3a3a3a; --design: #242424; }
+|     }
+|     .bg, .none { fill: var(--surface); }
+|     .fact { fill: var(--fact); } .policy { fill: var(--policy); } .design { fill: var(--design); }
+|     .st { stroke: var(--ink); stroke-width: 1.4; }
+|     .ring { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+|     .e { fill: none; stroke: var(--ink-2); stroke-width: 1.15; }
+|     .mk { fill: var(--ink-2); }
+|     .rule { stroke: var(--rule); stroke-width: 1; }
+|     .sn { font: italic 400 18px var(--serif); fill: var(--ink); }
+|     .lb { font: 400 14px var(--serif); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+|     .ti { font: 400 17px var(--serif); fill: var(--ink); }
+|     .tx { font: 400 14px var(--serif); fill: var(--ink); }
+|     .it { font-style: italic; }
+|     .nt { font: 400 13px var(--serif); fill: var(--muted); }
+|   </style>
+|   <defs>
+|     <marker id="arr" viewBox="0 0 10 8" refX="10" refY="4" markerWidth="10" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+|       <path class="mk" d="M0,0 L10,4 L0,8 z"/>
+|     </marker>
+|   </defs>
+|   <rect class="bg" x="0" y="0" width="860" height="641"/>
+|   <text class="ti" x="24" y="34" text-anchor="start"><tspan x="24" dy="0">Machine door, section 1.2</tspan></text>
+|   <text class="tx" x="24" y="58" text-anchor="start"><tspan x="24" dy="0">role ∈ {owner, guest}</tspan></text>
+|   <circle class="st fact" cx="587" cy="52" r="8"/>
+|   <text class="nt" x="603" y="56" text-anchor="start"><tspan x="603" dy="0">fact: irreversible in the world</tspan></text>
+|   <circle class="st design" cx="587" cy="74" r="8"/>
+|   <text class="nt" x="603" y="78" text-anchor="start"><tspan x="603" dy="0">design: an implementation choice</tspan></text>
+|   <circle class="st none" cx="587" cy="96" r="8"/>
+|   <text class="nt" x="603" y="100" text-anchor="start"><tspan x="603" dy="0">no kind</tspan></text>
+|   <path class="e" d="M35,220 L79,220" marker-end="url(#arr)"/>
+|   <g class="move"><title>closed → open</title>
+|   <path class="e" d="M160,220 Q290,220 419,220" marker-end="url(#arr)"/>
+|   <text class="lb" x="289.8" y="192" text-anchor="middle"><tspan x="289.8" dy="0">open</tspan><tspan x="289.8" dy="18">[role == 'owner']</tspan></text>
+|   </g>
+|   <g class="move"><title>closed → gone</title>
+|   <path class="e" d="M154.5,240.3 Q290,320 420.4,396.7" marker-end="url(#arr)"/>
+|   <text class="lb" x="301.7" y="302.1" text-anchor="middle"><tspan x="301.7" dy="0">remove</tspan></text>
+|   </g>
+|   <ellipse class="st fact" cx="120" cy="220" rx="40" ry="40"/>
+|   <text class="sn" x="120" y="226" text-anchor="middle">closed</text>
+|   <ellipse class="st none" cx="460" cy="220" rx="40" ry="40"/>
+|   <text class="sn" x="460" y="226" text-anchor="middle">open</text>
+|   <ellipse class="st design" cx="460" cy="420" rx="40" ry="40"/>
+|   <ellipse class="ring" cx="460" cy="420" rx="45" ry="45"/>
+|   <text class="sn" x="460" y="426" text-anchor="middle">gone</text>
+|   <text class="nt" x="24" y="505" text-anchor="start"><tspan x="24" dy="0">Every rule that doesn't change the state, by event and state. The moves are the edges above.</tspan><tspan x="24" dy="18">gone is terminal and has no rules.</tspan></text>
+|   <text class="tx it" x="24" y="553">event</text>
+|   <text class="tx it" x="95" y="553">closed</text>
+|   <text class="tx it" x="465.5" y="553">open</text>
+|   <line class="rule" x1="24" y1="561" x2="836" y2="561"/>
+|   <text class="tx" x="24" y="581">open</text>
+|   <g class="rules"><title>closed/open</title>
+|   <text class="tx" x="95" y="581">reject [role != 'owner']</text>
+|   </g>
+|   <g class="rules"><title>open/open</title>
+|   <text class="tx" x="465.5" y="581">stay</text>
+|   </g>
+|   <line class="rule" x1="24" y1="589" x2="836" y2="589"/>
+|   <text class="tx" x="24" y="609">remove</text>
+|   <g class="rules"><title>open/remove</title>
+|   <text class="tx" x="465.5" y="609">ignore</text>
+|   </g>
+| </svg>
+|
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/edges-list.yaml
+exit 1
+--- stdout
+| error   spec-shape         drawings/edges-list.yaml: "edges" must map a state to the states it moves to, each to its bend and label
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/edges-shapes.yaml
+exit 1
+--- stdout
+| error   spec-shape         drawings/edges-shapes.yaml: edges: "closed" must map the states it moves to, each to its bend and label
+| error   spec-shape         drawings/edges-shapes.yaml: edges: "open" to "gone" must be a mapping with a bend, a label or both
+| -- 2 errors, 2 findings
+|
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/edges.yaml
+exit 1
+--- stdout
+| error   unknown-key        drawings/edges.yaml: unknown edge key "color"
+| error   spec-shape         drawings/edges.yaml: edges: "closed" to "open": bend must be a whole number
+| error   spec-shape         drawings/edges.yaml: edges: "closed" to "open": label must be at [x, y], two whole numbers
+| error   bad-value          drawings/edges.yaml: edges: no rule moves from "open" to "closed"
+| error   spec-shape         drawings/edges.yaml: edges: "gone" must map the states it moves to, each to its bend and label
+| -- 5 errors, 5 findings
+|
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/list.yaml
+exit 1
+--- stdout
+| error   spec-shape         drawings/list.yaml: a layout must be a mapping with "states" and an optional "edges"
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/missing.yaml
+exit 1
+--- stdout
+| error   missing-key        drawings/missing.yaml: states: "open" has no centre
+| error   missing-key        drawings/missing.yaml: states: "gone" has no centre
+| -- 2 errors, 2 findings
+|
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/no-states.yaml
+exit 1
+--- stdout
+| error   missing-key        drawings/no-states.yaml: the layout needs "states"
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/no-such-file.yaml
+exit 1
+--- stdout
+| error   spec-unreadable    drawings/no-such-file.yaml: cannot be read: No such file or directory
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/not-yaml.yaml
+exit 1
+--- stdout
+| error   spec-unreadable    drawings/not-yaml.yaml: go-yaml load error in parser (while parsing a flow node) at L2.C1: did not find expected node content
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/numbers.yaml
+exit 1
+--- stdout
+| error   spec-shape         drawings/numbers.yaml: states: "closed" must be at [x, y], two whole numbers
+| error   spec-shape         drawings/numbers.yaml: states: "open" must be at [x, y], two whole numbers
+| error   spec-shape         drawings/numbers.yaml: states: "gone" must be at [x, y], two whole numbers
+| -- 3 errors, 3 findings
+|
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/shapes.yaml
+exit 1
+--- stdout
+| error   yaml-boolean-key   drawings/shapes.yaml: layout key read as true; YAML reads `on`, `off`, `yes` and `no` as true or false, so quote it
+| error   unknown-key        drawings/shapes.yaml: unknown layout key "extra"
+| error   spec-shape         drawings/shapes.yaml: states: "closed" must be at [x, y], two whole numbers
+| error   spec-shape         drawings/shapes.yaml: states: "open" must be at [x, y], two whole numbers
+| error   spec-shape         drawings/shapes.yaml: states: "gone" must be at [x, y], two whole numbers
+| error   bad-value          drawings/shapes.yaml: states: "nowhere" is not a state of the spine
+| -- 6 errors, 6 findings
+|
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/states-list.yaml
+exit 1
+--- stdout
+| error   spec-shape         drawings/states-list.yaml: "states" must map each state to its centre, [x, y]
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/through.yaml
+exit 0
+--- stdout
+| <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 441" width="860" height="441">
+|   <title>Machine door, section 1.2</title>
+|   <style>
+|     :root {
+|       --surface: #ffffff; --ink: #141414; --ink-2: #333333; --muted: #6a6a6a; --rule: #c4c4c4;
+|       --fact: #b4b4b4; --policy: #dadada; --design: #f2f2f2;
+|       --serif: "Latin Modern Roman", "CMU Serif", "Times New Roman", Times, serif;
+|     }
+|     @media (prefers-color-scheme: dark) {
+|       :root { --surface: #161616; --ink: #ececec; --ink-2: #cfcfcf; --muted: #9d9d9d; --rule: #444444;
+|               --fact: #5a5a5a; --policy: #3a3a3a; --design: #242424; }
+|     }
+|     .bg, .none { fill: var(--surface); }
+|     .fact { fill: var(--fact); } .policy { fill: var(--policy); } .design { fill: var(--design); }
+|     .st { stroke: var(--ink); stroke-width: 1.4; }
+|     .ring { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+|     .e { fill: none; stroke: var(--ink-2); stroke-width: 1.15; }
+|     .mk { fill: var(--ink-2); }
+|     .rule { stroke: var(--rule); stroke-width: 1; }
+|     .sn { font: italic 400 18px var(--serif); fill: var(--ink); }
+|     .lb { font: 400 14px var(--serif); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+|     .ti { font: 400 17px var(--serif); fill: var(--ink); }
+|     .tx { font: 400 14px var(--serif); fill: var(--ink); }
+|     .it { font-style: italic; }
+|     .nt { font: 400 13px var(--serif); fill: var(--muted); }
+|   </style>
+|   <defs>
+|     <marker id="arr" viewBox="0 0 10 8" refX="10" refY="4" markerWidth="10" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+|       <path class="mk" d="M0,0 L10,4 L0,8 z"/>
+|     </marker>
+|   </defs>
+|   <rect class="bg" x="0" y="0" width="860" height="441"/>
+|   <text class="ti" x="24" y="34" text-anchor="start"><tspan x="24" dy="0">Machine door, section 1.2</tspan></text>
+|   <text class="tx" x="24" y="58" text-anchor="start"><tspan x="24" dy="0">role ∈ {owner, guest}</tspan></text>
+|   <circle class="st fact" cx="587" cy="52" r="8"/>
+|   <text class="nt" x="603" y="56" text-anchor="start"><tspan x="603" dy="0">fact: irreversible in the world</tspan></text>
+|   <circle class="st design" cx="587" cy="74" r="8"/>
+|   <text class="nt" x="603" y="78" text-anchor="start"><tspan x="603" dy="0">design: an implementation choice</tspan></text>
+|   <circle class="st none" cx="587" cy="96" r="8"/>
+|   <text class="nt" x="603" y="100" text-anchor="start"><tspan x="603" dy="0">no kind</tspan></text>
+|   <path class="e" d="M35,220 L79,220" marker-end="url(#arr)"/>
+|   <g class="move"><title>closed → open</title>
+|   <path class="e" d="M157.7,233.3 Q290,280 421.3,233.6" marker-end="url(#arr)"/>
+|   <text class="lb" x="600" y="216" text-anchor="middle"><tspan x="600" dy="0">open</tspan><tspan x="600" dy="18">[role == 'owner']</tspan></text>
+|   </g>
+|   <g class="move"><title>closed → gone</title>
+|   <path class="e" d="M160,220 Q440,220 714,220" marker-end="url(#arr)"/>
+|   <text class="lb" x="438.5" y="210" text-anchor="middle"><tspan x="438.5" dy="0">remove</tspan></text>
+|   </g>
+|   <ellipse class="st fact" cx="120" cy="220" rx="40" ry="40"/>
+|   <text class="sn" x="120" y="226" text-anchor="middle">closed</text>
+|   <ellipse class="st none" cx="460" cy="220" rx="40" ry="40"/>
+|   <text class="sn" x="460" y="226" text-anchor="middle">open</text>
+|   <ellipse class="st design" cx="760" cy="220" rx="40" ry="40"/>
+|   <ellipse class="ring" cx="760" cy="220" rx="45" ry="45"/>
+|   <text class="sn" x="760" y="226" text-anchor="middle">gone</text>
+|   <text class="nt" x="24" y="305" text-anchor="start"><tspan x="24" dy="0">Every rule that doesn't change the state, by event and state. The moves are the edges above.</tspan><tspan x="24" dy="18">gone is terminal and has no rules.</tspan></text>
+|   <text class="tx it" x="24" y="353">event</text>
+|   <text class="tx it" x="95" y="353">closed</text>
+|   <text class="tx it" x="465.5" y="353">open</text>
+|   <line class="rule" x1="24" y1="361" x2="836" y2="361"/>
+|   <text class="tx" x="24" y="381">open</text>
+|   <g class="rules"><title>closed/open</title>
+|   <text class="tx" x="95" y="381">reject [role != 'owner']</text>
+|   </g>
+|   <g class="rules"><title>open/open</title>
+|   <text class="tx" x="465.5" y="381">stay</text>
+|   </g>
+|   <line class="rule" x1="24" y1="389" x2="836" y2="389"/>
+|   <text class="tx" x="24" y="409">remove</text>
+|   <g class="rules"><title>open/remove</title>
+|   <text class="tx" x="465.5" y="409">ignore</text>
+|   </g>
+| </svg>
+|
+=== in tools/internal/spine/testdata: spine draw spines/not-utf8.yaml drawings/door.yaml
+exit 1
+--- stdout
+| error   spec-unreadable    spines/not-utf8.yaml: not UTF-8: byte 0xe9 at offset 32
+| -- 1 errors, 1 findings
+|
 === in tools/internal/spine/testdata: spine guard --format json --junit REPORT policies/key-twice.yaml --branch build/x src/a.py src/secret.py spec/b.yaml
 exit 1
 --- stdout

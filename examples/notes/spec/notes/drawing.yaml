@@ -1,0 +1,7 @@
+# Where each state of spine.yaml sits in drawing.svg (#108), in units of the 860-wide drawing.
+# Written again, from the folder this file is in, with: spine draw spine.yaml drawing.yaml > drawing.svg
+states:
+  draft:   [100, 230]
+  active:  [330, 230]
+  trashed: [550, 230]
+  purged:  [785, 230]

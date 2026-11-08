@@ -24,6 +24,7 @@ type Rule struct {
 	From, Event string
 	Outcome     Outcome
 	When        *condition // nil when the rule has no when
+	WhenText    string     // the when as written, for the drawing; empty when the rule has none
 	canon       string     // the rule in the hashed form, for the cell hash
 }
 
@@ -35,6 +36,8 @@ type Example struct {
 
 // Spec is a validated spine.
 type Spec struct {
+	Machine  string
+	Section  string   // empty when the spine gives none
 	States   []string // declared order
 	Initial  string
 	Events   []string // as written, repeats and all
@@ -43,19 +46,27 @@ type Spec struct {
 	Examples []Example
 	stateSet map[string]bool
 	terminal map[string]bool
+	kind     map[string]string // fact, policy or design; missing when the state has none
 }
 
 // newSpec builds a Spec from a spine that validate() passed.
 func newSpec(v *yamldoc.Value) *Spec {
 	top := v.Map
 	get := func(k string) *yamldoc.Value { x, _ := top.Get(k); return x }
-	s := &Spec{stateSet: map[string]bool{}, terminal: map[string]bool{}}
+	s := &Spec{Machine: get("machine").Str, stateSet: map[string]bool{}, terminal: map[string]bool{}, kind: map[string]string{}}
+	if section := get("section"); section != nil {
+		s.Section = section.Str
+	}
 	states := get("states").Map
 	for i, k := range states.Keys {
 		s.States = append(s.States, k.Str)
 		s.stateSet[k.Str] = true
-		if t, ok := orEmpty(states.Values[i]).Map.Get("terminal"); ok && isTrue(t) {
+		details := orEmpty(states.Values[i]).Map
+		if t, ok := details.Get("terminal"); ok && isTrue(t) {
 			s.terminal[k.Str] = true
+		}
+		if kind, ok := details.Get("kind"); ok {
+			s.kind[k.Str] = kind.Str
 		}
 	}
 	s.Initial = get("initial").Str
@@ -83,6 +94,7 @@ func newSpec(v *yamldoc.Value) *Spec {
 		}
 		if when, ok := m.Get("when"); ok {
 			r.When, _ = compileCondition(when.Str, varNames)
+			r.WhenText = when.Str
 		}
 		s.Rules = append(s.Rules, r)
 	}

@@ -6,6 +6,7 @@ exit 0
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no spec/lamp/drawing.yaml)
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
 | -- all steps passed
@@ -20,6 +21,7 @@ exit 0
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no spec/lamp/drawing.yaml)
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
 | -- all steps passed
@@ -37,6 +39,7 @@ exit 1
 |       /usr/bin/env: 'python3': No such file or directory
 |       error   adapter-failed     env PYTHONPATH=src adapter_shim.py conformance/adapter_lamp.py: exited with status 127 before replying to new
 |       -- 1 errors, 1 findings
+| skip  lamp: drawing matches spine (no spec/lamp/drawing.yaml)
 | FAIL  content checks
 |       /usr/bin/env: 'python3': No such file or directory
 | skip  mutants killed (fast mode; --full runs them)
@@ -54,6 +57,7 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no spec/lamp/drawing.yaml)
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
 | -- 1 step(s) failed: guard (build/lamp)
@@ -68,6 +72,7 @@ exit 0
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no spec/lamp/drawing.yaml)
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
 | -- all steps passed
@@ -82,6 +87,7 @@ exit 0
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no spec/lamp/drawing.yaml)
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
 | -- all steps passed
@@ -120,6 +126,7 @@ exit 0
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no spec/lamp/drawing.yaml)
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
 | -- all steps passed
@@ -156,6 +163,7 @@ exit 0
 | ok    lamp: code conforms to spine
 |       info    coverage           10 sequences, margin 1: 6 of 6 state/event/variable cases exercised
 |       -- 0 errors, 1 findings
+| skip  lamp: drawing matches spine (no spec/lamp/drawing.yaml)
 | ok    content checks
 |       -- 0 errors, 1 checks run
 | skip  mutants killed (fast mode; --full runs them)

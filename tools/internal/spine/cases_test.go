@@ -132,6 +132,15 @@ func (c spineCase) runAsGiven(t *testing.T) {
 		return
 	}
 	c.recordRun(t, c.args, r, nil)
+	if len(c.args) > 0 && c.args[0] == "draw" { // no JSON: its findings are lines of text
+		codesSeen.Lock()
+		for _, line := range strings.Split(r.stdout+r.stderr, "\n") {
+			if f := strings.Fields(line); len(f) > 1 && (f[0] == "error" || f[0] == "warning" || f[0] == "info") {
+				codesSeen.m[f[1]] = true
+			}
+		}
+		codesSeen.Unlock()
+	}
 }
 
 // runJSON runs the case in JSON with a JUnit report, and gives the findings.
@@ -693,7 +702,7 @@ func contractCodes(t *testing.T) map[string]bool {
 		t.Fatal("tool-contract.md has no finding codes table")
 	}
 	table, _, _ = strings.Cut(table, "\n## ")
-	spineCommands := map[string]bool{"all": true, "check": true, "hash": true, "diff": true, "stale": true, "behaviors": true, "trace": true, "conform": true, "guard": true}
+	spineCommands := map[string]bool{"all": true, "check": true, "hash": true, "draw": true, "diff": true, "stale": true, "behaviors": true, "trace": true, "conform": true, "guard": true}
 	code := regexp.MustCompile("`([a-z-]+)`")
 	codes := map[string]bool{}
 	for _, line := range strings.Split(table, "\n") {

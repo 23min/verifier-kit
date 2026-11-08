@@ -1,0 +1,5 @@
+states: {closed: [1, 1], open: [2, 2], gone: [3, 3]}
+edges:
+  closed: [x]
+  open:
+    gone: [1]

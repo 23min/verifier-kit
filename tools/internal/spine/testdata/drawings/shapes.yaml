@@ -1,0 +1,7 @@
+yes: 1
+extra: 2
+states:
+  closed: [1, 2, 3]
+  open: 1 2
+  gone: [1.5, 2]
+  nowhere: [1, 1]

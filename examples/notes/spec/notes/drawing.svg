@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 633.7" width="860" height="633.7">
+  <title>Machine note, section trash</title>
+  <style>
+    :root {
+      --surface: #ffffff; --ink: #141414; --ink-2: #333333; --muted: #6a6a6a; --rule: #c4c4c4;
+      --fact: #b4b4b4; --policy: #dadada; --design: #f2f2f2;
+      --serif: "Latin Modern Roman", "CMU Serif", "Times New Roman", Times, serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --surface: #161616; --ink: #ececec; --ink-2: #cfcfcf; --muted: #9d9d9d; --rule: #444444;
+              --fact: #5a5a5a; --policy: #3a3a3a; --design: #242424; }
+    }
+    .bg, .none { fill: var(--surface); }
+    .fact { fill: var(--fact); } .policy { fill: var(--policy); } .design { fill: var(--design); }
+    .st { stroke: var(--ink); stroke-width: 1.4; }
+    .ring { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+    .e { fill: none; stroke: var(--ink-2); stroke-width: 1.15; }
+    .mk { fill: var(--ink-2); }
+    .rule { stroke: var(--rule); stroke-width: 1; }
+    .sn { font: italic 400 18px var(--serif); fill: var(--ink); }
+    .lb { font: 400 14px var(--serif); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+    .ti { font: 400 17px var(--serif); fill: var(--ink); }
+    .tx { font: 400 14px var(--serif); fill: var(--ink); }
+    .it { font-style: italic; }
+    .nt { font: 400 13px var(--serif); fill: var(--muted); }
+  </style>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 8" refX="10" refY="4" markerWidth="10" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+      <path class="mk" d="M0,0 L10,4 L0,8 z"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0" y="0" width="860" height="633.7"/>
+  <text class="ti" x="24" y="34" text-anchor="start"><tspan x="24" dy="0">Machine note, section trash</tspan></text>
+  <text class="tx" x="24" y="58" text-anchor="start"><tspan x="24" dy="0">role ∈ {owner, editor, viewer}</tspan></text>
+  <circle class="st fact" cx="587" cy="52" r="8"/>
+  <text class="nt" x="603" y="56" text-anchor="start"><tspan x="603" dy="0">fact: irreversible in the world</tspan></text>
+  <circle class="st policy" cx="587" cy="74" r="8"/>
+  <text class="nt" x="603" y="78" text-anchor="start"><tspan x="603" dy="0">policy: a business choice</tspan></text>
+  <circle class="st design" cx="587" cy="96" r="8"/>
+  <text class="nt" x="603" y="100" text-anchor="start"><tspan x="603" dy="0">design: an implementation choice</tspan></text>
+  <path class="e" d="M15,230 L59,230" marker-end="url(#arr)"/>
+  <g class="move"><title>draft → active</title>
+  <path class="e" d="M140,230 Q215,230 289,230" marker-end="url(#arr)"/>
+  <text class="lb" x="214.8" y="202" text-anchor="middle"><tspan x="214.8" dy="0">publish</tspan><tspan x="214.8" dy="18">[role == 'owner']</tspan></text>
+  </g>
+  <g class="move"><title>active → trashed</title>
+  <path class="e" d="M367.1,215.1 Q440,186 510.1,214.1" marker-end="url(#arr)"/>
+  <text class="lb" x="439.3" y="172.3" text-anchor="middle"><tspan x="439.3" dy="0">trash</tspan><tspan x="439.3" dy="18">[role == 'owner']</tspan></text>
+  </g>
+  <g class="move"><title>trashed → active</title>
+  <path class="e" d="M511.1,245.6 Q440,274 368.1,245.2" marker-end="url(#arr)"/>
+  <text class="lb" x="439.8" y="279.7" text-anchor="middle"><tspan x="439.8" dy="0">restore</tspan><tspan x="439.8" dy="18">[role == 'owner']</tspan></text>
+  </g>
+  <g class="move"><title>trashed → purged</title>
+  <path class="e" d="M592.3,230 Q667.5,230 739,230" marker-end="url(#arr)"/>
+  <text class="lb" x="666.6" y="202" text-anchor="middle"><tspan x="666.6" dy="0">purge</tspan><tspan x="666.6" dy="18">[role == 'owner']</tspan></text>
+  </g>
+  <ellipse class="st policy" cx="100" cy="230" rx="40" ry="40"/>
+  <text class="sn" x="100" y="236" text-anchor="middle">draft</text>
+  <ellipse class="st policy" cx="330" cy="230" rx="40" ry="40"/>
+  <text class="sn" x="330" y="236" text-anchor="middle">active</text>
+  <ellipse class="st design" cx="550" cy="230" rx="42.3" ry="40"/>
+  <text class="sn" x="550" y="236" text-anchor="middle">trashed</text>
+  <ellipse class="st fact" cx="785" cy="230" rx="40" ry="40"/>
+  <ellipse class="ring" cx="785" cy="230" rx="45" ry="45"/>
+  <text class="sn" x="785" y="236" text-anchor="middle">purged</text>
+  <text class="nt" x="24" y="341.7" text-anchor="start"><tspan x="24" dy="0">Every rule that doesn't change the state, by event and state. The moves are the edges above.</tspan><tspan x="24" dy="18">purged is terminal and has no rules.</tspan></text>
+  <text class="tx it" x="24" y="389.7">event</text>
+  <text class="tx it" x="102.9" y="389.7">draft</text>
+  <text class="tx it" x="347.3" y="389.7">active</text>
+  <text class="tx it" x="591.6" y="389.7">trashed</text>
+  <line class="rule" x1="24" y1="397.7" x2="836" y2="397.7"/>
+  <text class="tx" x="24" y="417.7">publish</text>
+  <g class="rules"><title>draft/publish</title>
+  <text class="tx" x="102.9" y="417.7">reject [role != 'owner']</text>
+  </g>
+  <g class="rules"><title>active/publish</title>
+  <text class="tx" x="347.3" y="417.7">ignore [role == 'owner']</text>
+  <text class="tx" x="347.3" y="435.7">reject [role != 'owner']</text>
+  </g>
+  <g class="rules"><title>trashed/publish</title>
+  <text class="tx" x="591.6" y="417.7">reject</text>
+  </g>
+  <line class="rule" x1="24" y1="443.7" x2="836" y2="443.7"/>
+  <text class="tx" x="24" y="463.7">edit</text>
+  <g class="rules"><title>draft/edit</title>
+  <text class="tx" x="102.9" y="463.7">stay [role != 'viewer']</text>
+  <text class="tx" x="102.9" y="481.7">reject [role == 'viewer']</text>
+  </g>
+  <g class="rules"><title>active/edit</title>
+  <text class="tx" x="347.3" y="463.7">stay [role != 'viewer']</text>
+  <text class="tx" x="347.3" y="481.7">reject [role == 'viewer']</text>
+  </g>
+  <g class="rules"><title>trashed/edit</title>
+  <text class="tx" x="591.6" y="463.7">reject</text>
+  </g>
+  <line class="rule" x1="24" y1="489.7" x2="836" y2="489.7"/>
+  <text class="tx" x="24" y="509.7">trash</text>
+  <g class="rules"><title>draft/trash</title>
+  <text class="tx" x="102.9" y="509.7">reject</text>
+  </g>
+  <g class="rules"><title>active/trash</title>
+  <text class="tx" x="347.3" y="509.7">reject [role != 'owner']</text>
+  </g>
+  <g class="rules"><title>trashed/trash</title>
+  <text class="tx" x="591.6" y="509.7">ignore [role == 'owner']</text>
+  <text class="tx" x="591.6" y="527.7">reject [role != 'owner']</text>
+  </g>
+  <line class="rule" x1="24" y1="535.7" x2="836" y2="535.7"/>
+  <text class="tx" x="24" y="555.7">restore</text>
+  <g class="rules"><title>draft/restore</title>
+  <text class="tx" x="102.9" y="555.7">ignore [role == 'owner']</text>
+  <text class="tx" x="102.9" y="573.7">reject [role != 'owner']</text>
+  </g>
+  <g class="rules"><title>active/restore</title>
+  <text class="tx" x="347.3" y="555.7">ignore [role == 'owner']</text>
+  <text class="tx" x="347.3" y="573.7">reject [role != 'owner']</text>
+  </g>
+  <g class="rules"><title>trashed/restore</title>
+  <text class="tx" x="591.6" y="555.7">reject [role != 'owner']</text>
+  </g>
+  <line class="rule" x1="24" y1="581.7" x2="836" y2="581.7"/>
+  <text class="tx" x="24" y="601.7">purge</text>
+  <g class="rules"><title>draft/purge</title>
+  <text class="tx" x="102.9" y="601.7">reject</text>
+  </g>
+  <g class="rules"><title>active/purge</title>
+  <text class="tx" x="347.3" y="601.7">reject</text>
+  </g>
+  <g class="rules"><title>trashed/purge</title>
+  <text class="tx" x="591.6" y="601.7">reject [role != 'owner']</text>
+  </g>
+</svg>

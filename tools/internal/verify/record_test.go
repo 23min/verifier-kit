@@ -27,6 +27,7 @@ import (
 	"testing"
 
 	"github.com/23min/verifier-kit/tools/internal/record"
+	"github.com/23min/verifier-kit/tools/internal/spine"
 )
 
 var update = flag.Bool("update", false, "write testdata/record/ again from ./verify")
@@ -240,11 +241,26 @@ func examplesProject() files {
 	emptyMutants := pythonLamp(false)
 	emptyMutants["mutation/mutants.yaml"] = "# none yet\n"
 
+	// a drawing for each way the step ends: drawn alike (lamp's, written by drawn), stale, missing,
+	// a folder, and a layout spine draw refuses
+	drawings := pythonLamp(false)
+	drawings["spec/lamp/drawing.yaml"] = lampLayout
+	for _, m := range []string{"stale", "undrawn", "folder", "refused"} {
+		drawings["spec/"+m+"/spine.yaml"] = lampSpine
+		drawings["spec/"+m+"/drawing.yaml"] = lampLayout
+		drawings["conformance/adapter_"+m+".cmd"] = drawings["conformance/adapter_lamp.cmd"]
+	}
+	drawings["spec/stale/drawing.svg"] = "<svg/>\n"
+	drawings["spec/folder/drawing.svg/README"] = "A folder, not a drawing.\n"
+	drawings["spec/refused/drawing.yaml"] = "states:\n  dark: [120, 200]\n"
+	drawings["spec/refused/drawing.svg"] = "<svg/>\n"
+
 	return files{}.
 		with("examples/python", pythonLamp(false)).
 		with("examples/mutants", mutants).
 		with("examples/badmutants", badMutants).
 		with("examples/emptymutants", emptyMutants).
+		with("examples/drawings", drawings).
 		with("examples/commands", commandLamp()).
 		with("examples/failing", failing).
 		with("examples/failingcommands", failingCommands).
@@ -257,6 +273,16 @@ func examplesProject() files {
 			"checks/run.cmd":       "sh -c \"exit 0\"\n",
 		})
 }
+
+const lampLayout = `states:
+  dark:   [120, 200]
+  lit:    [460, 200]
+  broken: [290, 380]
+`
+
+// drawn are the drawings the examples project holds as spine draw makes them, written after its
+// other files.
+var drawn = []string{"examples/drawings/spec/lamp"}
 
 const ownPolicy = `branches:
   "build/*": builder
@@ -303,6 +329,7 @@ func projects(tmp string) []project {
 			r("examples/unsound", "--full"),
 			r("examples/mutants", "--full"), r("examples/badmutants", "--full"),
 			r("examples/emptymutants", "--full"),
+			r("examples/drawings"), withEnv("VERIFY_VERBOSE=1", "examples/drawings"),
 			r("../outside"), r(filepath.Join(tmp, "outside"), "--full"),
 			{from: "examples", args: []string{"python"}},
 			withEnv("VERIFY_REPORTS=reports", "examples/python"),
@@ -355,6 +382,16 @@ func makeProject(t *testing.T, repo, dir string, p project) {
 	}
 	for path, content := range p.files {
 		writeFile(t, filepath.Join(dir, path), content, 0o644)
+	}
+	if p.name == "examples" {
+		for _, m := range drawn {
+			var svg, warnings bytes.Buffer
+			d := filepath.Join(dir, m)
+			if code := spine.Main([]string{"draw", filepath.Join(d, "spine.yaml"), filepath.Join(d, "drawing.yaml")}, nil, &svg, &warnings); code != 0 {
+				t.Fatalf("spine draw %s: exit %d\n%s", m, code, svg.String())
+			}
+			writeFile(t, filepath.Join(d, "drawing.svg"), svg.String(), 0o644)
+		}
 	}
 	if !p.git {
 		return

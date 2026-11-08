@@ -9,6 +9,14 @@ the rules, J1 and J2, and the scenarios J01-J07. The work is tracked in issue #3
 
 ## What it shows
 
+![The job spine drawn: queued moves to running on start; running moves to succeeded on succeed,
+to retrying on fail when attempts is some_left, and to discarded on fail when attempts is last
+or on cancel; retrying moves back to queued on retry_due; queued and retrying move to discarded
+on cancel. succeeded and discarded are terminal. A table below gives every other rule by event
+and state.](spec/job/drawing.svg)
+
+The ratified spine, drawn by `spine draw` from `spec/job/drawing.yaml`.
+
 - A spine for one job's lifecycle (`queued`, `running`, `retrying`, and two final states), with
   one variable, `attempts`. It was ratified from two readings by different models, which agreed
   on every cell; the owner chose the rules before the readings and made `discarded` policy, not
@@ -39,6 +47,8 @@ cached.
 spec/job/chapter.md                the prose chapter: rules, J1-J2, J01-J07, assumptions      person
 spec/job/readings/                 two readings, with the prompt and their models             interpreters
 spec/job/spine.yaml                the ratified lifecycle of one job                          person
+spec/job/drawing.yaml              where each state sits in the spine's drawing               person
+spec/job/drawing.svg               the drawing, made by spine draw                            person
 spec/job/behaviors/                valid/ must be allowed, invalid/ refused                   person
 conformance/adapter_job.exs, .cmd  the adapter; its header is the whole contract with src/    person
 checks/run.exs, run.cmd            runs the checks; reports as tools/run_checks.py does     person
@@ -52,6 +62,7 @@ src/job.ex                         the lifecycle and the job                    
 | What | How | Bound |
 |---|---|---|
 | The lifecycle matches the spine | `spine conform` through `adapter_job.cmd`, on `Job.Lifecycle.transition/3` | every case, margin 1: 60 sequences |
+| The drawing shows the spine | `spine draw` on `spine.yaml` and `drawing.yaml`, compared with `drawing.svg` | byte for byte |
 | Scenarios J01-J07 end as the chapter says | `checks/job/job_test.exs` | one run each |
 | J1 and J2: attempts are counted, bounded and retried until the limit | the same file, over every reachable job | maximum attempts 1 to 4 |
 

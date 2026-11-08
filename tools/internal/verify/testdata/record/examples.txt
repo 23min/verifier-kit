@@ -8,21 +8,25 @@ exit 1
 | skip  empty: checks cite current spine (no examples/badcommands/checks/empty/)
 | FAIL  empty: code conforms to spine
 |       error   bad-command        examples/badcommands/conformance/adapter_empty.cmd: the command is empty
+| skip  empty: drawing matches spine (no examples/badcommands/spec/empty/drawing.yaml)
 | ok    twolines: spine is sound
 | skip  twolines: behaviors match spine (no examples/badcommands/spec/twolines/behaviors/)
 | skip  twolines: checks cite current spine (no examples/badcommands/checks/twolines/)
 | FAIL  twolines: code conforms to spine
 |       error   bad-command        examples/badcommands/conformance/adapter_twolines.cmd: holds more than one line
+| skip  twolines: drawing matches spine (no examples/badcommands/spec/twolines/drawing.yaml)
 | ok    unreadable: spine is sound
 | skip  unreadable: behaviors match spine (no examples/badcommands/spec/unreadable/behaviors/)
 | skip  unreadable: checks cite current spine (no examples/badcommands/checks/unreadable/)
 | FAIL  unreadable: code conforms to spine
 |       error   bad-command        examples/badcommands/conformance/adapter_unreadable.cmd: cannot be read: not UTF-8
+| skip  unreadable: drawing matches spine (no examples/badcommands/spec/unreadable/drawing.yaml)
 | ok    unsplit: spine is sound
 | skip  unsplit: behaviors match spine (no examples/badcommands/spec/unsplit/behaviors/)
 | skip  unsplit: checks cite current spine (no examples/badcommands/checks/unsplit/)
 | FAIL  unsplit: code conforms to spine
 |       error   bad-command        examples/badcommands/conformance/adapter_unsplit.cmd: cannot be split: no closing quotation
+| skip  unsplit: drawing matches spine (no examples/badcommands/spec/unsplit/drawing.yaml)
 | FAIL  content checks
 |       error   bad-command        examples/badcommands/checks/run.cmd: cannot run no-such-program: No such file or directory
 | skip  mutants killed (fast mode; --full runs them)
@@ -31,6 +35,7 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/badmutants/spec/lamp/drawing.yaml)
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
 | == examples/commands
@@ -38,6 +43,41 @@ exit 1
 | skip  lamp: behaviors match spine (no examples/commands/spec/lamp/behaviors/)
 | skip  lamp: checks cite current spine (no examples/commands/checks/lamp/)
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/commands/spec/lamp/drawing.yaml)
+| ok    content checks
+| skip  mutants killed (fast mode; --full runs them)
+| == examples/drawings
+| ok    folder: spine is sound
+| skip  folder: behaviors match spine (no examples/drawings/spec/folder/behaviors/)
+| skip  folder: checks cite current spine (no examples/drawings/checks/folder/)
+| ok    folder: code conforms to spine
+| FAIL  folder: drawing matches spine
+|       error   no-drawing         examples/drawings/spec/folder/drawing.svg: cannot be read: Is a directory
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| ok    lamp: code conforms to spine
+| ok    lamp: drawing matches spine
+| ok    refused: spine is sound
+| skip  refused: behaviors match spine (no examples/drawings/spec/refused/behaviors/)
+| skip  refused: checks cite current spine (no examples/drawings/checks/refused/)
+| ok    refused: code conforms to spine
+| FAIL  refused: drawing matches spine
+|       error   missing-key        examples/drawings/spec/refused/drawing.yaml: states: "lit" has no centre
+|       error   missing-key        examples/drawings/spec/refused/drawing.yaml: states: "broken" has no centre
+|       -- 2 errors, 2 findings
+| ok    stale: spine is sound
+| skip  stale: behaviors match spine (no examples/drawings/spec/stale/behaviors/)
+| skip  stale: checks cite current spine (no examples/drawings/checks/stale/)
+| ok    stale: code conforms to spine
+| FAIL  stale: drawing matches spine
+|       error   stale-drawing      examples/drawings/spec/stale/drawing.svg: differs from what spine draw makes of spine.yaml and drawing.yaml; write it with spine draw spine.yaml drawing.yaml > drawing.svg, run in examples/drawings/spec/stale
+| ok    undrawn: spine is sound
+| skip  undrawn: behaviors match spine (no examples/drawings/spec/undrawn/behaviors/)
+| skip  undrawn: checks cite current spine (no examples/drawings/checks/undrawn/)
+| ok    undrawn: code conforms to spine
+| FAIL  undrawn: drawing matches spine
+|       error   no-drawing         examples/drawings/spec/undrawn/drawing.svg: not found; write it with spine draw spine.yaml drawing.yaml > drawing.svg, run in examples/drawings/spec/undrawn
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
 | == examples/empty
@@ -51,6 +91,7 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/emptymutants/spec/lamp/drawing.yaml)
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
 | == examples/failing
@@ -60,6 +101,7 @@ exit 1
 | FAIL  lamp: code conforms to spine
 |       error   diverges           lit/press: after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 2 findings
+| skip  lamp: drawing matches spine (no examples/failing/spec/lamp/drawing.yaml)
 | FAIL  content checks
 |       error   check-failed       checks/lamp/test_lamp.py::test_a_second_press_darkens_it: AssertionError: lit
 |       error   check-unloadable   checks/lamp/test_unloadable.py: cannot be imported: ModuleNotFoundError: No module named 'no_such_module'
@@ -72,6 +114,7 @@ exit 1
 | FAIL  lamp: code conforms to spine
 |       error   diverges           lit/press: after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 2 findings
+| skip  lamp: drawing matches spine (no examples/failingcommands/spec/lamp/drawing.yaml)
 | FAIL  content checks
 |       1 of 2 checks failed
 | skip  mutants killed (fast mode; --full runs them)
@@ -81,6 +124,7 @@ exit 1
 | skip  lamp: checks cite current spine (no examples/missing/checks/lamp/)
 | FAIL  lamp: code conforms to spine
 |       error   no-adapter         lamp: examples/missing/conformance/adapter_lamp.cmd not found
+| skip  lamp: drawing matches spine (no examples/missing/spec/lamp/drawing.yaml)
 | FAIL  content checks
 |       error   no-checks          examples/missing/checks: no examples/missing/checks/run.cmd
 | skip  mutants killed (fast mode; --full runs them)
@@ -89,6 +133,7 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/mutants/spec/lamp/drawing.yaml)
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
 | == examples/python
@@ -96,6 +141,7 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/python/spec/lamp/drawing.yaml)
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
 | == examples/pythonnames
@@ -104,6 +150,7 @@ exit 1
 | ok    lamp: checks cite current spine
 | FAIL  lamp: code conforms to spine
 |       error   no-adapter         lamp: examples/pythonnames/conformance/adapter_lamp.cmd not found
+| skip  lamp: drawing matches spine (no examples/pythonnames/spec/lamp/drawing.yaml)
 | FAIL  content checks
 |       error   no-checks          examples/pythonnames/checks: no examples/pythonnames/checks/run.cmd
 | skip  mutants killed (fast mode; --full runs them)
@@ -114,7 +161,7 @@ exit 1
 | skip  lamp: other steps need a sound spine
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
-| -- 16 step(s) failed: examples/badcommands: empty: code conforms to spine, examples/badcommands: twolines: code conforms to spine, examples/badcommands: unreadable: code conforms to spine, examples/badcommands: unsplit: code conforms to spine, examples/badcommands: content checks, examples/empty: spines found, examples/empty: content checks, examples/failing: lamp: code conforms to spine, examples/failing: content checks, examples/failingcommands: lamp: code conforms to spine, examples/failingcommands: content checks, examples/missing: lamp: code conforms to spine, examples/missing: content checks, examples/pythonnames: lamp: code conforms to spine, examples/pythonnames: content checks, examples/unsound: lamp: spine is sound
+| -- 20 step(s) failed: examples/badcommands: empty: code conforms to spine, examples/badcommands: twolines: code conforms to spine, examples/badcommands: unreadable: code conforms to spine, examples/badcommands: unsplit: code conforms to spine, examples/badcommands: content checks, examples/drawings: folder: drawing matches spine, examples/drawings: refused: drawing matches spine, examples/drawings: stale: drawing matches spine, examples/drawings: undrawn: drawing matches spine, examples/empty: spines found, examples/empty: content checks, examples/failing: lamp: code conforms to spine, examples/failing: content checks, examples/failingcommands: lamp: code conforms to spine, examples/failingcommands: content checks, examples/missing: lamp: code conforms to spine, examples/missing: content checks, examples/pythonnames: lamp: code conforms to spine, examples/pythonnames: content checks, examples/unsound: lamp: spine is sound
 |
 --- stderr
 |
@@ -127,6 +174,7 @@ exit 0
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no $TMP/outside/spec/lamp/drawing.yaml)
 | ok    content checks
 | ok    mutants killed (mutants.yaml)
 | -- all steps passed
@@ -150,21 +198,25 @@ exit 1
 | skip  empty: checks cite current spine (no examples/badcommands/checks/empty/)
 | FAIL  empty: code conforms to spine
 |       error   bad-command        examples/badcommands/conformance/adapter_empty.cmd: the command is empty
+| skip  empty: drawing matches spine (no examples/badcommands/spec/empty/drawing.yaml)
 | ok    twolines: spine is sound
 | skip  twolines: behaviors match spine (no examples/badcommands/spec/twolines/behaviors/)
 | skip  twolines: checks cite current spine (no examples/badcommands/checks/twolines/)
 | FAIL  twolines: code conforms to spine
 |       error   bad-command        examples/badcommands/conformance/adapter_twolines.cmd: holds more than one line
+| skip  twolines: drawing matches spine (no examples/badcommands/spec/twolines/drawing.yaml)
 | ok    unreadable: spine is sound
 | skip  unreadable: behaviors match spine (no examples/badcommands/spec/unreadable/behaviors/)
 | skip  unreadable: checks cite current spine (no examples/badcommands/checks/unreadable/)
 | FAIL  unreadable: code conforms to spine
 |       error   bad-command        examples/badcommands/conformance/adapter_unreadable.cmd: cannot be read: not UTF-8
+| skip  unreadable: drawing matches spine (no examples/badcommands/spec/unreadable/drawing.yaml)
 | ok    unsplit: spine is sound
 | skip  unsplit: behaviors match spine (no examples/badcommands/spec/unsplit/behaviors/)
 | skip  unsplit: checks cite current spine (no examples/badcommands/checks/unsplit/)
 | FAIL  unsplit: code conforms to spine
 |       error   bad-command        examples/badcommands/conformance/adapter_unsplit.cmd: cannot be split: no closing quotation
+| skip  unsplit: drawing matches spine (no examples/badcommands/spec/unsplit/drawing.yaml)
 | FAIL  content checks
 |       error   bad-command        examples/badcommands/checks/run.cmd: cannot run no-such-program: No such file or directory
 | FAIL  mutants killed (mutate_one)
@@ -174,6 +226,7 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/badmutants/spec/lamp/drawing.yaml)
 | ok    content checks
 | FAIL  mutants killed (mutants.yaml)
 |       error   bad-mutants        examples/badmutants/mutation/mutants.yaml: mutant 1 (no file): no file
@@ -189,8 +242,43 @@ exit 1
 | skip  lamp: behaviors match spine (no examples/commands/spec/lamp/behaviors/)
 | skip  lamp: checks cite current spine (no examples/commands/checks/lamp/)
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/commands/spec/lamp/drawing.yaml)
 | ok    content checks
 | ok    mutants killed (mutate_lamp)
+| == examples/drawings
+| ok    folder: spine is sound
+| skip  folder: behaviors match spine (no examples/drawings/spec/folder/behaviors/)
+| skip  folder: checks cite current spine (no examples/drawings/checks/folder/)
+| ok    folder: code conforms to spine
+| FAIL  folder: drawing matches spine
+|       error   no-drawing         examples/drawings/spec/folder/drawing.svg: cannot be read: Is a directory
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| ok    lamp: code conforms to spine
+| ok    lamp: drawing matches spine
+| ok    refused: spine is sound
+| skip  refused: behaviors match spine (no examples/drawings/spec/refused/behaviors/)
+| skip  refused: checks cite current spine (no examples/drawings/checks/refused/)
+| ok    refused: code conforms to spine
+| FAIL  refused: drawing matches spine
+|       error   missing-key        examples/drawings/spec/refused/drawing.yaml: states: "lit" has no centre
+|       error   missing-key        examples/drawings/spec/refused/drawing.yaml: states: "broken" has no centre
+|       -- 2 errors, 2 findings
+| ok    stale: spine is sound
+| skip  stale: behaviors match spine (no examples/drawings/spec/stale/behaviors/)
+| skip  stale: checks cite current spine (no examples/drawings/checks/stale/)
+| ok    stale: code conforms to spine
+| FAIL  stale: drawing matches spine
+|       error   stale-drawing      examples/drawings/spec/stale/drawing.svg: differs from what spine draw makes of spine.yaml and drawing.yaml; write it with spine draw spine.yaml drawing.yaml > drawing.svg, run in examples/drawings/spec/stale
+| ok    undrawn: spine is sound
+| skip  undrawn: behaviors match spine (no examples/drawings/spec/undrawn/behaviors/)
+| skip  undrawn: checks cite current spine (no examples/drawings/checks/undrawn/)
+| ok    undrawn: code conforms to spine
+| FAIL  undrawn: drawing matches spine
+|       error   no-drawing         examples/drawings/spec/undrawn/drawing.svg: not found; write it with spine draw spine.yaml drawing.yaml > drawing.svg, run in examples/drawings/spec/undrawn
+| ok    content checks
+| ok    mutants killed (mutants.yaml)
 | == examples/empty
 | FAIL  spines found
 |       error   no-machines        examples/empty/spec: no examples/empty/spec/*/spine.yaml
@@ -203,6 +291,7 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/emptymutants/spec/lamp/drawing.yaml)
 | ok    content checks
 | FAIL  mutants killed (mutants.yaml)
 |       error   bad-mutants        examples/emptymutants/mutation/mutants.yaml: holds no mutants
@@ -213,6 +302,7 @@ exit 1
 | FAIL  lamp: code conforms to spine
 |       error   diverges           lit/press: after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 2 findings
+| skip  lamp: drawing matches spine (no examples/failing/spec/lamp/drawing.yaml)
 | FAIL  content checks
 |       error   check-failed       checks/lamp/test_lamp.py::test_a_second_press_darkens_it: AssertionError: lit
 |       error   check-unloadable   checks/lamp/test_unloadable.py: cannot be imported: ModuleNotFoundError: No module named 'no_such_module'
@@ -227,6 +317,7 @@ exit 1
 | FAIL  lamp: code conforms to spine
 |       error   diverges           lit/press: after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 2 findings
+| skip  lamp: drawing matches spine (no examples/failingcommands/spec/lamp/drawing.yaml)
 | FAIL  content checks
 |       1 of 2 checks failed
 | FAIL  mutants killed (mutate_lamp)
@@ -237,6 +328,7 @@ exit 1
 | skip  lamp: checks cite current spine (no examples/missing/checks/lamp/)
 | FAIL  lamp: code conforms to spine
 |       error   no-adapter         lamp: examples/missing/conformance/adapter_lamp.cmd not found
+| skip  lamp: drawing matches spine (no examples/missing/spec/lamp/drawing.yaml)
 | FAIL  content checks
 |       error   no-checks          examples/missing/checks: no examples/missing/checks/run.cmd
 | FAIL  mutants killed
@@ -246,6 +338,7 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/mutants/spec/lamp/drawing.yaml)
 | ok    content checks
 | FAIL  mutants killed (mutants.yaml)
 |       error   mutant-survived    a comment is added: no part of the oracle noticed
@@ -259,6 +352,7 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/python/spec/lamp/drawing.yaml)
 | ok    content checks
 | ok    mutants killed (mutants.yaml)
 | == examples/pythonnames
@@ -267,6 +361,7 @@ exit 1
 | ok    lamp: checks cite current spine
 | FAIL  lamp: code conforms to spine
 |       error   no-adapter         lamp: examples/pythonnames/conformance/adapter_lamp.cmd not found
+| skip  lamp: drawing matches spine (no examples/pythonnames/spec/lamp/drawing.yaml)
 | FAIL  content checks
 |       error   no-checks          examples/pythonnames/checks: no examples/pythonnames/checks/run.cmd
 | FAIL  mutants killed
@@ -279,7 +374,7 @@ exit 1
 | ok    content checks
 | FAIL  mutants killed
 |       error   no-mutation        examples/unsound/mutation: no examples/unsound/mutation/mutants.yaml or mutate_*.cmd
-| -- 26 step(s) failed: examples/badcommands: empty: code conforms to spine, examples/badcommands: twolines: code conforms to spine, examples/badcommands: unreadable: code conforms to spine, examples/badcommands: unsplit: code conforms to spine, examples/badcommands: content checks, examples/badcommands: mutants killed (mutate_one), examples/badmutants: mutants killed (mutants.yaml), examples/empty: spines found, examples/empty: content checks, examples/empty: mutants killed, examples/emptymutants: mutants killed (mutants.yaml), examples/failing: lamp: code conforms to spine, examples/failing: content checks, examples/failing: mutants killed (mutants.yaml), examples/failingcommands: lamp: code conforms to spine, examples/failingcommands: content checks, examples/failingcommands: mutants killed (mutate_lamp), examples/missing: lamp: code conforms to spine, examples/missing: content checks, examples/missing: mutants killed, examples/mutants: mutants killed (mutants.yaml), examples/pythonnames: lamp: code conforms to spine, examples/pythonnames: content checks, examples/pythonnames: mutants killed, examples/unsound: lamp: spine is sound, examples/unsound: mutants killed
+| -- 30 step(s) failed: examples/badcommands: empty: code conforms to spine, examples/badcommands: twolines: code conforms to spine, examples/badcommands: unreadable: code conforms to spine, examples/badcommands: unsplit: code conforms to spine, examples/badcommands: content checks, examples/badcommands: mutants killed (mutate_one), examples/badmutants: mutants killed (mutants.yaml), examples/drawings: folder: drawing matches spine, examples/drawings: refused: drawing matches spine, examples/drawings: stale: drawing matches spine, examples/drawings: undrawn: drawing matches spine, examples/empty: spines found, examples/empty: content checks, examples/empty: mutants killed, examples/emptymutants: mutants killed (mutants.yaml), examples/failing: lamp: code conforms to spine, examples/failing: content checks, examples/failing: mutants killed (mutants.yaml), examples/failingcommands: lamp: code conforms to spine, examples/failingcommands: content checks, examples/failingcommands: mutants killed (mutate_lamp), examples/missing: lamp: code conforms to spine, examples/missing: content checks, examples/missing: mutants killed, examples/mutants: mutants killed (mutants.yaml), examples/pythonnames: lamp: code conforms to spine, examples/pythonnames: content checks, examples/pythonnames: mutants killed, examples/unsound: lamp: spine is sound, examples/unsound: mutants killed
 |
 --- stderr
 |
@@ -290,15 +385,17 @@ exit 0
 | nothing else, so they cannot drift apart.
 |
 |   ./verify [ROOT]          fast checks (seconds): spine soundness, behaviors, stale checks,
-|                            conformance, content checks, and the path guard when a base is given
+|                            conformance, drawings, content checks, and the path guard when a
+|                            base is given
 |   ./verify [ROOT] --full   also checks the checker (mutation)
 |
 | ROOT is a folder laid out like a project: spec/, checks/, conformance/, src/, mutation/.
 | Without ROOT: this folder when it has spec/, otherwise every examples/*/ in turn.
 |
 | Nothing is skipped silently: a step that does not run prints a skip line with the reason,
-| and a missing piece (no spine, no adapter, no content checks, no mutants under --full) is an
-| error.
+| and a missing piece (no spine, no adapter, a layout with no drawing, no content checks, no
+| mutants under --full) is an error. A machine's drawing, spec/<machine>/drawing.svg, must be
+| what spine draw makes of its spine and spec/<machine>/drawing.yaml.
 |
 | The adapter and the content checks are .cmd files holding one command line, in any language:
 | conformance/adapter_<machine>.cmd, checks/run.cmd. A command runs from its root, without a
@@ -334,6 +431,7 @@ exit 0
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no $TMP/outside/spec/lamp/drawing.yaml)
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
 | -- all steps passed
@@ -350,21 +448,25 @@ exit 1
 | skip  empty: checks cite current spine (no examples/badcommands/checks/empty/)
 | FAIL  empty: code conforms to spine
 |       error   bad-command        examples/badcommands/conformance/adapter_empty.cmd: the command is empty
+| skip  empty: drawing matches spine (no examples/badcommands/spec/empty/drawing.yaml)
 | ok    twolines: spine is sound
 | skip  twolines: behaviors match spine (no examples/badcommands/spec/twolines/behaviors/)
 | skip  twolines: checks cite current spine (no examples/badcommands/checks/twolines/)
 | FAIL  twolines: code conforms to spine
 |       error   bad-command        examples/badcommands/conformance/adapter_twolines.cmd: holds more than one line
+| skip  twolines: drawing matches spine (no examples/badcommands/spec/twolines/drawing.yaml)
 | ok    unreadable: spine is sound
 | skip  unreadable: behaviors match spine (no examples/badcommands/spec/unreadable/behaviors/)
 | skip  unreadable: checks cite current spine (no examples/badcommands/checks/unreadable/)
 | FAIL  unreadable: code conforms to spine
 |       error   bad-command        examples/badcommands/conformance/adapter_unreadable.cmd: cannot be read: not UTF-8
+| skip  unreadable: drawing matches spine (no examples/badcommands/spec/unreadable/drawing.yaml)
 | ok    unsplit: spine is sound
 | skip  unsplit: behaviors match spine (no examples/badcommands/spec/unsplit/behaviors/)
 | skip  unsplit: checks cite current spine (no examples/badcommands/checks/unsplit/)
 | FAIL  unsplit: code conforms to spine
 |       error   bad-command        examples/badcommands/conformance/adapter_unsplit.cmd: cannot be split: no closing quotation
+| skip  unsplit: drawing matches spine (no examples/badcommands/spec/unsplit/drawing.yaml)
 | FAIL  content checks
 |       error   bad-command        examples/badcommands/checks/run.cmd: cannot run no-such-program: No such file or directory
 | FAIL  mutants killed (mutate_one)
@@ -382,6 +484,7 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/badmutants/spec/lamp/drawing.yaml)
 | ok    content checks
 | FAIL  mutants killed (mutants.yaml)
 |       error   bad-mutants        examples/badmutants/mutation/mutants.yaml: mutant 1 (no file): no file
@@ -405,9 +508,118 @@ exit 0
 | skip  lamp: behaviors match spine (no examples/commands/spec/lamp/behaviors/)
 | skip  lamp: checks cite current spine (no examples/commands/checks/lamp/)
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/commands/spec/lamp/drawing.yaml)
 | ok    content checks
 | ok    mutants killed (mutate_lamp)
 | -- all steps passed
+|
+--- stderr
+|
+=== examples: ./verify examples/drawings
+exit 1
+--- stdout
+| skip  guard (VERIFY_BASE not set)
+| == examples/drawings
+| ok    folder: spine is sound
+| skip  folder: behaviors match spine (no examples/drawings/spec/folder/behaviors/)
+| skip  folder: checks cite current spine (no examples/drawings/checks/folder/)
+| ok    folder: code conforms to spine
+| FAIL  folder: drawing matches spine
+|       error   no-drawing         examples/drawings/spec/folder/drawing.svg: cannot be read: Is a directory
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| ok    lamp: code conforms to spine
+| ok    lamp: drawing matches spine
+| ok    refused: spine is sound
+| skip  refused: behaviors match spine (no examples/drawings/spec/refused/behaviors/)
+| skip  refused: checks cite current spine (no examples/drawings/checks/refused/)
+| ok    refused: code conforms to spine
+| FAIL  refused: drawing matches spine
+|       error   missing-key        examples/drawings/spec/refused/drawing.yaml: states: "lit" has no centre
+|       error   missing-key        examples/drawings/spec/refused/drawing.yaml: states: "broken" has no centre
+|       -- 2 errors, 2 findings
+| ok    stale: spine is sound
+| skip  stale: behaviors match spine (no examples/drawings/spec/stale/behaviors/)
+| skip  stale: checks cite current spine (no examples/drawings/checks/stale/)
+| ok    stale: code conforms to spine
+| FAIL  stale: drawing matches spine
+|       error   stale-drawing      examples/drawings/spec/stale/drawing.svg: differs from what spine draw makes of spine.yaml and drawing.yaml; write it with spine draw spine.yaml drawing.yaml > drawing.svg, run in examples/drawings/spec/stale
+| ok    undrawn: spine is sound
+| skip  undrawn: behaviors match spine (no examples/drawings/spec/undrawn/behaviors/)
+| skip  undrawn: checks cite current spine (no examples/drawings/checks/undrawn/)
+| ok    undrawn: code conforms to spine
+| FAIL  undrawn: drawing matches spine
+|       error   no-drawing         examples/drawings/spec/undrawn/drawing.svg: not found; write it with spine draw spine.yaml drawing.yaml > drawing.svg, run in examples/drawings/spec/undrawn
+| ok    content checks
+| skip  mutants killed (fast mode; --full runs them)
+| -- 4 step(s) failed: examples/drawings: folder: drawing matches spine, examples/drawings: refused: drawing matches spine, examples/drawings: stale: drawing matches spine, examples/drawings: undrawn: drawing matches spine
+|
+--- stderr
+|
+=== examples: ./verify examples/drawings with VERIFY_VERBOSE=1
+exit 1
+--- stdout
+| skip  guard (VERIFY_BASE not set)
+| == examples/drawings
+| ok    folder: spine is sound
+|       -- 0 errors, 0 findings
+| skip  folder: behaviors match spine (no examples/drawings/spec/folder/behaviors/)
+| skip  folder: checks cite current spine (no examples/drawings/checks/folder/)
+| ok    folder: code conforms to spine
+|       info    coverage           10 sequences, margin 1: 6 of 6 state/event/variable cases exercised
+|       -- 0 errors, 1 findings
+| FAIL  folder: drawing matches spine
+|       error   no-drawing         examples/drawings/spec/folder/drawing.svg: cannot be read: Is a directory
+| ok    lamp: spine is sound
+|       -- 0 errors, 0 findings
+| ok    lamp: behaviors match spine
+|       info    behaviors          examples/drawings/spec/lamp/behaviors: 2 behavior files checked
+|       -- 0 errors, 1 findings
+| ok    lamp: checks cite current spine
+|       info    uncovered          dark/drop: no check cites this transition; conformance still exercises it
+|       info    uncovered          dark/press: no check cites this transition; conformance still exercises it
+|       info    uncovered          lit/drop: no check cites this transition; conformance still exercises it
+|       info    uncovered          lit/press: no check cites this transition; conformance still exercises it
+|       -- 0 errors, 4 findings
+| ok    lamp: code conforms to spine
+|       info    coverage           10 sequences, margin 1: 6 of 6 state/event/variable cases exercised
+|       -- 0 errors, 1 findings
+| ok    lamp: drawing matches spine
+|       examples/drawings/spec/lamp/drawing.svg is what spine draw makes
+| ok    refused: spine is sound
+|       -- 0 errors, 0 findings
+| skip  refused: behaviors match spine (no examples/drawings/spec/refused/behaviors/)
+| skip  refused: checks cite current spine (no examples/drawings/checks/refused/)
+| ok    refused: code conforms to spine
+|       info    coverage           10 sequences, margin 1: 6 of 6 state/event/variable cases exercised
+|       -- 0 errors, 1 findings
+| FAIL  refused: drawing matches spine
+|       error   missing-key        examples/drawings/spec/refused/drawing.yaml: states: "lit" has no centre
+|       error   missing-key        examples/drawings/spec/refused/drawing.yaml: states: "broken" has no centre
+|       -- 2 errors, 2 findings
+| ok    stale: spine is sound
+|       -- 0 errors, 0 findings
+| skip  stale: behaviors match spine (no examples/drawings/spec/stale/behaviors/)
+| skip  stale: checks cite current spine (no examples/drawings/checks/stale/)
+| ok    stale: code conforms to spine
+|       info    coverage           10 sequences, margin 1: 6 of 6 state/event/variable cases exercised
+|       -- 0 errors, 1 findings
+| FAIL  stale: drawing matches spine
+|       error   stale-drawing      examples/drawings/spec/stale/drawing.svg: differs from what spine draw makes of spine.yaml and drawing.yaml; write it with spine draw spine.yaml drawing.yaml > drawing.svg, run in examples/drawings/spec/stale
+| ok    undrawn: spine is sound
+|       -- 0 errors, 0 findings
+| skip  undrawn: behaviors match spine (no examples/drawings/spec/undrawn/behaviors/)
+| skip  undrawn: checks cite current spine (no examples/drawings/checks/undrawn/)
+| ok    undrawn: code conforms to spine
+|       info    coverage           10 sequences, margin 1: 6 of 6 state/event/variable cases exercised
+|       -- 0 errors, 1 findings
+| FAIL  undrawn: drawing matches spine
+|       error   no-drawing         examples/drawings/spec/undrawn/drawing.svg: not found; write it with spine draw spine.yaml drawing.yaml > drawing.svg, run in examples/drawings/spec/undrawn
+| ok    content checks
+|       -- 0 errors, 1 checks run
+| skip  mutants killed (fast mode; --full runs them)
+| -- 4 step(s) failed: examples/drawings: folder: drawing matches spine, examples/drawings: refused: drawing matches spine, examples/drawings: stale: drawing matches spine, examples/drawings: undrawn: drawing matches spine
 |
 --- stderr
 |
@@ -435,6 +647,7 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/emptymutants/spec/lamp/drawing.yaml)
 | ok    content checks
 | FAIL  mutants killed (mutants.yaml)
 |       error   bad-mutants        examples/emptymutants/mutation/mutants.yaml: holds no mutants
@@ -453,6 +666,7 @@ exit 1
 | FAIL  lamp: code conforms to spine
 |       error   diverges           lit/press: after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 2 findings
+| skip  lamp: drawing matches spine (no examples/failing/spec/lamp/drawing.yaml)
 | FAIL  content checks
 |       error   check-failed       checks/lamp/test_lamp.py::test_a_second_press_darkens_it: AssertionError: lit
 |       error   check-unloadable   checks/lamp/test_unloadable.py: cannot be imported: ModuleNotFoundError: No module named 'no_such_module'
@@ -475,6 +689,7 @@ exit 1
 | FAIL  lamp: code conforms to spine
 |       error   diverges           lit/press: after press() -> press(): spine expects ok in dark, code gave ok in lit
 |       -- 1 errors, 2 findings
+| skip  lamp: drawing matches spine (no examples/failingcommands/spec/lamp/drawing.yaml)
 | FAIL  content checks
 |       1 of 2 checks failed
 | FAIL  mutants killed (mutate_lamp)
@@ -493,6 +708,7 @@ exit 1
 | skip  lamp: checks cite current spine (no examples/missing/checks/lamp/)
 | FAIL  lamp: code conforms to spine
 |       error   no-adapter         lamp: examples/missing/conformance/adapter_lamp.cmd not found
+| skip  lamp: drawing matches spine (no examples/missing/spec/lamp/drawing.yaml)
 | FAIL  content checks
 |       error   no-checks          examples/missing/checks: no examples/missing/checks/run.cmd
 | FAIL  mutants killed
@@ -510,6 +726,7 @@ exit 1
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/mutants/spec/lamp/drawing.yaml)
 | ok    content checks
 | FAIL  mutants killed (mutants.yaml)
 |       error   mutant-survived    a comment is added: no part of the oracle noticed
@@ -531,6 +748,7 @@ exit 0
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/python/spec/lamp/drawing.yaml)
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
 | -- all steps passed
@@ -546,6 +764,7 @@ exit 0
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/python/spec/lamp/drawing.yaml)
 | ok    content checks
 | ok    mutants killed (mutants.yaml)
 | -- all steps passed
@@ -571,6 +790,7 @@ exit 0
 | ok    lamp: code conforms to spine
 |       info    coverage           10 sequences, margin 1: 6 of 6 state/event/variable cases exercised
 |       -- 0 errors, 1 findings
+| skip  lamp: drawing matches spine (no examples/python/spec/lamp/drawing.yaml)
 | ok    content checks
 |       -- 0 errors, 1 checks run
 | ok    mutants killed (mutants.yaml)
@@ -597,6 +817,7 @@ exit 0
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/python/spec/lamp/drawing.yaml)
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
 | -- all steps passed
@@ -625,6 +846,7 @@ exit 1
 | ok    lamp: checks cite current spine
 | FAIL  lamp: code conforms to spine
 |       error   no-adapter         lamp: examples/pythonnames/conformance/adapter_lamp.cmd not found
+| skip  lamp: drawing matches spine (no examples/pythonnames/spec/lamp/drawing.yaml)
 | FAIL  content checks
 |       error   no-checks          examples/pythonnames/checks: no examples/pythonnames/checks/run.cmd
 | FAIL  mutants killed
@@ -665,6 +887,7 @@ exit 0
 | ok    lamp: behaviors match spine
 | ok    lamp: checks cite current spine
 | ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/python/spec/lamp/drawing.yaml)
 | ok    content checks
 | skip  mutants killed (fast mode; --full runs them)
 | -- all steps passed

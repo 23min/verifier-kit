@@ -82,6 +82,8 @@ type machineFacts struct {
 	behaviors bool       // spec/<machine>/behaviors/ is a folder
 	checks    bool       // checks/<machine>/ is a folder
 	adapter   *pieceFile // conformance/adapter_<machine>.cmd, or nil when there is none
+	layout    bool       // spec/<machine>/drawing.yaml exists
+	drawing   *pieceFile // spec/<machine>/drawing.svg, or nil when there is none
 }
 
 // rootFacts is what a root holds, as far as its steps depend on it.
@@ -115,17 +117,20 @@ type command struct {
 	inRoot bool   // with the toolkit's folder first on PATH and VERIFY_SPINE set, as a root's commands run
 	stdin  *string
 	shown  string // the .cmd file the command came from, or empty for spine
+	quiet  bool   // its standard error is left out of its output
 }
 
 // step is one line of the run, and the lines under it. Exactly one of skip, lines, cmd and
 // mutate is set: a step that doesn't run, a step that fails without running, a program to run,
-// or the mutants in mutants.yaml to make and judge.
+// or the mutants in mutants.yaml to make and judge. With cmd, want is the drawing the program
+// must print, when it is spine draw.
 type step struct {
 	name   string
 	skip   string
 	lines  []string
 	cmd    *command
 	mutate *mutation
+	want   *pieceFile
 }
 
 // group is steps run in turn. When the first fails and unsound is set, the rest don't run and
@@ -175,7 +180,7 @@ func planRoot(r rootFacts, c config) []group {
 		}
 
 		conform := conformStep(m, p, c.spine, c.junit(jp+m.name+"-conform"))
-		g.steps = append(g.steps, behaviors, stale, conform)
+		g.steps = append(g.steps, behaviors, stale, conform, drawingStep(m, p, c.spine))
 		out = append(out, g)
 	}
 	if len(r.machines) == 0 {
@@ -216,6 +221,42 @@ func conformStep(m machineFacts, p, spine string, junit []string) step {
 		}
 	}
 	return s
+}
+
+// drawingStep checks that a machine's drawing.svg is what spine draw makes of its spine and
+// layout (#108): spine draw's errors when it can't draw, stale-drawing when what it prints is
+// different, as compared judges.
+func drawingStep(m machineFacts, p, spine string) step {
+	name := m.name + ": drawing matches spine"
+	dir := p + "spec/" + m.name + "/"
+	switch {
+	case !m.layout:
+		return step{name: name, skip: "no " + dir + "drawing.yaml"}
+	case m.drawing == nil:
+		return step{name: name, lines: []string{errorLine("no-drawing", dir+"drawing.svg", "not found; "+redraw(dir))}}
+	case m.drawing.err != nil:
+		return step{name: name, lines: []string{errorLine("no-drawing", dir+"drawing.svg", "cannot be read: "+m.drawing.err.Error())}}
+	}
+	argv := []string{spine, "draw", dir + "spine.yaml", dir + "drawing.yaml"}
+	return step{name: name, cmd: &command{argv: argv, quiet: true}, want: m.drawing}
+}
+
+// redraw says how to write a machine's drawing again.
+func redraw(dir string) string {
+	return "write it with spine draw spine.yaml drawing.yaml > drawing.svg, run in " + strings.TrimSuffix(dir, "/")
+}
+
+// compared is a drawing step's outcome: spine draw's when it fails, otherwise whether what it
+// printed is the drawing the step wants.
+func compared(s step, o outcome) outcome {
+	switch {
+	case o.startErr != "" || !o.ok:
+		return o
+	case o.out == string(s.want.data):
+		return outcome{ok: true, out: s.want.shown + " is what spine draw makes\n"}
+	}
+	dir := strings.TrimSuffix(s.want.shown, "drawing.svg")
+	return outcome{out: errorLine("stale-drawing", s.want.shown, "differs from what spine draw makes of spine.yaml and drawing.yaml; "+redraw(dir)) + "\n"}
 }
 
 // checksStep runs the content checks, from the root at prefix p.

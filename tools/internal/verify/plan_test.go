@@ -87,8 +87,9 @@ func TestPlanRoot(t *testing.T) {
 	r := rootFacts{
 		prefix: "examples/x/",
 		machines: []machineFacts{
-			{name: "lamp", behaviors: true, adapter: &pieceFile{shown: "examples/x/conformance/adapter_lamp.cmd", data: []byte("adapt 'a b'\n")}},
-			{name: "door", checks: true},
+			{name: "lamp", behaviors: true, adapter: &pieceFile{shown: "examples/x/conformance/adapter_lamp.cmd", data: []byte("adapt 'a b'\n")},
+				layout: true, drawing: &pieceFile{shown: "examples/x/spec/lamp/drawing.svg", data: []byte("<svg/>\n")}},
+			{name: "door", checks: true, layout: true},
 		},
 		mutations: []pieceFile{{shown: "examples/x/mutation/mutate_one.cmd", data: []byte("mutate\n")}},
 	}
@@ -98,11 +99,13 @@ func TestPlanRoot(t *testing.T) {
 		"lamp: behaviors match spine: /kit/tools/bin/spine behaviors examples/x/spec/lamp/spine.yaml examples/x/spec/lamp/behaviors --junit /reports/examples-x-lamp-behaviors.xml",
 		"lamp: checks cite current spine: skip no examples/x/checks/lamp/",
 		"lamp: code conforms to spine: in examples/x/: /kit/tools/bin/spine conform spec/lamp/spine.yaml --adapter-cmd adapt 'a b' --junit /reports/examples-x-lamp-conform.xml",
+		"lamp: drawing matches spine: /kit/tools/bin/spine draw examples/x/spec/lamp/spine.yaml examples/x/spec/lamp/drawing.yaml, printing examples/x/spec/lamp/drawing.svg",
 		"unless sound: door: other steps need a sound spine",
 		"door: spine is sound: /kit/tools/bin/spine check examples/x/spec/door/spine.yaml --junit /reports/examples-x-door-check.xml",
 		"door: behaviors match spine: skip no examples/x/spec/door/behaviors/",
 		"door: checks cite current spine: /kit/tools/bin/spine stale examples/x/spec/door/spine.yaml examples/x/checks/door --junit /reports/examples-x-door-stale.xml",
 		"door: code conforms to spine: fails error   no-adapter         door: examples/x/conformance/adapter_door.cmd not found",
+		"door: drawing matches spine: fails error   no-drawing         examples/x/spec/door/drawing.svg: not found; write it with spine draw spine.yaml drawing.yaml > drawing.svg, run in examples/x/spec/door",
 		"content checks: fails error   no-checks          examples/x/checks: no examples/x/checks/run.cmd",
 		"mutants killed (mutate_one): in examples/x/: mutate",
 	}
@@ -145,6 +148,8 @@ func describe(groups []group) []string {
 				out = append(out, s.name+": fails "+strings.Join(s.lines, " | "))
 			case s.mutate != nil:
 				out = append(out, s.name+": "+fmt.Sprint(len(s.mutate.mutants))+" mutants of "+s.mutate.shown+", each through "+strings.Join(describe([]group{{steps: s.mutate.oracle}}), " | "))
+			case s.want != nil:
+				out = append(out, s.name+": "+strings.Join(s.cmd.argv, " ")+", printing "+s.want.shown)
 			case s.cmd.inRoot:
 				out = append(out, s.name+": in "+s.cmd.dir+": "+strings.Join(s.cmd.argv, " "))
 			default:
@@ -191,6 +196,24 @@ func TestVerdict(t *testing.T) {
 	} {
 		if got := passed(c.s, c.o); got != c.want {
 			t.Errorf("passed(%+v, %+v) = %v, want %v", c.s, c.o, got, c.want)
+		}
+	}
+}
+
+func TestCompared(t *testing.T) {
+	s := step{name: "lamp: drawing matches spine", cmd: &command{argv: []string{"/s", "draw"}, quiet: true},
+		want: &pieceFile{shown: "spec/lamp/drawing.svg", data: []byte("<svg/>\n")}}
+	for _, c := range []struct {
+		o, want outcome
+	}{
+		{outcome{ok: true, out: "<svg/>\n"}, outcome{ok: true, out: "spec/lamp/drawing.svg is what spine draw makes\n"}},
+		{outcome{ok: true, out: "<svg></svg>\n"}, outcome{out: errorLine("stale-drawing", "spec/lamp/drawing.svg",
+			"differs from what spine draw makes of spine.yaml and drawing.yaml; write it with spine draw spine.yaml drawing.yaml > drawing.svg, run in spec/lamp") + "\n"}},
+		{outcome{out: "error   missing-key ...\n"}, outcome{out: "error   missing-key ...\n"}},
+		{outcome{startErr: "Permission denied"}, outcome{startErr: "Permission denied"}},
+	} {
+		if got := compared(s, c.o); got != c.want {
+			t.Errorf("compared(%+v) = %+v, want %+v", c.o, got, c.want)
 		}
 	}
 }
