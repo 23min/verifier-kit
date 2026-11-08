@@ -1,0 +1,31 @@
+# Five states with rules that keep the state, one of them as wide as oban_job's (#110): the table
+# doesn't fit five equal columns, so it wraps into blocks of two (#111).
+machine: relay
+section: five-columns
+vars:
+  answer: [ok, rate_limited]
+states:
+  one:   {kind: design}
+  two:   {kind: design}
+  three: {kind: design}
+  four:  {kind: design}
+  five:  {kind: design}
+  done:  {kind: fact, terminal: true}
+initial: one
+events: [go, wait]
+rules:
+  - {from: one, event: go, to: two}
+  - {from: one, event: wait, when: "answer == 'rate_limited'", stay: true}
+  - {from: one, event: wait, when: "answer == 'ok'", ignore: true}
+  - {from: two, event: go, to: three}
+  - {from: two, event: wait, when: "answer == 'rate_limited'", stay: true}
+  - {from: two, event: wait, when: "answer == 'ok'", ignore: true}
+  - {from: three, event: go, to: four}
+  - {from: three, event: wait, when: "answer == 'rate_limited'", stay: true}
+  - {from: three, event: wait, when: "answer == 'ok'", ignore: true}
+  - {from: four, event: go, to: five}
+  - {from: four, event: wait, when: "answer == 'rate_limited'", stay: true}
+  - {from: four, event: wait, when: "answer == 'ok'", ignore: true}
+  - {from: five, event: go, to: done}
+  - {from: five, event: wait, when: "answer == 'rate_limited'", stay: true}
+  - {from: five, event: wait, when: "answer == 'ok'", ignore: true}
