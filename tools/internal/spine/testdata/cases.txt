@@ -176,6 +176,7 @@
 ["draw", "seeds/spine.yaml", "drawings/bent.yaml"]
 ["draw", "seeds/spine.yaml", "drawings/crowded.yaml"]
 ["draw", "seeds/spine.yaml", "drawings/through.yaml"]
+["draw", "drawings/wrapped/spine.yaml", "drawings/wrapped/drawing.yaml"]
 ["draw", "seeds/spine.yaml", "drawings/list.yaml"]
 ["draw", "seeds/spine.yaml", "drawings/no-states.yaml"]
 ["draw", "seeds/spine.yaml", "drawings/shapes.yaml"]

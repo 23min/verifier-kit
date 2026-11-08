@@ -5235,6 +5235,124 @@ exit 1
 | error   vars-differ        vars: A and B declare different variables; case comparison skipped
 | -- 13 errors, 13 findings
 |
+=== in tools/internal/spine/testdata: spine draw drawings/wrapped/spine.yaml drawings/wrapped/drawing.yaml
+exit 0
+--- stdout
+| <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 683" width="860" height="683">
+|   <title>Machine relay, section five-columns</title>
+|   <style>
+|     :root {
+|       --surface: #ffffff; --ink: #141414; --ink-2: #333333; --muted: #6a6a6a; --rule: #c4c4c4;
+|       --fact: #b4b4b4; --policy: #dadada; --design: #f2f2f2;
+|       --serif: "Latin Modern Roman", "CMU Serif", "Times New Roman", Times, serif;
+|     }
+|     @media (prefers-color-scheme: dark) {
+|       :root { --surface: #161616; --ink: #ececec; --ink-2: #cfcfcf; --muted: #9d9d9d; --rule: #444444;
+|               --fact: #5a5a5a; --policy: #3a3a3a; --design: #242424; }
+|     }
+|     .bg, .none { fill: var(--surface); }
+|     .fact { fill: var(--fact); } .policy { fill: var(--policy); } .design { fill: var(--design); }
+|     .st { stroke: var(--ink); stroke-width: 1.4; }
+|     .ring { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+|     .e { fill: none; stroke: var(--ink-2); stroke-width: 1.15; }
+|     .mk { fill: var(--ink-2); }
+|     .rule { stroke: var(--rule); stroke-width: 1; }
+|     .sn { font: italic 400 18px var(--serif); fill: var(--ink); }
+|     .lb { font: 400 14px var(--serif); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+|     .ti { font: 400 17px var(--serif); fill: var(--ink); }
+|     .tx { font: 400 14px var(--serif); fill: var(--ink); }
+|     .it { font-style: italic; }
+|     .nt { font: 400 13px var(--serif); fill: var(--muted); }
+|   </style>
+|   <defs>
+|     <marker id="arr" viewBox="0 0 10 8" refX="10" refY="4" markerWidth="10" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+|       <path class="mk" d="M0,0 L10,4 L0,8 z"/>
+|     </marker>
+|   </defs>
+|   <rect class="bg" x="0" y="0" width="860" height="683"/>
+|   <text class="ti" x="24" y="34" text-anchor="start"><tspan x="24" dy="0">Machine relay, section five-columns</tspan></text>
+|   <text class="tx" x="24" y="58" text-anchor="start"><tspan x="24" dy="0">answer ∈ {ok, rate_limited}</tspan></text>
+|   <circle class="st fact" cx="587" cy="52" r="8"/>
+|   <text class="nt" x="603" y="56" text-anchor="start"><tspan x="603" dy="0">fact: irreversible in the world</tspan></text>
+|   <circle class="st design" cx="587" cy="74" r="8"/>
+|   <text class="nt" x="603" y="78" text-anchor="start"><tspan x="603" dy="0">design: an implementation choice</tspan></text>
+|   <path class="e" d="M25,220 L69,220" marker-end="url(#arr)"/>
+|   <g class="move"><title>one → two</title>
+|   <path class="e" d="M150,220 Q175,220 199,220" marker-end="url(#arr)"/>
+|   <text class="lb" x="174.8" y="210" text-anchor="middle"><tspan x="174.8" dy="0">go</tspan></text>
+|   </g>
+|   <g class="move"><title>two → three</title>
+|   <path class="e" d="M280,220 Q305,220 329,220" marker-end="url(#arr)"/>
+|   <text class="lb" x="304.8" y="210" text-anchor="middle"><tspan x="304.8" dy="0">go</tspan></text>
+|   </g>
+|   <g class="move"><title>three → four</title>
+|   <path class="e" d="M410,220 Q435,220 459,220" marker-end="url(#arr)"/>
+|   <text class="lb" x="434.8" y="210" text-anchor="middle"><tspan x="434.8" dy="0">go</tspan></text>
+|   </g>
+|   <g class="move"><title>four → five</title>
+|   <path class="e" d="M540,220 Q565,220 589,220" marker-end="url(#arr)"/>
+|   <text class="lb" x="564.8" y="210" text-anchor="middle"><tspan x="564.8" dy="0">go</tspan></text>
+|   </g>
+|   <g class="move"><title>five → done</title>
+|   <path class="e" d="M670,220 Q700,220 724,220" marker-end="url(#arr)"/>
+|   <text class="lb" x="698.5" y="210" text-anchor="middle"><tspan x="698.5" dy="0">go</tspan></text>
+|   </g>
+|   <ellipse class="st design" cx="110" cy="220" rx="40" ry="40"/>
+|   <text class="sn" x="110" y="226" text-anchor="middle">one</text>
+|   <ellipse class="st design" cx="240" cy="220" rx="40" ry="40"/>
+|   <text class="sn" x="240" y="226" text-anchor="middle">two</text>
+|   <ellipse class="st design" cx="370" cy="220" rx="40" ry="40"/>
+|   <text class="sn" x="370" y="226" text-anchor="middle">three</text>
+|   <ellipse class="st design" cx="500" cy="220" rx="40" ry="40"/>
+|   <text class="sn" x="500" y="226" text-anchor="middle">four</text>
+|   <ellipse class="st design" cx="630" cy="220" rx="40" ry="40"/>
+|   <text class="sn" x="630" y="226" text-anchor="middle">five</text>
+|   <ellipse class="st fact" cx="770" cy="220" rx="40" ry="40"/>
+|   <ellipse class="ring" cx="770" cy="220" rx="45" ry="45"/>
+|   <text class="sn" x="770" y="226" text-anchor="middle">done</text>
+|   <text class="nt" x="24" y="305" text-anchor="start"><tspan x="24" dy="0">Every rule that doesn't change the state, by event and state. The moves are the edges above.</tspan><tspan x="24" dy="18">done is terminal and has no rules.</tspan></text>
+|   <text class="tx it" x="24" y="353">event</text>
+|   <text class="tx it" x="87.2" y="353">one</text>
+|   <text class="tx it" x="461.6" y="353">two</text>
+|   <line class="rule" x1="24" y1="361" x2="836" y2="361"/>
+|   <text class="tx" x="24" y="381">go</text>
+|   <line class="rule" x1="24" y1="389" x2="836" y2="389"/>
+|   <text class="tx" x="24" y="409">wait</text>
+|   <g class="rules"><title>one/wait</title>
+|   <text class="tx" x="87.2" y="409">stay [answer == 'rate_limited']</text>
+|   <text class="tx" x="87.2" y="427">ignore [answer == 'ok']</text>
+|   </g>
+|   <g class="rules"><title>two/wait</title>
+|   <text class="tx" x="461.6" y="409">stay [answer == 'rate_limited']</text>
+|   <text class="tx" x="461.6" y="427">ignore [answer == 'ok']</text>
+|   </g>
+|   <text class="tx it" x="24" y="465">event</text>
+|   <text class="tx it" x="87.2" y="465">three</text>
+|   <text class="tx it" x="461.6" y="465">four</text>
+|   <line class="rule" x1="24" y1="473" x2="836" y2="473"/>
+|   <text class="tx" x="24" y="493">go</text>
+|   <line class="rule" x1="24" y1="501" x2="836" y2="501"/>
+|   <text class="tx" x="24" y="521">wait</text>
+|   <g class="rules"><title>three/wait</title>
+|   <text class="tx" x="87.2" y="521">stay [answer == 'rate_limited']</text>
+|   <text class="tx" x="87.2" y="539">ignore [answer == 'ok']</text>
+|   </g>
+|   <g class="rules"><title>four/wait</title>
+|   <text class="tx" x="461.6" y="521">stay [answer == 'rate_limited']</text>
+|   <text class="tx" x="461.6" y="539">ignore [answer == 'ok']</text>
+|   </g>
+|   <text class="tx it" x="24" y="577">event</text>
+|   <text class="tx it" x="87.2" y="577">five</text>
+|   <line class="rule" x1="24" y1="585" x2="836" y2="585"/>
+|   <text class="tx" x="24" y="605">go</text>
+|   <line class="rule" x1="24" y1="613" x2="836" y2="613"/>
+|   <text class="tx" x="24" y="633">wait</text>
+|   <g class="rules"><title>five/wait</title>
+|   <text class="tx" x="87.2" y="633">stay [answer == 'rate_limited']</text>
+|   <text class="tx" x="87.2" y="651">ignore [answer == 'ok']</text>
+|   </g>
+| </svg>
+|
 === in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/bent.yaml
 exit 0
 --- stdout

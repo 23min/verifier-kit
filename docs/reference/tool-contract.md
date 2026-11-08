@@ -119,7 +119,7 @@ is a usage error: one line on stderr, naming the command and what is wrong, and 
 | `untried-case` | error | `conform` | a case no run tried, because the code diverged on the way to its state |
 | `coverage` | info | `conform` | sequences run, the margin, and cases exercised |
 | `adapter-failed` | error | `conform` | the adapter command can't be started, exits before replying, breaks the protocol, or replies `{"error": ...}` to `new` or `observe`; the shim does when a Python adapter's `new()` or `observe()` raised, and exits before replying when the file can't be imported or lacks a function. `conform` stops there |
-| `layout-overlap` | warning | `draw` | a label overlaps a label, a state or an edge; an edge runs through a state; a state overlaps another; or a table entry is wider than its column |
+| `layout-overlap` | warning | `draw` | a label overlaps a label, a state or an edge; an edge runs through a state; a state overlaps another; or a table entry is wider than its column even with its state alone in a block |
 | `layout-outside` | warning | `draw` | a label or a state leaves the drawing |
 | `path-denied` | error | `guard` | a deny pattern for the role matches a changed file |
 | `path-not-allowed` | error | `guard` | no allow pattern for the role matches a changed file |

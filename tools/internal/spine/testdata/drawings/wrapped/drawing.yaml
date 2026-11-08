@@ -1,0 +1,8 @@
+# The relay spine in a row; its table wraps into three blocks of up to two columns.
+states:
+  one:   [110, 220]
+  two:   [240, 220]
+  three: [370, 220]
+  four:  [500, 220]
+  five:  [630, 220]
+  done:  [770, 220]

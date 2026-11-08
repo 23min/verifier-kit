@@ -87,7 +87,7 @@ func TestDrawings(t *testing.T) {
 		t.Fatalf("found %d example layouts", len(layouts))
 	}
 	td := testdata(t)
-	for _, name := range []string{"door", "bent", "crowded", "through"} {
+	for _, name := range []string{"door", "bent", "crowded", "through", "wrapped/drawing"} {
 		layouts = append(layouts, filepath.Join(td, "drawings", name+".yaml"))
 	}
 	for _, path := range layouts {

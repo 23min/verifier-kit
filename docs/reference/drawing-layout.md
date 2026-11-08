@@ -56,6 +56,8 @@ to, or to the left of travel when it is straight; `label` sets its centre instea
   a row for each event, a column for each state with such a rule, and in the cell each rule as
   the spine names its outcome (`stay`, `ignore`, `reject`, `to <state>`) with its `when` in
   brackets, in the spine's order. A note above the table names the terminal states with no rules.
+  The columns share the width equally. When the widest entry doesn't fit one, the states go in
+  blocks of as many columns as fit it, each block with a row for each event, one under another.
 
 So each rule is drawn exactly once. In the SVG, each arrow is a `<g class="move">` titled
 `<from> → <to>`, and each table cell a `<g class="rules">` titled `<state>/<event>`. The colours
@@ -67,7 +69,8 @@ Times or another, at 14 px for labels and the table.
 `spine draw` estimates the width of text as generously as DejaVu Serif, the widest serif a reader
 is likely to have, and warns where the drawing is hard to read: `layout-overlap` when a label
 overlaps a label, a state or an edge, an edge runs through a state, a state overlaps another, or
-a table entry is wider than its column; `layout-outside` when a label or a state leaves the
-drawing. A warning names the label or state, so the layout can move it; the drawing is made all
-the same. A layout that can't be drawn, a state with no centre, a state or edge the spine doesn't
-have, or a coordinate or bend that isn't a whole number, is an error, and nothing is drawn.
+a table entry is wider than its column even with its state alone in a block; `layout-outside`
+when a label or a state leaves the drawing. A warning names the label or state, so the layout can
+move it; the drawing is made all the same. A layout that can't be drawn, a state with no centre, a
+state or edge the spine doesn't have, or a coordinate or bend that isn't a whole number, is an
+error, and nothing is drawn.

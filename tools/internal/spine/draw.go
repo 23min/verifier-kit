@@ -453,7 +453,8 @@ func (d *drawer) state(st string) {
 }
 
 // table draws every rule that doesn't move to another state, by event and state, below
-// everything else, and gives the drawing's height.
+// everything else, in blocks of columns when they don't fit side by side, and gives the
+// drawing's height.
 func (d *drawer) table() float64 {
 	s := d.s
 	top := 0.0
@@ -510,43 +511,67 @@ func (d *drawer) table() float64 {
 	}
 	first += 24
 	right := drawWidth - margin
-	cw := (right - margin - first) / float64(max(len(cols), 1))
-	at := func(k int) float64 { return margin + first + cw*float64(k) }
-	d.add(`<text class="tx it" x="%s" y="%s">event</text>`, num(margin), num(y))
-	for k, st := range cols {
-		d.add(`<text class="tx it" x="%s" y="%s">%s</text>`, num(at(k)), num(y), xmlText(st))
-	}
-	head := y - 14
-	y += 8
-	d.add(`<line class="rule" x1="%s" y1="%s" x2="%s" y2="%s"/>`, num(margin), num(y), num(right), num(y))
-	for i, ev := range s.Events {
-		rowTop, lines := y, 1
-		d.add(`<text class="tx" x="%s" y="%s">%s</text>`, num(margin), num(rowTop+lead+2), xmlText(ev))
-		for k, st := range cols {
-			rules := stays(st, ev)
-			if len(rules) == 0 {
-				continue
-			}
-			lines = max(lines, len(rules))
-			d.add(`<g class="rules"><title>%s</title>`, xmlText(st+"/"+ev))
-			for m, r := range rules {
-				words := r.Outcome.Kind
-				if words == "to" {
-					words += " " + r.Outcome.Target
-				}
-				if r.WhenText != "" {
-					words += " [" + strings.Join(strings.Fields(r.WhenText), " ") + "]"
-				}
-				if textWidth(words, 14) > cw-10 {
-					d.warn.AddSeverity("layout-overlap", d.where, fmt.Sprintf("the table's entry %q for %s/%s is wider than its column", words, st, ev), "warning")
-				}
-				d.add(`<text class="tx" x="%s" y="%s">%s</text>`, num(at(k)), num(rowTop+lead*float64(m+1)+2), xmlText(words))
-			}
-			d.add(`</g>`)
+	entry := func(r *Rule) string {
+		words := r.Outcome.Kind
+		if words == "to" {
+			words += " " + r.Outcome.Target
 		}
-		y = rowTop + lead*float64(lines) + 10
-		if i+1 < len(s.Events) {
-			d.add(`<line class="rule" x1="%s" y1="%s" x2="%s" y2="%s"/>`, num(margin), num(y), num(right), num(y))
+		if r.WhenText != "" {
+			words += " [" + strings.Join(strings.Fields(r.WhenText), " ") + "]"
+		}
+		return words
+	}
+	// The columns share the width equally. When the widest entry doesn't fit one, the states go
+	// in blocks of as many columns as fit it, one block under another (#111).
+	widest := 0.0
+	for _, st := range cols {
+		for _, ev := range s.Events {
+			for _, r := range stays(st, ev) {
+				widest = max(widest, textWidth(entry(r), 14))
+			}
+		}
+	}
+	per := max(len(cols), 1)
+	for per > 1 && (right-margin-first)/float64(per)-10 < widest {
+		per--
+	}
+	cw := (right - margin - first) / float64(per)
+	at := func(k int) float64 { return margin + first + cw*float64(k) }
+	head := y - 14
+	for b := 0; b == 0 || b < len(cols); b += per {
+		block := cols[b:min(b+per, len(cols))]
+		if b > 0 {
+			y += 30
+		}
+		d.add(`<text class="tx it" x="%s" y="%s">event</text>`, num(margin), num(y))
+		for k, st := range block {
+			d.add(`<text class="tx it" x="%s" y="%s">%s</text>`, num(at(k)), num(y), xmlText(st))
+		}
+		y += 8
+		d.add(`<line class="rule" x1="%s" y1="%s" x2="%s" y2="%s"/>`, num(margin), num(y), num(right), num(y))
+		for i, ev := range s.Events {
+			rowTop, lines := y, 1
+			d.add(`<text class="tx" x="%s" y="%s">%s</text>`, num(margin), num(rowTop+lead+2), xmlText(ev))
+			for k, st := range block {
+				rules := stays(st, ev)
+				if len(rules) == 0 {
+					continue
+				}
+				lines = max(lines, len(rules))
+				d.add(`<g class="rules"><title>%s</title>`, xmlText(st+"/"+ev))
+				for m, r := range rules {
+					words := entry(r)
+					if textWidth(words, 14) > cw-10 {
+						d.warn.AddSeverity("layout-overlap", d.where, fmt.Sprintf("the table's entry %q for %s/%s is wider than its column", words, st, ev), "warning")
+					}
+					d.add(`<text class="tx" x="%s" y="%s">%s</text>`, num(at(k)), num(rowTop+lead*float64(m+1)+2), xmlText(words))
+				}
+				d.add(`</g>`)
+			}
+			y = rowTop + lead*float64(lines) + 10
+			if i+1 < len(s.Events) {
+				d.add(`<line class="rule" x1="%s" y1="%s" x2="%s" y2="%s"/>`, num(margin), num(y), num(right), num(y))
+			}
 		}
 	}
 	d.boxes = append(d.boxes, box{margin, head, right, y + 4, "the table"})
