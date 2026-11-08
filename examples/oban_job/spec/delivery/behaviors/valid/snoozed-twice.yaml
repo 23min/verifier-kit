@@ -1,0 +1,5 @@
+# D10: the worker runs in both steps, and the job is scheduled_0 after each.
+steps:
+  - "run answer=rate_limited"
+  - "wait answer=rate_limited"
+expect: scheduled_0

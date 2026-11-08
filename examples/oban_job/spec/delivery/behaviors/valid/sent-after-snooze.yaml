@@ -1,0 +1,5 @@
+# D06: a rate-limited attempt is snoozed, and the next one is accepted.
+steps:
+  - "run answer=rate_limited"
+  - "wait answer=accepted"
+expect: completed

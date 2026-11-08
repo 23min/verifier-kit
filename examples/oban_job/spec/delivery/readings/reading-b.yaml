@@ -1,0 +1,60 @@
+# Reading B of the delivery chapter, by claude-haiku-5-5, 2026-11-08. Made from (git hash-object):
+# chapter.md 515de9f4c57aef9121d6198242cce5db45cca0bb, readings/prompt.md 6061b0015a5fb92e41c4d02f5fcb9ceb027b0ab5,
+# docs/reference/spine-format.md c82fa174ccc81704f9886dd36e9d3b4558420760. The reader was given the filled-in
+# prompt as one file to read, because the tool layer rewrites escapes typed into a prompt. The reply below is
+# unedited, apart from the Markdown code fence around it.
+machine: delivery
+vars:
+  answer: [accepted, failed, bounced, rate_limited]
+states:
+  available_0: {kind: design}
+  retryable_1: {kind: policy}
+  retryable_2: {kind: policy}
+  scheduled_0: {kind: policy}
+  scheduled_1: {kind: policy}
+  scheduled_2: {kind: policy}
+  completed: {kind: fact, terminal: true}
+  cancelled: {kind: policy, terminal: true}
+  discarded: {kind: policy, terminal: true}
+initial: available_0
+events: [run, wait, cancel]
+rules:
+  - {from: available_0, event: run, when: "answer == 'accepted'", to: completed}
+  - {from: available_0, event: run, when: "answer == 'failed'", to: retryable_1}
+  - {from: available_0, event: run, when: "answer == 'bounced'", to: cancelled}
+  - {from: available_0, event: run, when: "answer == 'rate_limited'", to: scheduled_0}
+  - {from: available_0, event: wait, when: "answer == 'accepted'", to: completed}
+  - {from: available_0, event: wait, when: "answer == 'failed'", to: retryable_1}
+  - {from: available_0, event: wait, when: "answer == 'bounced'", to: cancelled}
+  - {from: available_0, event: wait, when: "answer == 'rate_limited'", to: scheduled_0}
+  - {from: available_0, event: cancel, to: cancelled}
+  - {from: retryable_1, event: run, ignore: true}
+  - {from: retryable_1, event: wait, when: "answer == 'accepted'", to: completed}
+  - {from: retryable_1, event: wait, when: "answer == 'failed'", to: retryable_2}
+  - {from: retryable_1, event: wait, when: "answer == 'bounced'", to: cancelled}
+  - {from: retryable_1, event: wait, when: "answer == 'rate_limited'", to: scheduled_1}
+  - {from: retryable_1, event: cancel, to: cancelled}
+  - {from: retryable_2, event: run, ignore: true}
+  - {from: retryable_2, event: wait, when: "answer == 'accepted'", to: completed}
+  - {from: retryable_2, event: wait, when: "answer == 'failed'", to: discarded}
+  - {from: retryable_2, event: wait, when: "answer == 'bounced'", to: cancelled}
+  - {from: retryable_2, event: wait, when: "answer == 'rate_limited'", to: scheduled_2}
+  - {from: retryable_2, event: cancel, to: cancelled}
+  - {from: scheduled_0, event: run, ignore: true}
+  - {from: scheduled_0, event: wait, when: "answer == 'accepted'", to: completed}
+  - {from: scheduled_0, event: wait, when: "answer == 'failed'", to: retryable_1}
+  - {from: scheduled_0, event: wait, when: "answer == 'bounced'", to: cancelled}
+  - {from: scheduled_0, event: wait, when: "answer == 'rate_limited'", stay: true}
+  - {from: scheduled_0, event: cancel, to: cancelled}
+  - {from: scheduled_1, event: run, ignore: true}
+  - {from: scheduled_1, event: wait, when: "answer == 'accepted'", to: completed}
+  - {from: scheduled_1, event: wait, when: "answer == 'failed'", to: retryable_2}
+  - {from: scheduled_1, event: wait, when: "answer == 'bounced'", to: cancelled}
+  - {from: scheduled_1, event: wait, when: "answer == 'rate_limited'", stay: true}
+  - {from: scheduled_1, event: cancel, to: cancelled}
+  - {from: scheduled_2, event: run, ignore: true}
+  - {from: scheduled_2, event: wait, when: "answer == 'accepted'", to: completed}
+  - {from: scheduled_2, event: wait, when: "answer == 'failed'", to: discarded}
+  - {from: scheduled_2, event: wait, when: "answer == 'bounced'", to: cancelled}
+  - {from: scheduled_2, event: wait, when: "answer == 'rate_limited'", stay: true}
+  - {from: scheduled_2, event: cancel, to: cancelled}

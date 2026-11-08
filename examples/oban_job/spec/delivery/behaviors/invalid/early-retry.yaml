@@ -1,0 +1,5 @@
+# D6: a retryable job never runs before its backoff is over.
+steps:
+  - "run answer=failed"
+  - "run answer=accepted"
+expect: completed

@@ -1,0 +1,66 @@
+# The lifecycle of one email's job (chapter.md, section 2). Built on 2026-11-08 from readings/ and
+# the owner's answers in #110: reading B, which agrees with reading A on every cell and every kind,
+# except that retryable_1 and retryable_2 are policy, not design. Ratified by the reviewed merge of
+# this file.
+machine: delivery
+section: delivering-one-email
+vars:
+  answer: [accepted, failed, bounced, rate_limited]
+states:
+  available_0: {kind: design}
+  retryable_1: {kind: policy}
+  retryable_2: {kind: policy}
+  scheduled_0: {kind: policy}
+  scheduled_1: {kind: policy}
+  scheduled_2: {kind: policy}
+  completed:   {kind: fact, terminal: true}
+  cancelled:   {kind: policy, terminal: true}
+  discarded:   {kind: policy, terminal: true}
+initial: available_0
+events: [run, wait, cancel]
+rules:
+  # available_0: inserted and not yet run; run and wait both run it.
+  - {from: available_0, event: run, when: "answer == 'accepted'", to: completed}
+  - {from: available_0, event: run, when: "answer == 'failed'", to: retryable_1}
+  - {from: available_0, event: run, when: "answer == 'bounced'", to: cancelled}
+  - {from: available_0, event: run, when: "answer == 'rate_limited'", to: scheduled_0}
+  - {from: available_0, event: wait, when: "answer == 'accepted'", to: completed}
+  - {from: available_0, event: wait, when: "answer == 'failed'", to: retryable_1}
+  - {from: available_0, event: wait, when: "answer == 'bounced'", to: cancelled}
+  - {from: available_0, event: wait, when: "answer == 'rate_limited'", to: scheduled_0}
+  - {from: available_0, event: cancel, to: cancelled}
+
+  # retryable_1, retryable_2: an attempt failed with attempts left; the job waits out its backoff.
+  - {from: retryable_1, event: run, ignore: true}
+  - {from: retryable_1, event: wait, when: "answer == 'accepted'", to: completed}
+  - {from: retryable_1, event: wait, when: "answer == 'failed'", to: retryable_2}
+  - {from: retryable_1, event: wait, when: "answer == 'bounced'", to: cancelled}
+  - {from: retryable_1, event: wait, when: "answer == 'rate_limited'", to: scheduled_1}
+  - {from: retryable_1, event: cancel, to: cancelled}
+  - {from: retryable_2, event: run, ignore: true}
+  - {from: retryable_2, event: wait, when: "answer == 'accepted'", to: completed}
+  - {from: retryable_2, event: wait, when: "answer == 'failed'", to: discarded}
+  - {from: retryable_2, event: wait, when: "answer == 'bounced'", to: cancelled}
+  - {from: retryable_2, event: wait, when: "answer == 'rate_limited'", to: scheduled_2}
+  - {from: retryable_2, event: cancel, to: cancelled}
+
+  # scheduled_0 to scheduled_2: an attempt was rate limited; the job waits out its snooze, which
+  # gave the attempt back.
+  - {from: scheduled_0, event: run, ignore: true}
+  - {from: scheduled_0, event: wait, when: "answer == 'accepted'", to: completed}
+  - {from: scheduled_0, event: wait, when: "answer == 'failed'", to: retryable_1}
+  - {from: scheduled_0, event: wait, when: "answer == 'bounced'", to: cancelled}
+  - {from: scheduled_0, event: wait, when: "answer == 'rate_limited'", stay: true}
+  - {from: scheduled_0, event: cancel, to: cancelled}
+  - {from: scheduled_1, event: run, ignore: true}
+  - {from: scheduled_1, event: wait, when: "answer == 'accepted'", to: completed}
+  - {from: scheduled_1, event: wait, when: "answer == 'failed'", to: retryable_2}
+  - {from: scheduled_1, event: wait, when: "answer == 'bounced'", to: cancelled}
+  - {from: scheduled_1, event: wait, when: "answer == 'rate_limited'", stay: true}
+  - {from: scheduled_1, event: cancel, to: cancelled}
+  - {from: scheduled_2, event: run, ignore: true}
+  - {from: scheduled_2, event: wait, when: "answer == 'accepted'", to: completed}
+  - {from: scheduled_2, event: wait, when: "answer == 'failed'", to: discarded}
+  - {from: scheduled_2, event: wait, when: "answer == 'bounced'", to: cancelled}
+  - {from: scheduled_2, event: wait, when: "answer == 'rate_limited'", stay: true}
+  - {from: scheduled_2, event: cancel, to: cancelled}

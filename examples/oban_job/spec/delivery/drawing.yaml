@@ -1,0 +1,39 @@
+# Where each state of spine.yaml sits in drawing.svg (#108), in units of the 860-wide drawing.
+# Written again, from the folder this file is in, with: spine draw spine.yaml drawing.yaml > drawing.svg
+# The waiting states run down the middle, completed and cancelled to either side (#110).
+states:
+  available_0: [430, 200]
+  scheduled_0: [430, 410]
+  retryable_1: [430, 620]
+  scheduled_1: [430, 830]
+  retryable_2: [430, 1040]
+  scheduled_2: [430, 1250]
+  discarded:   [430, 1460]
+  completed:   [90, 830]
+  cancelled:   [780, 830]
+edges:
+  available_0:
+    completed: {bend: -60}
+    retryable_1: {bend: -110, label: [180, 360]}
+    cancelled: {bend: 40}
+    scheduled_0: {label: [610, 205]}
+  retryable_1:
+    completed: {bend: -60, label: [238, 684]}
+    retryable_2: {bend: -110, label: [280, 850]}
+    cancelled: {bend: 60, label: [626, 674]}
+  retryable_2:
+    completed: {bend: 20, label: [269, 992]}
+    discarded: {bend: -110}
+    cancelled: {bend: -50, label: [621, 988]}
+    scheduled_2: {label: [470, 1145]}
+  scheduled_0:
+    completed: {bend: -60, label: [263, 582]}
+    retryable_1: {label: [420, 505]}
+    cancelled: {bend: 60, label: [591, 592]}
+  scheduled_1:
+    completed: {bend: -50, label: [230, 750]}
+    cancelled: {bend: 30, label: [605, 800]}
+  scheduled_2:
+    completed: {bend: 60, label: [213, 1078]}
+    discarded: {label: [430, 1355]}
+    cancelled: {bend: -60}

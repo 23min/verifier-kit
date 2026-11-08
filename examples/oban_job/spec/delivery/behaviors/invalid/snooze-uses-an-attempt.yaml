@@ -1,0 +1,4 @@
+# D2: a snooze is not an attempt.
+steps:
+  - "run answer=rate_limited"
+expect: scheduled_1

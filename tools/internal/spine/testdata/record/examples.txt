@@ -36,6 +36,25 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine behaviors" tests="1" failures="0"><testcase classname="spine behaviors" name="no errors" /></testsuite>
+=== in .: spine behaviors --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "behaviors",
+|   "findings": [
+|     {
+|       "code": "behaviors",
+|       "severity": "info",
+|       "where": "examples/oban_job/spec/delivery/behaviors",
+|       "message": "19 behavior files checked"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine behaviors" tests="1" failures="0"><testcase classname="spine behaviors" name="no errors" /></testsuite>
 === in .: spine behaviors --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/spec/ref_sync/behaviors
 exit 0
 --- stdout
@@ -65,6 +84,12 @@ exit 0
 exit 0
 --- stdout
 | info    behaviors          examples/notes/spec/notes/behaviors: 5 behavior files checked
+| -- 0 errors, 1 findings
+|
+=== in .: spine behaviors examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors
+exit 0
+--- stdout
+| info    behaviors          examples/oban_job/spec/delivery/behaviors: 19 behavior files checked
 | -- 0 errors, 1 findings
 |
 === in .: spine behaviors examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/spec/ref_sync/behaviors
@@ -417,6 +442,42 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+=== in .: spine check --format json --junit REPORT examples/oban_job/spec/delivery/readings/reading-a.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+=== in .: spine check --format json --junit REPORT examples/oban_job/spec/delivery/readings/reading-b.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+=== in .: spine check --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in .: spine check --format json --junit REPORT examples/ref_sync/spec/ref_sync/readings/reading-a.yaml
 exit 0
 --- stdout
@@ -607,6 +668,21 @@ exit 0
 --- stdout
 | -- 0 errors, 0 findings
 |
+=== in .: spine check examples/oban_job/spec/delivery/readings/reading-a.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine check examples/oban_job/spec/delivery/readings/reading-b.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine check examples/oban_job/spec/delivery/spine.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
 === in .: spine check examples/ref_sync/spec/ref_sync/readings/reading-a.yaml
 exit 0
 --- stdout
@@ -673,6 +749,25 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
+=== in .: spine conform --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/oban_job/conformance/adapter_delivery.py" with PYTHONPATH=examples/oban_job/src
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 tools/adapter_shim.py examples/oban_job/conformance/adapter_delivery.py",
+|       "message": "exited with status 1 before replying to new"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 tools/adapter_shim.py examples/oban_job/conformance/adapter_delivery.py"><failure message="exited with status 1 before replying to new">exited with status 1 before replying to new</failure></testcase></testsuite>
 === in .: spine conform --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/ref_sync/conformance/adapter_ref_sync.py" with PYTHONPATH=examples/ref_sync/src
 exit 0
 --- stdout
@@ -703,6 +798,12 @@ exit 0
 --- stdout
 | info    coverage           180 sequences, margin 1: 45 of 45 state/event/variable cases exercised
 | -- 0 errors, 1 findings
+|
+=== in .: spine conform examples/oban_job/spec/delivery/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/oban_job/conformance/adapter_delivery.py" with PYTHONPATH=examples/oban_job/src
+exit 1
+--- stdout
+| error   adapter-failed     python3 tools/adapter_shim.py examples/oban_job/conformance/adapter_delivery.py: exited with status 1 before replying to new
+| -- 1 errors, 1 findings
 |
 === in .: spine conform examples/ref_sync/spec/ref_sync/spine.yaml --adapter-cmd "python3 tools/adapter_shim.py examples/ref_sync/conformance/adapter_ref_sync.py" with PYTHONPATH=examples/ref_sync/src
 exit 0
@@ -1485,6 +1586,114 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="26" failures="26"><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;active&quot;, B does not">A has state "active", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;draft&quot;, B does not">A has state "draft", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;purged&quot;, B does not">A has state "purged", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a states"><failure message="A has state &quot;trashed&quot;, B does not">A has state "trashed", B does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;confirmed&quot;, A does not">B has state "confirmed", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;conflicted&quot;, A does not">B has state "conflicted", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;prepared&quot;, A does not">B has state "prepared", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;protocol_error&quot;, A does not">B has state "protocol_error", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;queued&quot;, A does not">B has state "queued", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b states"><failure message="B has state &quot;uncertain&quot;, A does not">B has state "uncertain", A does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;edit&quot;, B does not">A has event "edit", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;publish&quot;, B does not">A has event "publish", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;purge&quot;, B does not">A has event "purge", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;restore&quot;, B does not">A has event "restore", B does not</failure></testcase><testcase classname="spine diff" name="only-in-a events"><failure message="A has event &quot;trash&quot;, B does not">A has event "trash", B does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;absent_on_remote&quot;, A does not">B has event "absent_on_remote", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;accepted&quot;, A does not">B has event "accepted", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;digest_mismatch&quot;, A does not">B has event "digest_mismatch", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;invalidated&quot;, A does not">B has event "invalidated", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;non_fast_forward&quot;, A does not">B has event "non_fast_forward", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;prepare&quot;, A does not">B has event "prepare", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;response_lost&quot;, A does not">B has event "response_lost", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;restart&quot;, A does not">B has event "restart", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b events"><failure message="B has event &quot;seen_on_remote&quot;, A does not">B has event "seen_on_remote", A does not</failure></testcase><testcase classname="spine diff" name="initial-differs initial"><failure message="A starts in &quot;draft&quot;, B starts in &quot;queued&quot;">A starts in "draft", B starts in "queued"</failure></testcase><testcase classname="spine diff" name="vars-differ vars"><failure message="A and B declare different variables; case comparison skipped">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>
+=== in .: spine diff --format json --junit REPORT examples/oban_job/spec/delivery/readings/reading-a.yaml examples/oban_job/spec/delivery/readings/reading-a.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "diff",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
+=== in .: spine diff --format json --junit REPORT examples/oban_job/spec/delivery/readings/reading-a.yaml examples/oban_job/spec/delivery/readings/reading-b.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "diff",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
+=== in .: spine diff --format json --junit REPORT examples/oban_job/spec/delivery/readings/reading-a.yaml examples/oban_job/spec/delivery/spine.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "diff",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
+=== in .: spine diff --format json --junit REPORT examples/oban_job/spec/delivery/readings/reading-b.yaml examples/oban_job/spec/delivery/readings/reading-a.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "diff",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
+=== in .: spine diff --format json --junit REPORT examples/oban_job/spec/delivery/readings/reading-b.yaml examples/oban_job/spec/delivery/readings/reading-b.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "diff",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
+=== in .: spine diff --format json --junit REPORT examples/oban_job/spec/delivery/readings/reading-b.yaml examples/oban_job/spec/delivery/spine.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "diff",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
+=== in .: spine diff --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/readings/reading-a.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "diff",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
+=== in .: spine diff --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/readings/reading-b.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "diff",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
+=== in .: spine diff --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/spine.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "diff",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine diff" tests="1" failures="0"><testcase classname="spine diff" name="no errors" /></testsuite>
 === in .: spine diff --format json --junit REPORT examples/ref_sync/spec/ref_sync/readings/reading-a.yaml examples/ref_sync/spec/ref_sync/readings/reading-a.yaml
 exit 0
 --- stdout
@@ -2406,6 +2615,51 @@ exit 1
 | error   vars-differ        vars: A and B declare different variables; case comparison skipped
 | -- 26 errors, 26 findings
 |
+=== in .: spine diff examples/oban_job/spec/delivery/readings/reading-a.yaml examples/oban_job/spec/delivery/readings/reading-a.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine diff examples/oban_job/spec/delivery/readings/reading-a.yaml examples/oban_job/spec/delivery/readings/reading-b.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine diff examples/oban_job/spec/delivery/readings/reading-a.yaml examples/oban_job/spec/delivery/spine.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine diff examples/oban_job/spec/delivery/readings/reading-b.yaml examples/oban_job/spec/delivery/readings/reading-a.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine diff examples/oban_job/spec/delivery/readings/reading-b.yaml examples/oban_job/spec/delivery/readings/reading-b.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine diff examples/oban_job/spec/delivery/readings/reading-b.yaml examples/oban_job/spec/delivery/spine.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine diff examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/readings/reading-a.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine diff examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/readings/reading-b.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine diff examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/spine.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
 === in .: spine diff examples/ref_sync/spec/ref_sync/readings/reading-a.yaml examples/ref_sync/spec/ref_sync/readings/reading-a.yaml
 exit 0
 --- stdout
@@ -2605,6 +2859,31 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="path-denied examples/notes/spec/notes/spine.yaml"><failure message="the builder role may not change this path">the builder role may not change this path</failure></testcase></testsuite>
+=== in .: spine guard --format json --junit REPORT policy.yaml --branch build/x examples/oban_job/src/a.py examples/oban_job/spec/delivery/spine.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "guard",
+|   "findings": [
+|     {
+|       "code": "path-denied",
+|       "severity": "error",
+|       "where": "examples/oban_job/spec/delivery/spine.yaml",
+|       "message": "the builder role may not change this path"
+|     },
+|     {
+|       "code": "role",
+|       "severity": "info",
+|       "where": "build/x",
+|       "message": "checked 2 changed files as role builder"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine guard" tests="1" failures="1"><testcase classname="spine guard" name="path-denied examples/oban_job/spec/delivery/spine.yaml"><failure message="the builder role may not change this path">the builder role may not change this path</failure></testcase></testsuite>
 === in .: spine guard --format json --junit REPORT policy.yaml --branch build/x examples/ref_sync/src/a.py examples/ref_sync/spec/ref_sync/spine.yaml
 exit 1
 --- stdout
@@ -2641,6 +2920,13 @@ exit 1
 exit 1
 --- stdout
 | error   path-denied        examples/notes/spec/notes/spine.yaml: the builder role may not change this path
+| info    role               build/x: checked 2 changed files as role builder
+| -- 1 errors, 2 findings
+|
+=== in .: spine guard policy.yaml --branch build/x examples/oban_job/src/a.py examples/oban_job/spec/delivery/spine.yaml
+exit 1
+--- stdout
+| error   path-denied        examples/oban_job/spec/delivery/spine.yaml: the builder role may not change this path
 | info    role               build/x: checked 2 changed files as role builder
 | -- 1 errors, 2 findings
 |
@@ -2762,6 +3048,75 @@ exit 0
 | trashed/trash@14fb218a25e0
 | trashed/restore@95f9c8204e9f
 | trashed/purge@7177564a6068
+|
+=== in .: spine hash examples/oban_job/spec/delivery/readings/reading-a.yaml
+exit 0
+--- stdout
+| spine@d389c1d149e6
+| available_0/run@70068a6b04fe
+| available_0/wait@c1df945134ea
+| available_0/cancel@ff3b5195a95f
+| retryable_1/run@5218618f6643
+| retryable_1/wait@2c3d98aa33fc
+| retryable_1/cancel@319cbf8d8d99
+| retryable_2/run@b612b6171305
+| retryable_2/wait@86434ecfd54a
+| retryable_2/cancel@3ed3b58e2a8c
+| scheduled_0/run@2c7cbcb59fc4
+| scheduled_0/wait@3fa871f20f86
+| scheduled_0/cancel@0ee82d464672
+| scheduled_1/run@89dc38c6faeb
+| scheduled_1/wait@34efaa391359
+| scheduled_1/cancel@b880388921a8
+| scheduled_2/run@72ea6db55ae3
+| scheduled_2/wait@eb3b9173fa49
+| scheduled_2/cancel@e29b03cab09d
+|
+=== in .: spine hash examples/oban_job/spec/delivery/readings/reading-b.yaml
+exit 0
+--- stdout
+| spine@d389c1d149e6
+| available_0/run@70068a6b04fe
+| available_0/wait@c1df945134ea
+| available_0/cancel@ff3b5195a95f
+| retryable_1/run@5218618f6643
+| retryable_1/wait@2c3d98aa33fc
+| retryable_1/cancel@319cbf8d8d99
+| retryable_2/run@b612b6171305
+| retryable_2/wait@86434ecfd54a
+| retryable_2/cancel@3ed3b58e2a8c
+| scheduled_0/run@2c7cbcb59fc4
+| scheduled_0/wait@3fa871f20f86
+| scheduled_0/cancel@0ee82d464672
+| scheduled_1/run@89dc38c6faeb
+| scheduled_1/wait@34efaa391359
+| scheduled_1/cancel@b880388921a8
+| scheduled_2/run@72ea6db55ae3
+| scheduled_2/wait@eb3b9173fa49
+| scheduled_2/cancel@e29b03cab09d
+|
+=== in .: spine hash examples/oban_job/spec/delivery/spine.yaml
+exit 0
+--- stdout
+| spine@d389c1d149e6
+| available_0/run@70068a6b04fe
+| available_0/wait@c1df945134ea
+| available_0/cancel@ff3b5195a95f
+| retryable_1/run@5218618f6643
+| retryable_1/wait@2c3d98aa33fc
+| retryable_1/cancel@319cbf8d8d99
+| retryable_2/run@b612b6171305
+| retryable_2/wait@86434ecfd54a
+| retryable_2/cancel@3ed3b58e2a8c
+| scheduled_0/run@2c7cbcb59fc4
+| scheduled_0/wait@3fa871f20f86
+| scheduled_0/cancel@0ee82d464672
+| scheduled_1/run@89dc38c6faeb
+| scheduled_1/wait@34efaa391359
+| scheduled_1/cancel@b880388921a8
+| scheduled_2/run@72ea6db55ae3
+| scheduled_2/wait@eb3b9173fa49
+| scheduled_2/cancel@e29b03cab09d
 |
 === in .: spine hash examples/ref_sync/spec/ref_sync/readings/reading-a.yaml
 exit 0
@@ -2889,6 +3244,55 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine stale" tests="1" failures="0"><testcase classname="spine stale" name="no errors" /></testsuite>
+=== in .: spine stale --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/checks/delivery
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "stale",
+|   "findings": [
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "available_0/cancel",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     },
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "retryable_1/cancel",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     },
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "retryable_2/cancel",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     },
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "scheduled_0/cancel",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     },
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "scheduled_1/cancel",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     },
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "scheduled_2/cancel",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine stale" tests="1" failures="0"><testcase classname="spine stale" name="no errors" /></testsuite>
 === in .: spine stale --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/checks/ref_sync
 exit 0
 --- stdout
@@ -2913,6 +3317,17 @@ exit 0
 | info    uncovered          draft/publish: no check cites this transition; conformance still exercises it
 | info    uncovered          trashed/purge: no check cites this transition; conformance still exercises it
 | -- 0 errors, 3 findings
+|
+=== in .: spine stale examples/oban_job/spec/delivery/spine.yaml examples/oban_job/checks/delivery
+exit 0
+--- stdout
+| info    uncovered          available_0/cancel: no check cites this transition; conformance still exercises it
+| info    uncovered          retryable_1/cancel: no check cites this transition; conformance still exercises it
+| info    uncovered          retryable_2/cancel: no check cites this transition; conformance still exercises it
+| info    uncovered          scheduled_0/cancel: no check cites this transition; conformance still exercises it
+| info    uncovered          scheduled_1/cancel: no check cites this transition; conformance still exercises it
+| info    uncovered          scheduled_2/cancel: no check cites this transition; conformance still exercises it
+| -- 0 errors, 6 findings
 |
 === in .: spine stale examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/checks/ref_sync
 exit 0
@@ -3160,6 +3575,269 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/invalid/bounce-retried.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": [
+|     {
+|       "code": "refused",
+|       "severity": "error",
+|       "where": "examples/oban_job/spec/delivery/behaviors/invalid/bounce-retried.yaml",
+|       "message": "ends in cancelled, expected retryable_1"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused examples/oban_job/spec/delivery/behaviors/invalid/bounce-retried.yaml"><failure message="ends in cancelled, expected retryable_1">ends in cancelled, expected retryable_1</failure></testcase></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/invalid/early-retry.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": [
+|     {
+|       "code": "refused",
+|       "severity": "error",
+|       "where": "examples/oban_job/spec/delivery/behaviors/invalid/early-retry.yaml",
+|       "message": "ends in retryable_1, expected completed"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused examples/oban_job/spec/delivery/behaviors/invalid/early-retry.yaml"><failure message="ends in retryable_1, expected completed">ends in retryable_1, expected completed</failure></testcase></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/invalid/fourth-attempt.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": [
+|     {
+|       "code": "refused",
+|       "severity": "error",
+|       "where": "examples/oban_job/spec/delivery/behaviors/invalid/fourth-attempt.yaml",
+|       "message": "ends in discarded, expected retryable_2"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused examples/oban_job/spec/delivery/behaviors/invalid/fourth-attempt.yaml"><failure message="ends in discarded, expected retryable_2">ends in discarded, expected retryable_2</failure></testcase></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/invalid/run-after-sent.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": [
+|     {
+|       "code": "refused",
+|       "severity": "error",
+|       "where": "examples/oban_job/spec/delivery/behaviors/invalid/run-after-sent.yaml",
+|       "message": "step 2 \"run answer=accepted\" is undefined in state completed"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused examples/oban_job/spec/delivery/behaviors/invalid/run-after-sent.yaml"><failure message="step 2 &quot;run answer=accepted&quot; is undefined in state completed">step 2 "run answer=accepted" is undefined in state completed</failure></testcase></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/invalid/snooze-uses-an-attempt.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": [
+|     {
+|       "code": "refused",
+|       "severity": "error",
+|       "where": "examples/oban_job/spec/delivery/behaviors/invalid/snooze-uses-an-attempt.yaml",
+|       "message": "ends in scheduled_0, expected scheduled_1"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="1"><testcase classname="spine trace" name="refused examples/oban_job/spec/delivery/behaviors/invalid/snooze-uses-an-attempt.yaml"><failure message="ends in scheduled_0, expected scheduled_1">ends in scheduled_0, expected scheduled_1</failure></testcase></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/bounced-at-once.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/bounced-with-attempts-left.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/cancelled-before-any-attempt.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/cancelled-during-backoff.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/cancelled-during-snooze.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/discarded-after-third-failure.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/failure-snooze-failure.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/run-during-backoff.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/sent-after-snooze.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/sent-at-first-attempt.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/sent-at-third-attempt.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/snooze-then-two-failures.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/snoozed-at-the-limit.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
+=== in .: spine trace --format json --junit REPORT examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/snoozed-twice.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "trace",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine trace" tests="1" failures="0"><testcase classname="spine trace" name="no errors" /></testsuite>
 === in .: spine trace --format json --junit REPORT examples/ref_sync/spec/ref_sync/spine.yaml examples/ref_sync/spec/ref_sync/behaviors/invalid/conflict-while-pushing.yaml
 exit 1
 --- stdout
@@ -3372,6 +4050,106 @@ exit 0
 | -- 0 errors, 0 findings
 |
 === in .: spine trace examples/notes/spec/notes/spine.yaml examples/notes/spec/notes/behaviors/valid/owner-trashes-and-restores.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/invalid/bounce-retried.yaml
+exit 1
+--- stdout
+| error   refused            examples/oban_job/spec/delivery/behaviors/invalid/bounce-retried.yaml: ends in cancelled, expected retryable_1
+| -- 1 errors, 1 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/invalid/early-retry.yaml
+exit 1
+--- stdout
+| error   refused            examples/oban_job/spec/delivery/behaviors/invalid/early-retry.yaml: ends in retryable_1, expected completed
+| -- 1 errors, 1 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/invalid/fourth-attempt.yaml
+exit 1
+--- stdout
+| error   refused            examples/oban_job/spec/delivery/behaviors/invalid/fourth-attempt.yaml: ends in discarded, expected retryable_2
+| -- 1 errors, 1 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/invalid/run-after-sent.yaml
+exit 1
+--- stdout
+| error   refused            examples/oban_job/spec/delivery/behaviors/invalid/run-after-sent.yaml: step 2 "run answer=accepted" is undefined in state completed
+| -- 1 errors, 1 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/invalid/snooze-uses-an-attempt.yaml
+exit 1
+--- stdout
+| error   refused            examples/oban_job/spec/delivery/behaviors/invalid/snooze-uses-an-attempt.yaml: ends in scheduled_0, expected scheduled_1
+| -- 1 errors, 1 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/bounced-at-once.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/bounced-with-attempts-left.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/cancelled-before-any-attempt.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/cancelled-during-backoff.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/cancelled-during-snooze.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/discarded-after-third-failure.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/failure-snooze-failure.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/run-during-backoff.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/sent-after-snooze.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/sent-at-first-attempt.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/sent-at-third-attempt.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/snooze-then-two-failures.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/snoozed-at-the-limit.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
+=== in .: spine trace examples/oban_job/spec/delivery/spine.yaml examples/oban_job/spec/delivery/behaviors/valid/snoozed-twice.yaml
 exit 0
 --- stdout
 | -- 0 errors, 0 findings

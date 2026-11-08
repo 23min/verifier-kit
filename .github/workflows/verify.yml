@@ -15,7 +15,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
 
@@ -30,7 +30,7 @@ jobs:
           go-version-file: tools/go.mod
           cache-dependency-path: tools/go.sum
 
-      # The elixir_job example's adapter and checks run with elixir (1.18+ for JSON).
+      # The Elixir examples' adapters and checks run with elixir (1.18+ for JSON).
       # No problem matchers: the ExUnit failures demo/faults.sh plants would each become a
       # failure annotation on a passing run (#52).
       - uses: erlef/setup-beam@v1
@@ -38,6 +38,17 @@ jobs:
           otp-version: "29"
           elixir-version: "1.20"
           disable_problem_matchers: true
+
+      # oban_job's Hex packages, installed once (#110); its commands then run offline.
+      - uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cache/mix
+            ~/.hex
+            ~/.cache/elixir_make
+          key: oban-job-${{ runner.os }}-${{ hashFiles('examples/oban_job/src/mix.lock', 'examples/oban_job/src/deps.exs') }}
+
+      - run: elixir examples/oban_job/src/deps.exs
 
       - run: go -C tools vet ./...
 

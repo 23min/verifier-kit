@@ -216,6 +216,41 @@ flowchart LR
   mutate -->|"verify makes each in a copy"| job
 ```
 
+## The oban_job example
+
+In `examples/oban_job/`; the paths below are relative to it. It is in Elixir, as elixir_job is,
+but its code under test uses a library: `src/mailer.ex` sends each email from an Oban 2.24.2
+job, on SQLite, and `spine conform` drives the app and Oban together. Every command loads
+`src/deps.exs` first, which installs Oban's Hex packages with `Mix.install`, pinned by
+`src/mix.lock` and kept per machine outside the repo, with `HEX_OFFLINE=1`; then `src/**/*.ex`.
+The adapter runs one Oban, in `testing: :manual` on an in-memory database, for the whole run: a
+`run` is `Oban.drain_queue/2`, a `wait` the same with `with_scheduled: true`, and `observe`
+reads the job's row back as its state and attempt.
+
+```mermaid
+flowchart LR
+  chapter["spec/delivery/chapter.md<br/>from Oban's docs: D1-D6, D01-D14"]
+  readings["spec/delivery/readings/*.yaml<br/>two readings"]
+  spineY["spec/delivery/spine.yaml<br/>one email's job"]
+  behav["spec/delivery/behaviors/<br/>valid/ and invalid/"]
+  adapter["conformance/adapter_delivery.exs<br/>adapter protocol, via adapter_delivery.cmd"]
+  app["src/mailer.ex<br/>Mailer, Mailer.Worker"]
+  deps["src/deps.exs, src/mix.lock<br/>Mix.install, offline"]
+  oban[("Oban 2.24.2<br/>on SQLite, in memory")]
+  checks["checks/delivery/delivery_test.exs<br/>ExUnit, via checks/run.cmd"]
+  mutate["mutation/mutants.yaml<br/>seven edits"]
+  chapter -->|"read by two interpreters"| readings
+  readings -->|"spine diff; a person ratifies"| spineY
+  behav -->|"spine behaviors replays them"| spineY
+  spineY -->|"spine conform: every case, margin 1"| adapter
+  adapter -->|"sends, cancels, drains the queue"| app
+  app --> oban
+  adapter -->|"reads the job's state and attempt"| oban
+  checks -->|"backoff, snooze, max_attempts, address"| app
+  deps -.->|"loaded first by every command"| app
+  mutate -->|"verify makes each in a copy"| app
+```
+
 ## Checking the checker
 
 `./verify --full` makes each example's mutants, listed in `mutation/mutants.yaml`, each one edit
@@ -253,9 +288,9 @@ sequenceDiagram
 `demo/faults.sh` is the toolkit's own acceptance test. Each scenario makes a fresh copy of the
 repo (without `.git`) in a temp folder, seeds one fault, runs a command there, and checks the
 exit code and the lines it must print. Scenarios 0 to 9 seed faults in the notes example, and
-`./verify` in the copy checks every example, so ref_sync's and elixir_job's checks run in each of
-them too. Scenarios 11 to 13 seed faults in elixir_job and check it alone. Scenario 14 breaks
-the code of all three examples, so that each example's mutants stop at `oracle-fails`.
+`./verify` in the copy checks every example, so ref_sync's, elixir_job's and oban_job's checks run
+in each of them too. Scenarios 11 to 13 seed faults in elixir_job and check it alone. Scenario
+14 breaks the code of every example, so that each example's mutants stop at `oracle-fails`.
 Scenarios 15 to 17 run the Stop hook and read its reply as JSON, as Claude Code does: on a
 machine without `python3`, on failing lines that hold characters JSON must escape, and with a
 project folder that doesn't exist.
@@ -286,7 +321,7 @@ flowchart LR
 | 11 | the job retries after its last attempt fails | `./verify examples/elixir_job` | `diverges running/fail attempts=last` |
 | 12 | the job counts one attempt too many | `./verify examples/elixir_job` | conformance `ok`, content checks `FAIL` with J03 |
 | 13 | elixir_job's checks that count attempts deleted (J03, J04 and every reachable job) | `./verify examples/elixir_job --full` | content checks `ok`, and `mutant-survived` for a counting mutant |
-| 14 | the code of all three examples, as in scenarios 1 and 11 and ref_sync's first mutant | `./verify --full` | `oracle-fails` for each example's mutants |
+| 14 | the code of all four examples, as in scenarios 1 and 11, ref_sync's first mutant and oban_job's first | `./verify --full` | `oracle-fails` for each example's mutants |
 | 15 | no `python3` on the PATH, and no session id | the Stop hook, twice | a block with the failing lines, then the attempt-cap warning, each saying every session shares the count |
 | 16 | `./verify` prints failing lines with quotes, backslashes, control characters and a byte that isn't UTF-8 | the Stop hook | a block whose failing lines are exactly those |
 | 17 | the project folder given to the Stop hook doesn't exist | the Stop hook | a block saying `./verify` did not run |
@@ -337,9 +372,9 @@ test binary is the adapter. Plain `go test` runs one mutant of each class, model
 | `spine check`, `behaviors`, `stale`, `conform` | per machine | `{root}/spec/{m}/`, `{root}/checks/{m}/`, `{root}/conformance/adapter_{m}.cmd` |
 | content checks | per root: one run over all of `{root}/checks/` | `{root}/checks/run.cmd` |
 | mutation | per root, under `--full`: `{root}/mutation/mutants.yaml`, and every `{root}/mutation/mutate_*.cmd` | the file's name, and a file name pattern; each mutant runs every machine's `conform` and all of `checks/`, in a copy |
-| `src/` | per root: loaded by the commands | module name (`notes_app`, `ref_sync_client`), with `src/` on `PYTHONPATH` from the line; elixir_job's commands load `src/**/*.ex` |
+| `src/` | per root: loaded by the commands | module name (`notes_app`, `ref_sync_client`), with `src/` on `PYTHONPATH` from the line; elixir_job's and oban_job's commands load `src/**/*.ex`, oban_job's after `src/deps.exs` |
 | path guard | repo-wide | `policy.yaml` patterns over `examples/*/` and the toolkit's folders |
 | deny rules, CODEOWNERS (`integrations/`) | a project's root | folder patterns for a project with `spec/` at its root |
-| `demo/faults.sh` | seeds faults in notes (0-9), elixir_job (11-13) and all three examples (14) | hard-coded `examples/notes/`, `examples/elixir_job/` and `examples/ref_sync/` paths |
+| `demo/faults.sh` | seeds faults in notes (0-9), elixir_job (11-13) and all four examples (14) | hard-coded `examples/notes/`, `examples/elixir_job/`, `examples/ref_sync/` and `examples/oban_job/` paths |
 | `demo/live-builder.sh` | notes only | hard-coded `examples/notes/` paths |
 | choosing what to run | one root per call | `./verify ROOT`; without it, the discovery rule above |

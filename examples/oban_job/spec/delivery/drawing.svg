@@ -1,0 +1,198 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 1953" width="860" height="1953">
+  <title>Machine delivery, section delivering-one-email</title>
+  <style>
+    :root {
+      --surface: #ffffff; --ink: #141414; --ink-2: #333333; --muted: #6a6a6a; --rule: #c4c4c4;
+      --fact: #b4b4b4; --policy: #dadada; --design: #f2f2f2;
+      --serif: "Latin Modern Roman", "CMU Serif", "Times New Roman", Times, serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --surface: #161616; --ink: #ececec; --ink-2: #cfcfcf; --muted: #9d9d9d; --rule: #444444;
+              --fact: #5a5a5a; --policy: #3a3a3a; --design: #242424; }
+    }
+    .bg, .none { fill: var(--surface); }
+    .fact { fill: var(--fact); } .policy { fill: var(--policy); } .design { fill: var(--design); }
+    .st { stroke: var(--ink); stroke-width: 1.4; }
+    .ring { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+    .e { fill: none; stroke: var(--ink-2); stroke-width: 1.15; }
+    .mk { fill: var(--ink-2); }
+    .rule { stroke: var(--rule); stroke-width: 1; }
+    .sn { font: italic 400 18px var(--serif); fill: var(--ink); }
+    .lb { font: 400 14px var(--serif); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+    .ti { font: 400 17px var(--serif); fill: var(--ink); }
+    .tx { font: 400 14px var(--serif); fill: var(--ink); }
+    .it { font-style: italic; }
+    .nt { font: 400 13px var(--serif); fill: var(--muted); }
+  </style>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 8" refX="10" refY="4" markerWidth="10" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+      <path class="mk" d="M0,0 L10,4 L0,8 z"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0" y="0" width="860" height="1953"/>
+  <text class="ti" x="24" y="34" text-anchor="start"><tspan x="24" dy="0">Machine delivery, section delivering-one-email</tspan></text>
+  <text class="tx" x="24" y="58" text-anchor="start"><tspan x="24" dy="0">answer ∈ {accepted, failed, bounced, rate_limited}</tspan></text>
+  <circle class="st fact" cx="587" cy="52" r="8"/>
+  <text class="nt" x="603" y="56" text-anchor="start"><tspan x="603" dy="0">fact: irreversible in the world</tspan></text>
+  <circle class="st policy" cx="587" cy="74" r="8"/>
+  <text class="nt" x="603" y="78" text-anchor="start"><tspan x="603" dy="0">policy: a business choice</tspan></text>
+  <circle class="st design" cx="587" cy="96" r="8"/>
+  <text class="nt" x="603" y="100" text-anchor="start"><tspan x="603" dy="0">design: an implementation choice</tspan></text>
+  <path class="e" d="M322.6,200 L366.6,200" marker-end="url(#arr)"/>
+  <g class="move"><title>available_0 → completed</title>
+  <path class="e" d="M394.7,233 Q154.4,458 97.9,784.4" marker-end="url(#arr)"/>
+  <text class="lb" x="113.2" y="414.3" text-anchor="middle"><tspan x="113.2" dy="0">run</tspan><tspan x="113.2" dy="18">[answer == 'accepted']</tspan><tspan x="113.2" dy="18">wait</tspan><tspan x="113.2" dy="18">[answer == 'accepted']</tspan></text>
+  </g>
+  <g class="move"><title>available_0 → retryable_1</title>
+  <path class="e" d="M395.2,233.2 Q210,410 394.5,586.1" marker-end="url(#arr)"/>
+  <text class="lb" x="180" y="338" text-anchor="middle"><tspan x="180" dy="0">run</tspan><tspan x="180" dy="18">[answer == 'failed']</tspan><tspan x="180" dy="18">wait</tspan><tspan x="180" dy="18">[answer == 'failed']</tspan></text>
+  </g>
+  <g class="move"><title>available_0 → cancelled</title>
+  <path class="e" d="M460.8,234.8 Q674.9,476.1 766.7,785.2" marker-end="url(#arr)"/>
+  <text class="lb" x="731.6" y="413.6" text-anchor="middle"><tspan x="731.6" dy="0">run</tspan><tspan x="731.6" dy="18">[answer == 'bounced']</tspan><tspan x="731.6" dy="18">wait</tspan><tspan x="731.6" dy="18">[answer == 'bounced']</tspan><tspan x="731.6" dy="18">cancel</tspan></text>
+  </g>
+  <g class="move"><title>available_0 → scheduled_0</title>
+  <path class="e" d="M430,240 Q430,305 430,369" marker-end="url(#arr)"/>
+  <text class="lb" x="610" y="183" text-anchor="middle"><tspan x="610" dy="0">run</tspan><tspan x="610" dy="18">[answer == 'rate_limited']</tspan><tspan x="610" dy="18">wait</tspan><tspan x="610" dy="18">[answer == 'rate_limited']</tspan></text>
+  </g>
+  <g class="move"><title>retryable_1 → completed</title>
+  <path class="e" d="M367.6,620.8 Q196.9,622.9 112,787.4" marker-end="url(#arr)"/>
+  <text class="lb" x="238" y="680" text-anchor="middle"><tspan x="238" dy="0">wait</tspan><tspan x="238" dy="18">[answer == 'accepted']</tspan></text>
+  </g>
+  <g class="move"><title>retryable_1 → retryable_2</title>
+  <path class="e" d="M395.2,653.2 Q210,830 394.5,1006.1" marker-end="url(#arr)"/>
+  <text class="lb" x="280" y="846" text-anchor="middle"><tspan x="280" dy="0">wait</tspan><tspan x="280" dy="18">[answer == 'failed']</tspan></text>
+  </g>
+  <g class="move"><title>retryable_1 → cancelled</title>
+  <path class="e" d="M492.4,620.6 Q666.7,622.1 757,787.7" marker-end="url(#arr)"/>
+  <text class="lb" x="626" y="661" text-anchor="middle"><tspan x="626" dy="0">wait</tspan><tspan x="626" dy="18">[answer == 'bounced']</tspan><tspan x="626" dy="18">cancel</tspan></text>
+  </g>
+  <g class="move"><title>retryable_1 → scheduled_1</title>
+  <path class="e" d="M430,660 Q430,725 430,789" marker-end="url(#arr)"/>
+  <text class="lb" x="537.9" y="720.8" text-anchor="middle"><tspan x="537.9" dy="0">wait</tspan><tspan x="537.9" dy="18">[answer == 'rate_limited']</tspan></text>
+  </g>
+  <g class="move"><title>retryable_2 → completed</title>
+  <path class="e" d="M376,1019.9 Q239,969 127.6,865.1" marker-end="url(#arr)"/>
+  <text class="lb" x="269" y="988" text-anchor="middle"><tspan x="269" dy="0">wait</tspan><tspan x="269" dy="18">[answer == 'accepted']</tspan></text>
+  </g>
+  <g class="move"><title>retryable_2 → discarded</title>
+  <path class="e" d="M395.2,1073.2 Q210,1250 392.9,1424.5" marker-end="url(#arr)"/>
+  <text class="lb" x="217.6" y="1245.4" text-anchor="middle"><tspan x="217.6" dy="0">wait</tspan><tspan x="217.6" dy="18">[answer == 'failed']</tspan></text>
+  </g>
+  <g class="move"><title>retryable_2 → cancelled</title>
+  <path class="e" d="M491.9,1034.7 Q656.4,1020.7 753.5,871" marker-end="url(#arr)"/>
+  <text class="lb" x="621" y="975" text-anchor="middle"><tspan x="621" dy="0">wait</tspan><tspan x="621" dy="18">[answer == 'bounced']</tspan><tspan x="621" dy="18">cancel</tspan></text>
+  </g>
+  <g class="move"><title>retryable_2 → scheduled_2</title>
+  <path class="e" d="M430,1080 Q430,1145 430,1209" marker-end="url(#arr)"/>
+  <text class="lb" x="470" y="1141" text-anchor="middle"><tspan x="470" dy="0">wait</tspan><tspan x="470" dy="18">[answer == 'rate_limited']</tspan></text>
+  </g>
+  <g class="move"><title>scheduled_0 → completed</title>
+  <path class="e" d="M381.2,434.9 Q166.7,544.5 102.1,785" marker-end="url(#arr)"/>
+  <text class="lb" x="263" y="578" text-anchor="middle"><tspan x="263" dy="0">wait</tspan><tspan x="263" dy="18">[answer == 'accepted']</tspan></text>
+  </g>
+  <g class="move"><title>scheduled_0 → retryable_1</title>
+  <path class="e" d="M430,450 Q430,515 430,579" marker-end="url(#arr)"/>
+  <text class="lb" x="420" y="501" text-anchor="middle"><tspan x="420" dy="0">wait</tspan><tspan x="420" dy="18">[answer == 'failed']</tspan></text>
+  </g>
+  <g class="move"><title>scheduled_0 → cancelled</title>
+  <path class="e" d="M479.3,434.6 Q697.2,543.2 767.1,785.2" marker-end="url(#arr)"/>
+  <text class="lb" x="591" y="579" text-anchor="middle"><tspan x="591" dy="0">wait</tspan><tspan x="591" dy="18">[answer == 'bounced']</tspan><tspan x="591" dy="18">cancel</tspan></text>
+  </g>
+  <g class="move"><title>scheduled_1 → completed</title>
+  <path class="e" d="M384,802.9 Q260,730 136.8,802.5" marker-end="url(#arr)"/>
+  <text class="lb" x="230" y="746" text-anchor="middle"><tspan x="230" dy="0">wait</tspan><tspan x="230" dy="18">[answer == 'accepted']</tspan></text>
+  </g>
+  <g class="move"><title>scheduled_1 → retryable_2</title>
+  <path class="e" d="M430,870 Q430,935 430,999" marker-end="url(#arr)"/>
+  <text class="lb" x="514.4" y="930.8" text-anchor="middle"><tspan x="514.4" dy="0">wait</tspan><tspan x="514.4" dy="18">[answer == 'failed']</tspan></text>
+  </g>
+  <g class="move"><title>scheduled_1 → cancelled</title>
+  <path class="e" d="M485.1,811.1 Q605,770 726.5,811.7" marker-end="url(#arr)"/>
+  <text class="lb" x="605" y="787" text-anchor="middle"><tspan x="605" dy="0">wait</tspan><tspan x="605" dy="18">[answer == 'bounced']</tspan><tspan x="605" dy="18">cancel</tspan></text>
+  </g>
+  <g class="move"><title>scheduled_2 → completed</title>
+  <path class="e" d="M381.2,1225.1 Q166.7,1115.5 102.1,875" marker-end="url(#arr)"/>
+  <text class="lb" x="213" y="1074" text-anchor="middle"><tspan x="213" dy="0">wait</tspan><tspan x="213" dy="18">[answer == 'accepted']</tspan></text>
+  </g>
+  <g class="move"><title>scheduled_2 → discarded</title>
+  <path class="e" d="M430,1290 Q430,1355 430,1414" marker-end="url(#arr)"/>
+  <text class="lb" x="430" y="1351" text-anchor="middle"><tspan x="430" dy="0">wait</tspan><tspan x="430" dy="18">[answer == 'failed']</tspan></text>
+  </g>
+  <g class="move"><title>scheduled_2 → cancelled</title>
+  <path class="e" d="M479.3,1225.4 Q697.2,1116.8 767.1,874.8" marker-end="url(#arr)"/>
+  <text class="lb" x="726.6" y="1125.9" text-anchor="middle"><tspan x="726.6" dy="0">wait</tspan><tspan x="726.6" dy="18">[answer == 'bounced']</tspan><tspan x="726.6" dy="18">cancel</tspan></text>
+  </g>
+  <ellipse class="st design" cx="430" cy="200" rx="62.4" ry="40"/>
+  <text class="sn" x="430" y="206" text-anchor="middle">available_0</text>
+  <ellipse class="st policy" cx="430" cy="620" rx="62.4" ry="40"/>
+  <text class="sn" x="430" y="626" text-anchor="middle">retryable_1</text>
+  <ellipse class="st policy" cx="430" cy="1040" rx="62.4" ry="40"/>
+  <text class="sn" x="430" y="1046" text-anchor="middle">retryable_2</text>
+  <ellipse class="st policy" cx="430" cy="410" rx="62.4" ry="40"/>
+  <text class="sn" x="430" y="416" text-anchor="middle">scheduled_0</text>
+  <ellipse class="st policy" cx="430" cy="830" rx="62.4" ry="40"/>
+  <text class="sn" x="430" y="836" text-anchor="middle">scheduled_1</text>
+  <ellipse class="st policy" cx="430" cy="1250" rx="62.4" ry="40"/>
+  <text class="sn" x="430" y="1256" text-anchor="middle">scheduled_2</text>
+  <ellipse class="st fact" cx="90" cy="830" rx="52.4" ry="40"/>
+  <ellipse class="ring" cx="90" cy="830" rx="57.4" ry="45"/>
+  <text class="sn" x="90" y="836" text-anchor="middle">completed</text>
+  <ellipse class="st policy" cx="780" cy="830" rx="52.4" ry="40"/>
+  <ellipse class="ring" cx="780" cy="830" rx="57.4" ry="45"/>
+  <text class="sn" x="780" y="836" text-anchor="middle">cancelled</text>
+  <ellipse class="st policy" cx="430" cy="1460" rx="52.4" ry="40"/>
+  <ellipse class="ring" cx="430" cy="1460" rx="57.4" ry="45"/>
+  <text class="sn" x="430" y="1466" text-anchor="middle">discarded</text>
+  <text class="nt" x="24" y="1545" text-anchor="start"><tspan x="24" dy="0">Every rule that doesn't change the state, by event and state. The moves are the edges above.</tspan><tspan x="24" dy="18">completed, cancelled and discarded are terminal and have no rules.</tspan></text>
+  <text class="tx it" x="24" y="1593">event</text>
+  <text class="tx it" x="95" y="1593">retryable_1</text>
+  <text class="tx it" x="465.5" y="1593">retryable_2</text>
+  <line class="rule" x1="24" y1="1601" x2="836" y2="1601"/>
+  <text class="tx" x="24" y="1621">run</text>
+  <g class="rules"><title>retryable_1/run</title>
+  <text class="tx" x="95" y="1621">ignore</text>
+  </g>
+  <g class="rules"><title>retryable_2/run</title>
+  <text class="tx" x="465.5" y="1621">ignore</text>
+  </g>
+  <line class="rule" x1="24" y1="1629" x2="836" y2="1629"/>
+  <text class="tx" x="24" y="1649">wait</text>
+  <line class="rule" x1="24" y1="1657" x2="836" y2="1657"/>
+  <text class="tx" x="24" y="1677">cancel</text>
+  <text class="tx it" x="24" y="1715">event</text>
+  <text class="tx it" x="95" y="1715">scheduled_0</text>
+  <text class="tx it" x="465.5" y="1715">scheduled_1</text>
+  <line class="rule" x1="24" y1="1723" x2="836" y2="1723"/>
+  <text class="tx" x="24" y="1743">run</text>
+  <g class="rules"><title>scheduled_0/run</title>
+  <text class="tx" x="95" y="1743">ignore</text>
+  </g>
+  <g class="rules"><title>scheduled_1/run</title>
+  <text class="tx" x="465.5" y="1743">ignore</text>
+  </g>
+  <line class="rule" x1="24" y1="1751" x2="836" y2="1751"/>
+  <text class="tx" x="24" y="1771">wait</text>
+  <g class="rules"><title>scheduled_0/wait</title>
+  <text class="tx" x="95" y="1771">stay [answer == 'rate_limited']</text>
+  </g>
+  <g class="rules"><title>scheduled_1/wait</title>
+  <text class="tx" x="465.5" y="1771">stay [answer == 'rate_limited']</text>
+  </g>
+  <line class="rule" x1="24" y1="1779" x2="836" y2="1779"/>
+  <text class="tx" x="24" y="1799">cancel</text>
+  <text class="tx it" x="24" y="1837">event</text>
+  <text class="tx it" x="95" y="1837">scheduled_2</text>
+  <line class="rule" x1="24" y1="1845" x2="836" y2="1845"/>
+  <text class="tx" x="24" y="1865">run</text>
+  <g class="rules"><title>scheduled_2/run</title>
+  <text class="tx" x="95" y="1865">ignore</text>
+  </g>
+  <line class="rule" x1="24" y1="1873" x2="836" y2="1873"/>
+  <text class="tx" x="24" y="1893">wait</text>
+  <g class="rules"><title>scheduled_2/wait</title>
+  <text class="tx" x="95" y="1893">stay [answer == 'rate_limited']</text>
+  </g>
+  <line class="rule" x1="24" y1="1901" x2="836" y2="1901"/>
+  <text class="tx" x="24" y="1921">cancel</text>
+</svg>

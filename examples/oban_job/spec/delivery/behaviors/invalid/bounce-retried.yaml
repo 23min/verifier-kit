@@ -1,0 +1,4 @@
+# D4: a bounce ends the job, even with attempts left.
+steps:
+  - "run answer=bounced"
+expect: retryable_1

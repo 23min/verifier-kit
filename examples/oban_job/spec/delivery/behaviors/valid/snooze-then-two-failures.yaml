@@ -1,0 +1,6 @@
+# D07: a snooze gives its attempt back, so after two failures the job is still retryable.
+steps:
+  - "run answer=rate_limited"
+  - "wait answer=failed"
+  - "wait answer=failed"
+expect: retryable_2

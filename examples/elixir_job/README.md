@@ -27,6 +27,8 @@ The ratified spine, drawn by `spine draw` from `spec/job/drawing.yaml`.
   attempts is checked by the content checks, in ExUnit, against J1 and J2 in every job
   reachable with maximum attempts 1 to 4.
 - A job written by a different builder (Codex) from the oracle alone, and five mutants of it.
+- A job like Oban's, written for this example and not Oban itself; `examples/oban_job/` checks
+  a spine against Oban.
 
 ## Run it
 

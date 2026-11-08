@@ -1,0 +1,4 @@
+# D04: a bounce cancels the job at its first attempt.
+steps:
+  - "run answer=bounced"
+expect: cancelled

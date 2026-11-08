@@ -17,7 +17,10 @@ workflow events to one Git ref, checked through every interleaving of their step
 replies and crashes up to a bound, and against real Git. The third,
 [`examples/elixir_job/`](examples/elixir_job/README.md), is a background job with retries,
 written in Elixir: its adapter and content checks are commands, as every example's are, so it
-shows the toolkit checking a project in another language.
+shows the toolkit checking a project in another language. The fourth,
+[`examples/oban_job/`](examples/oban_job/README.md), sends an email from an Oban job: its spine,
+written from Oban's documentation, is checked against Oban itself, so the toolkit is tried on
+code it didn't write.
 
 To use it in your own project, start with [`docs/guide.md`](docs/guide.md): one line installs
 it, and the guide goes step by step from there. The design is in
@@ -74,11 +77,13 @@ yet.
 
 ```sh
 pip install -r requirements.txt   # PyYAML, for the ref_sync example's checks; or in a uv venv, activated
-./verify                    # fast checks on every example, a few seconds
+./verify                    # fast checks on every example, about fifteen seconds
 ./verify --full             # also breaks the code on purpose to check the checks
 ./verify examples/notes     # one example only
 ./verify examples/ref_sync  # the protocol example; it also needs the git program
 ./verify examples/elixir_job  # the Elixir example; it also needs Elixir 1.18 or later
+elixir examples/oban_job/src/deps.exs  # once, online: Oban's packages, for the next line
+./verify examples/oban_job    # the Oban example, in Elixir too
 demo/faults.sh              # acceptance test: seeds one fault at a time and checks the right part catches it
 demo/live-builder.sh        # optional: a real Claude Code builder session against the oracle
 ```

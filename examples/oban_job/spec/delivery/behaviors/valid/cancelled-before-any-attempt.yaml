@@ -1,0 +1,4 @@
+# D12: an operator cancels the job before any attempt.
+steps:
+  - "cancel answer=accepted"
+expect: cancelled

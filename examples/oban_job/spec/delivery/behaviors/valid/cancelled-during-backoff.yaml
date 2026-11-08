@@ -1,0 +1,5 @@
+# D13: an operator cancels the job while it waits out its backoff.
+steps:
+  - "run answer=failed"
+  - "cancel answer=accepted"
+expect: cancelled
