@@ -1,0 +1,16 @@
+# Where each state of spine.yaml sits in drawing.svg (#108), in units of the 860-wide drawing.
+# Written again, from the folder this file is in, with: spine draw spine.yaml drawing.yaml > drawing.svg
+states:
+  conflicted:     [140, 140]
+  queued:         [140, 340]
+  protocol_error: [140, 580]
+  confirmed:      [450, 385]
+  prepared:       [680, 170]
+  uncertain:      [680, 520]
+edges:
+  queued:
+    prepared: {bend: -22}
+  prepared:
+    queued: {bend: -22}
+  uncertain:
+    confirmed: {label: [615, 425]}

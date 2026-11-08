@@ -1,0 +1,8 @@
+# An edge through a state, and a label on another edge.
+states:
+  closed: [120, 220]
+  open:   [460, 220]
+  gone:   [760, 220]
+edges:
+  closed:
+    open: {bend: -30, label: [600, 220]}

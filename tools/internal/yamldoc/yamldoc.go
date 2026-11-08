@@ -18,7 +18,7 @@ import (
 
 // Kind is what a YAML value is to the spine format: text, true or false, nothing, a list or a
 // mapping, or something else the format never reads, such as a number, a date or a value with an
-// explicit tag.
+// explicit tag. A drawing's layout reads whole numbers too (#108).
 type Kind int
 
 const (
@@ -28,6 +28,7 @@ const (
 	KList              // a list
 	KMap               // a mapping
 	KOther             // a number, a date, a merge key or a value with an explicit tag
+	KInt               // a whole number in decimal, without a sign + or a leading zero; KOther otherwise
 )
 
 // Value is one YAML value.
@@ -35,6 +36,7 @@ type Value struct {
 	Kind  Kind
 	Bool  bool   // KBool
 	Str   string // KStr
+	Int   int    // KInt
 	Items []*Value
 	Map   *Map
 }
@@ -150,6 +152,7 @@ func escapesSurrogate(src []byte, index int) bool {
 var (
 	reBool  = regexp.MustCompile(`^(?:yes|Yes|YES|no|No|NO|true|True|TRUE|false|False|FALSE|on|On|ON|off|Off|OFF)$`)
 	reNull  = regexp.MustCompile(`^(?:~|null|Null|NULL|)$`)
+	reInt   = regexp.MustCompile(`^-?(?:0|[1-9][0-9]*)$`) // read alike by YAML 1.1 and 1.2
 	reOther = regexp.MustCompile(`^(?:` +
 		`[-+]?(?:[0-9][0-9_]*)\.[0-9_]*(?:[eE][-+][0-9]+)?|\.[0-9][0-9_]*(?:[eE][-+][0-9]+)?|` + // floats
 		`[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+\.[0-9_]*|[-+]?\.(?:inf|Inf|INF)|\.(?:nan|NaN|NAN)|` +
@@ -196,6 +199,10 @@ func value(n *yaml.Node, built map[*yaml.Node]*Value) (*Value, error) {
 			v.Kind, v.Bool = KBool, trueWords[strings.ToLower(s)]
 		case reNull.MatchString(s):
 			v.Kind = KNull
+		case reInt.MatchString(s):
+			if n, err := strconv.Atoi(s); err == nil {
+				v.Kind, v.Int = KInt, n
+			}
 		case !reOther.MatchString(s):
 			v.Kind, v.Str = KStr, s
 		}

@@ -22,6 +22,9 @@ checks the ones that are mechanical: `go -C examples test ./...`.
 - `spec/<machine>/spine.yaml`, headed with the lifecycle it is, when it was built from
   `readings/` and the owner's answers, in which issue, and "Ratified by the reviewed merge of
   this file." It has no worked examples: sample runs go in `spec/<machine>/behaviors/`.
+- `spec/<machine>/drawing.yaml` and `drawing.svg`, the spine drawn
+  (`docs/reference/drawing-layout.md`) with no warnings, shown at the top of the README's "What
+  it shows".
 - `conformance/adapter_<machine>.cmd`, and the program it runs, whose header states what `src/`
   must offer: the whole contract between the oracle and the code.
 - `checks/run.cmd`. The content checks cite what they depend on with `covers:`, and report as

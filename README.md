@@ -21,8 +21,8 @@ shows the toolkit checking a project in another language.
 
 To use it in your own project, start with [`docs/guide.md`](docs/guide.md): one line installs
 it, and the guide goes step by step from there. The design is in
-[`docs/design.md`](docs/design.md); the exact tool contract and spine format are in
-[`docs/reference/`](docs/reference/). Rules for agents working here are in
+[`docs/design.md`](docs/design.md); the exact tool contract, spine format and drawing layout are
+in [`docs/reference/`](docs/reference/). Rules for agents working here are in
 [`CLAUDE.md`](CLAUDE.md). Work is tracked in GitHub issues.
 
 ## Why use it
@@ -172,8 +172,10 @@ well.
    spine without seeing the other's. `spine diff` compares the two readings and turns every
    disagreement into a question with a concrete witness ("after publish, trash, restore by an
    editor: A says rejected, B says active"). You answer, and the answers become the ratified
-   `spine.yaml`. This loop finds ambiguity; it is not a gate. Two readings can share a
-   misreading, so a clean diff is evidence, not proof.
+   `spine.yaml`. `spine draw` draws it beside the YAML, from a layout an LLM keeps, so you
+   review a picture of the machine as well: its moves as arrows, every other rule in a table.
+   This loop finds ambiguity; it is not a gate. Two readings can share a misreading, so a clean
+   diff is evidence, not proof.
 3. **Build.** The builder changes `src/` until `./verify` passes. It can read the oracle but
    not change it.
 
@@ -186,16 +188,17 @@ well.
 | behaviors match spine | `spine behaviors` | the spine drifting from the example runs you agreed on | |
 | checks cite current spine | `spine stale` | content checks that cite a spine cell, or the whole spine, which has since changed, and citations written wrongly | checks that never cite anything (listed as info) |
 | code conforms to spine | `spine conform`, with the command in `adapter_<machine>.cmd` | any state/event/role case where the code allows, refuses or ends up somewhere other than the spine says, with the shortest sequence that shows it; every case is tried, and one it couldn't try is an error | hidden state beyond the margin, or that only a refusal changes; data the adapter does not observe |
+| drawing matches spine (with `spec/<machine>/drawing.yaml`) | `spine draw` | a committed `drawing.svg` that no longer shows the spine and its layout | labels that overlap, which `spine draw` warns about when the drawing is written |
 | content checks | the command in `checks/run.cmd` | wrong text, values, formats | whatever no check asserts |
 | mutants killed (`--full`) | each mutant in `mutation/mutants.yaml`, on a copy, through conform and the content checks; and the command in each `mutation/mutate_*.cmd` | an oracle too weak to notice a planted bug | bugs unlike the planted ones |
 
 Nothing is skipped silently. A step that does not run prints `skip` with the reason (no
-`VERIFY_BASE`, no behaviors folder, no `--full`, or a spine that is not sound), and a missing
-piece is an error: no spine at all, no adapter, no content checks, or no mutants under
-`--full`. So is a `.cmd` file that holds no single command line, or whose program can't be
-started. Output is one line per step, with error lines only for failing steps.
-`VERIFY_REPORTS=dir` writes JUnit XML for the spine steps; `spine ... --format json` gives
-machine-readable findings. Exit codes: 0 pass, 1 findings, 2 misuse.
+`VERIFY_BASE`, no behaviors folder, no layout, no `--full`, or a spine that is not sound), and a
+missing piece is an error: no spine at all, no adapter, no content checks, a layout with no
+drawing, or no mutants under `--full`. So is a `.cmd` file that holds no single command line, or
+whose program can't be started. Output is one line per step, with error lines only for failing
+steps. `VERIFY_REPORTS=dir` writes JUnit XML for the spine steps; `spine ... --format json`
+gives machine-readable findings. Exit codes: 0 pass, 1 findings, 2 misuse.
 
 ## Jacking it in
 
@@ -241,7 +244,9 @@ events; a few variables, each with a small, finite set of values; and exactly on
 state, event and combination of values, so that every case can be enumerated.
 [`docs/reference/spine-format.md`](docs/reference/spine-format.md) defines the format, the
 conditions a rule may use, and how a content check cites a cell or the whole spine;
-`spine hash <spine.yaml>` prints the hashes it cites.
+`spine hash <spine.yaml>` prints the hashes it cites. `spine draw <spine.yaml> <drawing.yaml>`
+draws it, its states where the layout puts them
+([`docs/reference/drawing-layout.md`](docs/reference/drawing-layout.md)).
 
 ## Adding an example or a machine
 
@@ -252,9 +257,10 @@ only.
 
 Within an example (or a project), everything is keyed by folder name, so for a machine called
 `invoice`: `spec/invoice/spine.yaml`, optional `spec/invoice/behaviors/{valid,invalid}/`,
-`checks/invoice/`, and `conformance/adapter_invoice.cmd`, the line that runs a program speaking
-the adapter protocol (`docs/reference/tool-contract.md`). In Python that program is the shim on
-a file with three functions, `new()`, `apply()` and `observe()`:
+optional `spec/invoice/drawing.yaml` and the `drawing.svg` drawn from it, `checks/invoice/`, and
+`conformance/adapter_invoice.cmd`, the line that runs a program speaking the adapter protocol
+(`docs/reference/tool-contract.md`). In Python that program is the shim on a file with three
+functions, `new()`, `apply()` and `observe()`:
 `env PYTHONPATH=src adapter_shim.py conformance/adapter_invoice.py`. `./verify` picks them up,
 and fails with `no-adapter` until the line exists. The content checks are a command too,
 `checks/run.cmd`, and the mutants are a list, `mutation/mutants.yaml`.

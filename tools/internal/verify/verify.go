@@ -21,15 +21,17 @@ const help = `One entry point for every gate: CI, git hooks and agent hooks all 
 nothing else, so they cannot drift apart.
 
   ./verify [ROOT]          fast checks (seconds): spine soundness, behaviors, stale checks,
-                           conformance, content checks, and the path guard when a base is given
+                           conformance, drawings, content checks, and the path guard when a
+                           base is given
   ./verify [ROOT] --full   also checks the checker (mutation)
 
 ROOT is a folder laid out like a project: spec/, checks/, conformance/, src/, mutation/.
 Without ROOT: this folder when it has spec/, otherwise every examples/*/ in turn.
 
 Nothing is skipped silently: a step that does not run prints a skip line with the reason,
-and a missing piece (no spine, no adapter, no content checks, no mutants under --full) is an
-error.
+and a missing piece (no spine, no adapter, a layout with no drawing, no content checks, no
+mutants under --full) is an error. A machine's drawing, spec/<machine>/drawing.svg, must be
+what spine draw makes of its spine and spec/<machine>/drawing.yaml.
 
 The adapter and the content checks are .cmd files holding one command line, in any language:
 conformance/adapter_<machine>.cmd, checks/run.cmd. A command runs from its root, without a
@@ -160,6 +162,8 @@ func newShell(stdout io.Writer) (*shell, error) {
 func (sh *shell) do(s step, label string) bool {
 	var o outcome
 	switch {
+	case s.cmd != nil && s.want != nil:
+		o = compared(s, sh.run(s.cmd))
 	case s.cmd != nil:
 		o = sh.run(s.cmd)
 	case s.mutate != nil:
@@ -175,7 +179,8 @@ func (sh *shell) do(s step, label string) bool {
 	return ok
 }
 
-// run starts a command and waits for it, with its standard output and standard error together.
+// run starts a command and waits for it, with its standard output and standard error together,
+// or its standard output alone when it is quiet.
 func (sh *shell) run(c *command) outcome {
 	dir := sh.here
 	if c.dir != "" {
@@ -190,7 +195,7 @@ func (sh *shell) runFrom(c *command, dir string) outcome {
 	if c.inRoot {
 		env = sh.rootEnv
 	}
-	out, ok, err := sh.start(c.argv, dir, env, c.stdin, true)
+	out, ok, err := sh.start(c.argv, dir, env, c.stdin, !c.quiet)
 	if err != nil {
 		return outcome{startErr: program.Strerror(err)}
 	}
@@ -392,6 +397,10 @@ func (sh *shell) facts(p string) rootFacts {
 			name:      m,
 			behaviors: isDir(filepath.Join(root, "spec", m, "behaviors")),
 			checks:    isDir(filepath.Join(root, "checks", m)),
+			layout:    exists(filepath.Join(root, "spec", m, "drawing.yaml")),
+		}
+		if f := filepath.Join(root, "spec", m, "drawing.svg"); exists(f) {
+			mf.drawing = readPiece(f, p+"spec/"+m+"/drawing.svg")
 		}
 		if f := filepath.Join(root, "conformance", "adapter_"+m+".cmd"); isFile(f) {
 			mf.adapter = readPiece(f, p+"conformance/adapter_"+m+".cmd")

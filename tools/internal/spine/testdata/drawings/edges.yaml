@@ -1,0 +1,11 @@
+states:
+  closed: [120, 220]
+  open:   [460, 220]
+  gone:   [460, 420]
+edges:
+  closed:
+    open: {bend: 1.5, label: [1], color: red}
+    gone:
+  open:
+    closed: {}
+  gone: [x]

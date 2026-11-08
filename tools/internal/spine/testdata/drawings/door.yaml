@@ -1,0 +1,5 @@
+# The seed spine, drawn with nothing in the way.
+states:
+  closed: [120, 220]
+  open:   [460, 220]
+  gone:   [460, 420]

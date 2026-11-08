@@ -7,6 +7,13 @@ the change says why (see `CLAUDE.md`).
 
 ## What it shows
 
+![The notes spine drawn: draft moves to active on publish when role is owner; active moves to
+trashed on trash, and trashed back to active on restore, both when role is owner; trashed moves
+to purged, a terminal state, on purge when role is owner. A table below gives every other rule,
+each stay, ignore and refusal, by event and state.](spec/notes/drawing.svg)
+
+The ratified spine, drawn by `spine draw` from `spec/notes/drawing.yaml`.
+
 - A short chapter that leaves who may do what open, and two readings of it, by different
   models, that disagree in 15 cases (`spine diff` on `spec/notes/readings/`). Each is a
   question for the chapter's owner; the ratified spine answers them.
@@ -32,6 +39,8 @@ demo/live-builder.sh             # a paid Claude Code builder session; run only 
 spec/notes/chapter.md            the prose chapter                                  person
 spec/notes/readings/             two readings, with the prompt and their models     interpreters
 spec/notes/spine.yaml            the ratified spine                                 person
+spec/notes/drawing.yaml          where each state sits in the spine's drawing       person
+spec/notes/drawing.svg           the drawing, made by spine draw                    person
 spec/notes/behaviors/            valid/ must be allowed, invalid/ refused           person
 checks/notes/test_content.py     content checks                                     person
 checks/run.cmd                   the line that runs them, through run_checks.py     person
@@ -49,6 +58,7 @@ demo/notes_app_as_written.py     the service as first written, with two bugs
 |---|---|---|
 | The service matches the spine | `spine conform` through `adapter_notes.cmd` | every case, margin 1: 180 sequences |
 | The runs that must be allowed or refused | `spine behaviors` on `spec/notes/behaviors/` | 2 valid, 3 invalid |
+| The drawing shows the spine | `spine draw` on `spine.yaml` and `drawing.yaml`, compared with `drawing.svg` | byte for byte |
 | A note's text is kept through edit, trash and restore | `checks/notes/test_content.py` | one run each |
 
 ## The mutants

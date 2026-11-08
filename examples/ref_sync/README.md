@@ -10,6 +10,15 @@ what is assumed of Git. The work is tracked in issue #18; the decisions are in
 
 ## What it shows
 
+![The ref_sync spine drawn: queued moves to prepared on prepare, and prepared back to queued on
+non_fast_forward or restart; prepared moves to uncertain on response_lost, and uncertain back to
+queued on absent_on_remote or restart. confirmed is reached from queued and uncertain on
+seen_on_remote and from prepared on accepted; protocol_error from queued and uncertain on
+digest_mismatch; conflicted from queued on invalidated. The three are terminal. A table below
+gives every other rule by event and state.](spec/ref_sync/drawing.svg)
+
+The ratified spine, drawn by `spine draw` from `spec/ref_sync/drawing.yaml`.
+
 - A spine for one operation's lifecycle (`queued`, `prepared`, `uncertain`, and three final
   states), ratified from two readings by different models. `spine diff` found one question;
   the owner also chose the state kinds, where both readings shared a misreading `diff` cannot
@@ -46,6 +55,8 @@ they never skip.
 spec/ref_sync/chapter.md             the prose chapter: rules, S1-S7, C01-C12, assumptions   person
 spec/ref_sync/readings/              two readings, with the prompt and their models           interpreters
 spec/ref_sync/spine.yaml             the ratified lifecycle of one operation                  person
+spec/ref_sync/drawing.yaml           where each state sits in the spine's drawing             person
+spec/ref_sync/drawing.svg            the drawing, made by spine draw                          person
 spec/ref_sync/behaviors/             valid/ must be allowed, invalid/ refused                 person
 conformance/adapter_ref_sync.py      the lifecycle adapter; its docstring is the whole        person
                                      contract with src/
@@ -68,6 +79,7 @@ pushes into the spine's events; the explorer and the Git checks drive it.
 | What | How | Bound |
 |---|---|---|
 | The lifecycle matches the spine | `spine conform` on `transition()` | every case, margin 1: 81 sequences |
+| The drawing shows the spine | `spine draw` on `spine.yaml` and `drawing.yaml`, compared with `drawing.svg` | byte for byte |
 | S1-S5, S7 in every reachable world; each scenario's outcome | `test_protocol.py`, C01-C06 | below |
 | The checks catch a broken tip (S4) and a false confirmation (S5) | C07, C08 on worlds made by hand | |
 | Git refuses a push that is not a fast-forward; the client's Git remote reports it | `test_git_ref.py`, C09 | one repository |

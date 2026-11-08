@@ -1,0 +1,5 @@
+# Whole numbers in decimal only: 012 is octal to YAML 1.1, +5 has a sign, the last is too big.
+states:
+  closed: [012, 5]
+  open: [+5, 5]
+  gone: [99999999999999999999, -5]

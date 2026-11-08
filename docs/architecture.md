@@ -24,7 +24,7 @@ flowchart LR
   entry["./verify, Bash<br/>builds spine and verify, then runs verify"]
   verify["tools/bin/verify, built from tools/ with Go<br/>finds the pieces by folder name, runs the steps"]
   subgraph tools["Tools: files in, findings out"]
-    spine["tools/bin/spine, built from tools/ with Go<br/>check, behaviors, stale, conform, guard"]
+    spine["tools/bin/spine, built from tools/ with Go<br/>check, behaviors, stale, conform, draw, guard"]
     rc["tools/run_checks.py"]
     shim["tools/adapter_shim.py<br/>a Python adapter over JSON lines"]
   end
@@ -74,6 +74,7 @@ flowchart TD
       check -- not sound --> skipm["skip the machine's other steps"]
       beh --> stale["spine stale<br/>checks/{m}/"]
       stale --> conf["spine conform with the line in<br/>conformance/adapter_{m}.cmd, from {root}"]
+      conf --> drw["spine draw with spec/{m}/drawing.yaml,<br/>its output compared with spec/{m}/drawing.svg"]
     end
     loop --> content["content checks: the line in<br/>{root}/checks/run.cmd, from {root}"]
     content --> f{"--full?"}

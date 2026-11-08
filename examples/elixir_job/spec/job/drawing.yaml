@@ -1,0 +1,13 @@
+# Where each state of spine.yaml sits in drawing.svg (#108), in units of the 860-wide drawing.
+# Written again, from the folder this file is in, with: spine draw spine.yaml drawing.yaml > drawing.svg
+states:
+  queued:    [110, 220]
+  running:   [560, 220]
+  succeeded: [770, 220]
+  retrying:  [335, 370]
+  discarded: [335, 590]
+edges:
+  running:
+    retrying: {label: [405, 270]}
+  retrying:
+    queued: {label: [240, 268]}

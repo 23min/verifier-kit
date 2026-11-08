@@ -77,8 +77,10 @@ turn the changed sections into a spine. Each gets a fixed bundle (section, gloss
 schema) and two instructions: decide every case, and write `undecided: "<what is missing>"`
 instead of guessing. `spine diff` compares the readings case by case and by behavior, and
 each disagreement becomes an issue with its shortest witness, phrased as a question. Your
-answers become the ratified spine. The same diff of a new reading against the current spine
-shows what a chapter edit means.
+answers become the ratified spine. You review it drawn as well as written: `spine draw` makes
+the drawing from the spine and a layout kept beside it, and `./verify` fails while the
+committed drawing is not what they make. The same diff of a new reading against the current
+spine shows what a chapter edit means.
 
 Limits: two readings can share a misreading; only formalizable content is covered.
 
@@ -241,7 +243,7 @@ growth; "still true" stamps later contradicted by an audit.
 
 | Part | Status |
 |---|---|
-| Spine format, `check`, `diff`, `hash`, `stale`, `behaviors`, `trace`, `conform`, `guard` | built, in Go (`tools/`); `./verify` builds it on every run |
+| Spine format, `check`, `diff`, `hash`, `draw`, `stale`, `behaviors`, `trace`, `conform`, `guard` | built, in Go (`tools/`); `./verify` builds it on every run |
 | `./verify`, gate examples for GitHub, GitLab, Claude Code, git hooks, code owners | built, in Go (`tools/`) behind a short Bash script; GitLab example not yet run |
 | Mutation (hand-picked), seeded faults | built |
 | Builder loop with Stop hook | run live with Claude Code |

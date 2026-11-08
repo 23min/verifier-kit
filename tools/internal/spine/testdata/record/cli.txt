@@ -29,6 +29,7 @@ exit 0
 | commands:
 |   spine check SPEC [--format text|json] [--junit FILE]
 |   spine hash SPEC
+|   spine draw SPEC LAYOUT
 |   spine diff A B [--format text|json] [--junit FILE] [--depth N]
 |   spine stale SPEC CHECKS_DIR [--format text|json] [--junit FILE]
 |   spine behaviors SPEC DIR [--format text|json] [--junit FILE]
@@ -48,6 +49,7 @@ exit 0
 | commands:
 |   spine check SPEC [--format text|json] [--junit FILE]
 |   spine hash SPEC
+|   spine draw SPEC LAYOUT
 |   spine diff A B [--format text|json] [--junit FILE] [--depth N]
 |   spine stale SPEC CHECKS_DIR [--format text|json] [--junit FILE]
 |   spine behaviors SPEC DIR [--format text|json] [--junit FILE]
@@ -67,6 +69,7 @@ exit 0
 | commands:
 |   spine check SPEC [--format text|json] [--junit FILE]
 |   spine hash SPEC
+|   spine draw SPEC LAYOUT
 |   spine diff A B [--format text|json] [--junit FILE] [--depth N]
 |   spine stale SPEC CHECKS_DIR [--format text|json] [--junit FILE]
 |   spine behaviors SPEC DIR [--format text|json] [--junit FILE]
@@ -877,6 +880,46 @@ exit 2
 |
 --- stderr
 | spine diff: unexpected argument "extra"; spine diff --help describes it
+|
+=== in tools/internal/spine/testdata: spine draw
+exit 2
+--- stdout
+|
+--- stderr
+| spine draw: SPEC is missing; spine draw --help describes it
+|
+=== in tools/internal/spine/testdata: spine draw --format json seeds/spine.yaml drawings/door.yaml
+exit 2
+--- stdout
+|
+--- stderr
+| spine draw: unknown option --format; spine draw --help describes it
+|
+=== in tools/internal/spine/testdata: spine draw --help
+exit 0
+--- stdout
+| usage: spine draw SPEC LAYOUT
+|
+| Prints SPEC as an SVG drawing, its states where LAYOUT puts them: each move an edge, every other
+| rule in a table. A label that overlaps something or leaves the drawing is a warning, on
+| standard error; the drawing is printed all the same.
+|
+| options:
+|   -h, --help               show this help
+|
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml
+exit 2
+--- stdout
+|
+--- stderr
+| spine draw: LAYOUT is missing; spine draw --help describes it
+|
+=== in tools/internal/spine/testdata: spine draw seeds/spine.yaml drawings/door.yaml extra
+exit 2
+--- stdout
+|
+--- stderr
+| spine draw: unexpected argument "extra"; spine draw --help describes it
 |
 === in tools/internal/spine/testdata: spine guard --b build/x seeds/policy.yaml src/a.py
 exit 2

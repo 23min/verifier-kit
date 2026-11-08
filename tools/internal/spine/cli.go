@@ -27,6 +27,10 @@ var commands = []command{
 			"they say."},
 	{"hash", []string{"SPEC"}, nil,
 		"Prints the whole spine's hash, spine@hash, then one hash per state/event cell, state/event@hash."},
+	{"draw", []string{"SPEC", "LAYOUT"}, nil,
+		"Prints SPEC as an SVG drawing, its states where LAYOUT puts them: each move an edge, every other\n" +
+			"rule in a table. A label that overlaps something or leaves the drawing is a warning, on\n" +
+			"standard error; the drawing is printed all the same."},
 	{"diff", []string{"A", "B"}, []string{"--format", "--junit", "--depth"},
 		"Compares two spines case by case, then by behavior over every event sequence up to the depth,\n" +
 			"reporting the shortest sequence for each difference."},
@@ -262,6 +266,18 @@ func Main(argv []string, stdin io.Reader, stdout, stderr io.Writer) int {
 					}
 				}
 				return 0
+			}
+			if cmd == "draw" {
+				layout, problems := loadLayout(readFile(cl.args[1]), spec)
+				findings = append(findings, problems...)
+				if findings.Errors() == 0 {
+					svg, warnings := drawing(spec, layout, cl.args[1])
+					io.WriteString(out, svg)
+					if warnings = append(findings, warnings...); len(warnings) > 0 {
+						emitText(stderr, warnings)
+					}
+					return 0
+				}
 			}
 			switch cmd {
 			case "check":

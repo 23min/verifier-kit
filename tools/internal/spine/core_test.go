@@ -21,7 +21,7 @@ var shell = map[string]bool{"adapter.go": true, "cli.go": true, "files.go": true
 // that prints, such as fmt.Println, needs no such import, and is for review to catch.
 var coreImports = map[string]bool{
 	"bytes": true, "crypto/sha256": true, "encoding/hex": true, "encoding/json": true, "errors": true,
-	"fmt": true, "regexp": true, "slices": true, "sort": true, "strconv": true, "strings": true,
+	"fmt": true, "math": true, "regexp": true, "slices": true, "sort": true, "strconv": true, "strings": true,
 	"unicode": true, "unicode/utf8": true, "github.com/23min/verifier-kit/tools/internal/yamldoc": true,
 }
 

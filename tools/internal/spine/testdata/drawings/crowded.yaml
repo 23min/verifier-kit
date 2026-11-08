@@ -1,0 +1,10 @@
+# States on top of each other, a label and a state off the drawing, and a label across two rows
+# of the legend, said once.
+states:
+  closed: [30, 220]
+  open:   [60, 240]
+  gone:   [850, 420]
+edges:
+  closed:
+    gone: {label: [900, 10]}
+    open: {label: [700, 78]}

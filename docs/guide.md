@@ -133,8 +133,16 @@ where those are, and "Ratified by the reviewed merge of this file." The format i
 
 - **An LLM** writes it from the answers, gets `spine check` to pass, and shows you `spine diff`
   of the spine against each reading (prompt [D](#d-the-spine)). Those diffs report findings, and
-  exit 1: each one should be a case one of your answers decided.
-- **You** review that case-by-case diff and merge the spine. The merge is the ratification.
+  exit 1: each one should be a case one of your answers decided. It also writes
+  `spec/<machine>/drawing.yaml`, where each state sits in the spine's drawing
+  (`docs/reference/drawing-layout.md`), and draws `spec/<machine>/drawing.svg` with `spine draw`
+  until it gives no warnings.
+- **You** review that case-by-case diff and the drawing, and merge the spine with its drawing.
+  The merge is the ratification.
+- **Why the drawing:** the YAML shows one rule at a time; the drawing shows the machine, its moves
+  as arrows and every other rule in a table, each rule once. It is made from the spine, so it
+  can't say something else: `./verify` fails while the committed drawing is not what `spine draw`
+  makes. Without a `drawing.yaml`, `./verify` skips the step.
 
 ## 7. Behaviors, if you want them
 
@@ -280,7 +288,9 @@ for you. CI runs `./verify --full` on its pull request.
 3. Compare each with the ratified spine, to see what the edit means, and answer the questions
    (step 5):
    `.verifier-kit/bin/spine diff spec/<machine>/readings/reading-a.yaml spec/<machine>/spine.yaml`.
-4. Ratify the changed spine (step 6).
+4. Ratify the changed spine (step 6). `./verify` reports the drawing as stale until `spine draw`
+   writes it again; the layout changes only when a new state needs a place or a label is in the
+   way.
 5. `./verify` now reports every check that cites a changed cell as stale: rewrite or re-cite them
    with the new hashes (step 9), and add mutants for new rules (step 10).
 6. Build (step 12).
@@ -295,6 +305,8 @@ installed (`.verifier-kit/VERSION` names it), for example:
   `https://raw.githubusercontent.com/23min/verifier-kit/v0.1.0/docs/reference/spine-format.md`
 - the tool contract:
   `https://raw.githubusercontent.com/23min/verifier-kit/v0.1.0/docs/reference/tool-contract.md`
+- the drawing layout, from the first release that has `spine draw`:
+  `https://raw.githubusercontent.com/23min/verifier-kit/<version>/docs/reference/drawing-layout.md`
 
 The readers (step 4) use the examples' prompt instead.
 
@@ -340,8 +352,11 @@ Write spec/<machine>/spine.yaml from spec/<machine>/readings/reading-a.yaml and 
 one per question. Change only the cases my answers decide. Head it with the lifecycle it is,
 that it was built from readings/ and my answers, where the answers are recorded, and "Ratified
 by the reviewed merge of this file." Run .verifier-kit/bin/spine check on it until it reports no
-errors, then show me .verifier-kit/bin/spine diff of the spine against each reading. Don't read
-the code.
+errors, then show me .verifier-kit/bin/spine diff of the spine against each reading. Then write
+or update spec/<machine>/drawing.yaml, where each state sits in the drawing (the drawing layout
+format), and run .verifier-kit/bin/spine draw spec/<machine>/spine.yaml
+spec/<machine>/drawing.yaml > spec/<machine>/drawing.svg, moving states and labels until it gives
+no warnings. Don't read the code.
 ```
 
 ### E. Behaviors

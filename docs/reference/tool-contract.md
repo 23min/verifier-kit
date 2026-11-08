@@ -21,8 +21,8 @@ this page names a file in that folder.
 - **Output:** text by default; `--format json` for machines, in UTF-8; `--junit FILE` additionally
   writes a JUnit XML report (one test case per error, or one passing case). The report writes
   each character XML can't hold as an escape, such as `\x1b`, and a byte of a file name that isn't
-  UTF-8 as `\xff`, so it always parses. `spine hash` is the exception: it prints hashes to copy,
-  not findings, and takes neither option.
+  UTF-8 as `\xff`, so it always parses. `spine hash` and `spine draw` are the exceptions: they
+  print hashes to copy and a drawing, not findings, and take neither option.
 - **Dependencies:** `spine` uses the Go standard library plus `go.yaml.in/yaml/v4`
   (`tools/go.mod`). `tools/run_checks.py` and `tools/adapter_shim.py` use the Python standard
   library only.
@@ -56,6 +56,7 @@ are part of the contract: new codes may be added, existing codes are never renam
 | `check` | `SPEC` | Validates the file, then: every state, event and variable combination has exactly one rule; every state is reachable; terminal states have no exits; worked examples replay to their expected end |
 | `diff` | `A B [--depth N]` | Compares two spines case by case, then by behavior over every sequence up to N events (default 4), reporting the shortest witness for each difference |
 | `hash` | `SPEC` | Prints the whole spine's hash, `spine@hash`, then one content hash per state/event cell: `state/event@hash`. Text only: `--format` and `--junit` are usage errors |
+| `draw` | `SPEC LAYOUT` | Prints the spine as an SVG drawing, its states where the layout file puts them (`drawing-layout.md`): each move to another state an edge, labelled with its event and condition, and every other rule an entry in a table of events by state. The same spine and layout give the same bytes. When the layout can't be drawn it prints the findings instead and exits 1. A label that overlaps something or leaves the drawing is a warning, printed on stderr in the text format, and the drawing is printed all the same. Like `hash`, `--format` and `--junit` are usage errors |
 | `stale` | `SPEC CHECKS_DIR` | Finds `covers: state/event@hash` and `covers: spine@hash` citations in the files under `CHECKS_DIR`, except binary ones (a file holding a NUL byte, such as Python's compiled `__pycache__` files), and reports stale, orphaned and uncovered cells, and text meant as a citation that isn't one. A check that cites the current whole spine counts every transition as cited |
 | `behaviors` | `SPEC DIR` | Replays every `.yaml` or `.yml` file in `DIR/valid/` (must be allowed) and `DIR/invalid/` (must be refused) |
 | `trace` | `SPEC FILE` | Replays one behavior file; for callers that run a validator once per fixture |
@@ -66,7 +67,7 @@ are part of the contract: new codes may be added, existing codes are never renam
 ./cmd/spine`); `./verify` builds it on every run. `go -C tools test ./...` checks it against a
 record of what it gives on every test input.
 
-All commands except `hash` accept `--format text|json` and `--junit FILE`. Every command that
+All commands except `hash` and `draw` accept `--format text|json` and `--junit FILE`. Every command that
 takes a spine validates it first and stops with the validation findings if it is invalid.
 
 The command comes first; its arguments and options follow in any order. An option is
@@ -81,13 +82,13 @@ is a usage error: one line on stderr, naming the command and what is wrong, and 
 
 | Code | Severity | From | Meaning |
 |---|---|---|---|
-| `spec-unreadable` | error | all | an input file (spine, reading, behavior file, policy) can't be read, isn't UTF-8 or isn't YAML, gives a key twice in one mapping, or escapes a surrogate such as `"\ud800"`; or a check file `stale` searches can't be read |
+| `spec-unreadable` | error | all | an input file (spine, reading, behavior file, policy, layout) can't be read, isn't UTF-8 or isn't YAML, gives a key twice in one mapping, or escapes a surrogate such as `"\ud800"`; or a check file `stale` searches can't be read |
 | `spec-shape` | error | all | a section of an input file has the wrong type, or a name or value isn't text |
 | `missing-key` | error | all | a required key of an input file is missing |
 | `unknown-key` | error | all | a key outside an input file's format, or a key that isn't text |
 | `yaml-boolean-key` | error | all | a key YAML read as a boolean (`on`, `off`, `yes`, `no`) |
 | `yaml-boolean-value` | error | all | a value YAML read as a boolean where a name was meant |
-| `bad-value` | error | all | a value outside its closed set, such as a state kind, a `terminal` that isn't true or false, a role the policy does not define, or an `expect` that isn't a declared state |
+| `bad-value` | error | all | a value outside its closed set, such as a state kind, a `terminal` that isn't true or false, a role the policy does not define, an `expect` that isn't a declared state, or a layout's state or edge the spine doesn't have |
 | `listed-twice` | error | all | an event, or a value of one variable, listed more than once in a spine or reading |
 | `bad-outcome` | error | all | a rule without exactly one outcome |
 | `bad-condition` | error | all | a condition outside the condition language (`spine-format.md`) |
@@ -118,6 +119,8 @@ is a usage error: one line on stderr, naming the command and what is wrong, and 
 | `untried-case` | error | `conform` | a case no run tried, because the code diverged on the way to its state |
 | `coverage` | info | `conform` | sequences run, the margin, and cases exercised |
 | `adapter-failed` | error | `conform` | the adapter command can't be started, exits before replying, breaks the protocol, or replies `{"error": ...}` to `new` or `observe`; the shim does when a Python adapter's `new()` or `observe()` raised, and exits before replying when the file can't be imported or lacks a function. `conform` stops there |
+| `layout-overlap` | warning | `draw` | a label overlaps a label, a state or an edge; an edge runs through a state; a state overlaps another; or a table entry is wider than its column |
+| `layout-outside` | warning | `draw` | a label or a state leaves the drawing |
 | `path-denied` | error | `guard` | a deny pattern for the role matches a changed file |
 | `path-not-allowed` | error | `guard` | no allow pattern for the role matches a changed file |
 | `unknown-role` | error | `guard` | no branch pattern matches |
@@ -220,7 +223,9 @@ the reason and exits 1 before any other step. Otherwise it runs `bin/verify` in 
 its arguments, which does the rest.
 
 Runs, per `spec/<machine>/spine.yaml`: `check`, then `behaviors` over `spec/<machine>/behaviors`,
-`stale` over `checks/<machine>`, and `conform` with the machine's adapter. Then the content
+`stale` over `checks/<machine>`, `conform` with the machine's adapter, and `draw` with
+`spec/<machine>/drawing.yaml`, whose output must be `spec/<machine>/drawing.svg` byte for byte;
+`draw`'s warnings are not shown. Then the content
 checks, and with `--full` the mutants. The adapter and the content checks are commands, in any
 language; the mutants are data, or a mutation tool's command:
 
@@ -281,15 +286,17 @@ report names then start with the root, slashes turned into dashes. Environment:
 than one ROOT, or a ROOT that is not a folder, is a usage error.
 
 Every step that does not run prints `skip  <step> (<reason>)`: the guard without `VERIFY_BASE`,
-behaviors without `spec/<machine>/behaviors/`, `stale` without `checks/<machine>/`, mutation
-without `--full`, and (in one line) a machine's remaining steps when its spine is not sound. A
-missing piece, or one given wrongly, is an error instead, reported per root, and so is a mutant
-the oracle doesn't catch:
+behaviors without `spec/<machine>/behaviors/`, `stale` without `checks/<machine>/`, the drawing
+without `spec/<machine>/drawing.yaml`, mutation without `--full`, and (in one line) a machine's
+remaining steps when its spine is not sound. A missing piece, or one given wrongly, is an error
+instead, reported per root, and so is a mutant the oracle doesn't catch:
 
 | Code | Severity | From | Meaning |
 |---|---|---|---|
 | `no-machines` | error | `./verify` | no `spec/*/spine.yaml` at all, including an `examples/*/` folder without `spec/` |
 | `no-adapter` | error | `./verify` | a machine has no `conformance/adapter_<machine>.cmd` |
+| `no-drawing` | error | `./verify` | a machine has `spec/<machine>/drawing.yaml` but no `drawing.svg` beside it, or it can't be read |
+| `stale-drawing` | error | `./verify` | `spec/<machine>/drawing.svg` is not what `spine draw` prints from the spine and its layout; the message says how to write it again |
 | `no-checks` | error | `./verify`; `run_checks.py` | from `./verify`: no `checks/run.cmd`; from `run_checks.py`: no `test_*` functions under the folder, which may be missing |
 | `no-mutation` | error | `./verify --full` | no `mutation/mutants.yaml` and no `mutation/mutate_*.cmd` |
 | `bad-command` | error | `./verify` | a `.cmd` file can't be read, is empty, holds more than one line, or can't be split; or a checks or mutation command's program can't be started |
