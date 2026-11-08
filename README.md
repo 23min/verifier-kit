@@ -45,7 +45,9 @@ builder writes the code, and a program decides whether they agree.
 - **A guarantee you can read, not a coverage percentage.** `spine conform` tries every case
   against the real code, from a shortest path to each state plus a margin: the classic method
   for testing state machines (Chow, 1978). A case it couldn't try is an error, and what it can
-  miss is written down under [Limits](#limits).
+  miss is written down under [Limits](#limits). Against models of a TLS server, an MQTT broker
+  and a bank card, with faults planted in them, it caught every fault the guarantee covers and
+  raised no false alarm ([benchmarks](docs/benchmarks.md)).
 - **It checks its own checks.** `./verify --full` plants bugs and fails if the oracle misses one,
   and a check that cites a spine cell is reported stale when that cell's rule changes.
 - **Any language, any agent, any CI.** The code is reached through an adapter that speaks JSON
@@ -131,7 +133,7 @@ examples/<name>/                 one worked example each, laid out like a projec
 examples/README.md               what every example has, checked by go -C examples test ./...
 demo/                            the toolkit's demos on the notes example: faults.sh, live-builder.sh
 integrations/                    CI, agent and git hook files, to copy when you want them
-docs/                            design (normative), architecture, decisions (adr/), reference, proposals (research/)
+docs/                            design (normative), architecture, decisions (adr/), reference, proposals (research/), benchmarks
 .github/workflows/verify.yml     this repo's own CI: go vet, both go tests, ./verify --full, demo/faults.sh
 ```
 

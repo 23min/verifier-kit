@@ -59,6 +59,7 @@ go -C tools test ./...   # runs spine on every test input, and ./verify on its f
                          # difference from their records (tools/internal/*/testdata/record/) fails
 go -C tools test ./internal/spine/ -update    # writes spine's record again; review its diff
 go -C tools test ./internal/verify/ -update   # writes ./verify's record again; review its diff
+go -C tools test ./internal/benchmarks/ -full -v -timeout 1h   # every mutant of the field models (#106), minutes
 go -C examples test ./...  # the examples' conventions (examples/README.md)
 ```
 

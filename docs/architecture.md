@@ -323,6 +323,12 @@ Bash `./verify`, and is what the change to commands (#69) and the Go `verify` (#
 against. Beside it, `plan_test.go` tests each of `verify`'s decisions without starting a
 program.
 
+`go test` also runs the benchmarks (`tools/internal/benchmarks/`, #106): `spine conform` against
+four Mealy machines from the Automata Wiki, with faults planted in them, each verdict checked
+against what ADR 0008's argument promises, computed by code that shares none of `spine`'s. The
+test binary is the adapter. Plain `go test` runs one mutant of each class, model and translation;
+`-full` runs them all (`docs/benchmarks.md`).
+
 ## Per machine, per root and repo-wide
 
 | Part | Scope today | How it finds its inputs |
