@@ -1,0 +1,6 @@
+# D08: a snooze between two failures doesn't count as an attempt.
+steps:
+  - "run answer=failed"
+  - "wait answer=rate_limited"
+  - "wait answer=failed"
+expect: retryable_2

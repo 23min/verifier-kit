@@ -1,0 +1,6 @@
+# D09: a snooze at the third attempt leaves the job scheduled, not discarded.
+steps:
+  - "run answer=failed"
+  - "wait answer=failed"
+  - "wait answer=rate_limited"
+expect: scheduled_2

@@ -580,7 +580,7 @@ func filesystemCases(t *testing.T, td, dir string) []spineCase {
 	return out
 }
 
-// exampleCases runs every command on both examples as they are: spines, readings, behaviors,
+// exampleCases runs every command on every example as it is: spines, readings, behaviors,
 // checks and the policy, and diff on every ordered pair of an example's spine and readings
 // (demo/faults.sh's scenario 5 among them) and on the two spines.
 func exampleCases(t *testing.T) []spineCase {

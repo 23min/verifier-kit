@@ -1,0 +1,5 @@
+# D11: a run during the backoff doesn't run the worker.
+steps:
+  - "run answer=failed"
+  - "run answer=accepted"
+expect: retryable_1

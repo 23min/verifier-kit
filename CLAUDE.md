@@ -47,7 +47,7 @@ Read before changing anything: `README.md`, `docs/design.md` (the design, normat
 ## Commands
 
 ```sh
-./verify             # fast checks on every example, a few seconds
+./verify             # fast checks on every example, about fifteen seconds
 ./verify --full      # also checks the checker (mutation)
 ./verify examples/notes --full   # one example only
 demo/faults.sh       # acceptance test: every seeded fault must be caught; exits 1 otherwise
@@ -66,8 +66,10 @@ go -C examples test ./...  # the examples' conventions (examples/README.md)
 `./verify` needs Go 1.27, Bash and the `git` program; it builds `spine` and `verify` with Go,
 as `demo/faults.sh` builds `spine`. A project needs Python only for the pieces it writes in
 Python. This repo's examples need Python 3 as `python3` on `PATH`, with PyYAML for ref_sync's
-checks, and Elixir 1.18 or later for elixir_job's. The devcontainer image has all of them; don't
-create a `.venv` there (the repo is shared with the host). Elsewhere:
+checks, and Elixir 1.18 or later for elixir_job's and oban_job's. oban_job also needs Oban's Hex
+packages: `elixir examples/oban_job/src/deps.exs` installs them once, online, and its commands
+then run offline. The devcontainer has all of them, the packages through its post-create step;
+don't create a `.venv` there (the repo is shared with the host). Elsewhere:
 `uv venv && uv pip install -r requirements.txt`, then `source .venv/bin/activate`, so that the
 examples' command lines find its `python3`; `./verify` picks no interpreter itself.
 `demo/live-builder.sh` starts a real Claude Code session and costs money; run it only when asked.

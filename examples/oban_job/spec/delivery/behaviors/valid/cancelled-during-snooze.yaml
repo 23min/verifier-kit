@@ -1,0 +1,5 @@
+# D14: an operator cancels the job while it waits out its snooze.
+steps:
+  - "run answer=rate_limited"
+  - "cancel answer=accepted"
+expect: cancelled

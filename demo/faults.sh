@@ -6,7 +6,8 @@
 #   demo/faults.sh 3        run scenario 3 only
 #
 # Exit 0 when every scenario behaves as expected, 1 otherwise. CI runs this on every push.
-# Needs python3 with PyYAML, Go, git, and elixir for scenarios 11-14.
+# Needs python3 with PyYAML, Go, git, and elixir with oban_job's Hex packages installed
+# (CLAUDE.md).
 set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SCRATCH="$(mktemp -d)"
@@ -187,10 +188,12 @@ if scenario 14 "Checking the checker: every example's code already fails its ora
   sed -i.bak 's/self.remote.push(parent, files, force=False)/self.remote.push(parent, files, force=True)/' \
     "$W/examples/ref_sync/src/ref_sync_client.py"
   sed -i.bak 's/def transition(:running, :fail, :last), do: {:ok, :discarded}/def transition(:running, :fail, :last), do: {:ok, :retrying}/' "$W/$JOB"
+  sed -i.bak 's/:bounced -> {:cancel, :bounced}/:bounced -> {:snooze, 60}/' "$W/examples/oban_job/src/mailer.ex"
   show ./verify --full
   expect 1 "oracle-fails       examples/notes/mutation/mutants.yaml: on the code as it is, notes: code conforms to spine failed" \
     "oracle-fails       examples/ref_sync/mutation/mutants.yaml: on the code as it is, content checks failed" \
-    "oracle-fails       examples/elixir_job/mutation/mutants.yaml: on the code as it is, job: code conforms to spine, content checks failed"
+    "oracle-fails       examples/elixir_job/mutation/mutants.yaml: on the code as it is, job: code conforms to spine, content checks failed" \
+    "oracle-fails       examples/oban_job/mutation/mutants.yaml: on the code as it is, delivery: code conforms to spine failed"
 fi
 
 # The Stop hook's reply, read as JSON, as Claude Code reads it.

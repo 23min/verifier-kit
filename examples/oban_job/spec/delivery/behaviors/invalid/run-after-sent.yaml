@@ -1,0 +1,4 @@
+# D5: a completed job never runs again.
+steps:
+  - "run answer=accepted"
+  - "run answer=accepted"

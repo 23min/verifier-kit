@@ -1,0 +1,6 @@
+# D03: all three attempts fail; there is never a fourth.
+steps:
+  - "run answer=failed"
+  - "wait answer=failed"
+  - "wait answer=failed"
+expect: discarded

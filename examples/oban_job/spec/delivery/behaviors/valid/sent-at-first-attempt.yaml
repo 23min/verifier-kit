@@ -1,0 +1,4 @@
+# D01: the server accepts the first attempt.
+steps:
+  - "run answer=accepted"
+expect: completed

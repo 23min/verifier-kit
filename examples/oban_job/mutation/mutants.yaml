@@ -1,0 +1,37 @@
+# The mutants ./verify --full makes in a copy of this example: each one edit to src/ that the
+# oracle must catch. `find` must occur exactly once in `file` (docs/reference/tool-contract.md).
+
+- name: 'a bounce is snoozed'
+  file: src/mailer.ex
+  find: ':bounced -> {:cancel, :bounced}'
+  replace: ':bounced -> {:snooze, 60}'
+
+- name: 'a rate limit uses an attempt'
+  file: src/mailer.ex
+  find: ':rate_limited -> {:snooze, 60}'
+  replace: ':rate_limited -> {:error, :rate_limited}'
+
+- name: 'one attempt too many'
+  file: src/mailer.ex
+  find: 'max_attempts: 3'
+  replace: 'max_attempts: 4'
+
+- name: 'cancel does nothing'
+  file: src/mailer.ex
+  find: 'def cancel(job_id), do: Oban.cancel_job(job_id)'
+  replace: 'def cancel(_job_id), do: :ok'
+
+- name: 'the backoff does not grow'
+  file: src/mailer.ex
+  find: 'def backoff(%Oban.Job{attempt: attempt}), do: 30 * attempt'
+  replace: 'def backoff(%Oban.Job{attempt: _attempt}), do: 30'
+
+- name: 'a short snooze'
+  file: src/mailer.ex
+  find: ':rate_limited -> {:snooze, 60}'
+  replace: ':rate_limited -> {:snooze, 6}'
+
+- name: 'the email goes elsewhere'
+  file: src/mailer.ex
+  find: 'Mailer.server().deliver(to)'
+  replace: 'Mailer.server().deliver("postmaster@example.com")'

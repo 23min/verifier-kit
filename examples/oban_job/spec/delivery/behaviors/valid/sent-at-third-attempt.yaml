@@ -1,0 +1,6 @@
+# D02: two attempts fail and the third is accepted.
+steps:
+  - "run answer=failed"
+  - "wait answer=failed"
+  - "wait answer=accepted"
+expect: completed

@@ -1,0 +1,5 @@
+# D05: a bounce cancels the job though it has attempts left.
+steps:
+  - "run answer=failed"
+  - "wait answer=bounced"
+expect: cancelled

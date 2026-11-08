@@ -1,0 +1,6 @@
+# D1: after its third failed attempt the job is discarded, not retried.
+steps:
+  - "run answer=failed"
+  - "wait answer=failed"
+  - "wait answer=failed"
+expect: retryable_2
