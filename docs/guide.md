@@ -305,8 +305,8 @@ installed (`.verifier-kit/VERSION` names it), for example:
   `https://raw.githubusercontent.com/23min/verifier-kit/v0.1.0/docs/reference/spine-format.md`
 - the tool contract:
   `https://raw.githubusercontent.com/23min/verifier-kit/v0.1.0/docs/reference/tool-contract.md`
-- the drawing layout, from the first release that has `spine draw`:
-  `https://raw.githubusercontent.com/23min/verifier-kit/<version>/docs/reference/drawing-layout.md`
+- the drawing layout, in releases from v0.2.0, the first that has `spine draw`:
+  `https://raw.githubusercontent.com/23min/verifier-kit/v0.2.0/docs/reference/drawing-layout.md`
 
 The readers (step 4) use the examples' prompt instead.
 
