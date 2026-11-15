@@ -1,10 +1,32 @@
 # Examples
 
 Each folder here is one example, laid out like a project that uses the toolkit
-(`docs/adr/0001-examples-layout.md`). The examples differ in what they show and in what their
-language dictates, never otherwise in how they are set up (`docs/adr/0007-no-language-built-in.md`).
-These conventions hold for this repo's examples only, not for projects. `conventions_test.go`
-checks the ones that are mechanical: `go -C examples test ./...`.
+(`docs/adr/0001-examples-layout.md`). Its README says what it shows, how to run it and what it
+needs:
+
+- [notes](notes/README.md): a notes service with drafts, publishing, trash and roles, in Python.
+  It is also the toolkit's acceptance test.
+- [ref_sync](ref_sync/README.md): a protocol, two clients publishing workflow events to one Git
+  ref, checked through every interleaving of their steps, lost replies and crashes up to a
+  bound, and against real Git.
+- [elixir_job](elixir_job/README.md): a background job with retries, written in Elixir. Its
+  adapter and content checks are commands, as every example's are, so it shows the toolkit
+  checking a project in another language.
+- [oban_job](oban_job/README.md): an email sent from an Oban job. Its spine, written from Oban's
+  documentation, is checked against Oban itself, so the toolkit is tried on code it didn't write.
+
+`./verify` checks them all, and `./verify examples/<name>` one alone.
+
+## Adding an example
+
+An example is a folder `examples/<name>/` with the layout below and a `README.md`. Plain
+`./verify` picks it up. It needs at least one content check and, for `--full`, one mutant; a
+missing piece is an error for that example only.
+
+The examples differ in what they show and in what their language dictates, never otherwise in
+how they are set up (`docs/adr/0007-no-language-built-in.md`). These conventions hold for this
+repo's examples only, not for projects. `conventions_test.go` checks the ones that are
+mechanical: `go -C examples test ./...`.
 
 ## What every example has
 

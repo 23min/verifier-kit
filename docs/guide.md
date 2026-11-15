@@ -3,7 +3,8 @@
 This guide takes a project from nothing to gated builds: an oracle you own (a spine, its checks
 and an adapter) and a builder agent that may change only the code, checked by `./verify` from
 an agent hook, a git hook and CI. It says, step by step, what an LLM can do for you and what
-you have to do yourself, and why.
+you have to do yourself, and why. [The introduction](introduction.md) explains each of these
+parts first, in order.
 
 The split follows the design's principles (`docs/design.md`):
 
@@ -53,7 +54,7 @@ Pick one thing in the code with a few named states, events that move it between 
 variables with small sets of values, such as a role: an order, an invoice, a document under
 review. Every non-terminal state, event and combination of values is one case the spine decides
 and `./verify` tries, so keep them few. One lifecycle is one machine; the toolkit checks each
-machine alone (README, "Limits").
+machine alone (`docs/introduction.md`, "Limits").
 
 - **An LLM** reads the code and proposes candidates (prompt [A](#a-finding-a-lifecycle)).
 - **You** choose one, and its name: the machine's folder name, such as `order`.
@@ -266,7 +267,7 @@ commit them that way.
 - **You** make CI a required check on a protected branch, name the owners in `CODEOWNERS`, and
   let the builder push only to `build/*` branches: the path guard trusts the branch name.
 - **Why:** only a required check is a gate; the hooks make failures cheap to fix early, and each
-  can be bypassed (README, "Jacking it in").
+  can be bypassed (`docs/design.md`, "Gates").
 
 ## 12. Build
 

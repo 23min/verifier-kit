@@ -7,6 +7,23 @@ folder name, such as `notes`, and `{root}` is the folder `./verify` checks: a pr
 with `spec/`, `checks/`, `conformance/`, `src/` and `mutation/`. In this repo each
 `examples/<name>/` is a root; a project that uses the toolkit is its own root.
 
+## The repo
+
+```
+verify                           the single entry point: builds spine and verify, then runs verify
+install.sh                       installs the toolkit into a project, or updates it
+tools/cmd/, tools/internal/      spine and verify, in Go, and their tests (no knowledge of any CI or agent)
+tools/run_checks.py              runs Python content checks; a Python project's checks/run.cmd calls it
+tools/adapter_shim.py            serves a Python adapter over the adapter protocol; an adapter line calls it
+policy.yaml                      which branch role may change which paths
+examples/<name>/                 one worked example each, laid out like a project (examples/README.md)
+demo/                            the toolkit's demos on the notes example: faults.sh, live-builder.sh
+integrations/                    CI, agent and git hook files, to copy when you want them
+docs/                            introduction, guide, comparison, design (normative), architecture,
+                                 decisions (adr/), reference, proposals (research/), benchmarks
+.github/workflows/verify.yml     this repo's own CI: go vet, both go tests, ./verify --full, demo/faults.sh
+```
+
 ## Layers
 
 Callers know about `./verify`. `./verify` knows the folder layout. The tools know only the

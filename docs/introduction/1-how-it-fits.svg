@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 560" width="1040" height="560">
+  <title>How verifier-kit fits together</title>
+  <style>
+    :root {
+      --surface: #ffffff; --ink: #15202b; --ink-2: #3b4755; --muted: #5a6676;
+      --line: #c6ced8; --line-2: #8a96a5;
+      --zone-n: #f2f4f7; --zone-you: #f3f1fb; --zone-code: #fbf2f4;
+      --you: #e7e3f7; --you-s: #6556b0;
+      --llm: #f8e3e8; --llm-s: #b0465c;
+      --prog: #ddefe3; --prog-s: #2f7a4c;
+      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --surface: #151d26; --ink: #e2e8ee; --ink-2: #b6c1cd; --muted: #95a3b2;
+        --line: #33404f; --line-2: #627082;
+        --zone-n: #1a232d; --zone-you: #1d1a33; --zone-code: #2a1a20;
+        --you: #272245; --you-s: #a99df2;
+        --llm: #3a1d26; --llm-s: #ec8fa3;
+        --prog: #14291d; --prog-s: #6fc593;
+      }
+    }
+    .bg { fill: var(--surface); stroke: var(--line); }
+    .z-n { fill: var(--zone-n); stroke: var(--line); }
+    .z-you { fill: var(--zone-you); stroke: var(--line); }
+    .z-code { fill: var(--zone-code); stroke: var(--line); }
+    .n { fill: var(--surface); stroke: var(--line-2); stroke-width: 1.2; }
+    .n.you { fill: var(--you); stroke: var(--you-s); }
+    .n.llm { fill: var(--llm); stroke: var(--llm-s); }
+    .n.prog { fill: var(--prog); stroke: var(--prog-s); }
+    .e { fill: none; stroke: var(--ink-2); stroke-width: 1.4; }
+    .mk { fill: var(--ink-2); }
+    .tt { font: 600 12.5px var(--font-body); fill: var(--ink); }
+    .tm { font: 600 13px var(--font-mono); fill: var(--ink); }
+    .ts { font: 400 11px var(--font-body); fill: var(--muted); }
+    .tz { font: 500 10.5px var(--font-mono); letter-spacing: 0.06em; fill: var(--muted); }
+    .tl { font: 400 11.5px var(--font-body); fill: var(--ink-2); }
+    /* An edge label carries a halo in the colour beneath it, so a line that
+       passes under the text does not strike through it. */
+    .te { font: 400 11px var(--font-body); fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+    .te.on-n { stroke: var(--zone-n); }
+  </style>
+  <defs>
+    <marker id="fit-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="mk" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0.5" y="0.5" width="1039" height="559" rx="10"/>
+
+  <!-- From prose to spine -->
+  <rect class="z-n" x="16" y="16" width="1008" height="170" rx="8"/>
+  <text class="tz" x="32" y="38">FROM PROSE TO SPINE</text>
+
+  <rect class="n you" x="40" y="78" width="160" height="56" rx="6"/>
+  <text class="tt" x="120" y="102" text-anchor="middle">chapter</text>
+  <text class="ts" x="120" y="120" text-anchor="middle">what you want, in prose</text>
+
+  <rect class="n llm" x="262" y="52" width="156" height="48" rx="6"/>
+  <text class="tt" x="340" y="72" text-anchor="middle">reader A</text>
+  <text class="ts" x="340" y="89" text-anchor="middle">one model, no code</text>
+
+  <rect class="n llm" x="262" y="112" width="156" height="48" rx="6"/>
+  <text class="tt" x="340" y="132" text-anchor="middle">reader B</text>
+  <text class="ts" x="340" y="149" text-anchor="middle">another model, no code</text>
+
+  <rect class="n prog" x="480" y="78" width="152" height="56" rx="6"/>
+  <text class="tm" x="556" y="102" text-anchor="middle">spine diff</text>
+  <text class="ts" x="556" y="120" text-anchor="middle">compares every case</text>
+
+  <rect class="n you" x="840" y="78" width="160" height="56" rx="6"/>
+  <text class="tt" x="920" y="102" text-anchor="middle">your answers</text>
+  <text class="ts" x="920" y="120" text-anchor="middle">one per question</text>
+
+  <path class="e" d="M200,106 C228,106 232,76 260,76" marker-end="url(#fit-arrow)"/>
+  <path class="e" d="M200,106 C228,106 232,136 260,136" marker-end="url(#fit-arrow)"/>
+  <path class="e" d="M418,76 C446,76 450,100 478,100" marker-end="url(#fit-arrow)"/>
+  <path class="e" d="M418,136 C446,136 450,112 478,112" marker-end="url(#fit-arrow)"/>
+  <text class="te on-n" x="230" y="110" text-anchor="middle">reads</text>
+  <text class="te on-n" x="449" y="110" text-anchor="middle">readings</text>
+  <path class="e" d="M632,106 H838" marker-end="url(#fit-arrow)"/>
+  <text class="te on-n" x="735" y="98" text-anchor="middle">questions, each with a run</text>
+
+  <!-- The oracle -->
+  <rect class="z-you" x="16" y="210" width="1008" height="120" rx="8"/>
+  <text class="tz" x="32" y="232">THE ORACLE · YOURS · THE BUILDER CAN'T CHANGE IT</text>
+
+  <rect class="n you" x="40" y="250" width="160" height="56" rx="6"/>
+  <text class="tt" x="120" y="274" text-anchor="middle">mutants</text>
+  <text class="ts" x="120" y="292" text-anchor="middle">planted bugs</text>
+
+  <rect class="n you" x="240" y="250" width="160" height="56" rx="6"/>
+  <text class="tt" x="320" y="274" text-anchor="middle">content checks</text>
+  <text class="ts" x="320" y="292" text-anchor="middle">text, totals, formats</text>
+
+  <rect class="n you" x="440" y="250" width="160" height="56" rx="6"/>
+  <text class="tt" x="520" y="274" text-anchor="middle">behaviors</text>
+  <text class="ts" x="520" y="292" text-anchor="middle">runs you agree on</text>
+
+  <rect class="n you" x="640" y="250" width="160" height="56" rx="6"/>
+  <text class="tt" x="720" y="274" text-anchor="middle">adapter</text>
+  <text class="ts" x="720" y="292" text-anchor="middle">translates, never decides</text>
+
+  <rect class="n you" x="840" y="250" width="160" height="56" rx="6"/>
+  <text class="tt" x="920" y="274" text-anchor="middle">spine</text>
+  <text class="ts" x="920" y="292" text-anchor="middle">one rule for every case</text>
+
+  <path class="e" d="M920,134 V248" marker-end="url(#fit-arrow)"/>
+  <text class="te" x="928" y="202">make</text>
+
+  <!-- The code -->
+  <rect class="z-code" x="620" y="360" width="404" height="120" rx="8"/>
+  <text class="tz" x="1008" y="382" text-anchor="end">THE CODE · THE BUILDER'S</text>
+
+  <rect class="n" x="650" y="400" width="140" height="56" rx="6"/>
+  <text class="tm" x="720" y="424" text-anchor="middle">src/</text>
+  <text class="ts" x="720" y="442" text-anchor="middle">the code</text>
+
+  <rect class="n llm" x="860" y="400" width="140" height="56" rx="6"/>
+  <text class="tt" x="930" y="424" text-anchor="middle">builder</text>
+  <text class="ts" x="930" y="442" text-anchor="middle">an agent</text>
+
+  <path class="e" d="M860,428 H792" marker-end="url(#fit-arrow)"/>
+  <text class="te" x="826" y="420" text-anchor="middle">changes</text>
+
+  <path class="e" d="M720,306 V398" marker-end="url(#fit-arrow)"/>
+  <text class="te" x="728" y="350">new · apply · observe</text>
+
+  <!-- Checking -->
+  <rect class="n" x="40" y="400" width="160" height="56" rx="6"/>
+  <text class="tt" x="120" y="424" text-anchor="middle">gates</text>
+  <text class="ts" x="120" y="442" text-anchor="middle">hooks and CI</text>
+
+  <rect class="n prog" x="240" y="392" width="320" height="72" rx="6"/>
+  <text class="tm" x="400" y="416" text-anchor="middle">./verify</text>
+  <text class="ts" x="400" y="434" text-anchor="middle">checks the spine, runs conform and the</text>
+  <text class="ts" x="400" y="450" text-anchor="middle">content checks; plants bugs with --full</text>
+
+  <path class="e" d="M200,428 H238" marker-end="url(#fit-arrow)"/>
+  <text class="te" x="219" y="420" text-anchor="middle">call</text>
+
+  <path class="e" d="M400,392 V332" marker-end="url(#fit-arrow)"/>
+  <text class="te" x="408" y="366">reads</text>
+
+  <path class="e" d="M480,464 V500 H930 V458" marker-end="url(#fit-arrow)"/>
+  <text class="te" x="705" y="494" text-anchor="middle">fails with the shortest run that shows it</text>
+
+  <!-- Legend -->
+  <rect class="n you" x="40" y="526" width="14" height="14" rx="3"/>
+  <text class="tl" x="62" y="537">yours</text>
+  <rect class="n llm" x="130" y="526" width="14" height="14" rx="3"/>
+  <text class="tl" x="152" y="537">an LLM session</text>
+  <rect class="n prog" x="276" y="526" width="14" height="14" rx="3"/>
+  <text class="tl" x="298" y="537">a program that decides</text>
+</svg>
