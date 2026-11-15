@@ -65,7 +65,9 @@ machine alone (`docs/introduction.md`, "Limits").
 glossary. This repo's examples use seven sections, a good shape to start from: 1. Glossary,
 2. the process, 3. What must hold, 4. Scenarios, 5. Assumptions, 6. Not covered, 7. What the
 lifecycle does not show (`examples/README.md`). What you haven't decided goes in the section it
-belongs to, marked "Open question:", not smoothed over.
+belongs to, marked "Open question:", not smoothed over. When a step sends something to another
+system, such as a mail or a commit, the glossary names it as an output, and section 2 says what
+each step sends (`docs/reference/spine-format.md`, "Outputs").
 
 - **An LLM**, the spec partner, drafts it with you, asks what it needs, and marks its open
   questions (prompt [B](#b-the-spec-partner)).
@@ -80,7 +82,10 @@ Two models each turn the chapter into a spine without seeing the code or each ot
    from the release you installed:
    `https://raw.githubusercontent.com/23min/verifier-kit/v0.1.0/examples/notes/spec/notes/readings/prompt.md`.
    In its rule 1, change `machine: note` to your machine, and say how many variables the
-   glossary declares.
+   glossary declares. When the glossary names outputs, rule 1 also says how to write them, as
+   oban_job's does: "Declare […] the glossary's outputs under `outputs:`. Give every rule that
+   moves or stays `outputs:` with what its step sends, `[<output>]` or `[]` for nothing; where
+   the chapter doesn't say what a step sends, the rule is undecided (rule 3)."
 2. For each reader, fill the prompt in: replace `{chapter}` with your chapter's text, and
    `{spine_format}` with the spine format's text, from
    `https://raw.githubusercontent.com/23min/verifier-kit/v0.1.0/docs/reference/spine-format.md`.
@@ -330,7 +335,8 @@ lives. Change nothing.
 ```text
 You are my spec partner for one lifecycle, <machine>. Help me write spec/<machine>/chapter.md:
 what it must do, in plain prose, with these sections: 1. Glossary (every state, event and
-variable with its values; the rest of the chapter uses only these names), 2. the process,
+variable with its values, and every output, something a step sends to another system; the rest
+of the chapter uses only these names), 2. the process,
 3. What must hold, 4. Scenarios, 5. Assumptions, 6. Not covered, 7. What the lifecycle does not
 show. A section with nothing to say says "None." Ask me what you need. Where I haven't decided
 something, write it in the section it belongs to, marked "Open question:"; never fill a gap from

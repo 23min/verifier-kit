@@ -7,6 +7,7 @@ package examples
 // `go -C examples test ./...` runs it.
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -41,6 +42,8 @@ var (
 		`chapter\.md [0-9a-f]{40}, readings/prompt\.md [0-9a-f]{40}, docs/reference/spine-format\.md [0-9a-f]{40}\. `)
 	spineHeader = regexp.MustCompile(`^The lifecycle of .+ \(chapter\.md, section 2\)\. Built on \d{4}-\d{2}-\d{2} from readings/ ` +
 		`and the owner's answers in #\d+: .+ Ratified by the reviewed merge of this file\.$`)
+	// spineOutputs is a spine's declared outputs, as a flow list: outputs: [a, b].
+	spineOutputs = regexp.MustCompile(`(?m)^outputs:\s*\[([^\]]*)\]\s*$`)
 	// rule1 is the prompt's first rule, which names the machine and its variables.
 	rule1 = regexp.MustCompile(`(?s)\n1\. .*?\n2\. `)
 )
@@ -69,6 +72,7 @@ func TestConventions(t *testing.T) {
 				checkChapter(t, filepath.Join(spec, "chapter.md"))
 				checkReadings(t, filepath.Join(spec, "readings"))
 				checkSpine(t, spine)
+				checkOutputs(t, spine, filepath.Join(spec, "chapter.md"))
 				prompts[dir] = rule1.ReplaceAllString(read(t, filepath.Join(spec, "readings", "prompt.md")), "\n1. \n2. ")
 			}
 			if got := names(t, filepath.Join(dir, "mutation")); !reflect.DeepEqual(got, []string{"mutants.yaml"}) {
@@ -137,6 +141,34 @@ func checkSpine(t *testing.T, path string) {
 	}
 	if regexp.MustCompile(`(?m)^examples:`).MatchString(read(t, path)) {
 		t.Errorf("%s has worked examples; sample runs go in behaviors/", path)
+	}
+}
+
+// checkOutputs: a chapter whose spine declares outputs names each one in its glossary, and says in
+// section 2 what each step sends (#116).
+func checkOutputs(t *testing.T, spine, chapter string) {
+	t.Helper()
+	m := spineOutputs.FindStringSubmatch(read(t, spine))
+	if m == nil {
+		if regexp.MustCompile(`(?m)^outputs:`).MatchString(read(t, spine)) {
+			t.Errorf("%s: write its outputs on one line, as outputs: [a, b], so that this test can read them", spine)
+		}
+		return
+	}
+	text := read(t, chapter)
+	section := func(n int) string {
+		_, after, _ := strings.Cut(text, fmt.Sprintf("\n## %d. ", n))
+		before, _, _ := strings.Cut(after, "\n## ")
+		return before
+	}
+	for _, name := range strings.Split(m[1], ",") {
+		name = strings.Trim(strings.TrimSpace(name), `"'`)
+		if !strings.Contains(section(1), "**"+name+"**") {
+			t.Errorf("%s declares the output %s, which the glossary of %s doesn't name", spine, name, chapter)
+		}
+		if !strings.Contains(section(2), name) {
+			t.Errorf("%s declares the output %s, which section 2 of %s doesn't mention", spine, name, chapter)
+		}
 	}
 }
 

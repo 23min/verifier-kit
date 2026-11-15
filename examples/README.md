@@ -35,8 +35,12 @@ mechanical: `go -C examples test ./...`.
 - `spec/<machine>/chapter.md`: a title and a short introduction, then seven numbered sections:
   1. Glossary; 2. the process, named for it; 3. What must hold; 4. Scenarios; 5. Assumptions;
   6. Not covered; 7. What the lifecycle does not show. A section with nothing to say says "None."
+  When the spine declares outputs, the glossary names each one in bold, and section 2 says what
+  each step sends.
 - `spec/<machine>/readings/`: `prompt.md`, the instructions both readers are given, the same in
-  every example but for rule 1, which names the machine and its variables; and
+  every example but for rule 1, which names the machine and its variables, and, where the spine
+  has outputs, says to declare the glossary's outputs and give every rule that moves or stays
+  what its step sends, or leave the rule undecided where the chapter doesn't say; and
   `reading-a.yaml` and `reading-b.yaml`, by two different models. Each reading is the reader's
   reply, unedited, under a header naming the reader, its model, the date, and the
   `git hash-object` of the chapter, the prompt and `docs/reference/spine-format.md` it was made
