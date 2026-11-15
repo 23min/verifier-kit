@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 1452" width="860" height="1452">
+  <title>What ./verify runs, from its arguments to its summary line</title>
+  <style>
+    :root {
+      --surface: #ffffff; --ink: #15202b; --ink-2: #3b4755; --muted: #5a6676;
+      --line: #c6ced8; --line-2: #8a96a5; --zone-n: #f2f4f7; --zone-in: #e7ebf0;
+      --you: #e7e3f7; --you-s: #6556b0;
+      --code: #f8e3e8; --code-s: #b0465c;
+      --prog: #ddefe3; --prog-s: #2f7a4c;
+      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --surface: #151d26; --ink: #e2e8ee; --ink-2: #b6c1cd; --muted: #95a3b2;
+        --line: #33404f; --line-2: #627082; --zone-n: #1a232d; --zone-in: #212c38;
+        --you: #272245; --you-s: #a99df2;
+        --code: #3a1d26; --code-s: #ec8fa3;
+        --prog: #14291d; --prog-s: #6fc593;
+      }
+    }
+    .bg { fill: var(--surface); stroke: var(--line); }
+    .z-n { fill: var(--zone-n); stroke: var(--line); }
+    .z-in { fill: var(--zone-in); stroke: var(--line); }
+    .n { fill: var(--surface); stroke: var(--line-2); stroke-width: 1.2; }
+    .n.you { fill: var(--you); stroke: var(--you-s); }
+    .n.code { fill: var(--code); stroke: var(--code-s); }
+    .n.prog { fill: var(--prog); stroke: var(--prog-s); }
+    .e { fill: none; stroke: var(--ink-2); stroke-width: 1.4; }
+    .mk { fill: var(--ink-2); }
+    .tt { font: 600 14px var(--font-body); fill: var(--ink); }
+    .tm { font: 600 14px var(--font-mono); fill: var(--ink); }
+    .ts { font: 400 14px var(--font-body); fill: var(--muted); }
+    .tc { font: 400 14px var(--font-mono); fill: var(--muted); }
+    .tz { font: 500 14px var(--font-mono); letter-spacing: 0.06em; fill: var(--muted); }
+    .tl { font: 400 14px var(--font-body); fill: var(--ink-2); }
+    /* An edge label carries a halo in the colour beneath it, so a line that
+       passes under the text does not strike through it. */
+    .te { font: 400 14px var(--font-body); fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+    .te.on-in { stroke: var(--zone-in); }
+    .te.on-n { stroke: var(--zone-n); }
+  </style>
+  <defs>
+    <marker id="runs-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="mk" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0.5" y="0.5" width="859" height="1451" rx="10"/>
+
+  <!-- The zones, under everything else -->
+  <rect class="z-n" x="16" y="600" width="828" height="720" rx="8"/>
+  <text class="tz" x="32" y="624">ONCE PER ROOT</text>
+  <rect class="z-in" x="32" y="640" width="796" height="424" rx="8"/>
+  <text class="tz" x="48" y="664">ONCE PER {root}/spec/{m}/spine.yaml</text>
+
+  <!-- Start and build -->
+  <rect class="n prog" x="170" y="20" width="240" height="40" rx="20"/>
+  <text class="tm" x="290" y="45" text-anchor="middle">./verify [ROOT] [--full]</text>
+  <path class="e" d="M290,60 V82" marker-end="url(#runs-arrow)"/>
+
+  <rect class="n prog" x="32" y="84" width="516" height="56" rx="6"/>
+  <text class="tm" x="290" y="107" text-anchor="middle">go -C tools build: tools/bin/spine and tools/bin/verify</text>
+  <text class="ts" x="290" y="127" text-anchor="middle">without Go, FAIL spine and verify built, exit 1</text>
+  <path class="e" d="M290,140 V164" marker-end="url(#runs-arrow)"/>
+
+  <!-- Which roots -->
+  <polygon class="n" points="290,166 390,198 290,230 190,198"/>
+  <text class="tt" x="290" y="203" text-anchor="middle">ROOT given?</text>
+  <path class="e" d="M390,198 H530" marker-end="url(#runs-arrow)"/>
+  <text class="te" x="460" y="190" text-anchor="middle">yes</text>
+  <rect class="n" x="532" y="178" width="160" height="40" rx="6"/>
+  <text class="tt" x="612" y="203" text-anchor="middle">that folder</text>
+
+  <path class="e" d="M290,230 V254" marker-end="url(#runs-arrow)"/>
+  <text class="te" x="298" y="247">no</text>
+  <polygon class="n" points="290,256 410,300 290,344 170,300"/>
+  <text class="tt" x="290" y="296" text-anchor="middle">spec/ here, or</text>
+  <text class="tt" x="290" y="314" text-anchor="middle">no examples/*/?</text>
+  <path class="e" d="M410,300 H530" marker-end="url(#runs-arrow)"/>
+  <text class="te" x="470" y="292" text-anchor="middle">yes</text>
+  <rect class="n" x="532" y="280" width="160" height="40" rx="6"/>
+  <text class="tt" x="612" y="305" text-anchor="middle">this folder</text>
+
+  <path class="e" d="M290,344 V368" marker-end="url(#runs-arrow)"/>
+  <text class="te" x="298" y="361">no</text>
+  <rect class="n" x="160" y="370" width="260" height="40" rx="6"/>
+  <text class="tt" x="290" y="395" text-anchor="middle">every examples/*/, sorted</text>
+
+  <path class="e" d="M692,198 H740 V424 H612 M612,320 V424 H290"/>
+  <path class="e" d="M290,410 V436" marker-end="url(#runs-arrow)"/>
+
+  <!-- The guard -->
+  <polygon class="n" points="290,438 402,470 290,502 178,470"/>
+  <text class="tt" x="290" y="475" text-anchor="middle">VERIFY_BASE set?</text>
+  <path class="e" d="M402,470 H520" marker-end="url(#runs-arrow)"/>
+  <text class="te" x="461" y="462" text-anchor="middle">yes</text>
+  <rect class="n prog" x="522" y="432" width="290" height="76" rx="6"/>
+  <text class="tm" x="667" y="455" text-anchor="middle">spine guard policy.yaml</text>
+  <text class="ts" x="667" y="475" text-anchor="middle">files changed since VERIFY_BASE</text>
+  <text class="ts" x="667" y="494" text-anchor="middle">once, whatever the roots</text>
+
+  <path class="e" d="M290,502 V526" marker-end="url(#runs-arrow)"/>
+  <text class="te" x="298" y="519">no</text>
+  <rect class="n" x="210" y="528" width="160" height="40" rx="6"/>
+  <text class="tt" x="290" y="553" text-anchor="middle">skip guard</text>
+
+  <path class="e" d="M290,568 V598" marker-end="url(#runs-arrow)"/>
+  <path class="e" d="M667,508 V598" marker-end="url(#runs-arrow)"/>
+
+  <!-- Once per machine -->
+  <rect class="n prog" x="210" y="680" width="160" height="40" rx="6"/>
+  <text class="tm" x="290" y="705" text-anchor="middle">spine check</text>
+  <path class="e" d="M370,700 H520" marker-end="url(#runs-arrow)"/>
+  <text class="te on-in" x="445" y="692" text-anchor="middle">not sound</text>
+  <rect class="n" x="522" y="680" width="290" height="40" rx="6"/>
+  <text class="tt" x="667" y="705" text-anchor="middle">skip the machine's other steps</text>
+
+  <path class="e" d="M290,720 V744" marker-end="url(#runs-arrow)"/>
+  <text class="te on-in" x="298" y="737">sound</text>
+  <rect class="n prog" x="180" y="746" width="220" height="56" rx="6"/>
+  <text class="tm" x="290" y="769" text-anchor="middle">spine behaviors</text>
+  <text class="tc" x="290" y="789" text-anchor="middle">spec/{m}/behaviors/</text>
+
+  <path class="e" d="M290,802 V826" marker-end="url(#runs-arrow)"/>
+  <rect class="n prog" x="200" y="828" width="180" height="56" rx="6"/>
+  <text class="tm" x="290" y="851" text-anchor="middle">spine stale</text>
+  <text class="tc" x="290" y="871" text-anchor="middle">checks/{m}/</text>
+
+  <path class="e" d="M290,884 V908" marker-end="url(#runs-arrow)"/>
+  <rect class="n prog" x="90" y="910" width="400" height="56" rx="6"/>
+  <text class="tt" x="290" y="933" text-anchor="middle">spine conform with the line in</text>
+  <text class="tc" x="290" y="953" text-anchor="middle">conformance/adapter_{m}.cmd, from {root}</text>
+
+  <path class="e" d="M290,966 V990" marker-end="url(#runs-arrow)"/>
+  <rect class="n prog" x="90" y="992" width="400" height="56" rx="6"/>
+  <text class="tt" x="290" y="1015" text-anchor="middle">spine draw with spec/{m}/drawing.yaml,</text>
+  <text class="ts" x="290" y="1035" text-anchor="middle">its output compared with spec/{m}/drawing.svg</text>
+
+  <!-- Once per root, after the machines -->
+  <path class="e" d="M290,1064 V1090" marker-end="url(#runs-arrow)"/>
+  <rect class="n you" x="120" y="1092" width="340" height="56" rx="6"/>
+  <text class="tt" x="290" y="1115" text-anchor="middle">content checks: the line in</text>
+  <text class="tc" x="290" y="1135" text-anchor="middle">{root}/checks/run.cmd, from {root}</text>
+
+  <path class="e" d="M290,1148 V1172" marker-end="url(#runs-arrow)"/>
+  <polygon class="n" points="290,1174 370,1206 290,1238 210,1206"/>
+  <text class="tm" x="290" y="1211" text-anchor="middle">--full?</text>
+  <path class="e" d="M370,1206 H430" marker-end="url(#runs-arrow)"/>
+  <text class="te on-n" x="400" y="1198" text-anchor="middle">yes</text>
+  <rect class="n prog" x="432" y="1168" width="380" height="76" rx="6"/>
+  <text class="tt" x="622" y="1191" text-anchor="middle">each mutant in {root}/mutation/mutants.yaml,</text>
+  <text class="ts" x="622" y="1211" text-anchor="middle">in a copy: conform and the content checks;</text>
+  <text class="ts" x="622" y="1230" text-anchor="middle">and the line in every mutate_*.cmd</text>
+
+  <path class="e" d="M290,1238 V1262" marker-end="url(#runs-arrow)"/>
+  <text class="te on-n" x="298" y="1255">no</text>
+  <rect class="n" x="210" y="1264" width="160" height="40" rx="6"/>
+  <text class="tt" x="290" y="1289" text-anchor="middle">skip mutation</text>
+
+  <!-- The end -->
+  <path class="e" d="M290,1320 V1346" marker-end="url(#runs-arrow)"/>
+  <rect class="n prog" x="160" y="1348" width="260" height="40" rx="6"/>
+  <text class="tt" x="290" y="1373" text-anchor="middle">one summary line; exit 0 or 1</text>
+
+  <!-- Legend -->
+  <rect class="n you" x="32" y="1412" width="16" height="16" rx="3"/>
+  <text class="tl" x="58" y="1425">yours: the builder can't change it</text>
+  <rect class="n prog" x="330" y="1412" width="16" height="16" rx="3"/>
+  <text class="tl" x="356" y="1425">the toolkit's programs</text>
+</svg>

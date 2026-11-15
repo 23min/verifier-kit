@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 984" width="860" height="984">
+  <title>Layers: who calls ./verify, what verify runs, and what the tools read</title>
+  <style>
+    :root {
+      --surface: #ffffff; --ink: #15202b; --ink-2: #3b4755; --muted: #5a6676;
+      --line: #c6ced8; --line-2: #8a96a5;
+      --zone-n: #f2f4f7;
+      --you: #e7e3f7; --you-s: #6556b0;
+      --code: #f8e3e8; --code-s: #b0465c;
+      --prog: #ddefe3; --prog-s: #2f7a4c;
+      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --surface: #151d26; --ink: #e2e8ee; --ink-2: #b6c1cd; --muted: #95a3b2;
+        --line: #33404f; --line-2: #627082;
+        --zone-n: #1a232d;
+        --you: #272245; --you-s: #a99df2;
+        --code: #3a1d26; --code-s: #ec8fa3;
+        --prog: #14291d; --prog-s: #6fc593;
+      }
+    }
+    .bg { fill: var(--surface); stroke: var(--line); }
+    .z-n { fill: var(--zone-n); stroke: var(--line); }
+    .n { fill: var(--surface); stroke: var(--line-2); stroke-width: 1.2; }
+    .n.you { fill: var(--you); stroke: var(--you-s); }
+    .n.code { fill: var(--code); stroke: var(--code-s); }
+    .n.prog { fill: var(--prog); stroke: var(--prog-s); }
+    .e { fill: none; stroke: var(--ink-2); stroke-width: 1.4; }
+    .mk { fill: var(--ink-2); }
+    .tt { font: 600 14px var(--font-body); fill: var(--ink); }
+    .tm { font: 600 14px var(--font-mono); fill: var(--ink); }
+    .ts { font: 400 14px var(--font-body); fill: var(--muted); }
+    .tc { font: 400 14px var(--font-mono); fill: var(--muted); }
+    .tz { font: 500 14px var(--font-mono); letter-spacing: 0.06em; fill: var(--muted); }
+    .tl { font: 400 14px var(--font-body); fill: var(--ink-2); }
+    /* An edge label carries a halo in the colour beneath it, so a line that
+       passes under the text does not strike through it. */
+    .te { font: 400 14px var(--font-body); fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+    .te.on-n { stroke: var(--zone-n); }
+  </style>
+  <defs>
+    <marker id="layers-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="mk" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0.5" y="0.5" width="859" height="983" rx="10"/>
+
+  <!-- The zones, under everything else -->
+  <rect class="z-n" x="16" y="16" width="532" height="370" rx="8"/>
+  <text class="tz" x="32" y="40">CALLERS</text>
+  <rect class="z-n" x="16" y="512" width="828" height="252" rx="8"/>
+  <text class="tz" x="32" y="536">TOOLS: FILES IN, FINDINGS OUT</text>
+  <rect class="z-n" x="16" y="812" width="828" height="112" rx="8"/>
+  <text class="tz" x="788" y="836" text-anchor="end">FILES IN THE REPO</text>
+
+  <!-- Callers -->
+  <rect class="n" x="32" y="54" width="312" height="76" rx="6"/>
+  <text class="tt" x="188" y="77" text-anchor="middle">Claude Code Stop hook</text>
+  <text class="tc" x="188" y="97" text-anchor="middle">integrations/claude-code/hooks/</text>
+  <text class="tc" x="188" y="116" text-anchor="middle">stop-verify.sh</text>
+
+  <rect class="n" x="32" y="142" width="312" height="56" rx="6"/>
+  <text class="tt" x="188" y="165" text-anchor="middle">git pre-commit</text>
+  <text class="tc" x="188" y="185" text-anchor="middle">integrations/git-hooks/pre-commit</text>
+
+  <rect class="n" x="32" y="210" width="312" height="56" rx="6"/>
+  <text class="tt" x="188" y="233" text-anchor="middle">CI job</text>
+  <text class="tc" x="188" y="253" text-anchor="middle">.github/workflows/verify.yml</text>
+
+  <rect class="n" x="32" y="278" width="312" height="40" rx="6"/>
+  <text class="tm" x="188" y="303" text-anchor="middle">demo/faults.sh</text>
+
+  <rect class="n" x="32" y="330" width="312" height="40" rx="6"/>
+  <text class="tt" x="188" y="355" text-anchor="middle">a person</text>
+
+  <path class="e" d="M344,92 H572 M344,170 H572 M344,238 H572 M344,298 H572 M344,350 H572 M572,92 V350"/>
+  <path class="e" d="M572,221 H602" marker-end="url(#layers-arrow)"/>
+  <text class="te on-n" x="446" y="85" text-anchor="middle">./verify, fast checks</text>
+  <text class="te on-n" x="446" y="163" text-anchor="middle">./verify</text>
+  <text class="te on-n" x="446" y="231" text-anchor="middle">./verify --full</text>
+  <text class="te on-n" x="446" y="291" text-anchor="middle">./verify, on a broken copy</text>
+
+  <!-- ./verify and verify -->
+  <rect class="n prog" x="604" y="178" width="240" height="86" rx="6"/>
+  <text class="tt" x="724" y="202" text-anchor="middle">./verify, Bash</text>
+  <text class="ts" x="724" y="224" text-anchor="middle">builds spine and verify,</text>
+  <text class="ts" x="724" y="243" text-anchor="middle">then runs verify</text>
+
+  <path class="e" d="M724,264 V410" marker-end="url(#layers-arrow)"/>
+  <text class="te" x="716" y="342" text-anchor="end">the same arguments</text>
+
+  <rect class="n prog" x="32" y="412" width="796" height="76" rx="6"/>
+  <text class="tm" x="430" y="436" text-anchor="middle">tools/bin/verify</text>
+  <text class="ts" x="430" y="456" text-anchor="middle">built from tools/ with Go</text>
+  <text class="ts" x="430" y="475" text-anchor="middle">finds the pieces by folder name, runs the steps</text>
+
+  <!-- Tools -->
+  <rect class="n prog" x="32" y="552" width="360" height="76" rx="6"/>
+  <text class="tm" x="212" y="575" text-anchor="middle">tools/bin/spine</text>
+  <text class="ts" x="212" y="595" text-anchor="middle">built from tools/ with Go</text>
+  <text class="ts" x="212" y="614" text-anchor="middle">check, behaviors, stale, conform, draw, guard</text>
+
+  <rect class="n prog" x="448" y="570" width="196" height="40" rx="6"/>
+  <text class="tm" x="546" y="595" text-anchor="middle">tools/run_checks.py</text>
+
+  <rect class="n prog" x="32" y="692" width="272" height="56" rx="6"/>
+  <text class="tm" x="168" y="715" text-anchor="middle">tools/adapter_shim.py</text>
+  <text class="ts" x="168" y="735" text-anchor="middle">a Python adapter over JSON lines</text>
+
+  <path class="e" d="M360,488 V550" marker-end="url(#layers-arrow)"/>
+  <path class="e" d="M546,488 V568" marker-end="url(#layers-arrow)"/>
+  <text class="te on-n" x="554" y="534">a Python root's checks/run.cmd</text>
+
+  <path class="e" d="M100,628 V690" marker-end="url(#layers-arrow)"/>
+  <text class="te on-n" x="108" y="654">conform, a Python root's</text>
+  <text class="te on-n" x="108" y="672">adapter line</text>
+
+  <path class="e" d="M800,488 V850" marker-end="url(#layers-arrow)"/>
+  <text class="te on-n" x="792" y="652" text-anchor="end">--full: each mutant in a copy,</text>
+  <text class="te on-n" x="792" y="670" text-anchor="end">then spine conform and the</text>
+  <text class="te on-n" x="792" y="688" text-anchor="end">checks there</text>
+
+  <!-- What the tools read -->
+  <path class="e" d="M330,628 V776 H172 V880 H154" marker-end="url(#layers-arrow)"/>
+  <path class="e" d="M355,628 V850" marker-end="url(#layers-arrow)"/>
+  <path class="e" d="M380,628 V788 H480 V850" marker-end="url(#layers-arrow)"/>
+  <path class="e" d="M470,610 V800 H420 V850" marker-end="url(#layers-arrow)"/>
+  <path class="e" d="M540,610 V850" marker-end="url(#layers-arrow)"/>
+
+  <!-- Files -->
+  <rect class="n you" x="32" y="852" width="120" height="56" rx="6"/>
+  <text class="tm" x="92" y="885" text-anchor="middle">policy.yaml</text>
+
+  <rect class="n you" x="192" y="852" width="252" height="56" rx="6"/>
+  <text class="tt" x="318" y="875" text-anchor="middle">the oracle, per root</text>
+  <text class="tc" x="318" y="895" text-anchor="middle">spec/, checks/, conformance/</text>
+
+  <rect class="n code" x="460" y="852" width="156" height="56" rx="6"/>
+  <text class="tt" x="538" y="875" text-anchor="middle">the code, per root</text>
+  <text class="tc" x="538" y="895" text-anchor="middle">src/</text>
+
+  <rect class="n you" x="632" y="852" width="196" height="56" rx="6"/>
+  <text class="tt" x="730" y="875" text-anchor="middle">the mutants, per root</text>
+  <text class="tc" x="730" y="895" text-anchor="middle">mutation/mutants.yaml</text>
+
+  <!-- Legend -->
+  <rect class="n you" x="32" y="944" width="16" height="16" rx="3"/>
+  <text class="tl" x="58" y="957">yours: the builder can't change it</text>
+  <rect class="n code" x="330" y="944" width="16" height="16" rx="3"/>
+  <text class="tl" x="356" y="957">the builder's</text>
+  <rect class="n prog" x="482" y="944" width="16" height="16" rx="3"/>
+  <text class="tl" x="508" y="957">the toolkit's programs</text>
+</svg>

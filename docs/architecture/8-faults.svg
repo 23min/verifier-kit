@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 276" width="860" height="276">
+  <title>One demo/faults.sh scenario, from the working copy to its verdict</title>
+  <style>
+    :root {
+      --surface: #ffffff; --ink: #15202b; --ink-2: #3b4755; --muted: #5a6676;
+      --line: #c6ced8; --line-2: #8a96a5;
+      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --surface: #151d26; --ink: #e2e8ee; --ink-2: #b6c1cd; --muted: #95a3b2;
+        --line: #33404f; --line-2: #627082;
+      }
+    }
+    .bg { fill: var(--surface); stroke: var(--line); }
+    .n { fill: var(--surface); stroke: var(--line-2); stroke-width: 1.2; }
+    .e { fill: none; stroke: var(--ink-2); stroke-width: 1.4; }
+    .mk { fill: var(--ink-2); }
+    .tt { font: 600 14px var(--font-body); fill: var(--ink); }
+    /* An edge label carries a halo in the colour beneath it, so a line that
+       passes under the text does not strike through it. */
+    .te { font: 400 14px var(--font-body); fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+  </style>
+  <defs>
+    <marker id="faults-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="mk" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0.5" y="0.5" width="859" height="275" rx="10"/>
+
+  <!-- Make the copy and break it -->
+  <rect class="n" x="32" y="20" width="140" height="40" rx="6"/>
+  <text class="tt" x="102" y="45" text-anchor="middle">working copy</text>
+  <path class="e" d="M172,40 H330" marker-end="url(#faults-arrow)"/>
+  <text class="te" x="251" y="32" text-anchor="middle">tar, without .git</text>
+
+  <rect class="n" x="332" y="20" width="140" height="40" rx="6"/>
+  <text class="tt" x="402" y="45" text-anchor="middle">temp copy</text>
+  <path class="e" d="M472,40 H560" marker-end="url(#faults-arrow)"/>
+
+  <rect class="n" x="562" y="20" width="160" height="40" rx="6"/>
+  <text class="tt" x="642" y="45" text-anchor="middle">seed one fault</text>
+  <path class="e" d="M642,60 V102" marker-end="url(#faults-arrow)"/>
+
+  <!-- Run it and judge -->
+  <rect class="n" x="532" y="104" width="220" height="56" rx="6"/>
+  <text class="tt" x="642" y="127" text-anchor="middle">run ./verify, spine diff,</text>
+  <text class="tt" x="642" y="147" text-anchor="middle">or the Stop hook</text>
+  <path class="e" d="M532,132 H452" marker-end="url(#faults-arrow)"/>
+
+  <polygon class="n" points="330,82 450,132 330,182 210,132"/>
+  <text class="tt" x="330" y="128" text-anchor="middle">expected exit code</text>
+  <text class="tt" x="330" y="146" text-anchor="middle">and expected lines?</text>
+
+  <path class="e" d="M210,132 H154" marker-end="url(#faults-arrow)"/>
+  <text class="te" x="182" y="124" text-anchor="middle">yes</text>
+  <rect class="n" x="32" y="112" width="120" height="40" rx="6"/>
+  <text class="tt" x="92" y="137" text-anchor="middle">scenario ok</text>
+
+  <path class="e" d="M330,182 V214" marker-end="url(#faults-arrow)"/>
+  <text class="te" x="338" y="204">no</text>
+  <rect class="n" x="190" y="216" width="280" height="40" rx="6"/>
+  <text class="tt" x="330" y="241" text-anchor="middle">scenario fails; faults.sh exits 1</text>
+</svg>

@@ -75,25 +75,17 @@ projects: no project uses the toolkit yet.
 
 The target, layer by layer:
 
-```mermaid
-flowchart TD
-  callers["Callers<br/>CI, git pre-commit, the agent's Stop hook, demo/faults.sh, a person"]
-  entry["./verify, Bash<br/>a few lines: builds the two programs, then runs verify with the same arguments"]
-  verify["verify, Go<br/>finds the pieces, runs the steps, reads mutation/mutants.yaml<br/>and runs each mutant on a copy, judges them all by one rule, and prints;<br/>its decisions are pure"]
-  subgraph programs["Run as programs"]
-    spine["spine, Go<br/>files in, findings out; runs only the adapter's line"]
-    checks["content checks<br/>a command, in any language"]
-    adapter["adapter, per machine<br/>a command, in any language"]
-  end
-  code["src/, in the example's language"]
-  callers -->|"./verify [example] [--full]"| entry
-  entry -->|"verify [example] [--full]"| verify
-  verify -->|"runs"| spine
-  verify -->|"runs"| checks
-  spine -->|"spine conform runs its line"| adapter
-  checks -->|"call the code"| code
-  adapter -->|"calls the code"| code
-```
+![The target, layer by layer. Callers (CI, git pre-commit, the agent's Stop hook, demo/faults.sh, a
+person) run ./verify \[example\] \[--full\]. ./verify, a few lines of Bash, builds the two programs,
+then runs verify with the same arguments. verify, in Go, finds the pieces, runs the steps, reads
+mutation/mutants.yaml and runs each mutant on a copy, judges them all by one rule, and prints; its
+decisions are pure. It runs two things as programs: spine, in Go, files in and findings out, which
+runs only the adapter's line, in spine conform; and the content checks, a command in any language.
+The adapter, per machine, is a command in any language too. The adapter and the content checks call
+the code, src/, in the example's language. Colours show who owns what: ./verify, verify and spine
+are green, the toolkit's programs; the content checks and the adapter are purple, yours: the builder
+can't change it; src/ is pink, the builder's; the callers are
+white.](0007-no-language-built-in/1-the-target.svg)
 
 ## Consequences
 

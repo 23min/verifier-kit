@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 812" width="860" height="812">
+  <title>How the oban_job example's files are tied together, with Oban</title>
+  <style>
+    :root {
+      --surface: #ffffff; --ink: #15202b; --ink-2: #3b4755; --muted: #5a6676;
+      --line: #c6ced8; --line-2: #8a96a5;
+      --you: #e7e3f7; --you-s: #6556b0;
+      --code: #f8e3e8; --code-s: #b0465c;
+      --prog: #ddefe3; --prog-s: #2f7a4c;
+      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --surface: #151d26; --ink: #e2e8ee; --ink-2: #b6c1cd; --muted: #95a3b2;
+        --line: #33404f; --line-2: #627082;
+        --you: #272245; --you-s: #a99df2;
+        --code: #3a1d26; --code-s: #ec8fa3;
+        --prog: #14291d; --prog-s: #6fc593;
+      }
+    }
+    .bg { fill: var(--surface); stroke: var(--line); }
+    .n { fill: var(--surface); stroke: var(--line-2); stroke-width: 1.2; }
+    .rim { fill: none; stroke: var(--line-2); stroke-width: 1.2; }
+    .n.you { fill: var(--you); stroke: var(--you-s); }
+    .n.code { fill: var(--code); stroke: var(--code-s); }
+    .n.prog { fill: var(--prog); stroke: var(--prog-s); }
+    .e { fill: none; stroke: var(--ink-2); stroke-width: 1.4; }
+    .e.dash { stroke-dasharray: 5 4; }
+    .mk { fill: var(--ink-2); }
+    .tt { font: 600 14px var(--font-body); fill: var(--ink); }
+    .tm { font: 600 14px var(--font-mono); fill: var(--ink); }
+    .ts { font: 400 14px var(--font-body); fill: var(--muted); }
+    .tl { font: 400 14px var(--font-body); fill: var(--ink-2); }
+    /* An edge label carries a halo in the colour beneath it, so a line that
+       passes under the text does not strike through it. */
+    .te { font: 400 14px var(--font-body); fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+  </style>
+  <defs>
+    <marker id="oban-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="mk" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0.5" y="0.5" width="859" height="811" rx="10"/>
+
+  <!-- From prose to the spine -->
+  <rect class="n you" x="32" y="20" width="320" height="56" rx="6"/>
+  <text class="tm" x="192" y="43" text-anchor="middle">spec/delivery/chapter.md</text>
+  <text class="ts" x="192" y="63" text-anchor="middle">from Oban's docs: D1-D6, D01-D14</text>
+  <path class="e" d="M192,76 V130" marker-end="url(#oban-arrow)"/>
+  <text class="te" x="200" y="108">read by two interpreters</text>
+
+  <rect class="n you" x="32" y="132" width="320" height="56" rx="6"/>
+  <text class="tm" x="192" y="155" text-anchor="middle">spec/delivery/readings/*.yaml</text>
+  <text class="ts" x="192" y="175" text-anchor="middle">two readings</text>
+  <path class="e" d="M192,188 V242" marker-end="url(#oban-arrow)"/>
+  <text class="te" x="200" y="220">spine diff; a person ratifies</text>
+
+  <rect class="n you" x="528" y="132" width="300" height="56" rx="6"/>
+  <text class="tm" x="678" y="155" text-anchor="middle">spec/delivery/behaviors/</text>
+  <text class="ts" x="678" y="175" text-anchor="middle">valid/ and invalid/</text>
+  <path class="e" d="M560,188 V272 H354" marker-end="url(#oban-arrow)"/>
+  <text class="te" x="568" y="228">spine behaviors replays them</text>
+
+  <rect class="n you" x="32" y="244" width="320" height="56" rx="6"/>
+  <text class="tm" x="192" y="267" text-anchor="middle">spec/delivery/spine.yaml</text>
+  <text class="ts" x="192" y="287" text-anchor="middle">one email's job</text>
+
+  <!-- From the spine to the code and Oban -->
+  <path class="e" d="M192,300 V354" marker-end="url(#oban-arrow)"/>
+  <text class="te" x="200" y="332">spine conform: every case, margin 1</text>
+
+  <rect class="n you" x="32" y="356" width="320" height="56" rx="6"/>
+  <text class="tm" x="192" y="379" text-anchor="middle">conformance/adapter_delivery.exs</text>
+  <text class="ts" x="192" y="399" text-anchor="middle">adapter protocol, via adapter_delivery.cmd</text>
+
+  <path class="n" d="M528,358 A150,8 0 0 1 828,358 V410 A150,8 0 0 1 528,410 Z"/>
+  <path class="rim" d="M528,358 A150,8 0 0 0 828,358"/>
+  <text class="tt" x="678" y="387" text-anchor="middle">Oban 2.24.2</text>
+  <text class="ts" x="678" y="406" text-anchor="middle">on SQLite, in memory</text>
+
+  <path class="e" d="M352,396 H526" marker-end="url(#oban-arrow)"/>
+  <text class="te" x="439" y="370" text-anchor="middle">reads the job's state</text>
+  <text class="te" x="439" y="388" text-anchor="middle">and attempt</text>
+
+  <path class="e" d="M192,412 V466" marker-end="url(#oban-arrow)"/>
+  <text class="te" x="200" y="444">sends, cancels, drains the queue</text>
+
+  <rect class="n code" x="32" y="468" width="320" height="56" rx="6"/>
+  <text class="tm" x="192" y="491" text-anchor="middle">src/mailer.ex</text>
+  <text class="ts" x="192" y="511" text-anchor="middle">Mailer, Mailer.Worker</text>
+  <path class="e" d="M352,484 H678 V420" marker-end="url(#oban-arrow)"/>
+
+  <!-- What else reaches the code -->
+  <rect class="n code" x="32" y="580" width="240" height="56" rx="6"/>
+  <text class="tm" x="152" y="603" text-anchor="middle">src/deps.exs, src/mix.lock</text>
+  <text class="ts" x="152" y="623" text-anchor="middle">Mix.install, offline</text>
+  <path class="e dash" d="M120,580 V526" marker-end="url(#oban-arrow)"/>
+  <text class="te" x="128" y="548">loaded first by</text>
+  <text class="te" x="128" y="566">every command</text>
+
+  <rect class="n you" x="528" y="580" width="300" height="56" rx="6"/>
+  <text class="tm" x="678" y="603" text-anchor="middle">checks/delivery/delivery_test.exs</text>
+  <text class="ts" x="678" y="623" text-anchor="middle">ExUnit, via checks/run.cmd</text>
+  <path class="e" d="M560,580 V510 H354" marker-end="url(#oban-arrow)"/>
+  <text class="te" x="457" y="532" text-anchor="middle">backoff, snooze,</text>
+  <text class="te" x="457" y="550" text-anchor="middle">max_attempts, address</text>
+
+  <rect class="n you" x="230" y="692" width="200" height="56" rx="6"/>
+  <text class="tm" x="330" y="715" text-anchor="middle">mutation/mutants.yaml</text>
+  <text class="ts" x="330" y="735" text-anchor="middle">seven edits</text>
+  <path class="e" d="M330,692 V526" marker-end="url(#oban-arrow)"/>
+  <text class="te" x="338" y="670">verify makes each in a copy</text>
+
+  <!-- Legend -->
+  <rect class="n you" x="32" y="772" width="16" height="16" rx="3"/>
+  <text class="tl" x="58" y="785">yours: the builder can't change it</text>
+  <rect class="n code" x="330" y="772" width="16" height="16" rx="3"/>
+  <text class="tl" x="356" y="785">the builder's</text>
+</svg>
