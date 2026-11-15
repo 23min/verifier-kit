@@ -67,7 +67,8 @@ glossary. This repo's examples use seven sections, a good shape to start from: 1
 lifecycle does not show (`examples/README.md`). What you haven't decided goes in the section it
 belongs to, marked "Open question:", not smoothed over. When a step sends something to another
 system, such as a mail or a commit, the glossary names it as an output, and section 2 says what
-each step sends (`docs/reference/spine-format.md`, "Outputs").
+each step sends (`docs/reference/spine-format.md`, "Outputs", in releases from v0.3.0, the first
+with outputs).
 
 - **An LLM**, the spec partner, drafts it with you, asks what it needs, and marks its open
   questions (prompt [B](#b-the-spec-partner)).
