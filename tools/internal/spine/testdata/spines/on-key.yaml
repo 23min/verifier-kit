@@ -1,4 +1,4 @@
-# The YAML slip the README names: `on:` is read as true, so the rule has a key true and no event.
+# The YAML slip the introduction names: `on:` is read as true, so the rule has a key true and no event.
 machine: m
 states: {draft: {}, active: {}}
 initial: draft
