@@ -162,8 +162,10 @@ it.](architecture/5-elixir-job.svg)
 In `examples/oban_job/`; the paths below are relative to it. It is in Elixir, as elixir_job is,
 but its code under test uses a library: `src/mailer.ex` sends each email from an Oban 2.24.2
 job, on SQLite, and `spine conform` drives the app and Oban together. Every command loads
-`src/deps.exs` first, which installs Oban's Hex packages with `Mix.install`, pinned by
-`src/mix.lock` and kept per machine outside the repo, with `HEX_OFFLINE=1`; then `src/**/*.ex`.
+`deps.exs` first, at the example's root, which installs Oban's Hex packages with `Mix.install`,
+pinned by `mix.lock` and kept per machine outside the repo, with `HEX_OFFLINE=1`; then
+`src/**/*.ex`. The two files are the oracle's side: they pin the Oban the spine is checked
+against (#126).
 The adapter runs one Oban, in `testing: :manual` on an in-memory database, for the whole run: a
 `run` is `Oban.drain_queue/2`, a `wait` the same with `with_scheduled: true`, and `observe`
 reads the job's row back as its state and attempt. Its spine declares an output (#116), what a
@@ -180,11 +182,10 @@ adapter sends, cancels and drains the queue through src/mailer.ex (Mailer, Maile
 runs on Oban 2.24.2, on SQLite in memory; it counts the mail server's calls, and reads the job's
 state and attempt from Oban.
 checks/delivery/delivery_test.exs, ExUnit run from checks/run.cmd, checks backoff, snooze,
-max_attempts and the address. src/deps.exs and src/mix.lock, Mix.install offline, are loaded first
-by every command, drawn dashed. verify makes each of the eight edits in mutation/mutants.yaml to the
-mailer, in a copy. Colours show who owns what: src/mailer.ex, src/deps.exs and src/mix.lock are
-pink, the builder's; Oban is white; every other file is purple, yours: the builder can't change
-it.](architecture/6-oban-job.svg)
+max_attempts and the address. deps.exs and mix.lock, Mix.install offline, are loaded first by
+every command, drawn dashed. verify makes each of the eight edits in mutation/mutants.yaml to the
+mailer, in a copy. Colours show who owns what: src/mailer.ex is pink, the builder's; Oban is
+white; every other file is purple, yours: the builder can't change it.](architecture/6-oban-job.svg)
 
 ## Checking the checker
 
@@ -293,7 +294,7 @@ test binary is the adapter. Plain `go test` runs one mutant of each class, model
 | `spine check`, `behaviors`, `stale`, `conform` | per machine | `{root}/spec/{m}/`, `{root}/checks/{m}/`, `{root}/conformance/adapter_{m}.cmd` |
 | content checks | per root: one run over all of `{root}/checks/` | `{root}/checks/run.cmd` |
 | mutation | per root, under `--full`: `{root}/mutation/mutants.yaml`, and every `{root}/mutation/mutate_*.cmd` | the file's name, and a file name pattern; each mutant runs every machine's `conform` and all of `checks/`, in a copy |
-| `src/` | per root: loaded by the commands | module name (`notes_app`, `ref_sync_client`), with `src/` on `PYTHONPATH` from the line; elixir_job's and oban_job's commands load `src/**/*.ex`, oban_job's after `src/deps.exs` |
+| `src/` | per root: loaded by the commands | module name (`notes_app`, `ref_sync_client`), with `src/` on `PYTHONPATH` from the line; elixir_job's and oban_job's commands load `src/**/*.ex`, oban_job's after its `deps.exs` |
 | path guard | repo-wide | `policy.yaml` patterns over `examples/*/` and the toolkit's folders |
 | deny rules, CODEOWNERS (`integrations/`) | a project's root | folder patterns for a project with `spec/` at its root |
 | `demo/faults.sh` | seeds faults in notes (0-9), elixir_job (11-13) and all four examples (14) | hard-coded `examples/notes/`, `examples/elixir_job/`, `examples/ref_sync/` and `examples/oban_job/` paths |

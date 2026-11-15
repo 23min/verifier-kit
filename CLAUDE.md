@@ -67,7 +67,7 @@ go -C examples test ./...  # the examples' conventions (examples/README.md)
 as `demo/faults.sh` builds `spine`. A project needs Python only for the pieces it writes in
 Python. This repo's examples need Python 3 as `python3` on `PATH`, with PyYAML for ref_sync's
 checks, and Elixir 1.18 or later for elixir_job's and oban_job's. oban_job also needs Oban's Hex
-packages: `elixir examples/oban_job/src/deps.exs` installs them once, online, and its commands
+packages: `elixir examples/oban_job/deps.exs` installs them once, online, and its commands
 then run offline. The devcontainer has all of them, the packages through its post-create step;
 don't create a `.venv` there (the repo is shared with the host). Elsewhere:
 `uv venv && uv pip install -r requirements.txt`, then `source .venv/bin/activate`, so that the
