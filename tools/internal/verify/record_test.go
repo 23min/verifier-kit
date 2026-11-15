@@ -241,6 +241,13 @@ func examplesProject() files {
 	emptyMutants := pythonLamp(false)
 	emptyMutants["mutation/mutants.yaml"] = "# none yet\n"
 
+	// a root laid out as a project in another language would be: its checks need a file and a
+	// folder at the root, a manifest and its dependencies, which --full's copy holds too (#113)
+	rootFiles := pythonLamp(false)
+	rootFiles["lamp.toml"] = "name = \"lamp\"\n"
+	rootFiles["deps/ready"] = "installed\n"
+	rootFiles["checks/run.cmd"] = "sh -c \"test -f lamp.toml && test -f deps/ready && PYTHONPATH=src run_checks.py checks\"\n"
+
 	// a drawing for each way the step ends: drawn alike (lamp's, written by drawn), stale, missing,
 	// a folder, and a layout spine draw refuses
 	drawings := pythonLamp(false)
@@ -260,6 +267,7 @@ func examplesProject() files {
 		with("examples/mutants", mutants).
 		with("examples/badmutants", badMutants).
 		with("examples/emptymutants", emptyMutants).
+		with("examples/rootfiles", rootFiles).
 		with("examples/drawings", drawings).
 		with("examples/commands", commandLamp()).
 		with("examples/failing", failing).
@@ -329,6 +337,7 @@ func projects(tmp string) []project {
 			r("examples/unsound", "--full"),
 			r("examples/mutants", "--full"), r("examples/badmutants", "--full"),
 			r("examples/emptymutants", "--full"),
+			r("examples/rootfiles", "--full"),
 			r("examples/drawings"), withEnv("VERIFY_VERBOSE=1", "examples/drawings"),
 			r("../outside"), r(filepath.Join(tmp, "outside"), "--full"),
 			{from: "examples", args: []string{"python"}},

@@ -53,8 +53,8 @@ up also fetches exqlite's prebuilt SQLite library. There is no Mix project. `src
 `Mix.install`, pinned by `src/mix.lock`, and Mix keeps the packages in `~/.cache/mix`, outside
 the repo. Every command line loads `src/deps.exs`, then `src/**/*.ex`, with `HEX_OFFLINE=1`, so
 `./verify` fetches nothing; on a machine that hasn't set up, they fail and print the line above.
-`deps.exs` sits in `src/` because `./verify --full` copies only `spec/`, `conformance/`,
-`checks/` and `src/` (#113).
+`deps.exs` sits in `src/` because, until #113, `./verify --full` copied only `spec/`,
+`conformance/`, `checks/` and `src/`; it now copies the whole root, so it could move back.
 
 ## Layout and who owns what
 

@@ -264,12 +264,17 @@ func (sh *shell) path(p string) string {
 	return filepath.Join(sh.here, p)
 }
 
-// mutate runs the oracle on the code as it is, then on each mutant, each time in a copy of the
-// root, and gives the lines under the step: oracle-fails alone when the code as it is fails,
-// otherwise a line per mutant, then the tally.
+// mutate runs the oracle on the code as it is, then on each mutant, in one copy of the root made
+// for the run, and gives the lines under the step: oracle-fails alone when the code as it is
+// fails, otherwise a line per mutant, then the tally.
 func (sh *shell) mutate(m *mutation) outcome {
 	root := sh.path(m.prefix)
-	asIs, err := sh.inCopy(root, "", "", m.oracle)
+	dir, err := copyRoot(root)
+	if err != nil {
+		return outcome{out: "cannot make a copy of " + root + ": " + program.Strerror(err)}
+	}
+	defer os.RemoveAll(dir)
+	asIs, err := sh.inCopy(root, dir, "", "", m.oracle)
 	if err != nil {
 		return outcome{out: "cannot make a copy of " + root + ": " + program.Strerror(err)}
 	}
@@ -291,7 +296,7 @@ func (sh *shell) mutate(m *mutation) outcome {
 			errors++
 			continue
 		}
-		runs, err := sh.inCopy(root, mu.file, mutated, m.oracle)
+		runs, err := sh.inCopy(root, dir, mu.file, mutated, m.oracle)
 		if err != nil {
 			return outcome{out: "cannot make a copy of " + root + ": " + program.Strerror(err)}
 		}
@@ -305,19 +310,40 @@ func (sh *shell) mutate(m *mutation) outcome {
 	return outcome{ok: errors == 0, out: strings.Join(lines, "\n") + "\n"}
 }
 
-// inCopy runs the oracle's steps in a new copy of the root's folders that the steps read, with
-// file, when given, holding text; the copy is removed after. Output names the root, not the copy.
-func (sh *shell) inCopy(root, file, text string, oracle []step) ([]ran, error) {
+// copyRoot copies the root, but for its .git and src/, into a new temporary folder (#113): once per
+// run, so that the oracle's commands find every file and folder they find in the root, such as a
+// manifest, its dependencies and its build, and so that a large root is copied once, not once per
+// mutant. inCopy gives the copy its src/.
+func copyRoot(root string) (string, error) {
 	dir, err := os.MkdirTemp("", "verify-mutant-")
 	if err != nil {
+		return "", err
+	}
+	entries, err := os.ReadDir(root)
+	for _, e := range entries {
+		if err == nil && e.Name() != ".git" && e.Name() != "src" {
+			err = copyTree(filepath.Join(root, e.Name()), filepath.Join(dir, e.Name()))
+		}
+	}
+	if err != nil {
+		os.RemoveAll(dir)
+		return "", err
+	}
+	return dir, nil
+}
+
+// inCopy runs the oracle's steps in dir, the copy of root, after giving it a fresh copy of root's
+// src/, with file, when given, holding text: each run starts from the root's own source, so no
+// earlier mutant survives into it, not even through a cache that a file's size and time decide.
+// Output names the root, not the copy.
+func (sh *shell) inCopy(root, dir, file, text string, oracle []step) ([]ran, error) {
+	src := filepath.Join(dir, "src")
+	if err := os.RemoveAll(src); err != nil {
 		return nil, err
 	}
-	defer os.RemoveAll(dir)
-	for _, f := range copied {
-		if exists(filepath.Join(root, f)) {
-			if err := copyTree(filepath.Join(root, f), filepath.Join(dir, f)); err != nil {
-				return nil, err
-			}
+	if exists(filepath.Join(root, "src")) {
+		if err := copyTree(filepath.Join(root, "src"), src); err != nil {
+			return nil, err
 		}
 	}
 	if file != "" {
@@ -352,7 +378,7 @@ func (sh *shell) inCopy(root, file, text string, oracle []step) ([]ran, error) {
 	return runs, nil
 }
 
-// copyTree copies the folder from to the new folder to: folders, files with their modes, and
+// copyTree copies the folder or file from to the new path to: folders, files with their modes, and
 // links as links.
 func copyTree(from, to string) error {
 	return filepath.WalkDir(from, func(p string, d os.DirEntry, err error) error {

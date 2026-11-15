@@ -154,6 +154,14 @@ exit 1
 | FAIL  content checks
 |       error   no-checks          examples/pythonnames/checks: no examples/pythonnames/checks/run.cmd
 | skip  mutants killed (fast mode; --full runs them)
+| == examples/rootfiles
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/rootfiles/spec/lamp/drawing.yaml)
+| ok    content checks
+| skip  mutants killed (fast mode; --full runs them)
 | == examples/unsound
 | FAIL  lamp: spine is sound
 |       error   undecided-cell     broken/drop: nothing says what "drop" does in "broken"
@@ -366,6 +374,14 @@ exit 1
 |       error   no-checks          examples/pythonnames/checks: no examples/pythonnames/checks/run.cmd
 | FAIL  mutants killed
 |       error   no-mutation        examples/pythonnames/mutation: no examples/pythonnames/mutation/mutants.yaml or mutate_*.cmd
+| == examples/rootfiles
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/rootfiles/spec/lamp/drawing.yaml)
+| ok    content checks
+| ok    mutants killed (mutants.yaml)
 | == examples/unsound
 | FAIL  lamp: spine is sound
 |       error   undecided-cell     broken/drop: nothing says what "drop" does in "broken"
@@ -852,6 +868,22 @@ exit 1
 | FAIL  mutants killed
 |       error   no-mutation        examples/pythonnames/mutation: no examples/pythonnames/mutation/mutants.yaml or mutate_*.cmd
 | -- 3 step(s) failed: examples/pythonnames: lamp: code conforms to spine, examples/pythonnames: content checks, examples/pythonnames: mutants killed
+|
+--- stderr
+|
+=== examples: ./verify examples/rootfiles --full
+exit 0
+--- stdout
+| skip  guard (VERIFY_BASE not set)
+| == examples/rootfiles
+| ok    lamp: spine is sound
+| ok    lamp: behaviors match spine
+| ok    lamp: checks cite current spine
+| ok    lamp: code conforms to spine
+| skip  lamp: drawing matches spine (no examples/rootfiles/spec/lamp/drawing.yaml)
+| ok    content checks
+| ok    mutants killed (mutants.yaml)
+| -- all steps passed
 |
 --- stderr
 |
