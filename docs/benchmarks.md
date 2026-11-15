@@ -5,7 +5,7 @@ examples wrote: models learned from a TLS server, an MQTT broker and a bank card
 coffee machine, each with faults planted in it mechanically (#106). The drawings show the four
 models as published.
 
-Measured on 2026-11-08 with `spine` as of `6e3b166`, on 16 cores:
+Measured on 2026-11-15 with `spine` as #116 changed it, adding outputs to spines, on 16 cores:
 `go -C tools test ./internal/benchmarks/ -full -v -timeout 1h`. The mutants are chosen with a
 fixed seed, so every number but the times comes out the same on every run. Plain
 `go -C tools test ./...` runs one mutant of each class, model and translation, in about 10 s.
@@ -17,18 +17,24 @@ state plus every sequence of 1 to K+1 further steps, catches every deterministic
 that has at most K more states than the spine (Vasilevskii 1973, Chow 1978). The benchmark plants
 faults where the answer is known in advance and checks conform's verdict on each:
 
-- **Two translations.** Each model, a Mealy machine whose every step gives an output and a next
-  state, becomes a spine twice: once with its outputs dropped, since a spine has none, and once
-  under the Mealy-to-Moore fold, which names each state with the output it was entered by, so that
-  outputs become states.
+- **Three translations.** Each model, a Mealy machine whose every step gives an output and a next
+  state, becomes a spine three times:
+  - with its outputs dropped, as a spine without outputs sees it;
+  - under the Mealy-to-Moore fold, which names each state with the output it was entered by, so
+    that outputs become states;
+  - with its outputs on its rules (#116): the spine declares the model's outputs, and each rule
+    says what its step sends.
 - **The code** is the model, or a mutant of it, run by an adapter the test binary serves.
   `observe()` reports the state's name, and under the fold the output it was entered by too.
+  Each `apply` reports the output it sent, which conform compares when the spine declares outputs
+  and ignores when it doesn't.
 - **Four classes of mutant,** the field's standard ones: every cell sent to every other state
   (transfer faults) and given every other output (output faults), tried at margin 0; and 100
   distinct mutants per model of one and of two hidden states, a copy of a state that `observe()`
   reports under the original's name but that differs on one cell, tried at margin 1.
 - **The expected verdict** comes from the theory, computed by code that shares none of `spine`'s:
-  a mutant that some input sequence tells from the spine, and whose smallest equivalent machine
+  a mutant that some input sequence tells from the spine, by the names `observe()` reports or, with
+  outputs on rules, by what a step sends, and whose smallest equivalent machine
   has at most K more states than the spine under names the spine has, is *covered*, and conform
   must kill it. A state under a name the spine lacks diverges the moment `observe()` reports it,
   so it needs no reaching and isn't counted. A mutant that no sequence tells from the spine is the
@@ -94,62 +100,87 @@ most under the fold, from 10 states to 39.
 
 ## Results
 
-Of 9,796 conform runs, 3.9 million sequences in 3 min 25 s:
+Of 14,694 conform runs, 5.0 million sequences in 4 min 14 s:
 
-- **Every covered mutant was killed:** 6,542, in both translations and every class.
-- **Every mutant the same as its spine passed:** 2,736. Conform raised no false alarm.
+- **Every covered mutant was killed:** 11,024, in all three translations and every class.
+- **Every mutant the same as its spine passed:** 2,793. Conform raised no false alarm.
 - **With outputs dropped, all 2,234 output faults go unseen,** as they must: a spine without
-  outputs can't tell them apart. Under the Moore fold all 2,234 are covered, and were killed. This
-  is how much a spine that states outputs would add.
-- **Two hidden states are mostly beyond margin 1,** and 431 of them survived, as ADR 0008 says
-  they may: 149 of 162 with outputs dropped and 282 of 354 under the fold.
+  outputs can't tell them apart.
+- **With outputs on rules, all 2,234 are covered, and were killed,** with each model's own
+  states. The Moore fold kills them too, but at the cost of states, up to 39 for Mosquitto's 10:
+  its output faults took 650,460 sequences, against 207,436 with outputs on rules. Over every
+  class, outputs on rules ran 1.0 million sequences, the fold 2.9 million.
+- **Two hidden states are mostly beyond margin 1,** and 757 of them survived, as ADR 0008 says
+  they may: 149 of 162 with outputs dropped, 282 of 354 under the fold, and 326 of 359 with
+  outputs on rules.
 
-Four deliberate breaks of conform, each in a copy of `tools/`, were each caught by the sample that
+Five deliberate breaks of conform, each in a copy of `tools/`, were each caught by the sample that
 plain `go test` runs: trying one step fewer than the margin, one step more, ignoring a wrong state
-after a run's last step, and reporting a refusal where the spine stays.
+after a run's last step, reporting a refusal where the spine stays, and, since #116, comparing no
+outputs, which every model's output and one-hidden-state samples with outputs on rules caught.
 
 | Model | Translation | Class | Margin | Mutants | Covered, killed | Same, passed | Beyond, killed | Sequences | Time |
 |---|---|---|---|---|---|---|---|---|---|
-| coffee | outputs dropped | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 100 | 51ms |
-| coffee | outputs dropped | transfer | 0 | 120 | 120, 120 | 0, 0 | 0, 0 | 2880 | 3.264s |
-| coffee | outputs dropped | output | 0 | 48 | 0, 0 | 48, 48 | 0, 0 | 1152 | 1.269s |
-| coffee | outputs dropped | hidden-1 | 1 | 100 | 51, 51 | 49, 49 | 0, 0 | 9932 | 6.405s |
-| coffee | outputs dropped | hidden-2 | 1 | 100 | 2, 2 | 53, 53 | 45, 8 | 10000 | 6.325s |
-| coffee | Moore fold | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 116 | 58ms |
-| coffee | Moore fold | transfer | 0 | 120 | 120, 120 | 0, 0 | 0, 0 | 3360 | 3.361s |
-| coffee | Moore fold | output | 0 | 48 | 48, 48 | 0, 0 | 0, 0 | 1344 | 1.383s |
-| coffee | Moore fold | hidden-1 | 1 | 100 | 94, 94 | 6, 6 | 0, 0 | 11456 | 6.519s |
-| coffee | Moore fold | hidden-2 | 1 | 100 | 4, 4 | 7, 7 | 89, 21 | 11600 | 6.505s |
-| bankcard | outputs dropped | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 1190 | 648ms |
-| bankcard | outputs dropped | transfer | 0 | 420 | 420, 420 | 0, 0 | 0, 0 | 35280 | 23.659s |
-| bankcard | outputs dropped | output | 0 | 756 | 0, 0 | 756, 756 | 0, 0 | 63504 | 42.783s |
-| bankcard | outputs dropped | hidden-1 | 1 | 100 | 48, 48 | 52, 52 | 0, 0 | 118986 | 1m18.529s |
-| bankcard | outputs dropped | hidden-2 | 1 | 100 | 0, 0 | 60, 60 | 40, 2 | 119000 | 1m25.392s |
-| bankcard | Moore fold | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 2758 | 2.147s |
-| bankcard | Moore fold | transfer | 0 | 420 | 420, 420 | 0, 0 | 0, 0 | 82320 | 55.109s |
-| bankcard | Moore fold | output | 0 | 756 | 756, 756 | 0, 0 | 0, 0 | 148176 | 1m35.701s |
-| bankcard | Moore fold | hidden-1 | 1 | 100 | 94, 94 | 4, 4 | 2, 2 | 275478 | 3m18.245s |
-| bankcard | Moore fold | hidden-2 | 1 | 100 | 0, 0 | 8, 8 | 92, 15 | 275786 | 3m26.907s |
-| tls | outputs dropped | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 737 | 526ms |
-| tls | outputs dropped | transfer | 0 | 330 | 330, 330 | 0, 0 | 0, 0 | 21780 | 16.64s |
-| tls | outputs dropped | output | 0 | 330 | 0, 0 | 330, 330 | 0, 0 | 21780 | 17.205s |
-| tls | outputs dropped | hidden-1 | 1 | 100 | 50, 50 | 50, 50 | 0, 0 | 73645 | 48.947s |
-| tls | outputs dropped | hidden-2 | 1 | 100 | 1, 1 | 67, 67 | 32, 2 | 73689 | 48.8s |
-| tls | Moore fold | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 979 | 722ms |
-| tls | Moore fold | transfer | 0 | 330 | 330, 330 | 0, 0 | 0, 0 | 29040 | 21.443s |
-| tls | Moore fold | output | 0 | 330 | 330, 330 | 0, 0 | 0, 0 | 29040 | 22.477s |
-| tls | Moore fold | hidden-1 | 1 | 100 | 95, 95 | 5, 5 | 0, 0 | 97812 | 1m14.936s |
-| tls | Moore fold | hidden-2 | 1 | 100 | 8, 8 | 13, 13 | 79, 6 | 97856 | 1m22.804s |
-| mqtt | outputs dropped | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 1221 | 851ms |
-| mqtt | outputs dropped | transfer | 0 | 990 | 990, 990 | 0, 0 | 0, 0 | 108900 | 1m26.799s |
-| mqtt | outputs dropped | output | 0 | 1100 | 0, 0 | 1100, 1100 | 0, 0 | 121000 | 1m42.258s |
-| mqtt | outputs dropped | hidden-1 | 1 | 100 | 45, 45 | 55, 55 | 0, 0 | 122100 | 1m35.56s |
-| mqtt | outputs dropped | hidden-2 | 1 | 100 | 0, 0 | 55, 55 | 45, 1 | 122100 | 1m51.442s |
-| mqtt | Moore fold | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 4730 | 5.394s |
-| mqtt | Moore fold | transfer | 0 | 990 | 990, 990 | 0, 0 | 0, 0 | 424710 | 6m20.513s |
-| mqtt | Moore fold | output | 0 | 1100 | 1100, 1100 | 0, 0 | 0, 0 | 471900 | 6m2s |
-| mqtt | Moore fold | hidden-1 | 1 | 100 | 94, 94 | 6, 6 | 0, 0 | 472461 | 7m35.934s |
-| mqtt | Moore fold | hidden-2 | 1 | 100 | 2, 2 | 4, 4 | 94, 30 | 472978 | 7m20.594s |
+| coffee | outputs dropped | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 100 | 72ms |
+| coffee | outputs dropped | transfer | 0 | 120 | 120, 120 | 0, 0 | 0, 0 | 2880 | 3.424s |
+| coffee | outputs dropped | output | 0 | 48 | 0, 0 | 48, 48 | 0, 0 | 1152 | 1.442s |
+| coffee | outputs dropped | hidden-1 | 1 | 100 | 51, 51 | 49, 49 | 0, 0 | 9932 | 6.592s |
+| coffee | outputs dropped | hidden-2 | 1 | 100 | 2, 2 | 53, 53 | 45, 8 | 10000 | 6.419s |
+| coffee | Moore fold | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 116 | 74ms |
+| coffee | Moore fold | transfer | 0 | 120 | 120, 120 | 0, 0 | 0, 0 | 3360 | 3.546s |
+| coffee | Moore fold | output | 0 | 48 | 48, 48 | 0, 0 | 0, 0 | 1344 | 1.484s |
+| coffee | Moore fold | hidden-1 | 1 | 100 | 94, 94 | 6, 6 | 0, 0 | 11456 | 7.056s |
+| coffee | Moore fold | hidden-2 | 1 | 100 | 4, 4 | 7, 7 | 89, 21 | 11600 | 6.948s |
+| coffee | outputs on rules | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 100 | 67ms |
+| coffee | outputs on rules | transfer | 0 | 120 | 120, 120 | 0, 0 | 0, 0 | 2880 | 3.312s |
+| coffee | outputs on rules | output | 0 | 48 | 48, 48 | 0, 0 | 0, 0 | 1152 | 1.429s |
+| coffee | outputs on rules | hidden-1 | 1 | 100 | 94, 94 | 6, 6 | 0, 0 | 9880 | 6.917s |
+| coffee | outputs on rules | hidden-2 | 1 | 100 | 4, 4 | 7, 7 | 89, 16 | 10000 | 6.851s |
+| bankcard | outputs dropped | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 1190 | 997ms |
+| bankcard | outputs dropped | transfer | 0 | 420 | 420, 420 | 0, 0 | 0, 0 | 35280 | 24.49s |
+| bankcard | outputs dropped | output | 0 | 756 | 0, 0 | 756, 756 | 0, 0 | 63504 | 45.737s |
+| bankcard | outputs dropped | hidden-1 | 1 | 100 | 48, 48 | 52, 52 | 0, 0 | 118986 | 1m24.778s |
+| bankcard | outputs dropped | hidden-2 | 1 | 100 | 0, 0 | 60, 60 | 40, 2 | 119000 | 1m20.294s |
+| bankcard | Moore fold | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 2758 | 2.041s |
+| bankcard | Moore fold | transfer | 0 | 420 | 420, 420 | 0, 0 | 0, 0 | 82320 | 54.395s |
+| bankcard | Moore fold | output | 0 | 756 | 756, 756 | 0, 0 | 0, 0 | 148176 | 1m42.471s |
+| bankcard | Moore fold | hidden-1 | 1 | 100 | 94, 94 | 4, 4 | 2, 2 | 275478 | 3m25.495s |
+| bankcard | Moore fold | hidden-2 | 1 | 100 | 0, 0 | 8, 8 | 92, 15 | 275786 | 3m22.733s |
+| bankcard | outputs on rules | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 1190 | 821ms |
+| bankcard | outputs on rules | transfer | 0 | 420 | 420, 420 | 0, 0 | 0, 0 | 35280 | 25.131s |
+| bankcard | outputs on rules | output | 0 | 756 | 756, 756 | 0, 0 | 0, 0 | 63504 | 45.849s |
+| bankcard | outputs on rules | hidden-1 | 1 | 100 | 96, 96 | 4, 4 | 0, 0 | 118958 | 1m22.153s |
+| bankcard | outputs on rules | hidden-2 | 1 | 100 | 0, 0 | 8, 8 | 92, 6 | 119000 | 1m44.722s |
+| tls | outputs dropped | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 737 | 359ms |
+| tls | outputs dropped | transfer | 0 | 330 | 330, 330 | 0, 0 | 0, 0 | 21780 | 18.62s |
+| tls | outputs dropped | output | 0 | 330 | 0, 0 | 330, 330 | 0, 0 | 21780 | 18.465s |
+| tls | outputs dropped | hidden-1 | 1 | 100 | 50, 50 | 50, 50 | 0, 0 | 73645 | 1m0.422s |
+| tls | outputs dropped | hidden-2 | 1 | 100 | 1, 1 | 67, 67 | 32, 2 | 73689 | 1m0.798s |
+| tls | Moore fold | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 979 | 857ms |
+| tls | Moore fold | transfer | 0 | 330 | 330, 330 | 0, 0 | 0, 0 | 29040 | 27.519s |
+| tls | Moore fold | output | 0 | 330 | 330, 330 | 0, 0 | 0, 0 | 29040 | 25.281s |
+| tls | Moore fold | hidden-1 | 1 | 100 | 95, 95 | 5, 5 | 0, 0 | 97812 | 1m33.954s |
+| tls | Moore fold | hidden-2 | 1 | 100 | 8, 8 | 13, 13 | 79, 6 | 97856 | 1m43.148s |
+| tls | outputs on rules | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 737 | 842ms |
+| tls | outputs on rules | transfer | 0 | 330 | 330, 330 | 0, 0 | 0, 0 | 21780 | 19.032s |
+| tls | outputs on rules | output | 0 | 330 | 330, 330 | 0, 0 | 0, 0 | 21780 | 19.108s |
+| tls | outputs on rules | hidden-1 | 1 | 100 | 95, 95 | 5, 5 | 0, 0 | 73634 | 1m1.622s |
+| tls | outputs on rules | hidden-2 | 1 | 100 | 5, 5 | 13, 13 | 82, 6 | 73689 | 56.06s |
+| mqtt | outputs dropped | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 1221 | 905ms |
+| mqtt | outputs dropped | transfer | 0 | 990 | 990, 990 | 0, 0 | 0, 0 | 108900 | 1m18.797s |
+| mqtt | outputs dropped | output | 0 | 1100 | 0, 0 | 1100, 1100 | 0, 0 | 121000 | 1m31.696s |
+| mqtt | outputs dropped | hidden-1 | 1 | 100 | 45, 45 | 55, 55 | 0, 0 | 122100 | 1m42.435s |
+| mqtt | outputs dropped | hidden-2 | 1 | 100 | 0, 0 | 55, 55 | 45, 1 | 122100 | 1m36.554s |
+| mqtt | Moore fold | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 4730 | 4.344s |
+| mqtt | Moore fold | transfer | 0 | 990 | 990, 990 | 0, 0 | 0, 0 | 424710 | 6m38.202s |
+| mqtt | Moore fold | output | 0 | 1100 | 1100, 1100 | 0, 0 | 0, 0 | 471900 | 6m35.911s |
+| mqtt | Moore fold | hidden-1 | 1 | 100 | 94, 94 | 6, 6 | 0, 0 | 472461 | 6m59.203s |
+| mqtt | Moore fold | hidden-2 | 1 | 100 | 2, 2 | 4, 4 | 94, 30 | 472978 | 6m59.735s |
+| mqtt | outputs on rules | none | 1 | 1 | 0, 0 | 1, 1 | 0, 0 | 1221 | 676ms |
+| mqtt | outputs on rules | transfer | 0 | 990 | 990, 990 | 0, 0 | 0, 0 | 108900 | 1m22.434s |
+| mqtt | outputs on rules | output | 0 | 1100 | 1100, 1100 | 0, 0 | 0, 0 | 121000 | 1m29.816s |
+| mqtt | outputs on rules | hidden-1 | 1 | 100 | 94, 94 | 6, 6 | 0, 0 | 122045 | 1m30.618s |
+| mqtt | outputs on rules | hidden-2 | 1 | 100 | 0, 0 | 4, 4 | 96, 5 | 122100 | 1m31.465s |
 
 *None* is the model itself as the code, which must pass with every case tried. *Time* is the sum
 of each conform run's own time, so a row can take longer than the whole run, which spreads the

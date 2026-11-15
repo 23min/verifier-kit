@@ -136,6 +136,23 @@ func (m mealy) outputs() []string {
 	return outs
 }
 
+// A translation is how a model becomes a spine: with its outputs dropped, since a spine without
+// outputs has none; under the Moore fold, which names each state with the output it was entered
+// by; or with each step's output on its rule (#116).
+type translation int
+
+const (
+	dropped translation = iota
+	fold
+	onRules
+)
+
+var translations = []translation{dropped, fold, onRules}
+
+func (t translation) String() string {
+	return [...]string{"outputs dropped", "Moore fold", "outputs on rules"}[t]
+}
+
 // seen is the name observe() reports: the state's, and under the Moore fold the output the state
 // was entered by, which the start has none of.
 func seen(name, out string, moore bool) string {
@@ -146,14 +163,17 @@ func seen(name, out string, moore bool) string {
 }
 
 // A view is what a spine sees of a machine: every configuration it reaches, by the name observe()
-// reports in it, and where each input takes it. With outputs dropped a configuration is a state;
-// under the Moore fold it is a state and the output it was entered by.
+// reports in it, where each input takes it, and with outputs on rules what each step sends. With
+// outputs dropped or on rules a configuration is a state; under the Moore fold it is a state and
+// the output it was entered by.
 type view struct {
-	names []string // by configuration; 0 is the start
-	next  [][]int  // by configuration, then input
+	names []string   // by configuration; 0 is the start
+	next  [][]int    // by configuration, then input
+	outs  [][]string // by configuration, then input: the step's output with outputs on rules, else ""
 }
 
-func observe(m mealy, moore bool) view {
+func observe(m mealy, t translation) view {
+	moore := t == fold
 	type config struct {
 		state int
 		out   string
@@ -176,16 +196,20 @@ func observe(m mealy, moore bool) view {
 	for n := 0; n < len(configs); n++ {
 		c := configs[n]
 		v.names = append(v.names, seen(m.Names[c.state], c.out, moore))
-		row := make([]int, len(m.Inputs))
+		row, outs := make([]int, len(m.Inputs)), make([]string, len(m.Inputs))
 		for i, a := range m.Next[c.state] {
 			row[i] = add(config{a.To, a.Out})
+			if t == onRules {
+				outs[i] = a.Out
+			}
 		}
-		v.next = append(v.next, row)
+		v.next, v.outs = append(v.next, row), append(v.outs, outs)
 	}
 	return v
 }
 
-// differs says whether some input sequence makes the two report different names.
+// differs says whether some input sequence makes the two report different names, or send
+// different outputs.
 func differs(a, b view) bool {
 	type pair struct{ a, b int }
 	seenPairs := map[pair]bool{{0, 0}: true}
@@ -197,6 +221,9 @@ func differs(a, b view) bool {
 			return true
 		}
 		for i := range a.next[p.a] {
+			if a.outs[p.a][i] != b.outs[p.b][i] {
+				return true
+			}
 			q := pair{a.next[p.a][i], b.next[p.b][i]}
 			if !seenPairs[q] {
 				seenPairs[q] = true
@@ -208,8 +235,8 @@ func differs(a, b view) bool {
 }
 
 // partition gives each configuration of v its state in the smallest machine that behaves as v:
-// configurations are split by the name they report, then by where each input takes them, until
-// nothing splits.
+// configurations are split by the name they report, then by where each input takes them and what
+// it sends, until nothing splits.
 func partition(v view) []int {
 	split := func(key func(c int) string) []int {
 		ids := map[string]int{}
@@ -226,9 +253,9 @@ func partition(v view) []int {
 	class := split(func(c int) string { return v.names[c] })
 	for {
 		next := split(func(c int) string {
-			key := []int{class[c]}
-			for _, to := range v.next[c] {
-				key = append(key, class[to])
+			key := []any{class[c]}
+			for i, to := range v.next[c] {
+				key = append(key, class[to], v.outs[c][i])
 			}
 			return fmt.Sprint(key)
 		})
@@ -259,8 +286,9 @@ func extraStates(spec, code view) int {
 }
 
 // writeSpine writes v as a spine: each configuration a state, each input an event, no variables,
-// and for each configuration and input a rule that moves or stays.
-func writeSpine(path, machine string, v view, inputs []string) error {
+// and for each configuration and input a rule that moves or stays. With outputs, it declares them,
+// and each rule says what its step sends.
+func writeSpine(path, machine string, v view, inputs, outputs []string) error {
 	q := strconv.Quote
 	var b strings.Builder
 	fmt.Fprintf(&b, "machine: %s\nstates:\n", q(machine))
@@ -271,12 +299,21 @@ func writeSpine(path, machine string, v view, inputs []string) error {
 	for _, input := range inputs {
 		fmt.Fprintf(&b, "  - %s\n", q(input))
 	}
+	if outputs != nil {
+		b.WriteString("outputs:\n")
+		for _, out := range outputs {
+			fmt.Fprintf(&b, "  - %s\n", q(out))
+		}
+	}
 	b.WriteString("rules:\n")
 	for c, row := range v.next {
 		for i, to := range row {
 			outcome := "to: " + q(v.names[to])
 			if to == c {
 				outcome = "stay: true"
+			}
+			if outputs != nil {
+				outcome += ", outputs: [" + q(v.outs[c][i]) + "]"
 			}
 			fmt.Fprintf(&b, "  - {from: %s, event: %s, %s}\n", q(v.names[c]), q(inputs[i]), outcome)
 		}

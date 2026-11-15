@@ -5,8 +5,10 @@ package benchmarks
 // With observe() reading the state, conform at margin K must catch every mutant that differs from
 // the spine and has at most K more states than it under names the spine has (extraStates), and
 // pass every mutant that doesn't differ.
-// Each model is tried twice: with its outputs dropped, and under the Moore fold, which names each
-// state with the output it was entered by, so that output faults show as states.
+// Each model is tried three times: with its outputs dropped; under the Moore fold, which names each
+// state with the output it was entered by, so that output faults show as states; and with its
+// outputs on its rules, as a spine says what each step sends (#116), so that output faults show
+// as outputs.
 //
 // The harness runs spine only as a program and imports none of its packages, so that its
 // verdicts share no code with what they judge. This test binary is also the adapter: run with
@@ -73,7 +75,9 @@ type code struct {
 	Moore   bool  `json:"moore"`
 }
 
-// serve answers the adapter protocol's requests on one instance of the machine in path.
+// serve answers the adapter protocol's requests on one instance of the machine in path. Each apply
+// reports the output it sent, which conform compares when the spine declares outputs and ignores
+// when it doesn't.
 func serve(path string, in io.Reader, out io.Writer) int {
 	data, err := os.ReadFile(path)
 	var c code
@@ -105,7 +109,7 @@ func serve(path string, in io.Reader, out io.Writer) int {
 		case req.Op == "apply" && i >= 0:
 			a := c.Machine.Next[state][i]
 			state, last = a.To, a.Out
-			reply(map[string]any{"result": "ok"})
+			reply(map[string]any{"result": "ok", "outputs": []string{a.Out}})
 		case req.Op == "observe":
 			reply(map[string]any{"state": seen(c.Machine.Names[state], last, c.Moore)})
 		default:
@@ -211,6 +215,7 @@ type row struct {
 func TestBenchmarks(t *testing.T) {
 	type job struct {
 		r     *row
+		tr    translation
 		spec  string
 		want  view
 		k     int // the mutant's place in its class
@@ -228,7 +233,7 @@ func TestBenchmarks(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		fmt.Fprintf(&sizes, "| %s | %d | %d | %d | %d | %d |\n", md.name, len(m.Names), len(observe(m, true).names),
+		fmt.Fprintf(&sizes, "| %s | %d | %d | %d | %d | %d |\n", md.name, len(m.Names), len(observe(m, fold).names),
 			len(m.Inputs), len(m.outputs()), len(m.Names)*len(m.Inputs))
 		mutants := map[string][]mutant{}
 		sample := map[string]int{} // the mutant of each class plain go test runs
@@ -237,11 +242,15 @@ func TestBenchmarks(t *testing.T) {
 			mutants[cl.name] = cl.make(m)
 			sample[cl.name] = pick.IntN(len(mutants[cl.name]))
 		}
-		for _, moore := range []bool{false, true} {
-			translation := map[bool]string{false: "outputs dropped", true: "Moore fold"}[moore]
-			spec := filepath.Join(dir, md.name, strconv.FormatBool(moore), "spine.yaml")
-			want := observe(m, moore)
-			if err := writeSpine(spec, md.name, want, m.Inputs); err != nil {
+		for _, tr := range translations {
+			translation := tr.String()
+			spec := filepath.Join(dir, md.name, strconv.Itoa(int(tr)), "spine.yaml")
+			want := observe(m, tr)
+			var outputs []string
+			if tr == onRules {
+				outputs = m.outputs()
+			}
+			if err := writeSpine(spec, md.name, want, m.Inputs, outputs); err != nil {
 				t.Fatal(err)
 			}
 			exit, findings, err := spine(nil, "check", spec)
@@ -251,14 +260,14 @@ func TestBenchmarks(t *testing.T) {
 			r := &row{model: md.name, translation: translation, class: "none", margin: 1}
 			rows = append(rows, r)
 			cases := len(want.names) * len(m.Inputs)
-			jobs = append(jobs, job{r, spec, want, 0, mutant{"the model itself", m}, code{m, moore},
+			jobs = append(jobs, job{r, tr, spec, want, 0, mutant{"the model itself", m}, code{m, tr == fold},
 				fmt.Sprintf("%d of %d state/event/variable cases exercised", cases, cases)})
 			for _, cl := range classes {
 				r := &row{model: md.name, translation: translation, class: cl.name, margin: cl.margin}
 				rows = append(rows, r)
 				for k, mu := range mutants[cl.name] {
 					if *full || k == sample[cl.name] {
-						jobs = append(jobs, job{r, spec, want, k, mu, code{mu.code, moore}, ""})
+						jobs = append(jobs, job{r, tr, spec, want, k, mu, code{mu.code, tr == fold}, ""})
 					}
 				}
 			}
@@ -272,7 +281,7 @@ func TestBenchmarks(t *testing.T) {
 	for range runtime.NumCPU() {
 		wg.Go(func() {
 			for j := range work {
-				got := observe(j.m.code, j.c.Moore)
+				got := observe(j.m.code, j.tr)
 				same := !differs(j.want, got)
 				covered := !same && extraStates(j.want, got) <= j.r.margin
 				most, steps := 0, 1
