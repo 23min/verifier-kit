@@ -1,8 +1,9 @@
 package spine
 
-// The drawing test (#108): every rule of a spine is in its drawing exactly once, read back from
-// the SVG, as a line of an edge's label or an entry of the table; and a layout drawn twice gives
-// the same drawing. It runs on every example's layout and on the cases' layouts that draw.
+// The drawing test (#108): every rule of a spine is in its drawing exactly once, with what it
+// sends (#116), read back from the SVG, as a line of an edge's label or an entry of the table;
+// and a layout drawn twice gives the same drawing. It runs on every example's layout and on the
+// cases' layouts that draw.
 
 import (
 	"encoding/xml"
@@ -24,7 +25,8 @@ type svgGroup struct {
 	Texts []svgText `xml:"text"`
 }
 
-// drawnRules reads an SVG's rules back: from, event, condition and outcome, one string each.
+// drawnRules reads an SVG's rules back: from, event, condition, outcome and output, one string
+// each.
 func drawnRules(t *testing.T, svg string) []string {
 	t.Helper()
 	var doc struct {
@@ -47,7 +49,8 @@ func drawnRules(t *testing.T, svg string) []string {
 				if i+1 < len(lines) && strings.HasPrefix(lines[i+1], "[") {
 					when = strings.TrimSuffix(strings.TrimPrefix(lines[i+1], "["), "]")
 				}
-				out = append(out, strings.Join([]string{from, lines[i], when, "to " + to}, " | "))
+				event, output, _ := strings.Cut(lines[i], " / ")
+				out = append(out, strings.Join([]string{from, event, when, "to " + to, output}, " | "))
 				if when != "" {
 					i++
 				}
@@ -58,8 +61,9 @@ func drawnRules(t *testing.T, svg string) []string {
 				t.Fatalf("a table cell is drawn as %+v", g)
 			}
 			for _, x := range g.Texts {
-				outcome, when, _ := strings.Cut(x.Chars, " [")
-				out = append(out, strings.Join([]string{from, event, strings.TrimSuffix(when, "]"), outcome}, " | "))
+				words, when, _ := strings.Cut(x.Chars, " [")
+				outcome, output, _ := strings.Cut(words, " / ")
+				out = append(out, strings.Join([]string{from, event, strings.TrimSuffix(when, "]"), outcome, output}, " | "))
 			}
 		}
 	}
@@ -75,7 +79,7 @@ func specRules(s *Spec) []string {
 		if outcome == "to" {
 			outcome += " " + r.Outcome.Target
 		}
-		out = append(out, strings.Join([]string{r.From, r.Event, strings.Join(strings.Fields(r.WhenText), " "), outcome}, " | "))
+		out = append(out, strings.Join([]string{r.From, r.Event, strings.Join(strings.Fields(r.WhenText), " "), outcome, r.Outcome.Output}, " | "))
 	}
 	slices.Sort(out)
 	return out
@@ -87,7 +91,7 @@ func TestDrawings(t *testing.T) {
 		t.Fatalf("found %d example layouts", len(layouts))
 	}
 	td := testdata(t)
-	for _, name := range []string{"door", "bent", "crowded", "through", "wrapped/drawing"} {
+	for _, name := range []string{"door", "bent", "crowded", "through", "wrapped/drawing", "outputs/drawing"} {
 		layouts = append(layouts, filepath.Join(td, "drawings", name+".yaml"))
 	}
 	for _, path := range layouts {

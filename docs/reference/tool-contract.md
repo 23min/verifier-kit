@@ -54,9 +54,9 @@ are part of the contract: new codes may be added, existing codes are never renam
 | Command | Arguments | Does |
 |---|---|---|
 | `check` | `SPEC` | Validates the file, then: every state, event and variable combination has exactly one rule; every state is reachable; terminal states have no exits; worked examples replay to their expected end |
-| `diff` | `A B [--depth N]` | Compares two spines case by case, then by behavior over every sequence up to N events (default 4), reporting the shortest witness for each difference |
+| `diff` | `A B [--depth N]` | Compares two spines case by case, what each case sends included, then by behavior over every sequence up to N events (default 4), reporting the shortest witness for each difference |
 | `hash` | `SPEC` | Prints the whole spine's hash, `spine@hash`, then one content hash per state/event cell: `state/event@hash`. Text only: `--format` and `--junit` are usage errors |
-| `draw` | `SPEC LAYOUT` | Prints the spine as an SVG drawing, its states where the layout file puts them (`drawing-layout.md`): each move to another state an edge, labelled with its event and condition, and every other rule an entry in a table of events by state. The same spine and layout give the same bytes. When the layout can't be drawn it prints the findings instead and exits 1. A label that overlaps something or leaves the drawing is a warning, printed on stderr in the text format, and the drawing is printed all the same. Like `hash`, `--format` and `--junit` are usage errors |
+| `draw` | `SPEC LAYOUT` | Prints the spine as an SVG drawing, its states where the layout file puts them (`drawing-layout.md`): each move to another state an edge, labelled with its event, what it sends and its condition, and every other rule an entry in a table of events by state. The same spine and layout give the same bytes. When the layout can't be drawn it prints the findings instead and exits 1. A label that overlaps something or leaves the drawing is a warning, printed on stderr in the text format, and the drawing is printed all the same. Like `hash`, `--format` and `--junit` are usage errors |
 | `stale` | `SPEC CHECKS_DIR` | Finds `covers: state/event@hash` and `covers: spine@hash` citations in the files under `CHECKS_DIR`, except binary ones (a file holding a NUL byte, such as Python's compiled `__pycache__` files), and reports stale, orphaned and uncovered cells, and text meant as a citation that isn't one. A check that cites the current whole spine counts every transition as cited |
 | `behaviors` | `SPEC DIR` | Replays every `.yaml` or `.yml` file in `DIR/valid/` (must be allowed) and `DIR/invalid/` (must be refused) |
 | `trace` | `SPEC FILE` | Replays one behavior file; for callers that run a validator once per fixture |
@@ -89,21 +89,21 @@ is a usage error: one line on stderr, naming the command and what is wrong, and 
 | `yaml-boolean-key` | error | all | a key YAML read as a boolean (`on`, `off`, `yes`, `no`) |
 | `yaml-boolean-value` | error | all | a value YAML read as a boolean where a name was meant |
 | `bad-value` | error | all | a value outside its closed set, such as a state kind, a `terminal` that isn't true or false, a role the policy does not define, an `expect` that isn't a declared state, or a layout's state or edge the spine doesn't have |
-| `listed-twice` | error | all | an event, or a value of one variable, listed more than once in a spine or reading |
+| `listed-twice` | error | all | an event, an output, or a value of one variable, listed more than once in a spine or reading |
 | `bad-outcome` | error | all | a rule without exactly one outcome |
 | `bad-condition` | error | all | a condition outside the condition language (`spine-format.md`) |
 | `bad-step` | error | all | a step in a worked example or behavior file that isn't `event var=value ...`, names an undeclared event, or doesn't give each declared variable exactly once, with one of its values, and no other variable |
-| `unknown-state`, `unknown-event` | error | `check` | a rule or `initial` names something undeclared |
+| `unknown-state`, `unknown-event`, `unknown-output` | error | `check` | a rule or `initial` names something undeclared |
 | `undecided-cell` | error | `check` | no rule at all for a state and event |
 | `missing-case` | error | `check` | no rule matches some variable values |
 | `overlap` | error | `check` | two rules with different outcomes match the same case |
 | `terminal-has-exit` | error | `check` | a terminal state has a transition out |
 | `unreachable` | error | `check` | no event sequence reaches a state |
 | `example-fails` | error | `check` | a worked example ends somewhere else |
-| `only-in-a`, `only-in-b` | error | `diff` | a state or event exists in one reading only |
+| `only-in-a`, `only-in-b` | error | `diff` | a state, event or output exists in one reading only |
 | `initial-differs` | error | `diff` | the readings start in different states; every sequence then starts apart, so the behavior comparison stops there |
 | `vars-differ` | error | `diff` | the readings declare different variable names, or different values for one; the order of the values doesn't count |
-| `case-disagrees` | error | `diff` | the readings decide a case differently |
+| `case-disagrees` | error | `diff` | the readings decide a case differently, or send something different in it |
 | `behavior-differs` | error | `diff` | a shortest event sequence on which the readings end differently |
 | `stale-check` | error | `stale` | a check cites a cell, or the whole spine, whose hash has changed |
 | `orphan-check` | error | `stale` | a check cites a cell that no longer exists |

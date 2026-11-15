@@ -1,0 +1,9 @@
+# The outputs list given as one name, not a list of names (#116).
+machine: door
+states:
+  closed: {}
+initial: closed
+events: [knock]
+outputs: chime
+rules:
+  - {from: closed, event: knock, stay: true, outputs: [chime]}

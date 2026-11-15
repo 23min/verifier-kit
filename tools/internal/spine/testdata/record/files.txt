@@ -158,6 +158,130 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/outputs-check.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": [
+|     {
+|       "code": "unknown-output",
+|       "severity": "error",
+|       "where": "closed/remove",
+|       "message": "rule sends undeclared output \"bell\""
+|     },
+|     {
+|       "code": "overlap",
+|       "severity": "error",
+|       "where": "closed/open",
+|       "message": "role=guest matches conflicting rules: -> open and -> open / chime"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine check" tests="2" failures="2"><testcase classname="spine check" name="unknown-output closed/remove"><failure message="rule sends undeclared output &quot;bell&quot;">rule sends undeclared output "bell"</failure></testcase><testcase classname="spine check" name="overlap closed/open"><failure message="role=guest matches conflicting rules: -&gt; open and -&gt; open / chime">role=guest matches conflicting rules: -&gt; open and -&gt; open / chime</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/outputs-keys.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": [
+|     {
+|       "code": "listed-twice",
+|       "severity": "error",
+|       "where": "outputs",
+|       "message": "\"chime\" is listed more than once"
+|     },
+|     {
+|       "code": "missing-key",
+|       "severity": "error",
+|       "where": "rules[1]",
+|       "message": "rule needs \"outputs\": the spine declares outputs, and this rule moves or stays"
+|     },
+|     {
+|       "code": "unknown-key",
+|       "severity": "error",
+|       "where": "rules[2]",
+|       "message": "a rule that rejects the event sends nothing, so it has no \"outputs\""
+|     },
+|     {
+|       "code": "spec-shape",
+|       "severity": "error",
+|       "where": "rules[3]",
+|       "message": "a rule's outputs must be a list of at most one output, such as [send_mail], or [] for none"
+|     },
+|     {
+|       "code": "spec-shape",
+|       "severity": "error",
+|       "where": "rules[4]",
+|       "message": "a rule's outputs must be a list of at most one output, such as [send_mail], or [] for none"
+|     },
+|     {
+|       "code": "spec-shape",
+|       "severity": "error",
+|       "where": "rules[5]",
+|       "message": "a rule's outputs must be a list of at most one output, such as [send_mail], or [] for none"
+|     },
+|     {
+|       "code": "unknown-key",
+|       "severity": "error",
+|       "where": "rules[6]",
+|       "message": "a rule that ignores the event sends nothing, so it has no \"outputs\""
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine check" tests="7" failures="7"><testcase classname="spine check" name="listed-twice outputs"><failure message="&quot;chime&quot; is listed more than once">"chime" is listed more than once</failure></testcase><testcase classname="spine check" name="missing-key rules[1]"><failure message="rule needs &quot;outputs&quot;: the spine declares outputs, and this rule moves or stays">rule needs "outputs": the spine declares outputs, and this rule moves or stays</failure></testcase><testcase classname="spine check" name="unknown-key rules[2]"><failure message="a rule that rejects the event sends nothing, so it has no &quot;outputs&quot;">a rule that rejects the event sends nothing, so it has no "outputs"</failure></testcase><testcase classname="spine check" name="spec-shape rules[3]"><failure message="a rule's outputs must be a list of at most one output, such as [send_mail], or [] for none">a rule's outputs must be a list of at most one output, such as [send_mail], or [] for none</failure></testcase><testcase classname="spine check" name="spec-shape rules[4]"><failure message="a rule's outputs must be a list of at most one output, such as [send_mail], or [] for none">a rule's outputs must be a list of at most one output, such as [send_mail], or [] for none</failure></testcase><testcase classname="spine check" name="spec-shape rules[5]"><failure message="a rule's outputs must be a list of at most one output, such as [send_mail], or [] for none">a rule's outputs must be a list of at most one output, such as [send_mail], or [] for none</failure></testcase><testcase classname="spine check" name="unknown-key rules[6]"><failure message="a rule that ignores the event sends nothing, so it has no &quot;outputs&quot;">a rule that ignores the event sends nothing, so it has no "outputs"</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/outputs-list.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": [
+|     {
+|       "code": "spec-shape",
+|       "severity": "error",
+|       "where": "outputs",
+|       "message": "outputs must be a list of names"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-shape outputs"><failure message="outputs must be a list of names">outputs must be a list of names</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/outputs-undeclared.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": [
+|     {
+|       "code": "unknown-key",
+|       "severity": "error",
+|       "where": "rules[1]",
+|       "message": "the spine declares no outputs, so a rule has no \"outputs\""
+|     },
+|     {
+|       "code": "unknown-key",
+|       "severity": "error",
+|       "where": "rules[2]",
+|       "message": "the spine declares no outputs, so a rule has no \"outputs\""
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine check" tests="2" failures="2"><testcase classname="spine check" name="unknown-key rules[1]"><failure message="the spine declares no outputs, so a rule has no &quot;outputs&quot;">the spine declares no outputs, so a rule has no "outputs"</failure></testcase><testcase classname="spine check" name="unknown-key rules[2]"><failure message="the spine declares no outputs, so a rule has no &quot;outputs&quot;">the spine declares no outputs, so a rule has no "outputs"</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT spines/terminal-start.yaml
 exit 0
 --- stdout
@@ -415,6 +539,38 @@ exit 0
 --- stdout
 | -- 0 errors, 0 findings
 |
+=== in tools/internal/spine/testdata: spine check spines/outputs-check.yaml
+exit 1
+--- stdout
+| error   unknown-output     closed/remove: rule sends undeclared output "bell"
+| error   overlap            closed/open: role=guest matches conflicting rules: -> open and -> open / chime
+| -- 2 errors, 2 findings
+|
+=== in tools/internal/spine/testdata: spine check spines/outputs-keys.yaml
+exit 1
+--- stdout
+| error   listed-twice       outputs: "chime" is listed more than once
+| error   missing-key        rules[1]: rule needs "outputs": the spine declares outputs, and this rule moves or stays
+| error   unknown-key        rules[2]: a rule that rejects the event sends nothing, so it has no "outputs"
+| error   spec-shape         rules[3]: a rule's outputs must be a list of at most one output, such as [send_mail], or [] for none
+| error   spec-shape         rules[4]: a rule's outputs must be a list of at most one output, such as [send_mail], or [] for none
+| error   spec-shape         rules[5]: a rule's outputs must be a list of at most one output, such as [send_mail], or [] for none
+| error   unknown-key        rules[6]: a rule that ignores the event sends nothing, so it has no "outputs"
+| -- 7 errors, 7 findings
+|
+=== in tools/internal/spine/testdata: spine check spines/outputs-list.yaml
+exit 1
+--- stdout
+| error   spec-shape         outputs: outputs must be a list of names
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine check spines/outputs-undeclared.yaml
+exit 1
+--- stdout
+| error   unknown-key        rules[1]: the spine declares no outputs, so a rule has no "outputs"
+| error   unknown-key        rules[2]: the spine declares no outputs, so a rule has no "outputs"
+| -- 2 errors, 2 findings
+|
 === in tools/internal/spine/testdata: spine check spines/terminal-start.yaml
 exit 0
 --- stdout
@@ -587,6 +743,40 @@ exit 0
 | delivered/ship@ee96b2fc537e
 | delivered/deliver@5050ad6e053e
 | delivered/return_item@806cd64f4186
+|
+=== in tools/internal/spine/testdata: spine hash spines/outputs-check.yaml
+exit 0
+--- stdout
+| spine@31b2de0c422a
+| closed/open@4e9461d05f5e
+| closed/remove@c8d1618d874b
+| open/open@d94ff9dd5131
+| open/remove@6c6a6ee2ab96
+|
+=== in tools/internal/spine/testdata: spine hash spines/outputs-keys.yaml
+exit 1
+--- stdout
+| error   listed-twice       outputs: "chime" is listed more than once
+| error   missing-key        rules[1]: rule needs "outputs": the spine declares outputs, and this rule moves or stays
+| error   unknown-key        rules[2]: a rule that rejects the event sends nothing, so it has no "outputs"
+| error   spec-shape         rules[3]: a rule's outputs must be a list of at most one output, such as [send_mail], or [] for none
+| error   spec-shape         rules[4]: a rule's outputs must be a list of at most one output, such as [send_mail], or [] for none
+| error   spec-shape         rules[5]: a rule's outputs must be a list of at most one output, such as [send_mail], or [] for none
+| error   unknown-key        rules[6]: a rule that ignores the event sends nothing, so it has no "outputs"
+| -- 7 errors, 7 findings
+|
+=== in tools/internal/spine/testdata: spine hash spines/outputs-list.yaml
+exit 1
+--- stdout
+| error   spec-shape         outputs: outputs must be a list of names
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine hash spines/outputs-undeclared.yaml
+exit 1
+--- stdout
+| error   unknown-key        rules[1]: the spine declares no outputs, so a rule has no "outputs"
+| error   unknown-key        rules[2]: the spine declares no outputs, so a rule has no "outputs"
+| -- 2 errors, 2 findings
 |
 === in tools/internal/spine/testdata: spine hash spines/terminal-start.yaml
 exit 0

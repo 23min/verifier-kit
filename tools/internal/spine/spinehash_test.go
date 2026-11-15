@@ -20,11 +20,12 @@ states:
   gone: {kind: design, terminal: true}
 initial: closed
 events: [open, remove]
+outputs: [chime, bell]
 rules:
-  - {from: closed, event: open, when: "role == 'owner'", to: open}
+  - {from: closed, event: open, when: "role == 'owner'", to: open, outputs: [chime]}
   - {from: closed, event: open, when: "role != 'owner'", reject: true}
-  - {from: closed, event: remove, to: gone}
-  - {from: open, event: open, stay: true}
+  - {from: closed, event: remove, to: gone, outputs: []}
+  - {from: open, event: open, stay: true, outputs: [bell]}
   - {from: open, event: remove, ignore: true}
 examples:
   - {name: owner opens, steps: ["open role=owner mood=calm"], expect: open}
@@ -57,13 +58,17 @@ func TestSpineHash(t *testing.T) {
 		{"the order of events", "events: [open, remove]", "events: [remove, open]", true},
 		{"the order of variables", "  role: [owner, guest]\n  mood: [calm, cross]\n", "  mood: [calm, cross]\n  role: [owner, guest]\n", true},
 		{"the order of a variable's values", "role: [owner, guest]", "role: [guest, owner]", true},
-		{"the order of rules", "  - {from: open, event: open, stay: true}\n  - {from: open, event: remove, ignore: true}\n",
-			"  - {from: open, event: remove, ignore: true}\n  - {from: open, event: open, stay: true}\n", true},
+		{"the order of rules", "  - {from: open, event: open, stay: true, outputs: [bell]}\n  - {from: open, event: remove, ignore: true}\n",
+			"  - {from: open, event: remove, ignore: true}\n  - {from: open, event: open, stay: true, outputs: [bell]}\n", true},
+		{"the order of outputs", "outputs: [chime, bell]", "outputs: [bell, chime]", true},
 
 		{"initial", "initial: closed", "initial: open", false},
 		{"which states are terminal", "open: {}", "open: {terminal: true}", false},
 		{"a state", "  gone: {kind: design, terminal: true}", "  lost: {}\n  gone: {kind: design, terminal: true}", false},
 		{"an event", "events: [open, remove]", "events: [open, remove, knock]", false},
+		{"an output, even one no rule sends (#116)", "outputs: [chime, bell]", "outputs: [chime, bell, knock]", false},
+		{"what a rule sends", "stay: true, outputs: [bell]", "stay: true, outputs: [chime]", false},
+		{"what a rule sends, to nothing", "stay: true, outputs: [bell]", "stay: true, outputs: []", false},
 		{"a variable's values", "mood: [calm, cross]", "mood: [calm, cross, glad]", false},
 		{"a rule's outcome", "{from: open, event: remove, ignore: true}", "{from: open, event: remove, reject: true}", false},
 		{"a rule's condition, even reworded, as a cell's hash", `when: "role == 'owner'", to: open`, `when: "'owner' == role", to: open`, false},

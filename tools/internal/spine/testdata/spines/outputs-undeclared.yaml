@@ -1,0 +1,10 @@
+# A rule that says what it sends in a spine that declares no outputs (#116), even nothing.
+machine: door
+states:
+  closed: {}
+  open: {}
+initial: closed
+events: [knock]
+rules:
+  - {from: closed, event: knock, to: open, outputs: [chime]}
+  - {from: open, event: knock, stay: true, outputs: []}

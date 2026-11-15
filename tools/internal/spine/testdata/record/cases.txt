@@ -583,6 +583,18 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="1"><testcase classname="spine check" name="spec-unreadable "><failure message="cannot be read: No such file or directory">cannot be read: No such file or directory</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine check --format json --junit REPORT drawings/outputs/spine.yaml
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "check",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine check --format json --junit REPORT seeds/policy.yaml
 exit 1
 --- stdout
@@ -688,6 +700,11 @@ exit 0
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine check" tests="1" failures="0"><testcase classname="spine check" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine check drawings/outputs/spine.yaml
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
 === in tools/internal/spine/testdata: spine check seeds/policy.yaml
 exit 1
 --- stdout
@@ -4258,6 +4275,31 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="4" failures="4"><testcase classname="spine diff" name="case-disagrees rejected/go"><failure message="this case: A says -&gt; start, B says -&gt; later">this case: A says -&gt; start, B says -&gt; later</failure></testcase><testcase classname="spine diff" name="case-disagrees start/go"><failure message="this case: A says reject, B says -&gt; rejected">this case: A says reject, B says -&gt; rejected</failure></testcase><testcase classname="spine diff" name="case-disagrees start/wait"><failure message="this case: A says nothing (no rule matches), B says -&gt; undefined">this case: A says nothing (no rule matches), B says -&gt; undefined</failure></testcase><testcase classname="spine diff" name="case-disagrees undefined/go"><failure message="this case: A says -&gt; start, B says -&gt; later">this case: A says -&gt; start, B says -&gt; later</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine diff --format json --junit REPORT drawings/outputs/spine.yaml diff/outputs-b.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "diff",
+|   "findings": [
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "closed/open",
+|       "message": "role=owner: A says -> open / chime, B says -> open"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "open/open",
+|       "message": "role=guest: A says stay, B says stay / chime"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine diff" tests="2" failures="2"><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=owner: A says -&gt; open / chime, B says -&gt; open">role=owner: A says -&gt; open / chime, B says -&gt; open</failure></testcase><testcase classname="spine diff" name="case-disagrees open/open"><failure message="role=guest: A says stay, B says stay / chime">role=guest: A says stay, B says stay / chime</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml diff/door-b.yaml
 exit 1
 --- stdout
@@ -4591,6 +4633,55 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine diff" tests="1" failures="1"><testcase classname="spine diff" name="vars-differ vars"><failure message="A and B declare different variables; case comparison skipped">A and B declare different variables; case comparison skipped</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml drawings/outputs/spine.yaml
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "diff",
+|   "findings": [
+|     {
+|       "code": "only-in-b",
+|       "severity": "error",
+|       "where": "outputs",
+|       "message": "B has output \"alarm\", A does not"
+|     },
+|     {
+|       "code": "only-in-b",
+|       "severity": "error",
+|       "where": "outputs",
+|       "message": "B has output \"chime\", A does not"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "closed/open",
+|       "message": "role=owner: A says -> open, B says -> open / chime"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "closed/remove",
+|       "message": "role=owner: A says -> gone, B says -> gone / alarm"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "closed/remove",
+|       "message": "role=guest: A says -> gone, B says -> gone / alarm"
+|     },
+|     {
+|       "code": "case-disagrees",
+|       "severity": "error",
+|       "where": "open/open",
+|       "message": "role=owner: A says stay, B says stay / chime"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine diff" tests="6" failures="6"><testcase classname="spine diff" name="only-in-b outputs"><failure message="B has output &quot;alarm&quot;, A does not">B has output "alarm", A does not</failure></testcase><testcase classname="spine diff" name="only-in-b outputs"><failure message="B has output &quot;chime&quot;, A does not">B has output "chime", A does not</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/open"><failure message="role=owner: A says -&gt; open, B says -&gt; open / chime">role=owner: A says -&gt; open, B says -&gt; open / chime</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=owner: A says -&gt; gone, B says -&gt; gone / alarm">role=owner: A says -&gt; gone, B says -&gt; gone / alarm</failure></testcase><testcase classname="spine diff" name="case-disagrees closed/remove"><failure message="role=guest: A says -&gt; gone, B says -&gt; gone / alarm">role=guest: A says -&gt; gone, B says -&gt; gone / alarm</failure></testcase><testcase classname="spine diff" name="case-disagrees open/open"><failure message="role=owner: A says stay, B says stay / chime">role=owner: A says stay, B says stay / chime</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine diff --format json --junit REPORT seeds/spine.yaml seeds/spine.yaml
 exit 0
 --- stdout
@@ -5074,6 +5165,13 @@ exit 1
 | error   case-disagrees     undefined/go: this case: A says -> start, B says -> later
 | -- 4 errors, 4 findings
 |
+=== in tools/internal/spine/testdata: spine diff drawings/outputs/spine.yaml diff/outputs-b.yaml
+exit 1
+--- stdout
+| error   case-disagrees     closed/open: role=owner: A says -> open / chime, B says -> open
+| error   case-disagrees     open/open: role=guest: A says stay, B says stay / chime
+| -- 2 errors, 2 findings
+|
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml diff/door-b.yaml
 exit 1
 --- stdout
@@ -5164,6 +5262,17 @@ exit 1
 | error   vars-differ        vars: A and B declare different variables; case comparison skipped
 | -- 1 errors, 1 findings
 |
+=== in tools/internal/spine/testdata: spine diff seeds/spine.yaml drawings/outputs/spine.yaml
+exit 1
+--- stdout
+| error   only-in-b          outputs: B has output "alarm", A does not
+| error   only-in-b          outputs: B has output "chime", A does not
+| error   case-disagrees     closed/open: role=owner: A says -> open, B says -> open / chime
+| error   case-disagrees     closed/remove: role=owner: A says -> gone, B says -> gone / alarm
+| error   case-disagrees     closed/remove: role=guest: A says -> gone, B says -> gone / alarm
+| error   case-disagrees     open/open: role=owner: A says stay, B says stay / chime
+| -- 6 errors, 6 findings
+|
 === in tools/internal/spine/testdata: spine diff seeds/spine.yaml seeds/spine.yaml
 exit 0
 --- stdout
@@ -5234,6 +5343,85 @@ exit 1
 | error   initial-differs    initial: A starts in "s", B starts in "closed"
 | error   vars-differ        vars: A and B declare different variables; case comparison skipped
 | -- 13 errors, 13 findings
+|
+=== in tools/internal/spine/testdata: spine draw drawings/outputs/spine.yaml drawings/outputs/drawing.yaml
+exit 0
+--- stdout
+| <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 659" width="860" height="659">
+|   <title>Machine door, section 1.2</title>
+|   <style>
+|     :root {
+|       --surface: #ffffff; --ink: #141414; --ink-2: #333333; --muted: #6a6a6a; --rule: #c4c4c4;
+|       --fact: #b4b4b4; --policy: #dadada; --design: #f2f2f2;
+|       --serif: "Latin Modern Roman", "CMU Serif", "Times New Roman", Times, serif;
+|     }
+|     @media (prefers-color-scheme: dark) {
+|       :root { --surface: #161616; --ink: #ececec; --ink-2: #cfcfcf; --muted: #9d9d9d; --rule: #444444;
+|               --fact: #5a5a5a; --policy: #3a3a3a; --design: #242424; }
+|     }
+|     .bg, .none { fill: var(--surface); }
+|     .fact { fill: var(--fact); } .policy { fill: var(--policy); } .design { fill: var(--design); }
+|     .st { stroke: var(--ink); stroke-width: 1.4; }
+|     .ring { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+|     .e { fill: none; stroke: var(--ink-2); stroke-width: 1.15; }
+|     .mk { fill: var(--ink-2); }
+|     .rule { stroke: var(--rule); stroke-width: 1; }
+|     .sn { font: italic 400 18px var(--serif); fill: var(--ink); }
+|     .lb { font: 400 14px var(--serif); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+|     .ti { font: 400 17px var(--serif); fill: var(--ink); }
+|     .tx { font: 400 14px var(--serif); fill: var(--ink); }
+|     .it { font-style: italic; }
+|     .nt { font: 400 13px var(--serif); fill: var(--muted); }
+|   </style>
+|   <defs>
+|     <marker id="arr" viewBox="0 0 10 8" refX="10" refY="4" markerWidth="10" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+|       <path class="mk" d="M0,0 L10,4 L0,8 z"/>
+|     </marker>
+|   </defs>
+|   <rect class="bg" x="0" y="0" width="860" height="659"/>
+|   <text class="ti" x="24" y="34" text-anchor="start"><tspan x="24" dy="0">Machine door, section 1.2</tspan></text>
+|   <text class="tx" x="24" y="58" text-anchor="start"><tspan x="24" dy="0">role ∈ {owner, guest}</tspan></text>
+|   <circle class="st fact" cx="587" cy="52" r="8"/>
+|   <text class="nt" x="603" y="56" text-anchor="start"><tspan x="603" dy="0">fact: irreversible in the world</tspan></text>
+|   <circle class="st design" cx="587" cy="74" r="8"/>
+|   <text class="nt" x="603" y="78" text-anchor="start"><tspan x="603" dy="0">design: an implementation choice</tspan></text>
+|   <circle class="st none" cx="587" cy="96" r="8"/>
+|   <text class="nt" x="603" y="100" text-anchor="start"><tspan x="603" dy="0">no kind</tspan></text>
+|   <path class="e" d="M35,220 L79,220" marker-end="url(#arr)"/>
+|   <g class="move"><title>closed → open</title>
+|   <path class="e" d="M160,220 Q290,220 419,220" marker-end="url(#arr)"/>
+|   <text class="lb" x="289.8" y="192" text-anchor="middle"><tspan x="289.8" dy="0">open / chime</tspan><tspan x="289.8" dy="18">[role == 'owner']</tspan></text>
+|   </g>
+|   <g class="move"><title>closed → gone</title>
+|   <path class="e" d="M154.5,240.3 Q290,320 420.4,396.7" marker-end="url(#arr)"/>
+|   <text class="lb" x="309.8" y="288.4" text-anchor="middle"><tspan x="309.8" dy="0">remove / alarm</tspan></text>
+|   </g>
+|   <ellipse class="st fact" cx="120" cy="220" rx="40" ry="40"/>
+|   <text class="sn" x="120" y="226" text-anchor="middle">closed</text>
+|   <ellipse class="st none" cx="460" cy="220" rx="40" ry="40"/>
+|   <text class="sn" x="460" y="226" text-anchor="middle">open</text>
+|   <ellipse class="st design" cx="460" cy="420" rx="40" ry="40"/>
+|   <ellipse class="ring" cx="460" cy="420" rx="45" ry="45"/>
+|   <text class="sn" x="460" y="426" text-anchor="middle">gone</text>
+|   <text class="nt" x="24" y="505" text-anchor="start"><tspan x="24" dy="0">Every rule that doesn't change the state, by event and state. The moves are the edges above.</tspan><tspan x="24" dy="18">gone is terminal and has no rules.</tspan></text>
+|   <text class="tx it" x="24" y="553">event</text>
+|   <text class="tx it" x="95" y="553">closed</text>
+|   <text class="tx it" x="465.5" y="553">open</text>
+|   <line class="rule" x1="24" y1="561" x2="836" y2="561"/>
+|   <text class="tx" x="24" y="581">open</text>
+|   <g class="rules"><title>closed/open</title>
+|   <text class="tx" x="95" y="581">reject [role != 'owner']</text>
+|   </g>
+|   <g class="rules"><title>open/open</title>
+|   <text class="tx" x="465.5" y="581">stay / chime [role == 'owner']</text>
+|   <text class="tx" x="465.5" y="599">stay [role != 'owner']</text>
+|   </g>
+|   <line class="rule" x1="24" y1="607" x2="836" y2="607"/>
+|   <text class="tx" x="24" y="627">remove</text>
+|   <g class="rules"><title>open/remove</title>
+|   <text class="tx" x="465.5" y="627">ignore</text>
+|   </g>
+| </svg>
 |
 === in tools/internal/spine/testdata: spine draw drawings/wrapped/spine.yaml drawings/wrapped/drawing.yaml
 exit 0
@@ -6257,6 +6445,49 @@ exit 1
 | error   spec-unreadable    spines/not-utf8.yaml: not UTF-8: byte 0xe9 at offset 32
 | -- 1 errors, 1 findings
 |
+=== in tools/internal/spine/testdata: spine stale --format json --junit REPORT diff/outputs-b.yaml drawings/outputs/checks
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "stale",
+|   "findings": [
+|     {
+|       "code": "stale-check",
+|       "severity": "error",
+|       "where": "drawings/outputs/checks/test_sends.py",
+|       "message": "covers closed/open@2361092bc972, but that cell now hashes to fbdfd40ef7f2: re-ratify, then update the check"
+|     },
+|     {
+|       "code": "stale-check",
+|       "severity": "error",
+|       "where": "drawings/outputs/checks/test_sends.py",
+|       "message": "covers open/open@fe132ab2f82b, but that cell now hashes to 1d1503e91322: re-ratify, then update the check"
+|     },
+|     {
+|       "code": "uncovered",
+|       "severity": "info",
+|       "where": "closed/open",
+|       "message": "no check cites this transition; conformance still exercises it"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine stale" tests="2" failures="2"><testcase classname="spine stale" name="stale-check drawings/outputs/checks/test_sends.py"><failure message="covers closed/open@2361092bc972, but that cell now hashes to fbdfd40ef7f2: re-ratify, then update the check">covers closed/open@2361092bc972, but that cell now hashes to fbdfd40ef7f2: re-ratify, then update the check</failure></testcase><testcase classname="spine stale" name="stale-check drawings/outputs/checks/test_sends.py"><failure message="covers open/open@fe132ab2f82b, but that cell now hashes to 1d1503e91322: re-ratify, then update the check">covers open/open@fe132ab2f82b, but that cell now hashes to 1d1503e91322: re-ratify, then update the check</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine stale --format json --junit REPORT drawings/outputs/spine.yaml drawings/outputs/checks
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "stale",
+|   "findings": []
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine stale" tests="1" failures="0"><testcase classname="spine stale" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine stale --format json --junit REPORT seeds/spine.yaml checks
 exit 1
 --- stdout
@@ -6781,6 +7012,19 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine stale" tests="9" failures="9"><testcase classname="spine stale" name="orphan-check checks/door/.hidden.py"><failure message="covers open/remove, which the spec no longer defines">covers open/remove, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers closed/open, which the spec no longer defines">covers closed/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers café/über, which the spec no longer defines">covers café/über, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/sub/test_more.txt"><failure message="covers a-b/c_d, which the spec no longer defines">covers a-b/c_d, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/open, which the spec no longer defines">covers closed/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers open/open, which the spec no longer defines">covers open/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers nowhere/open, which the spec no longer defines">covers nowhere/open, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="orphan-check checks/door/test_door.py"><failure message="covers closed/fly, which the spec no longer defines">covers closed/fly, which the spec no longer defines</failure></testcase><testcase classname="spine stale" name="bad-citation checks/door/test_door.py:4"><failure message="&quot;covers:closed/open@26CCABA33EA0&quot; is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase">"covers:closed/open@26CCABA33EA0" is not a citation: write covers: state/event@hash or covers: spine@hash, the hash in lowercase</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine stale diff/outputs-b.yaml drawings/outputs/checks
+exit 1
+--- stdout
+| error   stale-check        drawings/outputs/checks/test_sends.py: covers closed/open@2361092bc972, but that cell now hashes to fbdfd40ef7f2: re-ratify, then update the check
+| error   stale-check        drawings/outputs/checks/test_sends.py: covers open/open@fe132ab2f82b, but that cell now hashes to 1d1503e91322: re-ratify, then update the check
+| info    uncovered          closed/open: no check cites this transition; conformance still exercises it
+| -- 2 errors, 3 findings
+|
+=== in tools/internal/spine/testdata: spine stale drawings/outputs/spine.yaml drawings/outputs/checks
+exit 0
+--- stdout
+| -- 0 errors, 0 findings
+|
 === in tools/internal/spine/testdata: spine stale seeds/spine.yaml checks
 exit 1
 --- stdout

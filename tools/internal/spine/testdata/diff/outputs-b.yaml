@@ -1,0 +1,19 @@
+# drawings/outputs/spine.yaml sending otherwise (#116): nothing where it chimes for the owner who
+# opens the door, and a chime where a guest finds it open.
+machine: door
+section: "1.2"
+vars:
+  role: [owner, guest]
+states:
+  closed: {kind: fact}
+  open: {}
+  gone: {kind: design, terminal: true}
+initial: closed
+events: [open, remove]
+outputs: [chime, alarm]
+rules:
+  - {from: closed, event: open, when: "role == 'owner'", to: open, outputs: []}
+  - {from: closed, event: open, when: "role != 'owner'", reject: true}
+  - {from: closed, event: remove, to: gone, outputs: [alarm]}
+  - {from: open, event: open, stay: true, outputs: [chime]}
+  - {from: open, event: remove, ignore: true}

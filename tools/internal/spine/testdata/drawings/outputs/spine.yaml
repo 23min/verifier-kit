@@ -1,0 +1,22 @@
+# seeds/spine.yaml with outputs (#116): every rule that moves or stays says what it sends, one
+# output or none, on an edge and in the table.
+machine: door
+section: "1.2"
+vars:
+  role: [owner, guest]
+states:
+  closed: {kind: fact}
+  open: {}
+  gone: {kind: design, terminal: true}
+initial: closed
+events: [open, remove]
+outputs: [chime, alarm]
+rules:
+  - {from: closed, event: open, when: "role == 'owner'", to: open, outputs: [chime]}
+  - {from: closed, event: open, when: "role != 'owner'", reject: true}
+  - {from: closed, event: remove, to: gone, outputs: [alarm]}
+  - {from: open, event: open, when: "role == 'owner'", stay: true, outputs: [chime]}
+  - {from: open, event: open, when: "role != 'owner'", stay: true, outputs: []}
+  - {from: open, event: remove, ignore: true}
+examples:
+  - {name: owner opens, steps: ["open role=owner"], expect: open}

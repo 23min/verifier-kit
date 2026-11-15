@@ -13,11 +13,11 @@ import (
 // ---------- loading and validation ----------
 
 var (
-	topKeys      = names("machine", "section", "vars", "states", "initial", "events", "rules", "examples")
+	topKeys      = names("machine", "section", "vars", "states", "initial", "events", "outputs", "rules", "examples")
 	requiredKeys = []string{"events", "initial", "machine", "rules", "states"} // sorted, as reported
 	stateKeys    = names("kind", "terminal")
 	stateKinds   = names("fact", "policy", "design")
-	ruleKeys     = names("from", "event", "when", "to", "reject", "ignore", "stay")
+	ruleKeys     = names("from", "event", "when", "to", "reject", "ignore", "stay", "outputs")
 	outcomes     = []string{"to", "reject", "ignore", "stay"}
 	exampleKeys  = []string{"expect", "name", "steps"} // sorted, as reported
 	behaviorKeys = names("steps", "expect")
@@ -430,6 +430,13 @@ func validate(spec *yamldoc.Value, path string) Findings {
 		return out
 	}
 	listedTwice(textValues(events), "events", &out)
+	if outputs, ok := top.Get("outputs"); ok {
+		if !isList(outputs) || !allText(outputs) {
+			out.Add("spec-shape", "outputs", "outputs must be a list of names")
+			return out
+		}
+		listedTwice(textValues(outputs), "outputs", &out)
+	}
 	if !isMap(variables) {
 		out.Add("spec-shape", "vars", "vars must map each variable to its list of values")
 		return out
@@ -496,6 +503,18 @@ func validate(spec *yamldoc.Value, path string) Findings {
 			out.Add("bad-outcome", where, "a rule needs exactly one of to, reject, ignore, stay")
 		} else if v, _ := r.Get(given[0]); given[0] != "to" && !isTrue(v) {
 			out.Add("bad-outcome", where, given[0]+" must be true")
+		}
+		sends, hasSends := r.Get("outputs")
+		canSend := len(given) == 1 && (given[0] == "to" || given[0] == "stay")
+		switch {
+		case hasSends && len(given) == 1 && !canSend:
+			out.Add("unknown-key", where, fmt.Sprintf(`a rule that %ss the event sends nothing, so it has no "outputs"`, given[0]))
+		case hasSends && !top.Has("outputs"):
+			out.Add("unknown-key", where, `the spine declares no outputs, so a rule has no "outputs"`)
+		case hasSends && (!isList(sends) || !allText(sends) || len(sends.Items) > 1):
+			out.Add("spec-shape", where, "a rule's outputs must be a list of at most one output, such as [send_mail], or [] for none")
+		case !hasSends && canSend && top.Has("outputs"):
+			out.Add("missing-key", where, `rule needs "outputs": the spine declares outputs, and this rule moves or stays`)
 		}
 		if when, ok := r.Get("when"); ok {
 			if err := checkWhen(when, varNames); err != nil {

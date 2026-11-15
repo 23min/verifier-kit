@@ -16,8 +16,9 @@ import (
 
 // ---------- the machine ----------
 
-// Outcome is what one rule does: to (with a target), reject, ignore or stay.
-type Outcome struct{ Kind, Target string }
+// Outcome is what one rule does: to (with a target), reject, ignore or stay, and the output its
+// step sends, empty when it sends nothing or the spine declares no outputs (#116).
+type Outcome struct{ Kind, Target, Output string }
 
 // Rule is one validated rule.
 type Rule struct {
@@ -41,6 +42,7 @@ type Spec struct {
 	States   []string // declared order
 	Initial  string
 	Events   []string // as written, repeats and all
+	Outputs  []string // as written; nil when the spine declares none
 	Vars     []Var    // declared order; never nil
 	Rules    []*Rule
 	Examples []Example
@@ -71,6 +73,9 @@ func newSpec(v *yamldoc.Value) *Spec {
 	}
 	s.Initial = get("initial").Str
 	s.Events = textValues(get("events"))
+	if outputs := get("outputs"); outputs != nil {
+		s.Outputs = textValues(outputs)
+	}
 	s.Vars = specVars(orEmpty(get("vars")))
 	varNames := map[string]bool{}
 	for _, x := range s.Vars {
@@ -83,7 +88,7 @@ func newSpec(v *yamldoc.Value) *Spec {
 		event, _ := m.Get("event")
 		r.From, r.Event = from.Str, event.Str
 		if to, ok := m.Get("to"); ok {
-			r.Outcome = Outcome{"to", to.Str}
+			r.Outcome = Outcome{Kind: "to", Target: to.Str}
 		} else {
 			for _, k := range []string{"reject", "ignore", "stay"} {
 				if x, ok := m.Get(k); ok && isTrue(x) {
@@ -91,6 +96,9 @@ func newSpec(v *yamldoc.Value) *Spec {
 					break
 				}
 			}
+		}
+		if outputs, ok := m.Get("outputs"); ok && len(outputs.Items) == 1 {
+			r.Outcome.Output = outputs.Items[0].Str
 		}
 		if when, ok := m.Get("when"); ok {
 			r.When, _ = compileCondition(when.Str, varNames)
@@ -155,15 +163,23 @@ func hashString(s string) string {
 	return b.String()
 }
 
-// canonJSON is a validated rule in the hashed form: its keys sorted, its values text or true.
+// canonJSON is a validated rule in the hashed form: its keys sorted, its values text, true, or
+// a list of text, its outputs.
 func canonJSON(m *yamldoc.Map) string {
 	type kv struct{ k, v string }
 	var pairs []kv
 	for i, k := range m.Keys {
 		v := m.Values[i]
 		val := "true"
-		if isText(v) {
+		switch {
+		case isText(v):
 			val = hashString(v.Str)
+		case isList(v):
+			items := make([]string, len(v.Items))
+			for j, x := range v.Items {
+				items[j] = hashString(x.Str)
+			}
+			val = "[" + strings.Join(items, ", ") + "]"
 		}
 		pairs = append(pairs, kv{k.Str, val})
 	}
@@ -222,7 +238,8 @@ func (s *Spec) decide(state, event string, env Env) []Outcome {
 		}
 	}
 	sort.Slice(hits, func(i, j int) bool {
-		return hits[i].Kind < hits[j].Kind || hits[i].Kind == hits[j].Kind && hits[i].Target < hits[j].Target
+		a, b := hits[i], hits[j]
+		return a.Kind < b.Kind || a.Kind == b.Kind && (a.Target < b.Target || a.Target == b.Target && a.Output < b.Output)
 	})
 	return hits
 }
@@ -236,6 +253,9 @@ func show(outcomes []Outcome) string {
 		parts[i] = o.Kind
 		if o.Kind == "to" {
 			parts[i] = "-> " + o.Target
+		}
+		if o.Output != "" {
+			parts[i] += " / " + o.Output
 		}
 	}
 	return strings.Join(parts, " and ")
@@ -324,6 +344,9 @@ func check(s *Spec) Findings {
 		if !slices.Contains(s.Events, r.Event) {
 			out.Add("unknown-event", where, fmt.Sprintf(`rule uses undeclared event %q`, r.Event))
 		}
+		if r.Outcome.Output != "" && !slices.Contains(s.Outputs, r.Outcome.Output) {
+			out.Add("unknown-output", where, fmt.Sprintf(`rule sends undeclared output %q`, r.Outcome.Output))
+		}
 	}
 
 	envs := s.assignments()
@@ -395,7 +418,7 @@ func diff(a, b *Spec, depth int) Findings {
 	for _, part := range []struct {
 		name string
 		a, b []string
-	}{{"states", a.States, b.States}, {"events", a.Events, b.Events}} {
+	}{{"states", a.States, b.States}, {"events", a.Events, b.Events}, {"outputs", a.Outputs, b.Outputs}} {
 		for _, x := range sortedMinus(part.a, part.b) {
 			out.Add("only-in-a", part.name, fmt.Sprintf(`A has %s %q, B does not`, strings.TrimSuffix(part.name, "s"), x))
 		}
@@ -527,16 +550,20 @@ func (s *Spec) cellHash(state, event string) string {
 }
 
 // spineHash is what a check that depends on the whole machine cites, as spine@<hash> (#59):
-// the states and which are terminal, initial, the events, the variables and their values, and
-// the rules. The machine's name, its section, a state's kind, the worked examples, comments and
-// the order anything is written in don't change what the machine does, so they don't change it.
+// the states and which are terminal, initial, the events, the outputs when the spine declares
+// them (#116), the variables and their values, and the rules. The machine's name, its section, a
+// state's kind, the worked examples, comments and the order anything is written in don't change
+// what the machine does, so they don't change it.
 func (s *Spec) spineHash() string {
-	var states, events, vars, rules []string
+	var states, events, outputs, vars, rules []string
 	for _, st := range s.States {
 		states = append(states, fmt.Sprintf("[%s, %t]", hashString(st), s.terminal[st]))
 	}
 	for _, e := range s.Events {
 		events = append(events, hashString(e))
+	}
+	for _, o := range s.Outputs {
+		outputs = append(outputs, hashString(o))
 	}
 	for _, v := range s.Vars {
 		values := make([]string, len(v.Values))
@@ -549,11 +576,15 @@ func (s *Spec) spineHash() string {
 	for _, r := range s.Rules {
 		rules = append(rules, r.canon)
 	}
-	for _, list := range [][]string{states, events, vars, rules} {
+	for _, list := range [][]string{states, events, outputs, vars, rules} {
 		sort.Strings(list)
 	}
-	canon := fmt.Sprintf(`{"events": [%s], "initial": %s, "rules": [%s], "states": [%s], "vars": [%s]}`,
-		strings.Join(events, ", "), hashString(s.Initial), strings.Join(rules, ", "),
+	declared := "" // a spine without outputs hashes as it did before them
+	if s.Outputs != nil {
+		declared = fmt.Sprintf(`"outputs": [%s], `, strings.Join(outputs, ", "))
+	}
+	canon := fmt.Sprintf(`{"events": [%s], "initial": %s, %s"rules": [%s], "states": [%s], "vars": [%s]}`,
+		strings.Join(events, ", "), hashString(s.Initial), declared, strings.Join(rules, ", "),
 		strings.Join(states, ", "), strings.Join(vars, ", "))
 	sum := sha256.Sum256([]byte(canon))
 	return hex.EncodeToString(sum[:])[:12]

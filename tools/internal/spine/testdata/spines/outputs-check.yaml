@@ -1,0 +1,18 @@
+# What check finds in outputs (#116): an output the spine doesn't declare, and two rules that
+# agree on the move but not on what it sends.
+machine: door
+vars:
+  role: [owner, guest]
+states:
+  closed: {}
+  open: {}
+  gone: {terminal: true}
+initial: closed
+events: [open, remove]
+outputs: [chime]
+rules:
+  - {from: closed, event: open, to: open, outputs: [chime]}
+  - {from: closed, event: open, when: "role == 'guest'", to: open, outputs: []}
+  - {from: closed, event: remove, to: gone, outputs: [bell]}
+  - {from: open, event: open, stay: true, outputs: []}
+  - {from: open, event: remove, ignore: true}

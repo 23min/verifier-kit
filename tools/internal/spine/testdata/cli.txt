@@ -46,6 +46,7 @@
 ["hash", "-h"]
 ["hash", "spines/unsound.yaml"]
 ["hash", "spines/not-utf8.yaml"]
+["hash", "drawings/outputs/spine.yaml"]
 ["stale", "seeds/spine.yaml"]
 ["stale", "seeds/spine.yaml", "checks/door", "--format=json"]
 ["behaviors", "--format", "json", "seeds/spine.yaml", "behaviors/door"]
