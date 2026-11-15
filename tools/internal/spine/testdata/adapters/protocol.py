@@ -67,8 +67,17 @@ BENT = {
     "escapes": ("observe", 2, b'{"state": "\\u00e9\\ud83d\\ude00\\n\\t\\"\\\\\\/"}'),
     "bad-utf8": ("observe", 2, b'{"state": "op\xff\xfeen\xe2\x82\xff\xed\xa0\x80"}'),
     "bad-utf8-outside": ("observe", 1, b'{"state": "closed"}\xff'),
+    "outputs-text": ("apply", 1, b'{"result": "ok", "outputs": "chime"}'),
+    "outputs-numbers": ("apply", 1, b'{"result": "ok", "outputs": [1]}'),
+    "outputs-null": ("apply", 1, b'{"result": "ok", "outputs": [null]}'),
+    "outputs-twice": ("apply", 1, b'{"result": "ok", "outputs": [], "outputs": []}'),
+    "outputs-and-more": ("apply", 1, b'{"result": "ok", "outputs": [], "extra": 1}'),
+    "outputs-alone": ("apply", 1, b'{"outputs": []}'),
+    "outputs-on-error": ("apply", 1, b'{"error": "boom", "outputs": []}'),
+    "outputs-on-observe": ("observe", 1, b'{"state": "closed", "outputs": []}'),
     "crlf": None, "cr-split": None, "cr-at-exit": None, "exit-3": None, "exit-after-new": None, "signal": None,
     "echo-apply": None, "no-reply": None, "close-stdout": None, "mixed-endings": None, "ok": None,
+    "outputs": None,
 }
 
 
@@ -96,6 +105,8 @@ def main():
             reply = {"ok": True}
         elif op == "apply":
             reply = {"result": door(request["event"], request["env"])}
+            if MODE == "outputs":  # what each step sent, which seeds/spine.yaml says nothing of
+                reply["outputs"] = ["chime"] if request["event"] == "open" else []
             if MODE == "echo-apply":
                 reply = {"error": line.decode().rstrip("\n")}
         else:

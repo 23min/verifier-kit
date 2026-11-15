@@ -23,8 +23,9 @@ combination of a few finite variables ([introduction](introduction.md)).
   refusal changes is out of reach at any margin ([`design.md`, "What conform
   guarantees"](design.md#what-conform-guarantees)).
 - **What it isn't.** It is testing with a stated bound, not proof. It runs one lifecycle at a
-  time, so it says nothing about races. It sees states and permissions, not data; content
-  checks cover data, and mutants check that the oracle notices planted bugs.
+  time, so it says nothing about races. It sees states, permissions and the names of what each
+  step sends, not data; content checks cover data, and mutants check that the oracle notices
+  planted bugs.
 - **Who owns it.** The spine is made from your prose by two independent readings, with each
   disagreement put to you as a question, and you ratify it. Hooks, a required CI check and a path
   guard keep the builder agent from changing it.
