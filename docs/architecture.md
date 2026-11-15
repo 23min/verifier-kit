@@ -29,77 +29,35 @@ docs/                            introduction, guide, comparison, design (normat
 Callers know about `./verify`. `./verify` knows the folder layout. The tools know only the
 files they are given.
 
-```mermaid
-flowchart LR
-  subgraph callers["Callers"]
-    stop["Claude Code Stop hook<br/>integrations/claude-code/hooks/stop-verify.sh"]
-    pre["git pre-commit<br/>integrations/git-hooks/pre-commit"]
-    ci["CI job<br/>.github/workflows/verify.yml"]
-    faults["demo/faults.sh"]
-    person["a person"]
-  end
-  entry["./verify, Bash<br/>builds spine and verify, then runs verify"]
-  verify["tools/bin/verify, built from tools/ with Go<br/>finds the pieces by folder name, runs the steps"]
-  subgraph tools["Tools: files in, findings out"]
-    spine["tools/bin/spine, built from tools/ with Go<br/>check, behaviors, stale, conform, draw, guard"]
-    rc["tools/run_checks.py"]
-    shim["tools/adapter_shim.py<br/>a Python adapter over JSON lines"]
-  end
-  subgraph files["Files in the repo"]
-    mut["the mutants, per root<br/>mutation/mutants.yaml"]
-    oracle["the oracle, per root<br/>spec/, checks/, conformance/"]
-    code["the code, per root<br/>src/"]
-    policy["policy.yaml"]
-  end
-  stop -->|"./verify, fast checks"| entry
-  pre -->|"./verify"| entry
-  ci -->|"./verify --full"| entry
-  faults -->|"./verify, on a broken copy"| entry
-  person --> entry
-  entry -->|"the same arguments"| verify
-  verify --> spine
-  verify -->|"a Python root's checks/run.cmd"| rc
-  spine -->|"conform, a Python root's adapter line"| shim
-  verify -->|"--full: each mutant in a copy, then spine conform and the checks there"| mut
-  spine --> oracle
-  spine --> code
-  spine --> policy
-  rc --> oracle
-  rc --> code
-```
+![Layers. Five callers run ./verify: the Claude Code Stop hook
+(integrations/claude-code/hooks/stop-verify.sh) for the fast checks, git pre-commit
+(integrations/git-hooks/pre-commit), the CI job (.github/workflows/verify.yml) with --full,
+demo/faults.sh on a broken copy, and a person. ./verify, in Bash, builds spine and verify, then runs
+tools/bin/verify with the same arguments. verify finds the pieces by folder name and runs the steps:
+tools/bin/spine (check, behaviors, stale, conform, draw, guard); tools/run_checks.py, from a Python
+root's checks/run.cmd; and under --full each mutant in mutation/mutants.yaml, in a copy, with spine
+conform and the checks run there. spine's conform runs a Python root's adapter line through
+tools/adapter_shim.py, a Python adapter over JSON lines. spine works on policy.yaml and on each
+root's oracle (spec/, checks/, conformance/) and code (src/); run_checks.py on the oracle and the
+code. Colours show who owns what: ./verify, verify, spine, run_checks.py and adapter_shim.py are
+green, the toolkit's programs; policy.yaml, the oracle and the mutants are purple, yours: the
+builder can't change it; the code is pink, the builder's.](architecture/1-layers.svg)
 
 ## What `./verify` runs
 
-```mermaid
-flowchart TD
-  start(["./verify [ROOT] [--full]"]) --> build
-  build["go -C tools build: tools/bin/spine and tools/bin/verify<br/>without Go, FAIL spine and verify built, exit 1"] --> roots
-  roots{"ROOT given?"} -- yes --> one["that folder"]
-  roots -- no --> has{"spec/ here, or<br/>no examples/*/?"}
-  has -- yes --> here["this folder"]
-  has -- no --> each["every examples/*/, sorted"]
-  one --> g
-  here --> g
-  each --> g
-  g{"VERIFY_BASE set?"} -- yes --> guard["spine guard policy.yaml<br/>files changed since VERIFY_BASE<br/>once, whatever the roots"]
-  g -- no --> skipg["skip guard"]
-  guard --> rootloop
-  skipg --> rootloop
-  subgraph rootloop["once per root"]
-    subgraph loop["once per {root}/spec/{m}/spine.yaml"]
-      check["spine check"] -- sound --> beh["spine behaviors<br/>spec/{m}/behaviors/"]
-      check -- not sound --> skipm["skip the machine's other steps"]
-      beh --> stale["spine stale<br/>checks/{m}/"]
-      stale --> conf["spine conform with the line in<br/>conformance/adapter_{m}.cmd, from {root}"]
-      conf --> drw["spine draw with spec/{m}/drawing.yaml,<br/>its output compared with spec/{m}/drawing.svg"]
-    end
-    loop --> content["content checks: the line in<br/>{root}/checks/run.cmd, from {root}"]
-    content --> f{"--full?"}
-    f -- yes --> mut["each mutant in {root}/mutation/mutants.yaml,<br/>in a copy: conform and the content checks;<br/>and the line in every mutate_*.cmd"]
-    f -- no --> skipmut["skip mutation"]
-  end
-  rootloop --> sum["one summary line; exit 0 or 1"]
-```
+![What ./verify runs. It builds tools/bin/spine and tools/bin/verify with go -C tools build, and
+without Go fails with exit 1. The roots are the folder given as ROOT; without one, this folder if it
+has spec/ or there is no examples/\*/; otherwise every examples/\*/, sorted. If VERIFY_BASE is set,
+spine guard checks the files changed since VERIFY_BASE against policy.yaml, once, whatever the
+roots. Then, once per root: for each {root}/spec/{m}/spine.yaml, spine check, and only if the spine
+is sound, spine behaviors on spec/{m}/behaviors/, spine stale on checks/{m}/, spine conform with the
+line in conformance/adapter_{m}.cmd, and spine draw with spec/{m}/drawing.yaml, its output compared
+with spec/{m}/drawing.svg; then the content checks, the line in {root}/checks/run.cmd; then, under
+--full, each mutant in {root}/mutation/mutants.yaml, in a copy, and the line in every mutate_\*.cmd.
+One summary line ends the run, with exit 0 or 1. Colours show who owns what: the steps the toolkit
+runs are green, the toolkit's programs; the content checks, the root's own command line, are purple,
+yours: the builder can't change it; the decisions, roots and skips are
+white.](architecture/2-what-verify-runs.svg)
 
 Each adapter and the content checks are a `.cmd` file holding one command line, in any
 language (`docs/adr/0007-no-language-built-in.md`), and so is a mutation tool's command,
@@ -135,25 +93,15 @@ The first example, in `examples/notes/`; the paths below are relative to it. Its
 are tied together by the name `notes`, by Python imports, and by the cell hashes the checks
 cite.
 
-```mermaid
-flowchart LR
-  chapter["spec/notes/chapter.md<br/>prose"]
-  readings["spec/notes/readings/*.yaml<br/>two readings"]
-  spineY["spec/notes/spine.yaml<br/>ratified spine"]
-  behav["spec/notes/behaviors/<br/>valid/ and invalid/"]
-  adapter["conformance/adapter_notes.py<br/>new, apply, observe"]
-  app["src/notes_app.py<br/>the service"]
-  checks["checks/notes/test_content.py"]
-  mutate["mutation/mutants.yaml<br/>five edits"]
-  chapter -->|"read by two interpreters"| readings
-  readings -->|"spine diff; a person ratifies"| spineY
-  behav -->|"spine behaviors replays them"| spineY
-  spineY -->|"spine conform: every case, margin 1"| adapter
-  adapter -->|"imports and calls"| app
-  checks -->|"imports"| app
-  checks -.->|"cite cells as covers: state/event@hash"| spineY
-  mutate -->|"verify makes each in a copy"| app
-```
+![The notes example's files. Two interpreters read spec/notes/chapter.md, the prose, into
+spec/notes/readings/\*.yaml; spine diff compares the two readings and a person ratifies
+spec/notes/spine.yaml. spine behaviors replays spec/notes/behaviors/, valid/ and invalid/, against
+the spine. spine conform tries every case, with margin 1, through conformance/adapter_notes.py (new,
+apply, observe), which imports and calls src/notes_app.py, the service. checks/notes/test_content.py
+imports the service too, and cites the spine's cells as covers: state/event@hash, drawn dashed.
+verify makes each of the five edits in mutation/mutants.yaml to the service, in a copy. Colours show
+who owns what: the service, src/notes_app.py, is pink, the builder's; every other file is purple,
+yours: the builder can't change it.](architecture/3-notes.svg)
 
 Who may change what, from `policy.yaml` (enforced by `spine guard` when `VERIFY_BASE` is set):
 
@@ -171,35 +119,20 @@ racing, lost replies and crashes are checked by its own explorer, and Git's assu
 checks against real Git. The adapter's docstring is the whole contract between the oracle and
 `src/`.
 
-```mermaid
-flowchart LR
-  chapter["spec/ref_sync/chapter.md<br/>rules, S1-S7, C01-C12"]
-  readings["spec/ref_sync/readings/*.yaml<br/>two readings"]
-  spineY["spec/ref_sync/spine.yaml<br/>one operation's lifecycle"]
-  behav["spec/ref_sync/behaviors/<br/>valid/ and invalid/"]
-  adapter["conformance/adapter_ref_sync.py<br/>new, apply, observe"]
-  client["src/ref_sync_client.py<br/>transition, Client, GitRemote"]
-  proto["checks/ref_sync/test_protocol.py<br/>C01-C08"]
-  explore["checks/ref_sync/explore.py<br/>breadth-first search"]
-  world["checks/ref_sync/world.py<br/>simulated remote, faults, S1-S5, S7"]
-  gitc["checks/ref_sync/test_git_ref.py<br/>C09-C11, S6"]
-  git[("git program<br/>throwaway repositories")]
-  mutate["mutation/mutants.yaml<br/>six edits"]
-  chapter -->|"read by two interpreters"| readings
-  readings -->|"spine diff; a person ratifies"| spineY
-  behav -->|"spine behaviors replays them"| spineY
-  spineY -->|"spine conform: every case, margin 1"| adapter
-  adapter -->|"calls transition"| client
-  proto --> explore
-  proto --> world
-  world -->|"reads the states"| spineY
-  world -.->|"with test_protocol.py, cites the whole spine as covers: spine@hash"| spineY
-  world -->|"steps two Clients against a simulated remote"| client
-  gitc -->|"publishes with GitRemote"| client
-  gitc --> git
-  client -->|"GitRemote runs"| git
-  mutate -->|"verify makes each in a copy"| client
-```
+![The ref_sync example's files. Two interpreters read spec/ref_sync/chapter.md (rules S1-S7,
+C01-C12) into spec/ref_sync/readings/\*.yaml; spine diff compares them and a person ratifies
+spec/ref_sync/spine.yaml, one operation's lifecycle. spine behaviors replays
+spec/ref_sync/behaviors/ against it, and spine conform tries every case, with margin 1, through
+conformance/adapter_ref_sync.py (new, apply, observe), which calls transition in
+src/ref_sync_client.py (transition, Client, GitRemote). checks/ref_sync/test_protocol.py (C01-C08)
+uses explore.py, a breadth-first search, and world.py, the simulated remote with its faults and
+S1-S5 and S7. world.py reads the spine's states, steps two Clients against the simulated remote, and
+with test_protocol.py cites the whole spine as covers: spine@hash, drawn dashed.
+checks/ref_sync/test_git_ref.py (C09-C11, S6) publishes with GitRemote and uses the git program on
+throwaway repositories, which GitRemote runs too. verify makes each of the six edits in
+mutation/mutants.yaml to the client, in a copy. Colours show who owns what: the client,
+src/ref_sync_client.py, is pink, the builder's; the git program is white; every other file is
+purple, yours: the builder can't change it.](architecture/4-ref-sync.svg)
 
 The explorer is generic: `explore.py` knows nothing of Git, and `world.py` holds the moves, the
 faults and the invariants. `git` is a dependency of this example only; without it the Git
@@ -214,24 +147,15 @@ project. The spine is one job's lifecycle, which `spine conform` checks through 
 `Job.Lifecycle.transition/3`, taking `attempts` as given; the content checks drive `Job`
 itself, which counts its own attempts.
 
-```mermaid
-flowchart LR
-  chapter["spec/job/chapter.md<br/>rules, J1-J2, J01-J07"]
-  readings["spec/job/readings/*.yaml<br/>two readings"]
-  spineY["spec/job/spine.yaml<br/>one job's lifecycle"]
-  behav["spec/job/behaviors/<br/>valid/ and invalid/"]
-  adapter["conformance/adapter_job.exs<br/>adapter protocol, via adapter_job.cmd"]
-  job["src/job.ex<br/>Job.Lifecycle, Job"]
-  checks["checks/job/job_test.exs<br/>ExUnit, via checks/run.cmd"]
-  mutate["mutation/mutants.yaml<br/>five edits"]
-  chapter -->|"read by two interpreters"| readings
-  readings -->|"spine diff; a person ratifies"| spineY
-  behav -->|"spine behaviors replays them"| spineY
-  spineY -->|"spine conform: every case, margin 1"| adapter
-  adapter -->|"calls Job.Lifecycle.transition/3"| job
-  checks -->|"J01-J07, J1 and J2 in every reachable job"| job
-  mutate -->|"verify makes each in a copy"| job
-```
+![The elixir_job example's files. Two interpreters read spec/job/chapter.md (rules J1-J2, J01-J07)
+into spec/job/readings/\*.yaml; spine diff compares them and a person ratifies spec/job/spine.yaml,
+one job's lifecycle. spine behaviors replays spec/job/behaviors/ against it, and spine conform tries
+every case, with margin 1, through conformance/adapter_job.exs, which speaks the adapter protocol
+from adapter_job.cmd and calls Job.Lifecycle.transition/3 in src/job.ex. checks/job/job_test.exs,
+ExUnit run from checks/run.cmd, checks J01-J07, and J1 and J2 in every reachable job. verify makes
+each of the five edits in mutation/mutants.yaml to src/job.ex, in a copy. Colours show who owns
+what: src/job.ex is pink, the builder's; every other file is purple, yours: the builder can't change
+it.](architecture/5-elixir-job.svg)
 
 ## The oban_job example
 
@@ -244,29 +168,19 @@ The adapter runs one Oban, in `testing: :manual` on an in-memory database, for t
 `run` is `Oban.drain_queue/2`, a `wait` the same with `with_scheduled: true`, and `observe`
 reads the job's row back as its state and attempt.
 
-```mermaid
-flowchart LR
-  chapter["spec/delivery/chapter.md<br/>from Oban's docs: D1-D6, D01-D14"]
-  readings["spec/delivery/readings/*.yaml<br/>two readings"]
-  spineY["spec/delivery/spine.yaml<br/>one email's job"]
-  behav["spec/delivery/behaviors/<br/>valid/ and invalid/"]
-  adapter["conformance/adapter_delivery.exs<br/>adapter protocol, via adapter_delivery.cmd"]
-  app["src/mailer.ex<br/>Mailer, Mailer.Worker"]
-  deps["src/deps.exs, src/mix.lock<br/>Mix.install, offline"]
-  oban[("Oban 2.24.2<br/>on SQLite, in memory")]
-  checks["checks/delivery/delivery_test.exs<br/>ExUnit, via checks/run.cmd"]
-  mutate["mutation/mutants.yaml<br/>seven edits"]
-  chapter -->|"read by two interpreters"| readings
-  readings -->|"spine diff; a person ratifies"| spineY
-  behav -->|"spine behaviors replays them"| spineY
-  spineY -->|"spine conform: every case, margin 1"| adapter
-  adapter -->|"sends, cancels, drains the queue"| app
-  app --> oban
-  adapter -->|"reads the job's state and attempt"| oban
-  checks -->|"backoff, snooze, max_attempts, address"| app
-  deps -.->|"loaded first by every command"| app
-  mutate -->|"verify makes each in a copy"| app
-```
+![The oban_job example's files. Two interpreters read spec/delivery/chapter.md, written from Oban's
+docs (D1-D6, D01-D14), into spec/delivery/readings/\*.yaml; spine diff compares them and a person
+ratifies spec/delivery/spine.yaml, one email's job. spine behaviors replays spec/delivery/behaviors/
+against it, and spine conform tries every case, with margin 1, through
+conformance/adapter_delivery.exs, which speaks the adapter protocol from adapter_delivery.cmd. The
+adapter sends, cancels and drains the queue through src/mailer.ex (Mailer, Mailer.Worker), which
+runs on Oban 2.24.2, on SQLite in memory, and reads the job's state and attempt from Oban.
+checks/delivery/delivery_test.exs, ExUnit run from checks/run.cmd, checks backoff, snooze,
+max_attempts and the address. src/deps.exs and src/mix.lock, Mix.install offline, are loaded first
+by every command, drawn dashed. verify makes each of the seven edits in mutation/mutants.yaml to the
+mailer, in a copy. Colours show who owns what: src/mailer.ex, src/deps.exs and src/mix.lock are
+pink, the builder's; Oban is white; every other file is purple, yours: the builder can't change
+it.](architecture/6-oban-job.svg)
 
 ## Checking the checker
 
@@ -281,24 +195,14 @@ once. This is `verify`'s own code, in every language alike (`mutants.go` for the
 `verify.go` for the copies); a project with a mutation tool gives its command as
 `mutation/mutate_<name>.cmd`, which runs as a step of its own.
 
-```mermaid
-sequenceDiagram
-  participant V as verify
-  participant T as temp copy
-  participant C as spine conform, per machine
-  participant R as checks/run.cmd
-  V->>T: copy spec/, conformance/, checks/ and src/
-  V->>C: run from the copy
-  V->>R: run from the copy
-  Note over V: oracle-fails, and no mutant, unless every step exits 0
-  loop each mutant in mutation/mutants.yaml
-    V->>T: a new copy, with the mutant's one edit to src/
-    V->>C: run from the copy
-    V->>R: run from the copy
-    Note over V: killed if any step exits other than 0
-  end
-  Note over V: the step fails if any mutant survived or is stale
-```
+![How ./verify --full checks the checker. verify copies spec/, conformance/, checks/ and src/ into a
+temporary copy, and runs spine conform, per machine, and checks/run.cmd from it; unless every step
+exits 0, it reports oracle-fails and makes no mutant. Then, for each mutant in
+mutation/mutants.yaml, it makes a new copy with the mutant's one edit to src/ and runs the same
+steps from it; the mutant is killed if any step exits other than 0. The step fails if any mutant
+survived or is stale. Colours show who owns what: verify and spine conform are green, the toolkit's
+programs; checks/run.cmd is purple, yours: the builder can't change it; the temporary copy is
+white.](architecture/7-checking-the-checker.svg)
 
 ## Acceptance: `demo/faults.sh` and CI
 
@@ -312,15 +216,10 @@ Scenarios 15 to 17 run the Stop hook and read its reply as JSON, as Claude Code 
 machine without `python3`, on failing lines that hold characters JSON must escape, and with a
 project folder that doesn't exist.
 
-```mermaid
-flowchart LR
-  repo["working copy"] -->|"tar, without .git"| copy["temp copy"]
-  copy --> seed["seed one fault"]
-  seed --> run["run ./verify, spine diff,<br/>or the Stop hook"]
-  run --> expect{"expected exit code<br/>and expected lines?"}
-  expect -- yes --> ok["scenario ok"]
-  expect -- no --> fail["scenario fails; faults.sh exits 1"]
-```
+![One demo/faults.sh scenario. The working copy is copied with tar, without .git, into a
+temporary copy; one fault is seeded there; ./verify, spine diff or the Stop hook runs on it. If
+its exit code and lines are the expected ones, the scenario is ok; otherwise it fails and
+faults.sh exits 1.](architecture/8-faults.svg)
 
 | # | Fault seeded | Command | Must print |
 |---|---|---|---|

@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 660" width="860" height="660">
+  <title>How ./verify --full runs the code as it is, then each mutant, in copies</title>
+  <style>
+    :root {
+      --surface: #ffffff; --ink: #15202b; --ink-2: #3b4755; --muted: #5a6676;
+      --line: #c6ced8; --line-2: #8a96a5; --zone-n: #f2f4f7;
+      --you: #e7e3f7; --you-s: #6556b0;
+      --code: #f8e3e8; --code-s: #b0465c;
+      --prog: #ddefe3; --prog-s: #2f7a4c;
+      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --surface: #151d26; --ink: #e2e8ee; --ink-2: #b6c1cd; --muted: #95a3b2;
+        --line: #33404f; --line-2: #627082; --zone-n: #1a232d;
+        --you: #272245; --you-s: #a99df2;
+        --code: #3a1d26; --code-s: #ec8fa3;
+        --prog: #14291d; --prog-s: #6fc593;
+      }
+    }
+    .bg { fill: var(--surface); stroke: var(--line); }
+    .n { fill: var(--surface); stroke: var(--line-2); stroke-width: 1.2; }
+    .note { fill: var(--zone-n); stroke: var(--line-2); stroke-width: 1; }
+    .frame { fill: none; stroke: var(--line-2); stroke-width: 1.2; }
+    .tab { fill: var(--zone-n); stroke: var(--line-2); stroke-width: 1.2; }
+    .life { stroke: var(--line-2); stroke-width: 1.2; stroke-dasharray: 4 4; }
+    .n.you { fill: var(--you); stroke: var(--you-s); }
+    .n.code { fill: var(--code); stroke: var(--code-s); }
+    .n.prog { fill: var(--prog); stroke: var(--prog-s); }
+    .e { fill: none; stroke: var(--ink-2); stroke-width: 1.4; }
+    .mk { fill: var(--ink-2); }
+    .tt { font: 600 14px var(--font-body); fill: var(--ink); }
+    .tm { font: 600 14px var(--font-mono); fill: var(--ink); }
+    .ts { font: 400 14px var(--font-body); fill: var(--muted); }
+    .tn { font: 400 14px var(--font-body); fill: var(--ink); }
+    .tl { font: 400 14px var(--font-body); fill: var(--ink-2); }
+    /* An edge label carries a halo in the colour beneath it, so a line that
+       passes under the text does not strike through it. */
+    .te { font: 400 14px var(--font-body); fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+  </style>
+  <defs>
+    <marker id="mutation-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="mk" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0.5" y="0.5" width="859" height="659" rx="10"/>
+
+  <!-- The participants and their lifelines -->
+  <path class="life" d="M80,76 V596 M450,76 V596 M610,76 V596 M768,76 V596"/>
+
+  <rect class="n prog" x="32" y="20" width="96" height="56" rx="6"/>
+  <text class="tm" x="80" y="53" text-anchor="middle">verify</text>
+  <rect class="n" x="390" y="20" width="120" height="56" rx="6"/>
+  <text class="tt" x="450" y="53" text-anchor="middle">temp copy</text>
+  <rect class="n prog" x="540" y="20" width="140" height="56" rx="6"/>
+  <text class="tt" x="610" y="43" text-anchor="middle">spine conform,</text>
+  <text class="ts" x="610" y="63" text-anchor="middle">per machine</text>
+  <rect class="n you" x="693" y="20" width="150" height="56" rx="6"/>
+  <text class="tm" x="768" y="53" text-anchor="middle">checks/run.cmd</text>
+
+  <!-- The code as it is -->
+  <path class="e" d="M80,120 H448" marker-end="url(#mutation-arrow)"/>
+  <text class="te" x="96" y="112">copy spec/, conformance/, checks/ and src/</text>
+  <path class="e" d="M80,160 H608" marker-end="url(#mutation-arrow)"/>
+  <text class="te" x="96" y="152">run from the copy</text>
+  <path class="e" d="M80,200 H766" marker-end="url(#mutation-arrow)"/>
+  <text class="te" x="96" y="192">run from the copy</text>
+
+  <rect class="note" x="32" y="222" width="240" height="46" rx="4"/>
+  <text class="tn" x="152" y="241" text-anchor="middle">oracle-fails, and no mutant,</text>
+  <text class="tn" x="152" y="259" text-anchor="middle">unless every step exits 0</text>
+
+  <!-- Each mutant -->
+  <rect class="frame" x="24" y="290" width="812" height="226" rx="4"/>
+  <path class="tab" d="M24,290 H76 V304 L68,312 H24 Z"/>
+  <text class="tt" x="32" y="306">loop</text>
+  <text class="ts" x="88" y="306">each mutant in mutation/mutants.yaml</text>
+
+  <path class="e" d="M80,350 H448" marker-end="url(#mutation-arrow)"/>
+  <text class="te" x="96" y="342">a new copy, with the mutant's one edit to src/</text>
+  <path class="e" d="M80,390 H608" marker-end="url(#mutation-arrow)"/>
+  <text class="te" x="96" y="382">run from the copy</text>
+  <path class="e" d="M80,430 H766" marker-end="url(#mutation-arrow)"/>
+  <text class="te" x="96" y="422">run from the copy</text>
+
+  <rect class="note" x="40" y="452" width="200" height="46" rx="4"/>
+  <text class="tn" x="140" y="471" text-anchor="middle">killed if any step exits</text>
+  <text class="tn" x="140" y="489" text-anchor="middle">other than 0</text>
+
+  <!-- The verdict -->
+  <rect class="note" x="32" y="536" width="240" height="46" rx="4"/>
+  <text class="tn" x="152" y="555" text-anchor="middle">the step fails if any mutant</text>
+  <text class="tn" x="152" y="573" text-anchor="middle">survived or is stale</text>
+
+  <!-- Legend -->
+  <rect class="n you" x="32" y="620" width="16" height="16" rx="3"/>
+  <text class="tl" x="58" y="633">yours: the builder can't change it</text>
+  <rect class="n prog" x="330" y="620" width="16" height="16" rx="3"/>
+  <text class="tl" x="356" y="633">the toolkit's programs</text>
+</svg>

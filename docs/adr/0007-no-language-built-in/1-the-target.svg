@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 756" width="860" height="756">
+  <title>ADR 0007's target, layer by layer: callers, ./verify, verify, and what it runs as programs</title>
+  <style>
+    :root {
+      --surface: #ffffff; --ink: #15202b; --ink-2: #3b4755; --muted: #5a6676;
+      --line: #c6ced8; --line-2: #8a96a5; --zone-n: #f2f4f7;
+      --you: #e7e3f7; --you-s: #6556b0;
+      --code: #f8e3e8; --code-s: #b0465c;
+      --prog: #ddefe3; --prog-s: #2f7a4c;
+      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --surface: #151d26; --ink: #e2e8ee; --ink-2: #b6c1cd; --muted: #95a3b2;
+        --line: #33404f; --line-2: #627082; --zone-n: #1a232d;
+        --you: #272245; --you-s: #a99df2;
+        --code: #3a1d26; --code-s: #ec8fa3;
+        --prog: #14291d; --prog-s: #6fc593;
+      }
+    }
+    .bg { fill: var(--surface); stroke: var(--line); }
+    .z-n { fill: var(--zone-n); stroke: var(--line); }
+    .n { fill: var(--surface); stroke: var(--line-2); stroke-width: 1.2; }
+    .n.you { fill: var(--you); stroke: var(--you-s); }
+    .n.code { fill: var(--code); stroke: var(--code-s); }
+    .n.prog { fill: var(--prog); stroke: var(--prog-s); }
+    .e { fill: none; stroke: var(--ink-2); stroke-width: 1.4; }
+    .mk { fill: var(--ink-2); }
+    .tt { font: 600 14px var(--font-body); fill: var(--ink); }
+    .ts { font: 400 14px var(--font-body); fill: var(--muted); }
+    .tz { font: 500 14px var(--font-mono); letter-spacing: 0.06em; fill: var(--muted); }
+    .tl { font: 400 14px var(--font-body); fill: var(--ink-2); }
+    /* An edge label carries a halo in the colour beneath it, so a line that
+       passes under the text does not strike through it. */
+    .te { font: 400 14px var(--font-body); fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+    .te.on-n { stroke: var(--zone-n); }
+  </style>
+  <defs>
+    <marker id="target-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="mk" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0.5" y="0.5" width="859" height="755" rx="10"/>
+
+  <!-- The zone, under everything else -->
+  <rect class="z-n" x="32" y="372" width="796" height="224" rx="8"/>
+  <text class="tz" x="48" y="396">RUN AS PROGRAMS</text>
+
+  <!-- Callers, ./verify and verify -->
+  <rect class="n" x="160" y="20" width="540" height="56" rx="6"/>
+  <text class="tt" x="430" y="43" text-anchor="middle">Callers</text>
+  <text class="ts" x="430" y="63" text-anchor="middle">CI, git pre-commit, the agent's Stop hook, demo/faults.sh, a person</text>
+  <path class="e" d="M430,76 V130" marker-end="url(#target-arrow)"/>
+  <text class="te" x="438" y="108">./verify [example] [--full]</text>
+
+  <rect class="n prog" x="100" y="132" width="660" height="56" rx="6"/>
+  <text class="tt" x="430" y="155" text-anchor="middle">./verify, Bash</text>
+  <text class="ts" x="430" y="175" text-anchor="middle">a few lines: builds the two programs, then runs verify with the same arguments</text>
+  <path class="e" d="M430,188 V242" marker-end="url(#target-arrow)"/>
+  <text class="te" x="438" y="220">verify [example] [--full]</text>
+
+  <rect class="n prog" x="130" y="244" width="600" height="94" rx="6"/>
+  <text class="tt" x="430" y="267" text-anchor="middle">verify, Go</text>
+  <text class="ts" x="430" y="287" text-anchor="middle">finds the pieces, runs the steps, reads mutation/mutants.yaml</text>
+  <text class="ts" x="430" y="306" text-anchor="middle">and runs each mutant on a copy, judges them all by one rule, and prints;</text>
+  <text class="ts" x="430" y="325" text-anchor="middle">its decisions are pure</text>
+
+  <!-- What verify runs -->
+  <path class="e" d="M248,338 V410" marker-end="url(#target-arrow)"/>
+  <text class="te on-n" x="256" y="388">runs</text>
+  <path class="e" d="M694,338 V410" marker-end="url(#target-arrow)"/>
+  <text class="te on-n" x="702" y="388">runs</text>
+
+  <rect class="n prog" x="48" y="412" width="400" height="56" rx="6"/>
+  <text class="tt" x="248" y="435" text-anchor="middle">spine, Go</text>
+  <text class="ts" x="248" y="455" text-anchor="middle">files in, findings out; runs only the adapter's line</text>
+
+  <rect class="n you" x="576" y="412" width="236" height="56" rx="6"/>
+  <text class="tt" x="694" y="435" text-anchor="middle">content checks</text>
+  <text class="ts" x="694" y="455" text-anchor="middle">a command, in any language</text>
+
+  <path class="e" d="M248,468 V522" marker-end="url(#target-arrow)"/>
+  <text class="te on-n" x="256" y="500">spine conform runs its line</text>
+
+  <rect class="n you" x="130" y="524" width="236" height="56" rx="6"/>
+  <text class="tt" x="248" y="547" text-anchor="middle">adapter, per machine</text>
+  <text class="ts" x="248" y="567" text-anchor="middle">a command, in any language</text>
+
+  <!-- The code -->
+  <path class="e" d="M248,580 V664 H318" marker-end="url(#target-arrow)"/>
+  <text class="te" x="256" y="628">calls the code</text>
+  <path class="e" d="M694,468 V664 H602" marker-end="url(#target-arrow)"/>
+  <text class="te on-n" x="702" y="528">call the code</text>
+
+  <rect class="n code" x="320" y="636" width="280" height="56" rx="6"/>
+  <text class="tt" x="460" y="669" text-anchor="middle">src/, in the example's language</text>
+
+  <!-- Legend -->
+  <rect class="n you" x="32" y="716" width="16" height="16" rx="3"/>
+  <text class="tl" x="58" y="729">yours: the builder can't change it</text>
+  <rect class="n code" x="330" y="716" width="16" height="16" rx="3"/>
+  <text class="tl" x="356" y="729">the builder's</text>
+  <rect class="n prog" x="482" y="716" width="16" height="16" rx="3"/>
+  <text class="tl" x="508" y="729">the toolkit's programs</text>
+</svg>
