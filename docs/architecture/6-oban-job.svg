@@ -93,8 +93,8 @@
   <path class="e" d="M352,484 H678 V420" marker-end="url(#oban-arrow)"/>
 
   <!-- What else reaches the code -->
-  <rect class="n code" x="32" y="580" width="240" height="56" rx="6"/>
-  <text class="tm" x="152" y="603" text-anchor="middle">src/deps.exs, src/mix.lock</text>
+  <rect class="n you" x="32" y="580" width="240" height="56" rx="6"/>
+  <text class="tm" x="152" y="603" text-anchor="middle">deps.exs, mix.lock</text>
   <text class="ts" x="152" y="623" text-anchor="middle">Mix.install, offline</text>
   <path class="e dash" d="M120,580 V526" marker-end="url(#oban-arrow)"/>
   <text class="te" x="128" y="548">loaded first by</text>

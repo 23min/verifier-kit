@@ -43,18 +43,18 @@ The ratified spine, drawn by `spine draw` from `spec/delivery/drawing.yaml`.
 From the repo root:
 
 ```sh
-elixir examples/oban_job/src/deps.exs   # once, online: Oban and its packages
+elixir examples/oban_job/deps.exs       # once, online: Oban and its packages
 ./verify examples/oban_job              # fast checks
 ./verify examples/oban_job --full       # also the eight mutants
 ```
 
 It needs Elixir 1.18 or later, for its built-in `JSON`, besides what the toolkit needs; setting
-up also fetches exqlite's prebuilt SQLite library. There is no Mix project. `src/deps.exs` calls
-`Mix.install`, pinned by `src/mix.lock`, and Mix keeps the packages in `~/.cache/mix`, outside
-the repo. Every command line loads `src/deps.exs`, then `src/**/*.ex`, with `HEX_OFFLINE=1`, so
-`./verify` fetches nothing; on a machine that hasn't set up, they fail and print the line above.
-`deps.exs` sits in `src/` because, until #113, `./verify --full` copied only `spec/`,
-`conformance/`, `checks/` and `src/`; it now copies the whole root, so it could move back.
+up also fetches exqlite's prebuilt SQLite library. There is no Mix project. `deps.exs`, at the
+example's root as a Mix project's manifest would be, calls `Mix.install`, pinned by `mix.lock`
+beside it, and Mix keeps the packages in `~/.cache/mix`, outside the repo. Every command line
+loads `deps.exs`, then `src/**/*.ex`, with `HEX_OFFLINE=1`, so `./verify` fetches nothing; on a
+machine that hasn't set up, they fail and print the line above. `./verify --full` copies the
+whole root for its mutants, so they find `deps.exs` there too (#113, #126).
 
 ## Layout and who owns what
 
@@ -69,8 +69,8 @@ conformance/adapter_delivery.*  the adapter; its header is the contract with src
 checks/run.exs, run.cmd         runs the checks; reports as tools/run_checks.py does    person
 checks/delivery/                backoff and snooze lengths, max_attempts, the address   person
 mutation/mutants.yaml           eight deliberate bugs the oracle must catch             person
+deps.exs, mix.lock              the Hex packages, pinned: the Oban under test           person
 src/mailer.ex                   the app: its worker, sending and cancelling             builder
-src/deps.exs, mix.lock          the Hex packages the app uses, pinned                   builder
 ```
 
 ## What is checked, and how far
@@ -124,4 +124,4 @@ how often a step sends, so the content checks pass on it.
   records.
 - **What the chapter leaves out** (its section 6): retrying a job by hand, `suspended`, jobs
   inserted as scheduled, several nodes or queues, unique jobs, Postgres and Oban Pro.
-- **Other versions.** The spine is checked against Oban 2.24.2, as `src/mix.lock` pins it.
+- **Other versions.** The spine is checked against Oban 2.24.2, as `mix.lock` pins it.

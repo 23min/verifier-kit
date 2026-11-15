@@ -46,9 +46,9 @@ jobs:
             ~/.cache/mix
             ~/.hex
             ~/.cache/elixir_make
-          key: oban-job-${{ runner.os }}-${{ hashFiles('examples/oban_job/src/mix.lock', 'examples/oban_job/src/deps.exs') }}
+          key: oban-job-${{ runner.os }}-${{ hashFiles('examples/oban_job/mix.lock', 'examples/oban_job/deps.exs') }}
 
-      - run: elixir examples/oban_job/src/deps.exs
+      - run: elixir examples/oban_job/deps.exs
 
       - run: go -C tools vet ./...
 

@@ -22,7 +22,7 @@
 #   Mailer.send_email(to) -> {:ok, job}: inserts the job that sends it, to run now, in queue :mail
 #   Mailer.cancel(job_id) -> :ok: an operator's cancel
 #   Mailer.Repo -> the app's Ecto repo, which holds Oban's jobs
-#   src/deps.exs -> installs the Hex packages src/ uses, pinned by src/mix.lock; the command
+#   deps.exs -> installs the Hex packages src/ uses, pinned by mix.lock; the command
 #             lines here and in checks/ load it first
 #
 # Time doesn't pass here: Oban runs in testing: :manual, and the queue runs only when the

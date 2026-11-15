@@ -7,4 +7,4 @@
 set -euo pipefail
 
 # oban_job's Hex packages, installed once, online, so that its commands run offline (#110).
-elixir examples/oban_job/src/deps.exs
+elixir examples/oban_job/deps.exs
