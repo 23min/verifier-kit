@@ -190,8 +190,9 @@ it.](architecture/6-oban-job.svg)
 
 `./verify --full` makes each example's mutants, listed in `mutation/mutants.yaml`, each one edit
 to a file under `src/` (#58). For each root it runs the steps that read `src/`, each machine's
-`conform` and the content checks, first on the code as it is and then on each mutant, every
-time in a new temporary copy of the root's `spec/`, `conformance/`, `checks/` and `src/`. If a
+`conform` and the content checks, first on the code as it is and then on each mutant, from one
+temporary copy of the whole root but its `.git`, made once per run (#113), whose `src/` is a
+fresh copy of the root's, with the mutant's edit made, before each run. If a
 step fails on the code as it is, it reports `oracle-fails` and makes no mutant, because an
 oracle that already fails would count every mutant as caught. A mutant is killed when any step
 exits other than 0, survives when all pass, and is stale when its text isn't in its file exactly
@@ -199,10 +200,10 @@ once. This is `verify`'s own code, in every language alike (`mutants.go` for the
 `verify.go` for the copies); a project with a mutation tool gives its command as
 `mutation/mutate_<name>.cmd`, which runs as a step of its own.
 
-![How ./verify --full checks the checker. verify copies spec/, conformance/, checks/ and src/ into a
-temporary copy, and runs spine conform, per machine, and checks/run.cmd from it; unless every step
-exits 0, it reports oracle-fails and makes no mutant. Then, for each mutant in
-mutation/mutants.yaml, it makes a new copy with the mutant's one edit to src/ and runs the same
+![How ./verify --full checks the checker. verify copies the root, but for its .git, into a
+temporary copy, once, and runs spine conform, per machine, and checks/run.cmd from it; unless every
+step exits 0, it reports oracle-fails and makes no mutant. Then, for each mutant in
+mutation/mutants.yaml, it gives the copy a fresh src/ with the mutant's one edit and runs the same
 steps from it; the mutant is killed if any step exits other than 0. The step fails if any mutant
 survived or is stale. Colours show who owns what: verify and spine conform are green, the toolkit's
 programs; checks/run.cmd is purple, yours: the builder can't change it; the temporary copy is

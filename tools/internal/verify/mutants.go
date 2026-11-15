@@ -28,9 +28,6 @@ type mutation struct {
 	oracle  []step // planned from the root; each command runs from the copy instead
 }
 
-// copied are the root's folders a copy holds: what the steps that read src/ read (OQ4).
-var copied = []string{"spec", "conformance", "checks", "src"}
-
 // readMutants reads mutants.yaml. problems are its bad-mutants lines; with any, no mutant runs.
 func readMutants(f pieceFile) (mutants []mutant, problems []string) {
 	bad := func(format string, args ...any) {

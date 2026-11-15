@@ -61,7 +61,7 @@
 
   <!-- The code as it is -->
   <path class="e" d="M80,120 H448" marker-end="url(#mutation-arrow)"/>
-  <text class="te" x="96" y="112">copy spec/, conformance/, checks/ and src/</text>
+  <text class="te" x="96" y="112">copy the root, once, but for its .git</text>
   <path class="e" d="M80,160 H608" marker-end="url(#mutation-arrow)"/>
   <text class="te" x="96" y="152">run from the copy</text>
   <path class="e" d="M80,200 H766" marker-end="url(#mutation-arrow)"/>
@@ -78,7 +78,7 @@
   <text class="ts" x="88" y="306">each mutant in mutation/mutants.yaml</text>
 
   <path class="e" d="M80,350 H448" marker-end="url(#mutation-arrow)"/>
-  <text class="te" x="96" y="342">a new copy, with the mutant's one edit to src/</text>
+  <text class="te" x="96" y="342">a fresh src/, with the mutant's one edit</text>
   <path class="e" d="M80,390 H608" marker-end="url(#mutation-arrow)"/>
   <text class="te" x="96" y="382">run from the copy</text>
   <path class="e" d="M80,430 H766" marker-end="url(#mutation-arrow)"/>

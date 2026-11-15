@@ -278,9 +278,12 @@ takes its place:
 ```
 
 Under `--full`, `verify` runs the steps that read `src/`, each machine's `conform` and the
-content checks, without JUnit reports, on the code as it is and then on each mutant: each time
-in a new temporary copy of the root's `spec/`, `conformance/`, `checks/` and `src/`, with the one
-edit made, removed after. If any of them fails on the code as it is, the step reports
+content checks, without JUnit reports, on the code as it is and then on each mutant. They run
+from one temporary copy of the root, but for its `.git`, made once per run and removed after, so
+that they find every file and folder they find in the root, such as a manifest, its
+dependencies and its build (#113). Before each run the copy gets a fresh copy of the root's
+`src/`, with the mutant's one edit made: no earlier mutant survives into a run, and the root
+itself is never written to. If any of them fails on the code as it is, the step reports
 `oracle-fails` and no mutant runs. A mutant is killed when any of them exits other than 0, and
 survives when all pass; it is stale when its `find` doesn't occur exactly once in its `file`,
 or the file can't be read. The step, `mutants killed (mutants.yaml)`, passes when every mutant
