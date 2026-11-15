@@ -6,7 +6,7 @@ spine written from Oban's documentation against what the app's worker and the li
 together, so the toolkit is tried on behavior it doesn't control. The chapter
 (`spec/delivery/chapter.md`) was written from Oban's documentation alone, and its section 5 says
 what it assumes where the documentation is silent or contradicts itself. The work is tracked in
-issue #110.
+issue #110, and what each step sends in #116.
 
 ## What it shows
 
@@ -15,8 +15,9 @@ retryable_1, scheduled_1, retryable_2 and scheduled_2, with discarded below them
 state moves to completed, on the left, when the server accepts, and to cancelled, on the right,
 on a bounce or a cancel. A failure moves available_0 or a waiting state to the next retryable
 state, and retryable_2 or scheduled_2 to discarded; a rate limit moves available_0 or a
-retryable state to the scheduled state with the same count. completed, cancelled and discarded
-are terminal. A table below gives every other rule by event and state.](spec/delivery/drawing.svg)
+retryable state to the scheduled state with the same count. Every label of a step that runs the
+worker reads its event / send_mail, as each such step sends the email once. completed, cancelled
+and discarded are terminal. A table below gives every other rule by event and state.](spec/delivery/drawing.svg)
 
 The ratified spine, drawn by `spine draw` from `spec/delivery/drawing.yaml`.
 
@@ -25,6 +26,11 @@ The ratified spine, drawn by `spine draw` from `spec/delivery/drawing.yaml`.
   `answer`, is what the mail server answers. It was ratified from two readings by different
   models, which agreed on every cell; the owner made `retryable_1` and `retryable_2` policy,
   where the readings differed.
+- What each step sends (#116). The spine declares one output, `send_mail`, the worker's call to
+  the mail server: every step in which the worker runs sends it once, and every other step sends
+  nothing. The adapter counts the calls its fake mail server gets in each step and reports them,
+  so `conform` checks on every sequence how often the email is sent. Two new readings of the
+  chapter, which now names `send_mail`, agreed with each other and with the spine in every case.
 - `conform` driving code the toolkit didn't write: the adapter runs real Oban, on SQLite, in one
   process for the whole run. A `run` is one `Oban.drain_queue/2`; a `wait` is one with
   `with_scheduled: true`, which makes every waiting job available and runs it.
@@ -39,7 +45,7 @@ From the repo root:
 ```sh
 elixir examples/oban_job/src/deps.exs   # once, online: Oban and its packages
 ./verify examples/oban_job              # fast checks
-./verify examples/oban_job --full       # also the seven mutants
+./verify examples/oban_job --full       # also the eight mutants
 ```
 
 It needs Elixir 1.18 or later, for its built-in `JSON`, besides what the toolkit needs; setting
@@ -62,7 +68,7 @@ spec/delivery/behaviors/        valid/ must be allowed, invalid/ refused        
 conformance/adapter_delivery.*  the adapter; its header is the contract with src/       person
 checks/run.exs, run.cmd         runs the checks; reports as tools/run_checks.py does    person
 checks/delivery/                backoff and snooze lengths, max_attempts, the address   person
-mutation/mutants.yaml           seven deliberate bugs the oracle must catch             person
+mutation/mutants.yaml           eight deliberate bugs the oracle must catch             person
 src/mailer.ex                   the app: its worker, sending and cancelling             builder
 src/deps.exs, mix.lock          the Hex packages the app uses, pinned                   builder
 ```
@@ -71,10 +77,10 @@ src/deps.exs, mix.lock          the Hex packages the app uses, pinned           
 
 | What | How | Bound |
 |---|---|---|
-| The app and Oban match the spine | `spine conform` through `adapter_delivery.cmd`, on Oban 2.24.2 with SQLite | every case, margin 1: 396 sequences |
+| The app and Oban match the spine, and each step sends what it says | `spine conform` through `adapter_delivery.cmd`, on Oban 2.24.2 with SQLite | every case, margin 1: 396 sequences |
 | The drawing shows the spine | `spine draw` on `spine.yaml` and `drawing.yaml`, compared with `drawing.svg` | byte for byte |
 | Scenarios D01-D14 end as the chapter says, and D1, D2, D4, D5 and D6 rule out what they should | `spine behaviors` on `spec/delivery/behaviors/` | one run each, against the spine |
-| A backoff lasts 30 seconds times the attempt, a snooze 60 seconds; a snooze leaves `max_attempts` at 3; the email goes to its address once per attempt | `checks/delivery/delivery_test.exs` | one run each |
+| A backoff lasts 30 seconds times the attempt, a snooze 60 seconds; a snooze leaves `max_attempts` at 3; the email goes to its address | `checks/delivery/delivery_test.exs` | one run each |
 
 **What `conform` found:** nothing. On every sequence, Oban did what the ratified spine says, so
 the owner had no disagreement to resolve. The chapter's assumptions where the documentation is
@@ -83,11 +89,12 @@ starts (A1); `max_attempts: 3` means three attempts in all (A2); a snoozed job i
 and the snooze gives back exactly one attempt (A3). The documentation's contradictions stand as
 section 5 records them. One more gap, which the adapter relies on: the documentation says
 `with_scheduled: true` makes scheduled jobs available, and it makes retryable ones available
-too.
+too. With outputs (#116), it found nothing either: the worker called the mail server once in
+every step it ran, and never in another.
 
 ## The mutants
 
-`mutation/mutants.yaml` lists seven small edits to `src/mailer.ex`, which `./verify --full`
+`mutation/mutants.yaml` lists eight small edits to `src/mailer.ex`, which `./verify --full`
 makes and judges (`docs/reference/tool-contract.md`).
 
 | Mutant | Caught by |
@@ -99,9 +106,11 @@ makes and judges (`docs/reference/tool-contract.md`).
 | the backoff does not grow | content checks |
 | a short snooze | content checks |
 | the email goes elsewhere | content checks |
+| the email is sent twice | delivery: code conforms to spine |
 
-The last three change how long the job waits or where the email goes, which the lifecycle
-doesn't show, so `conform` passes on them.
+Three change how long the job waits or where the email goes, which the lifecycle doesn't show,
+so `conform` passes on them. The last sends each email twice: only the spine's `send_mail` says
+how often a step sends, so the content checks pass on it.
 
 ## Not verified
 

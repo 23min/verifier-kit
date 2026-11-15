@@ -35,3 +35,8 @@
   file: src/mailer.ex
   find: 'Mailer.server().deliver(to)'
   replace: 'Mailer.server().deliver("postmaster@example.com")'
+
+- name: 'the email is sent twice'
+  file: src/mailer.ex
+  find: 'case Mailer.server().deliver(to) do'
+  replace: 'case (Mailer.server().deliver(to); Mailer.server().deliver(to)) do'

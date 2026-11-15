@@ -84,7 +84,8 @@
   <text class="te" x="439" y="388" text-anchor="middle">and attempt</text>
 
   <path class="e" d="M192,412 V466" marker-end="url(#oban-arrow)"/>
-  <text class="te" x="200" y="444">sends, cancels, drains the queue</text>
+  <text class="te" x="200" y="436">sends, cancels, drains the queue;</text>
+  <text class="te" x="200" y="454">counts the mail server's calls</text>
 
   <rect class="n code" x="32" y="468" width="320" height="56" rx="6"/>
   <text class="tm" x="192" y="491" text-anchor="middle">src/mailer.ex</text>
@@ -108,7 +109,7 @@
 
   <rect class="n you" x="230" y="692" width="200" height="56" rx="6"/>
   <text class="tm" x="330" y="715" text-anchor="middle">mutation/mutants.yaml</text>
-  <text class="ts" x="330" y="735" text-anchor="middle">seven edits</text>
+  <text class="ts" x="330" y="735" text-anchor="middle">eight edits</text>
   <path class="e" d="M330,692 V526" marker-end="url(#oban-arrow)"/>
   <text class="te" x="338" y="670">verify makes each in a copy</text>
 

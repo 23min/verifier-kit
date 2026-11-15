@@ -166,7 +166,10 @@ job, on SQLite, and `spine conform` drives the app and Oban together. Every comm
 `src/mix.lock` and kept per machine outside the repo, with `HEX_OFFLINE=1`; then `src/**/*.ex`.
 The adapter runs one Oban, in `testing: :manual` on an in-memory database, for the whole run: a
 `run` is `Oban.drain_queue/2`, a `wait` the same with `with_scheduled: true`, and `observe`
-reads the job's row back as its state and attempt.
+reads the job's row back as its state and attempt. Its spine declares an output (#116), what a
+step sends to another system: `send_mail`, the worker's call to the mail server. The adapter's
+fake mail server counts its calls, and each reply to `apply` reports one `send_mail` for each call
+made during the step, which `conform` compares with the rule's.
 
 ![The oban_job example's files. Two interpreters read spec/delivery/chapter.md, written from Oban's
 docs (D1-D6, D01-D14), into spec/delivery/readings/\*.yaml; spine diff compares them and a person
@@ -174,10 +177,11 @@ ratifies spec/delivery/spine.yaml, one email's job. spine behaviors replays spec
 against it, and spine conform tries every case, with margin 1, through
 conformance/adapter_delivery.exs, which speaks the adapter protocol from adapter_delivery.cmd. The
 adapter sends, cancels and drains the queue through src/mailer.ex (Mailer, Mailer.Worker), which
-runs on Oban 2.24.2, on SQLite in memory, and reads the job's state and attempt from Oban.
+runs on Oban 2.24.2, on SQLite in memory; it counts the mail server's calls, and reads the job's
+state and attempt from Oban.
 checks/delivery/delivery_test.exs, ExUnit run from checks/run.cmd, checks backoff, snooze,
 max_attempts and the address. src/deps.exs and src/mix.lock, Mix.install offline, are loaded first
-by every command, drawn dashed. verify makes each of the seven edits in mutation/mutants.yaml to the
+by every command, drawn dashed. verify makes each of the eight edits in mutation/mutants.yaml to the
 mailer, in a copy. Colours show who owns what: src/mailer.ex, src/deps.exs and src/mix.lock are
 pink, the builder's; Oban is white; every other file is purple, yours: the builder can't change
 it.](architecture/6-oban-job.svg)

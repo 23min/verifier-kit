@@ -8,9 +8,11 @@ Everything you need is in this message. Do not read, search for or run anything 
 
 Rules:
 
-1. Use only the state, event and variable names in the chapter's glossary, and the variable's
-   values, spelled exactly as there. Declare that one variable and no other. Use
-   `machine: delivery`.
+1. Use only the state, event, output and variable names in the chapter's glossary, and the
+   variable's values, spelled exactly as there. Declare that one variable and no other, and the
+   glossary's outputs under `outputs:`. Give every rule that moves or stays `outputs:` with what
+   its step sends, `[<output>]` or `[]` for nothing; where the chapter doesn't say what a step
+   sends, the rule is undecided (rule 3). Use `machine: delivery`.
 2. Decide every case. For every state that is not final and every event, write exactly one
    rule: `to: <state>`, `stay: true`, `ignore: true` or `reject: true`. Final states get no
    rules.
