@@ -823,6 +823,112 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="spec-unreadable diff/unreadable.yaml"><failure message="go-yaml load error in parser (while parsing a flow sequence) at L2.C9-L3.C1: did not find expected ',' or ']'">go-yaml load error in parser (while parsing a flow sequence) at L2.C9-L3.C1: did not find expected ',' or ']'</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT drawings/outputs/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 ../../../adapter_shim.py adapters/door.py",
+|       "message": "replied to apply with \"{\\\"result\\\": \\\"ok\\\"}\", without the \"outputs\" the spine declares"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door.py"><failure message="replied to apply with &quot;{\&quot;result\&quot;: \&quot;ok\&quot;}&quot;, without the &quot;outputs&quot; the spine declares">replied to apply with "{\"result\": \"ok\"}", without the "outputs" the spine declares</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT drawings/outputs/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_outputs.py"
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "24 sequences, margin 1",
+|       "message": "8 of 8 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT drawings/outputs/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_outputs_bugs.py"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "closed/open role=guest",
+|       "message": "after open(role=guest): spine expects rejected in closed, code gave rejected / chime in closed"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "closed/remove role=owner",
+|       "message": "after remove(role=owner): spine expects ok / alarm in gone, code gave ok in gone"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "closed/remove role=guest",
+|       "message": "after remove(role=guest): spine expects ok / alarm in gone, code gave ok in gone"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "open/open role=owner",
+|       "message": "after open(role=owner) -> open(role=owner): spine expects ok / chime in open, code gave ok / chime, chime in open"
+|     },
+|     {
+|       "code": "diverges",
+|       "severity": "error",
+|       "where": "open/open role=guest",
+|       "message": "after open(role=owner) -> open(role=guest): spine expects ok in open, code gave ok / chime in open"
+|     },
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "16 sequences, margin 1",
+|       "message": "8 of 8 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="5" failures="5"><testcase classname="spine conform" name="diverges closed/open role=guest"><failure message="after open(role=guest): spine expects rejected in closed, code gave rejected / chime in closed">after open(role=guest): spine expects rejected in closed, code gave rejected / chime in closed</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=owner"><failure message="after remove(role=owner): spine expects ok / alarm in gone, code gave ok in gone">after remove(role=owner): spine expects ok / alarm in gone, code gave ok in gone</failure></testcase><testcase classname="spine conform" name="diverges closed/remove role=guest"><failure message="after remove(role=guest): spine expects ok / alarm in gone, code gave ok in gone">after remove(role=guest): spine expects ok / alarm in gone, code gave ok in gone</failure></testcase><testcase classname="spine conform" name="diverges open/open role=owner"><failure message="after open(role=owner) -&gt; open(role=owner): spine expects ok / chime in open, code gave ok / chime, chime in open">after open(role=owner) -&gt; open(role=owner): spine expects ok / chime in open, code gave ok / chime, chime in open</failure></testcase><testcase classname="spine conform" name="diverges open/open role=guest"><failure message="after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave ok / chime in open">after open(role=owner) -&gt; open(role=guest): spine expects ok in open, code gave ok / chime in open</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT drawings/outputs/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_outputs_raises.py"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 ../../../adapter_shim.py adapters/door_outputs_raises.py",
+|       "message": "exited with status 1 before replying to apply"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_outputs_raises.py"><failure message="exited with status 1 before replying to apply">exited with status 1 before replying to apply</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "   "
 exit 1
 --- stdout
@@ -1143,6 +1249,25 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 ../../../adapter_shim.py adapters/door_observe_raises.py"><failure message="replied to observe with the error &quot;KeyError: 'gone'&quot; after remove(role=owner)">replied to observe with the error "KeyError: 'gone'" after remove(role=owner)</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_outputs.py"
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "24 sequences, margin 1",
+|       "message": "8 of 8 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_set.py"
 exit 1
 --- stdout
@@ -2190,6 +2315,177 @@ exit 1
 --- junit
 | <?xml version="1.0" encoding="UTF-8"?>
 | <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py ok-twice"><failure message="replied to new with &quot;{\&quot;ok\&quot;: true, \&quot;ok\&quot;: true}&quot;, not {&quot;ok&quot;: true} or {&quot;error&quot;: &quot;...&quot;}">replied to new with "{\"ok\": true, \"ok\": true}", not {"ok": true} or {"error": "..."}</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs"
+exit 0
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "coverage",
+|       "severity": "info",
+|       "where": "24 sequences, margin 1",
+|       "message": "8 of 8 state/event/variable cases exercised"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="0"><testcase classname="spine conform" name="no errors" /></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs-alone"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 adapters/protocol.py outputs-alone",
+|       "message": "replied to apply with \"{\\\"outputs\\\": []}\", not {\"result\": \"...\"} or {\"error\": \"...\"}"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py outputs-alone"><failure message="replied to apply with &quot;{\&quot;outputs\&quot;: []}&quot;, not {&quot;result&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to apply with "{\"outputs\": []}", not {"result": "..."} or {"error": "..."}</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs-and-more"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 adapters/protocol.py outputs-and-more",
+|       "message": "replied to apply with \"{\\\"result\\\": \\\"ok\\\", \\\"outputs\\\": [], \\\"extra\\\": 1}\", not {\"result\": \"...\"} or {\"error\": \"...\"}"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py outputs-and-more"><failure message="replied to apply with &quot;{\&quot;result\&quot;: \&quot;ok\&quot;, \&quot;outputs\&quot;: [], \&quot;extra\&quot;: 1}&quot;, not {&quot;result&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to apply with "{\"result\": \"ok\", \"outputs\": [], \"extra\": 1}", not {"result": "..."} or {"error": "..."}</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs-null"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 adapters/protocol.py outputs-null",
+|       "message": "replied to apply with \"{\\\"result\\\": \\\"ok\\\", \\\"outputs\\\": [null]}\": \"outputs\" must be a list of text"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py outputs-null"><failure message="replied to apply with &quot;{\&quot;result\&quot;: \&quot;ok\&quot;, \&quot;outputs\&quot;: [null]}&quot;: &quot;outputs&quot; must be a list of text">replied to apply with "{\"result\": \"ok\", \"outputs\": [null]}": "outputs" must be a list of text</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs-numbers"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 adapters/protocol.py outputs-numbers",
+|       "message": "replied to apply with \"{\\\"result\\\": \\\"ok\\\", \\\"outputs\\\": [1]}\": \"outputs\" must be a list of text"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py outputs-numbers"><failure message="replied to apply with &quot;{\&quot;result\&quot;: \&quot;ok\&quot;, \&quot;outputs\&quot;: [1]}&quot;: &quot;outputs&quot; must be a list of text">replied to apply with "{\"result\": \"ok\", \"outputs\": [1]}": "outputs" must be a list of text</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs-on-error"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 adapters/protocol.py outputs-on-error",
+|       "message": "replied to apply with \"{\\\"error\\\": \\\"boom\\\", \\\"outputs\\\": []}\", not {\"result\": \"...\"} or {\"error\": \"...\"}"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py outputs-on-error"><failure message="replied to apply with &quot;{\&quot;error\&quot;: \&quot;boom\&quot;, \&quot;outputs\&quot;: []}&quot;, not {&quot;result&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to apply with "{\"error\": \"boom\", \"outputs\": []}", not {"result": "..."} or {"error": "..."}</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs-on-observe"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 adapters/protocol.py outputs-on-observe",
+|       "message": "replied to observe with \"{\\\"state\\\": \\\"closed\\\", \\\"outputs\\\": []}\", not {\"state\": \"...\"} or {\"error\": \"...\"}"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py outputs-on-observe"><failure message="replied to observe with &quot;{\&quot;state\&quot;: \&quot;closed\&quot;, \&quot;outputs\&quot;: []}&quot;, not {&quot;state&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to observe with "{\"state\": \"closed\", \"outputs\": []}", not {"state": "..."} or {"error": "..."}</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs-text"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 adapters/protocol.py outputs-text",
+|       "message": "replied to apply with \"{\\\"result\\\": \\\"ok\\\", \\\"outputs\\\": \\\"chime\\\"}\": \"outputs\" must be a list of text"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py outputs-text"><failure message="replied to apply with &quot;{\&quot;result\&quot;: \&quot;ok\&quot;, \&quot;outputs\&quot;: \&quot;chime\&quot;}&quot;: &quot;outputs&quot; must be a list of text">replied to apply with "{\"result\": \"ok\", \"outputs\": \"chime\"}": "outputs" must be a list of text</failure></testcase></testsuite>
+=== in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs-twice"
+exit 1
+--- stdout
+| {
+|   "tool": "spine",
+|   "command": "conform",
+|   "findings": [
+|     {
+|       "code": "adapter-failed",
+|       "severity": "error",
+|       "where": "python3 adapters/protocol.py outputs-twice",
+|       "message": "replied to apply with \"{\\\"result\\\": \\\"ok\\\", \\\"outputs\\\": [], \\\"outputs\\\": []}\", not {\"result\": \"...\"} or {\"error\": \"...\"}"
+|     }
+|   ]
+| }
+|
+--- junit
+| <?xml version="1.0" encoding="UTF-8"?>
+| <testsuite name="spine conform" tests="1" failures="1"><testcase classname="spine conform" name="adapter-failed python3 adapters/protocol.py outputs-twice"><failure message="replied to apply with &quot;{\&quot;result\&quot;: \&quot;ok\&quot;, \&quot;outputs\&quot;: [], \&quot;outputs\&quot;: []}&quot;, not {&quot;result&quot;: &quot;...&quot;} or {&quot;error&quot;: &quot;...&quot;}">replied to apply with "{\"result\": \"ok\", \"outputs\": [], \"outputs\": []}", not {"result": "..."} or {"error": "..."}</failure></testcase></testsuite>
 === in tools/internal/spine/testdata: spine conform --format json --junit REPORT seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py result-for-new"
 exit 1
 --- stdout
@@ -3069,6 +3365,35 @@ exit 1
 | error   spec-unreadable    diff/unreadable.yaml: go-yaml load error in parser (while parsing a flow sequence) at L2.C9-L3.C1: did not find expected ',' or ']'
 | -- 1 errors, 1 findings
 |
+=== in tools/internal/spine/testdata: spine conform drawings/outputs/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door.py"
+exit 1
+--- stdout
+| error   adapter-failed     python3 ../../../adapter_shim.py adapters/door.py: replied to apply with "{\"result\": \"ok\"}", without the "outputs" the spine declares
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform drawings/outputs/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_outputs.py"
+exit 0
+--- stdout
+| info    coverage           24 sequences, margin 1: 8 of 8 state/event/variable cases exercised
+| -- 0 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform drawings/outputs/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_outputs_bugs.py"
+exit 1
+--- stdout
+| error   diverges           closed/open role=guest: after open(role=guest): spine expects rejected in closed, code gave rejected / chime in closed
+| error   diverges           closed/remove role=owner: after remove(role=owner): spine expects ok / alarm in gone, code gave ok in gone
+| error   diverges           closed/remove role=guest: after remove(role=guest): spine expects ok / alarm in gone, code gave ok in gone
+| error   diverges           open/open role=owner: after open(role=owner) -> open(role=owner): spine expects ok / chime in open, code gave ok / chime, chime in open
+| error   diverges           open/open role=guest: after open(role=owner) -> open(role=guest): spine expects ok in open, code gave ok / chime in open
+| info    coverage           16 sequences, margin 1: 8 of 8 state/event/variable cases exercised
+| -- 5 errors, 6 findings
+|
+=== in tools/internal/spine/testdata: spine conform drawings/outputs/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_outputs_raises.py"
+exit 1
+--- stdout
+| error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_outputs_raises.py: exited with status 1 before replying to apply
+| -- 1 errors, 1 findings
+|
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "   "
 exit 1
 --- stdout
@@ -3161,6 +3486,12 @@ exit 1
 --- stdout
 | error   adapter-failed     python3 ../../../adapter_shim.py adapters/door_observe_raises.py: replied to observe with the error "KeyError: 'gone'" after remove(role=owner)
 | -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_outputs.py"
+exit 0
+--- stdout
+| info    coverage           24 sequences, margin 1: 8 of 8 state/event/variable cases exercised
+| -- 0 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 ../../../adapter_shim.py adapters/door_set.py"
 exit 1
@@ -3460,6 +3791,60 @@ exit 1
 exit 1
 --- stdout
 | error   adapter-failed     python3 adapters/protocol.py ok-twice: replied to new with "{\"ok\": true, \"ok\": true}", not {"ok": true} or {"error": "..."}
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs"
+exit 0
+--- stdout
+| info    coverage           24 sequences, margin 1: 8 of 8 state/event/variable cases exercised
+| -- 0 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs-alone"
+exit 1
+--- stdout
+| error   adapter-failed     python3 adapters/protocol.py outputs-alone: replied to apply with "{\"outputs\": []}", not {"result": "..."} or {"error": "..."}
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs-and-more"
+exit 1
+--- stdout
+| error   adapter-failed     python3 adapters/protocol.py outputs-and-more: replied to apply with "{\"result\": \"ok\", \"outputs\": [], \"extra\": 1}", not {"result": "..."} or {"error": "..."}
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs-null"
+exit 1
+--- stdout
+| error   adapter-failed     python3 adapters/protocol.py outputs-null: replied to apply with "{\"result\": \"ok\", \"outputs\": [null]}": "outputs" must be a list of text
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs-numbers"
+exit 1
+--- stdout
+| error   adapter-failed     python3 adapters/protocol.py outputs-numbers: replied to apply with "{\"result\": \"ok\", \"outputs\": [1]}": "outputs" must be a list of text
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs-on-error"
+exit 1
+--- stdout
+| error   adapter-failed     python3 adapters/protocol.py outputs-on-error: replied to apply with "{\"error\": \"boom\", \"outputs\": []}", not {"result": "..."} or {"error": "..."}
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs-on-observe"
+exit 1
+--- stdout
+| error   adapter-failed     python3 adapters/protocol.py outputs-on-observe: replied to observe with "{\"state\": \"closed\", \"outputs\": []}", not {"state": "..."} or {"error": "..."}
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs-text"
+exit 1
+--- stdout
+| error   adapter-failed     python3 adapters/protocol.py outputs-text: replied to apply with "{\"result\": \"ok\", \"outputs\": \"chime\"}": "outputs" must be a list of text
+| -- 1 errors, 1 findings
+|
+=== in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py outputs-twice"
+exit 1
+--- stdout
+| error   adapter-failed     python3 adapters/protocol.py outputs-twice: replied to apply with "{\"result\": \"ok\", \"outputs\": [], \"outputs\": []}", not {"result": "..."} or {"error": "..."}
 | -- 1 errors, 1 findings
 |
 === in tools/internal/spine/testdata: spine conform seeds/spine.yaml --adapter-cmd "python3 adapters/protocol.py result-for-new"

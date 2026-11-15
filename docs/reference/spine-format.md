@@ -113,7 +113,9 @@ rules:
 - What a step sends is part of its outcome: two rules that match the same case and move alike
   but send differently are an `overlap`, and `diff` compares what each case sends.
 
-A spine without `outputs:` says nothing about what its steps send.
+`spine conform` compares what each step of the code sends, as the adapter reports it, with what
+the rule says (`tool-contract.md`, "The adapter protocol"). A spine without `outputs:` says
+nothing about what its steps send.
 
 ## Text only
 

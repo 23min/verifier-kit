@@ -77,8 +77,12 @@ rules:
 ```
 
 A spine covers a lifecycle and its permissions: which steps are allowed, for whom, and where
-they lead. It says nothing about a note's text; that is for content checks (section 7). The
-format is in [`reference/spine-format.md`](reference/spine-format.md).
+they lead. When a step sends something to another system, such as a mail or a commit, the spine
+can say that too: it declares `outputs:`, and each rule that moves or stays names what its step
+sends, `outputs: [send_mail]`, or `[]` for nothing. The drawing writes it after the event,
+`run / send_mail`. A spine says nothing about a note's text or a mail's address; that is for
+content checks (section 7). The format is in
+[`reference/spine-format.md`](reference/spine-format.md).
 
 ## 3. Every case decided
 
@@ -116,15 +120,20 @@ them with three operations:
   service refuses.
 - **`observe`:** read the system's real data and name the state it is in.
 
+When the spine declares outputs, `apply`'s answer also says what the step sent, read from what
+the system really did: a call caught on its way out, an outbox compared before and after.
+
 The adapter only translates. It never decides whether something is allowed, since that is what
 is being checked. It is a program that speaks JSON lines, so the code can be in any language; for
-Python, a file with three functions is enough.
+Python, a file with three functions is enough, and a fourth, `outputs`, when the spine declares
+outputs.
 
 ## 6. Checking the code
 
 `spine conform` runs the spine and the code side by side through the adapter. It reaches each
 state by a shortest path, tries every event with every value from there, and one step further
-(the *margin*). After each step it compares the code's answer and state with the spine's. Notes
+(the *margin*). After each step it compares the code's answer and state, and what the step sent
+when the spine declares outputs, with the spine's. Notes
 takes 180 runs, well under a second. When they differ, conform prints the shortest run that
 shows it. This is the first version of notes' service, which let a draft be trashed:
 
@@ -229,7 +238,8 @@ finish: four lines changed in `src/`. The agent never chose to run the checks; t
 - **One lifecycle at a time.** Conform doesn't run clients against each other. Concurrency needs
   checks of its own, such as the ref_sync example's explorer, a parallel state-machine test or a
   model checker ([other tools](comparison.md)).
-- **States and permissions, not content.** Text, totals and formats need content checks.
+- **States, permissions and outputs, not content.** A spine names what a step sends, not what is
+  in it. Text, totals, formats and addresses need content checks.
 - **The adapter is part of the oracle.** If it decides instead of translating, it can hide a bug;
   review it like the spine.
 - **One machine at a time.** Real features have machines that interact, and more variables; the

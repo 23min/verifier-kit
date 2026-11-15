@@ -161,13 +161,15 @@ change to the spine that breaks one shows. The format is in `docs/reference/spin
 The adapter is how `./verify` drives your code. It is a program that speaks JSON lines on stdin
 and stdout (the tool contract, "The adapter protocol"): to `new` it starts a fresh instance, to
 `apply` it turns one spine event into calls on the code and says `ok` or `rejected`, and to
-`observe` it names the spine state the code is in. `conformance/adapter_<machine>.cmd` holds the
-one line that starts it.
+`observe` it names the spine state the code is in. When the spine declares outputs, its answer to
+`apply` also lists what the step sent to other systems, by the names the spine declares.
+`conformance/adapter_<machine>.cmd` holds the one line that starts it.
 
-- **In Python** it is a file with three functions, `new()`, `apply()` and `observe()`, served by
-  the toolkit's shim: `env PYTHONPATH=src adapter_shim.py conformance/adapter_<machine>.py`, as
-  `examples/notes/` does. Python writes `__pycache__/` folders beside the files it runs: add
-  `__pycache__/` to your `.gitignore`.
+- **In Python** it is a file with three functions, `new()`, `apply()` and `observe()`, and a
+  fourth, `outputs()`, when the spine declares outputs, served by the toolkit's shim:
+  `env PYTHONPATH=src adapter_shim.py conformance/adapter_<machine>.py`, as `examples/notes/`
+  does. Python writes `__pycache__/` folders beside the files it runs: add `__pycache__/` to your
+  `.gitignore`.
 - **In any other language** it is a program speaking the protocol itself, as
   `examples/elixir_job/conformance/adapter_job.exs` does.
 
@@ -177,7 +179,8 @@ guarantees"):
 - **Only translate.** It never decides whether an action is allowed; the code does, and the
   adapter reports what the code did.
 - **Observe the truth.** `observe` names the state from the code's real data, not from what the
-  adapter remembers. What the adapter can't see, `conform` can't check.
+  adapter remembers, and `outputs` reports what the code really sent: a call caught on its way
+  out, an outbox compared before and after. What the adapter can't see, `conform` can't check.
 - **Start afresh.** `new` starts from nothing every time, and the code must be deterministic: the
   same events give the same results.
 - **State its contract.** Its header says what `src/` must offer it, the whole contract between
@@ -196,9 +199,10 @@ oracle changes.
 
 ## 9. Content checks
 
-The spine sees states and permissions; content checks cover what it can't, such as text, totals
-and formats. `checks/run.cmd` holds the line that runs them. It must fail when no check ran; in
-Python that is `env PYTHONPATH=src run_checks.py checks`, over `test_*.py` files in
+The spine sees states, permissions and, when it declares outputs, what each step sends; content
+checks cover what it can't, such as text, totals, formats and where a mail goes.
+`checks/run.cmd` holds the line that runs them. It must fail when no check ran; in Python that is
+`env PYTHONPATH=src run_checks.py checks`, over `test_*.py` files in
 `checks/<machine>/`. Each check cites the cell it depends on, `# covers: <state>/<event>@<hash>`,
 with the hash from `.verifier-kit/bin/spine hash spec/<machine>/spine.yaml`; when that cell
 changes, `./verify` reports the check as stale (`docs/reference/spine-format.md`, "Citing a

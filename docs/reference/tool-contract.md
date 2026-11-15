@@ -60,7 +60,7 @@ are part of the contract: new codes may be added, existing codes are never renam
 | `stale` | `SPEC CHECKS_DIR` | Finds `covers: state/event@hash` and `covers: spine@hash` citations in the files under `CHECKS_DIR`, except binary ones (a file holding a NUL byte, such as Python's compiled `__pycache__` files), and reports stale, orphaned and uncovered cells, and text meant as a citation that isn't one. A check that cites the current whole spine counts every transition as cited |
 | `behaviors` | `SPEC DIR` | Replays every `.yaml` or `.yml` file in `DIR/valid/` (must be allowed) and `DIR/invalid/` (must be refused) |
 | `trace` | `SPEC FILE` | Replays one behavior file; for callers that run a validator once per fixture |
-| `conform` | `SPEC --adapter-cmd COMMAND [--margin K]` | Tries every case of every live state against the spine and against the code through the adapter, and reports where they differ: from the first shortest path to each state, every sequence of 1 to K+1 further steps (K is 1 unless given), each once, ending at a terminal state, a refusal or a divergence (`docs/adr/0008-conform-margin.md`). With no case to try, because the initial state is terminal or there are no events, it still runs the empty sequence, so the adapter and the start are checked. The adapter is a program that speaks the adapter protocol (below); a Python adapter's command runs it through `tools/adapter_shim.py` |
+| `conform` | `SPEC --adapter-cmd COMMAND [--margin K]` | Tries every case of every live state against the spine and against the code through the adapter, and reports where they differ: from the first shortest path to each state, every sequence of 1 to K+1 further steps (K is 1 unless given), each once, ending at a terminal state, a refusal or a divergence (`docs/adr/0008-conform-margin.md`). When the spine declares outputs, each step's comparison includes what the step sent (`spine-format.md`, "Outputs"). With no case to try, because the initial state is terminal or there are no events, it still runs the empty sequence, so the adapter and the start are checked. The adapter is a program that speaks the adapter protocol (below); a Python adapter's command runs it through `tools/adapter_shim.py` |
 | `guard` | `POLICY --branch NAME [FILES...]` | Maps the branch to a role and reports changed files that role may not touch; reads files from stdin when none are given |
 
 `spine` is `tools/bin/spine`, built from `tools/cmd/spine/` (`go -C tools build -o bin/spine
@@ -115,10 +115,10 @@ is a usage error: one line on stderr, naming the command and what is wrong, and 
 | `behaviors` | info | `behaviors` | how many files were checked |
 | `refused` | error | `trace` | the behavior is refused |
 | `spine-unsound` | error | `trace` | the spine fails `check` |
-| `diverges` | error | `conform` | code and spine disagree; the message carries the sequence |
+| `diverges` | error | `conform` | code and spine disagree; the message carries the sequence, and, when the spine declares outputs, what each side sent, as `ok / send_mail` |
 | `untried-case` | error | `conform` | a case no run tried, because the code diverged on the way to its state |
 | `coverage` | info | `conform` | sequences run, the margin, and cases exercised |
-| `adapter-failed` | error | `conform` | the adapter command can't be started, exits before replying, breaks the protocol, or replies `{"error": ...}` to `new` or `observe`; the shim does when a Python adapter's `new()` or `observe()` raised, and exits before replying when the file can't be imported or lacks a function. `conform` stops there |
+| `adapter-failed` | error | `conform` | the adapter command can't be started, exits before replying, breaks the protocol, replies `{"error": ...}` to `new` or `observe`, or replies to `apply` without the outputs the spine declares; the shim does when a Python adapter's `new()` or `observe()` raised, and exits before replying when the file can't be imported or lacks a function, or `outputs()` raised. `conform` stops there |
 | `layout-overlap` | warning | `draw` | a label overlaps a label, a state or an edge; an edge runs through a state; a state overlaps another; or a table entry is wider than its column even with its state alone in a block |
 | `layout-outside` | warning | `draw` | a label or a state leaves the drawing |
 | `path-denied` | error | `guard` | a deny pattern for the role matches a changed file |
@@ -129,21 +129,26 @@ is a usage error: one line on stderr, naming the command and what is wrong, and 
 ## The adapter
 
 A program that speaks the adapter protocol (below), owned by the oracle side;
-`conform --adapter-cmd COMMAND` runs it. In Python it is a file with three functions, which
-`tools/adapter_shim.py` serves over the protocol:
+`conform --adapter-cmd COMMAND` runs it. In Python it is a file with three functions, and a fourth
+when the spine declares outputs, which `tools/adapter_shim.py` serves over the protocol:
 
 - `new()` returns a handle to a fresh instance of the system under test, in the spine's initial state.
 - `apply(handle, event, env)` performs one spine event, with `env` holding the variable values
   (for example `{"role": "editor"}`), and returns `"ok"` or `"rejected"`. Any exception counts as a divergence.
 - `observe(handle)` returns the name of the spine state the system is in, read from its real data.
+- `outputs(handle)`, optional, returns the list of what the last `apply()` sent to other systems,
+  by the names the spine declares: `["send_mail"]`, or `[]` for nothing (#116). It is read from
+  what the system really did: a call caught on its way out, an outbox compared before and after,
+  the commits the step added. The shim calls it after each `apply()` that returns.
 
-An exception from `new()` or `observe()`, or while importing the file, is `adapter-failed`, not a
-divergence: without a fresh instance or a reading of its state there is nothing to compare.
+An exception from `new()`, `observe()` or `outputs()`, or while importing the file, is
+`adapter-failed`, not a divergence: without a fresh instance, or a reading of its state or of
+what it sent, there is nothing to compare.
 
 The shim runs in a Python process of its own, the one its command line names. The adapter's
-printing goes to stderr, and what `apply()` and `observe()` return reaches `conform` as JSON. It
-must be text: anything else is `adapter-failed`, as is a value JSON can't encode, such as a set,
-which makes the shim fail.
+printing goes to stderr, and what `apply()`, `observe()` and `outputs()` return reaches `conform` as
+JSON. It must be text, and a list of text from `outputs()`: anything else is `adapter-failed`, as
+is a value JSON can't encode, such as a set, which makes the shim fail.
 
 The adapter translates and never decides whether an action is allowed.
 
@@ -163,7 +168,7 @@ from its stdout, a line ending at `\n` or at the end of the output. A reply is s
 | Request | Reply | Same as |
 |---|---|---|
 | `{"op": "new"}` | `{"ok": true}` | `new()`: a fresh instance in the spine's initial state; it replaces the previous one |
-| `{"op": "apply", "event": "trash", "env": {"role": "owner"}}` | `{"result": "ok"}` or `{"result": "rejected"}` | `apply()`, on the current instance |
+| `{"op": "apply", "event": "trash", "env": {"role": "owner"}}` | `{"result": "ok"}` or `{"result": "rejected"}`, with `"outputs": ["send_mail"]` beside it when the adapter reports what the step sent | `apply()`, and `outputs()` when it is defined, on the current instance |
 | `{"op": "observe"}` | `{"state": "draft"}` | `observe()`, on the current instance |
 
 There are no handles: a program holds one instance at a time. Any request may instead get
@@ -171,20 +176,28 @@ There are no handles: a program holds one instance at a time. Any request may in
 `apply()` does, and the text appears as `crashed (<text>)`; for `new` or `observe` it is
 `adapter-failed`. A program replies `{"error": ...}` to a request it does not recognize.
 
+When the spine declares outputs, every reply to `apply` but an error gives `outputs`, a list of
+what the step sent, `[]` for nothing, and `conform` compares it with what the spine's rule sends:
+an output too many, too few or other than the rule's is a divergence, and so is a refused step
+that sends anything. A reply without `outputs` is then `adapter-failed`, not "nothing". When the
+spine declares none, `outputs` may still be given: it is read, and compared with nothing.
+
 `conform` starts the program once, before the first `new`, and closes its stdin when done; the
 program then exits. When the program's output ends before a reply, which then can't come,
 `conform` closes its stdin too, and waits for it to exit, so that its own exit status is
 reported. Each of these is `adapter-failed`, after which `conform` stops the program:
 it can't be started, it exits before replying, a reply is not UTF-8 or not JSON, or a reply has
-the wrong shape: other keys, more than one key, a key given twice, anything but `true` for `ok`,
-or anything but text for `result`, `state` and `error`. There is no timeout: a program that
+the wrong shape: other keys, more than one key (but `outputs` beside `result`), a key given twice,
+anything but `true` for `ok`, anything but text for `result`, `state` and `error`, or anything but
+a list of text for `outputs`. There is no timeout: a program that
 never replies makes `conform` wait.
 
 `tools/adapter_shim.py ADAPTER_FILE` serves a Python adapter over this protocol unchanged, for
 example `--adapter-cmd "python3 tools/adapter_shim.py conformance/adapter_notes.py"`. It sends
 the adapter's own printing to stderr. When the adapter can't be imported or doesn't define
 `new()`, `apply()` and `observe()`, it exits 1 with one line on stderr,
-`adapter_shim: ADAPTER_FILE <reason>`, before replying to `new`.
+`adapter_shim: ADAPTER_FILE <reason>`, before replying to `new`; when `outputs()` raises, it does
+the same before replying to that `apply`.
 
 ## The policy file
 

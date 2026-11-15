@@ -151,9 +151,12 @@ decision tables hang on transitions, sequence rules and the spine judge the same
 
 ### The adapter
 
-`new()`, `apply()`, `observe()`; translates, never decides; owned by the oracle side; observes
-real side effects. An adapter runs as a program speaking the same three operations as JSON
-lines over stdin and stdout (`docs/adr/0003-adapter-protocol.md`), named by a command line in
+`new()`, `apply()`, `observe()`, and `outputs()` where the spine declares outputs; translates,
+never decides; owned by the oracle side; observes real side effects. `observe()` reads the
+state, and `outputs()` what each step sent to other systems, such as a mail or a commit (#116):
+together they are the two halves of a Mealy machine's step, its next state and its output. An
+adapter runs as a program speaking the same operations as JSON lines over stdin and stdout
+(`docs/adr/0003-adapter-protocol.md`), named by a command line in
 `conformance/adapter_<machine>.cmd` (`docs/adr/0007-no-language-built-in.md`). A Python file is
 served that way by `tools/adapter_shim.py`, which its line calls; an adapter in any other
 language is its own program. Details in `docs/reference/tool-contract.md`.
@@ -163,10 +166,11 @@ language is its own program. Details in `docs/reference/tool-contract.md`.
 `spine conform` tries every case of every live state, every event with every combination of
 variable values: it reaches each state by the first shortest path to it, then runs every sequence
 of up to K+1 further steps, K being the margin, 1 unless `--margin` says otherwise
-(`docs/adr/0008-conform-margin.md`). A case it couldn't try, because the code diverged on the
-way there, is an `untried-case` error. That catches every implementation with up to K states the
-spine doesn't have (Vasilevskii 1973, Chow 1978, Lee and Yannakakis 1996), given what the method
-assumes:
+(`docs/adr/0008-conform-margin.md`). When the spine declares outputs, each step is compared by
+what it sent as well as by its answer and the state it left. A case it couldn't try, because the
+code diverged on the way there, is an `untried-case` error. That catches every implementation
+with up to K states the spine doesn't have (Vasilevskii 1973, Chow 1978, Lee and Yannakakis
+1996), given what the method assumes:
 
 - **`new()` starts afresh,** so that each sequence begins in the spine's initial state with no
   trace of the last one.

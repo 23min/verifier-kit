@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -57,56 +58,95 @@ func jsonString(s string) string {
 }
 
 // parseReply reads the reply to op, a line ending at \n: a JSON object in UTF-8 with one key, the
-// op's key or "error", each given once. Its value is true for new's "ok", and text otherwise;
-// parseReply gives that text.
-func parseReply(op string, r reply) (string, error) {
+// op's key or "error", each given once; apply's reply may also give "outputs" (#116). The op's
+// key's value is true for new's "ok", and text otherwise; parseReply gives that text, and the
+// outputs, nil when the reply gives none.
+func parseReply(op string, r reply) (string, []string, error) {
 	if len(r.line) == 0 {
-		return "", &adapterFailed{fmt.Sprintf("%s before replying to %s", r.ended, op)}
+		return "", nil, &adapterFailed{fmt.Sprintf("%s before replying to %s", r.ended, op)}
 	}
 	text := strings.TrimRight(string(r.line), "\r\n")
 	if !utf8.Valid(r.line) {
-		return "", &adapterFailed{fmt.Sprintf("replied to %s with a line that is not UTF-8", op)}
+		return "", nil, &adapterFailed{fmt.Sprintf("replied to %s with a line that is not UTF-8", op)}
 	}
 	if !json.Valid(r.line) {
-		return "", &adapterFailed{fmt.Sprintf("replied to %s with a line that is not JSON: %s", op, strconv.Quote(text))}
+		return "", nil, &adapterFailed{fmt.Sprintf("replied to %s with a line that is not JSON: %s", op, strconv.Quote(text))}
 	}
-	key, value, ok := oneKey(r.line)
-	var said string
-	isText := ok && bytes.HasPrefix(value, []byte(`"`)) && json.Unmarshal(value, &said) == nil // null too reads as ""
+	values, ok := fields(r.line)
 	want := replies[op]
-	switch {
-	case key == "error" && isText:
-		return "", &adapterError{said}
-	case key == want[0] && op == "new" && string(value) == "true":
-		return "", nil
-	case key == want[0] && op != "new" && isText:
-		return said, nil
+	sends, hasSends := values["outputs"]
+	if op == "apply" && hasSends {
+		delete(values, "outputs")
 	}
-	return "", &adapterFailed{fmt.Sprintf(`replied to %s with %s, not %s or {"error": "..."}`, op, strconv.Quote(text), want[1])}
+	var key string
+	for k := range values {
+		key = k
+	}
+	said, isText := jsonText(values[key])
+	switch {
+	case !ok || len(values) != 1:
+	case key == "error" && isText && !hasSends:
+		return "", nil, &adapterError{said}
+	case key == want[0] && op == "new" && string(values[key]) == "true":
+		return "", nil, nil
+	case key == want[0] && op != "new" && isText:
+		if !hasSends {
+			return said, nil, nil
+		}
+		if outputs, ok := textList(sends); ok {
+			return said, outputs, nil
+		}
+		return "", nil, &adapterFailed{fmt.Sprintf(`replied to apply with %s: "outputs" must be a list of text`, strconv.Quote(text))}
+	}
+	return "", nil, &adapterFailed{fmt.Sprintf(`replied to %s with %s, not %s or {"error": "..."}`, op, strconv.Quote(text), want[1])}
 }
 
-// oneKey reads a JSON object with exactly one key, given once: the key and its value.
-func oneKey(line []byte) (string, json.RawMessage, bool) {
+// fields reads a JSON object whose keys are each given once: each key's value.
+func fields(line []byte) (map[string]json.RawMessage, bool) {
 	dec := json.NewDecoder(bytes.NewReader(line))
 	if t, err := dec.Token(); err != nil || t != json.Delim('{') {
-		return "", nil, false
+		return nil, false
 	}
-	var keys []string
-	var value json.RawMessage
+	values := map[string]json.RawMessage{}
 	for dec.More() {
 		t, err := dec.Token()
 		if err != nil {
-			return "", nil, false
+			return nil, false
 		}
-		keys = append(keys, t.(string))
+		var value json.RawMessage
 		if err := dec.Decode(&value); err != nil {
-			return "", nil, false
+			return nil, false
 		}
+		if _, twice := values[t.(string)]; twice {
+			return nil, false
+		}
+		values[t.(string)] = value
 	}
-	if len(keys) != 1 {
-		return "", nil, false
+	return values, true
+}
+
+// jsonText is a JSON value as text, when it is a string.
+func jsonText(value json.RawMessage) (string, bool) {
+	var said string
+	ok := bytes.HasPrefix(value, []byte(`"`)) && json.Unmarshal(value, &said) == nil // null too reads as ""
+	return said, ok
+}
+
+// textList is a JSON value as a list of text, when it is a list of strings: never nil.
+func textList(value json.RawMessage) ([]string, bool) {
+	var items []json.RawMessage
+	if !bytes.HasPrefix(value, []byte(`[`)) || json.Unmarshal(value, &items) != nil {
+		return nil, false
 	}
-	return keys[0], value, true
+	list := []string{}
+	for _, item := range items {
+		x, ok := jsonText(item)
+		if !ok {
+			return nil, false
+		}
+		list = append(list, x)
+	}
+	return list, true
 }
 
 // ---------- the search ----------
@@ -163,8 +203,9 @@ type search struct {
 	run        *run    // the run replaying
 	at         int     // the step of the run being compared
 	state      string  // the spine's state before that step
-	want       Outcome // what the spine does at that step; of kind "undefined" when it doesn't say
-	result     string  // what the code gave for the step: its result, or how it crashed
+	want       Outcome  // what the spine does at that step; of kind "undefined" when it doesn't say
+	result     string   // what the code gave for the step: its result, or how it crashed
+	sent       []string // what the adapter says the step sent; nil when it says nothing
 	waiting    string  // the reply next answers: "new", "start", "apply" or "observe"; none at the end
 
 	exercised, reported map[string]bool
@@ -217,12 +258,12 @@ func (c *search) first() string { return c.nextRun() }
 func (c *search) next(r reply) string {
 	switch c.waiting {
 	case "new":
-		if _, err := parseReply("new", r); err != nil {
+		if _, _, err := parseReply("new", r); err != nil {
 			return c.fail(callAdapter("new", nil, err))
 		}
 		return c.await("start", observeRequest)
 	case "start":
-		observed, err := parseReply("observe", r)
+		observed, _, err := parseReply("observe", r)
 		if err != nil {
 			return c.fail(callAdapter("observe", nil, err))
 		}
@@ -232,19 +273,22 @@ func (c *search) next(r reply) string {
 		}
 		return c.nextStep()
 	case "apply":
-		result, err := parseReply("apply", r)
+		result, sent, err := parseReply("apply", r)
 		var failed *adapterFailed
 		if errors.As(err, &failed) {
 			return c.fail(err)
 		}
-		c.result = result
+		c.result, c.sent = result, sent
 		if err != nil { // a crash is a divergence too
 			c.result = "crashed (" + err.Error() + ")"
+		} else if c.s.Outputs != nil && sent == nil {
+			return c.fail(&adapterFailed{fmt.Sprintf(`replied to apply with %s, without the "outputs" the spine declares`,
+				strconv.Quote(strings.TrimRight(string(r.line), "\r\n")))})
 		}
 		return c.await("observe", observeRequest)
 	case "observe":
 		seq := c.run.seq[:c.at+1]
-		got, err := parseReply("observe", r)
+		got, _, err := parseReply("observe", r)
 		if err != nil {
 			return c.fail(callAdapter("observe", seq, err))
 		}
@@ -255,10 +299,19 @@ func (c *search) next(r reply) string {
 		if c.want.Kind == "to" {
 			wantState = c.want.Target
 		}
-		if c.result != wantResult || got != wantState {
+		gotResult, wantSent := c.result, []string{}
+		if c.want.Output != "" {
+			wantSent = []string{c.want.Output}
+		}
+		differs := c.result != wantResult || got != wantState
+		if c.s.Outputs != nil { // what each side sends, as Mealy writes it: ok / send_mail (#116)
+			differs = differs || !slices.Equal(c.sent, wantSent)
+			wantResult, gotResult = wantResult+sending(wantSent), gotResult+sending(c.sent)
+		}
+		if differs {
 			st := seq[c.at]
 			c.diverged(stepKey(c.state, st), caseWhere(c.state, st), fmt.Sprintf("after %s: spine expects %s in %s, code gave %s in %s",
-				stepsText(seq), wantResult, wantState, c.result, got))
+				stepsText(seq), wantResult, wantState, gotResult, got))
 			return c.nextRun()
 		}
 		c.state = wantState
@@ -266,6 +319,15 @@ func (c *search) next(r reply) string {
 		return c.nextStep()
 	}
 	panic("spine: next with no request waiting for its reply")
+}
+
+// sending is what a step sends as conform writes it after the result, " / output, output", or
+// nothing.
+func sending(outputs []string) string {
+	if len(outputs) == 0 {
+		return ""
+	}
+	return " / " + strings.Join(outputs, ", ")
 }
 
 // await gives a request, and notes which reply answers it.
