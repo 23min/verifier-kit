@@ -1,8 +1,9 @@
 # Spine format
 
 A spine is one state machine for one feature: which states exist, which events can happen,
-and what each event does in each state for each combination of variable values. It covers
-lifecycle and permissions only. Computations, content and timing belong in other views (see
+and what each event does in each state for each combination of variable values, including, when
+the spine declares outputs, what the step sends to another system. It covers lifecycle,
+permissions and outputs only. Computations, content and timing belong in other views (see
 `docs/design.md`). Changing this format needs an issue and the owner's approval first.
 
 ## File
@@ -17,6 +18,7 @@ lifecycle and permissions only. Computations, content and timing belong in other
 | `states` | yes | each state mapped to `{kind: fact|policy|design, terminal: true}` (`terminal` optional) |
 | `initial` | yes | the starting state |
 | `events` | yes | the list of event names, each listed once (a repeat is a `listed-twice`) |
+| `outputs` | no | the list of output names, each listed once (a repeat is a `listed-twice`); see "Outputs" |
 | `rules` | yes | the list of rules |
 | `examples` | no | worked examples that `check` replays |
 
@@ -53,7 +55,8 @@ examples:
 
 ## Rules
 
-Each rule has `from`, `event`, an optional `when`, and exactly one outcome:
+Each rule has `from`, `event`, an optional `when` and exactly one outcome; in a spine that
+declares outputs, a rule that moves or stays also says what it sends (see "Outputs"):
 
 | Outcome | Meaning |
 |---|---|
@@ -85,15 +88,43 @@ Anything else, such as a number, a variable alone, a list beside `==` or an unde
 a `bad-condition`. Numeric rules ("over 1,000") are split into named ranges at the thresholds the
 chapter gives, so the cases stay enumerable.
 
+## Outputs
+
+An output is something a step sends to another system: a commit, a push, a mail, a published
+event. A spine that declares `outputs:`, a list of names, says on every rule that moves or stays
+what its step sends: `outputs: [<output>]`, or `outputs: []` for nothing. Only the name is
+written; what is sent, such as which address or which files, belongs to content checks. The
+answer to the caller is the outcome, not an output.
+
+```yaml
+outputs: [send_notice]
+rules:
+  - {from: on_shelf, event: lend, when: "who == 'member'", to: on_loan, outputs: []}
+  - {from: on_loan, event: renew, when: "who != 'visitor'", stay: true, outputs: [send_notice]}
+  - {from: on_shelf, event: lend, when: "who != 'member'", reject: true}
+```
+
+- A rule sends at most one output; a list of more is a `spec-shape`. A step that sends two
+  things usually hides a state between them.
+- In a spine that declares `outputs:`, a rule that moves or stays without `outputs` is a
+  `missing-key`, and an output the list doesn't name is an `unknown-output` from `check`.
+- An `ignore` or `reject` sends nothing, so its rule has no `outputs`; nor has any rule of a
+  spine that declares no outputs. Either is an `unknown-key`.
+- What a step sends is part of its outcome: two rules that match the same case and move alike
+  but send differently are an `overlap`, and `diff` compares what each case sends.
+
+A spine without `outputs:` says nothing about what its steps send.
+
 ## Text only
 
 Every key, and every name and value the format defines, is text: the machine and section,
-state names, events, `initial`, a rule's `from`, `event`, `to` and `when`, variable names and
-values, and in worked examples and behavior files `name`, `expect` and each step. Steps pass
-values as text, so a number could never match one. Quote anything YAML would read as something
-else: `"yes"`, `"no"`, `"on"`, `"off"`, `"012"`, `"1.5"`, `"2026-10-14"`, `"null"`. A key read
-as true or false is a `yaml-boolean-key` and such a value a `yaml-boolean-value`; any other key
-that isn't text is an `unknown-key`, and any other value a `spec-shape`.
+state names, events, outputs, `initial`, a rule's `from`, `event`, `to`, `when` and outputs,
+variable names and values, and in worked examples and behavior files `name`, `expect` and each
+step. Steps pass values as text, so a number could never match one. Quote anything YAML would
+read as something else: `"yes"`, `"no"`, `"on"`, `"off"`, `"012"`, `"1.5"`, `"2026-10-14"`,
+`"null"`. A key read as true or false is a `yaml-boolean-key` and such a value a
+`yaml-boolean-value`; any other key that isn't text is an `unknown-key`, and any other value a
+`spec-shape`.
 
 That is the reading of plain words that YAML 1.1 readers share, so a spine means the same
 whatever YAML a tool reads it with:
@@ -149,7 +180,8 @@ A content check states which cell it depends on, anywhere in the file:
 ```
 
 `spine hash <spec>` prints the current hash of every cell. When the rules for a cell change,
-its hash changes and `spine stale` reports every check that cites the old one.
+what they send included, its hash changes and `spine stale` reports every check that cites the
+old one.
 
 A check that depends on the whole machine rather than on single cells, such as one that
 explores every interleaving, cites the spine instead (#59):
@@ -159,11 +191,11 @@ explores every interleaving, cites the spine instead (#59):
 ```
 
 That hash covers what the machine does: the states and which are terminal, `initial`, the
-events, the variables and their values, and the rules. The machine's name, its section, a
-state's kind, the worked examples, comments and the order anything is written in leave it
-alone. `spine hash` prints it first, as `spine@<hash>`. When it changes, `spine stale` reports
-every check that cites the old one; while it is current, `stale` counts every transition as
-cited.
+events, the outputs when the spine declares them, the variables and their values, and the rules,
+with what each sends. The machine's name, its section, a state's kind, the worked examples,
+comments and the order anything is written in leave it alone. `spine hash` prints it first, as
+`spine@<hash>`. When it changes, `spine stale` reports every check that cites the old one; while
+it is current, `stale` counts every transition as cited.
 
 A citation is written exactly so, on one line: `covers:`, optional spaces, the cell or `spine`,
 `@`, and the hash in lowercase hex, as `spine hash` prints it. Text on one line that is meant as

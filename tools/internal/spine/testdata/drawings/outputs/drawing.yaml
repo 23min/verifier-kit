@@ -1,0 +1,5 @@
+# drawings/outputs/spine.yaml, drawn as the seed spine is: its outputs after a slash (#116).
+states:
+  closed: [120, 220]
+  open:   [460, 220]
+  gone:   [460, 420]

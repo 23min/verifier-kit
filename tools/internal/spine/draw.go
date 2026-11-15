@@ -1,10 +1,11 @@
 package spine
 
 // The drawing (#108): a spine as an SVG, its states where a layout puts them. A move to another
-// state is an edge, labelled with its event and its condition as the spine writes it; every
-// other rule is an entry in a table of events by state. Terminal states are double circles, and
-// kinds are grey fills. A layout that can't be drawn is an error; a label that overlaps something
-// or leaves the drawing is a warning, and the drawing is made all the same.
+// state is an edge, labelled with its event, what it sends after a slash (#116), and its
+// condition as the spine writes it; every other rule is an entry in a table of events by state.
+// Terminal states are double circles, and kinds are grey fills. A layout that can't be drawn is
+// an error; a label that overlaps something or leaves the drawing is a warning, and the drawing
+// is made all the same.
 
 import (
 	"fmt"
@@ -381,8 +382,9 @@ func (d *drawer) start() {
 }
 
 // edge draws the moves from one state to another as one arrow, bowed to the left of travel by
-// its bend, and its label, each move's event with its condition below it. When the second state
-// also moves to the first, the bend is pairBend unless the layout gives one.
+// its bend, and its label, each move's event and what it sends, event / output, with its
+// condition below it. When the second state also moves to the first, the bend is pairBend unless
+// the layout gives one.
 func (d *drawer) edge(e *edge, l *Layout, pair bool) {
 	from, to := e.ends[0], e.ends[1]
 	a, b := d.shapes[from], d.shapes[to]
@@ -409,7 +411,7 @@ func (d *drawer) edge(e *edge, l *Layout, pair bool) {
 	what := from + " → " + to
 	var lines []string
 	for _, r := range e.moves {
-		lines = append(lines, r.Event)
+		lines = append(lines, r.Event+sends(r))
 		if r.WhenText != "" {
 			lines = append(lines, "["+strings.Join(strings.Fields(r.WhenText), " ")+"]")
 		}
@@ -436,6 +438,15 @@ func (d *drawer) edge(e *edge, l *Layout, pair bool) {
 	d.add(`<path class="e" d="M%s,%s Q%s,%s %s,%s" marker-end="url(#arr)"/>`, num(s.x), num(s.y), num(c.x), num(c.y), num(t.x), num(t.y))
 	d.text(lines, centre.x, centre.y-h/2+14, "middle", "lb", 14, "the label of "+what)
 	d.add(`</g>`)
+}
+
+// sends is what a rule's step sends as the drawing writes it after the event or the outcome,
+// " / output", or nothing.
+func sends(r *Rule) string {
+	if r.Outcome.Output == "" {
+		return ""
+	}
+	return " / " + r.Outcome.Output
 }
 
 // state draws a state: filled by its kind, ringed when terminal, its name inside.
@@ -516,6 +527,7 @@ func (d *drawer) table() float64 {
 		if words == "to" {
 			words += " " + r.Outcome.Target
 		}
+		words += sends(r)
 		if r.WhenText != "" {
 			words += " [" + strings.Join(strings.Fields(r.WhenText), " ") + "]"
 		}

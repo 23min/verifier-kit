@@ -124,9 +124,9 @@ A diagram that can't fail a build is documentation, not oracle.
 
 ### The spine
 
-One ratified state machine per feature, covering lifecycle and permissions only. Format and
-checks: `docs/reference/spine-format.md`. Precedent: SCR's tables with automated checks for
-missing and overlapping cases.
+One ratified state machine per feature, covering only its lifecycle, its permissions and what
+each step sends to other systems. Format and checks: `docs/reference/spine-format.md`.
+Precedent: SCR's tables with automated checks for missing and overlapping cases.
 
 ### The other views
 

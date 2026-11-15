@@ -48,16 +48,19 @@ to, or to the left of travel when it is straight; `label` sets its centre instea
 - **Each state** a circle with its name inside, widened into an ellipse when the name needs it;
   filled by its kind, fact darkest, then policy, then design, and unfilled when it has none; a
   terminal state with a second outline. An arrow from the left points at the initial state.
-- **Each move to another state** an arrow, labelled with its event and, on the line below, its
-  `when` in brackets, as the spine writes it with each run of spaces and line breaks as one space:
-  `publish` above `[role == 'owner']`. Moves from one state to another share their arrow, one
-  label line or pair for each, in the spine's order.
+- **Each move to another state** an arrow, labelled with its event, then ` / ` and its output
+  when it sends one, and on the line below its `when` in brackets, as the spine writes it with
+  each run of spaces and line breaks as one space: `publish / notify` above
+  `[role == 'owner']`. Moves from one state to another share their arrow, one label line or pair
+  for each, in the spine's order.
 - **Every other rule,** a stay, an ignore, a refusal or a move to its own state, in a table below:
   a row for each event, a column for each state with such a rule, and in the cell each rule as
-  the spine names its outcome (`stay`, `ignore`, `reject`, `to <state>`) with its `when` in
-  brackets, in the spine's order. A note above the table names the terminal states with no rules.
-  The columns share the width equally. When the widest entry doesn't fit one, the states go in
-  blocks of as many columns as fit it, each block with a row for each event, one under another.
+  the spine names its outcome (`stay`, `ignore`, `reject`, `to <state>`), then ` / ` and its
+  output when it sends one, and its `when` in brackets, in the spine's order:
+  `stay / notify [role == 'owner']`. A note above the table names the terminal states with no
+  rules. The columns share the width equally. When the widest entry doesn't fit one, the states
+  go in blocks of as many columns as fit it, each block with a row for each event, one under
+  another.
 
 So each rule is drawn exactly once. In the SVG, each arrow is a `<g class="move">` titled
 `<from> → <to>`, and each table cell a `<g class="rules">` titled `<state>/<event>`. The colours

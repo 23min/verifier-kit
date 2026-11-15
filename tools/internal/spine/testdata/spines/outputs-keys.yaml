@@ -1,0 +1,20 @@
+# Outputs written wrong (#116): the list names an output twice, and each rule but the last gets
+# a rule's outputs wrong in its own way.
+machine: door
+vars:
+  role: [owner, guest]
+states:
+  closed: {}
+  open: {}
+  gone: {terminal: true}
+initial: closed
+events: [open, remove, knock]
+outputs: [chime, alarm, chime]
+rules:
+  - {from: closed, event: open, when: "role == 'owner'", to: open}
+  - {from: closed, event: open, when: "role != 'owner'", reject: true, outputs: []}
+  - {from: closed, event: remove, to: gone, outputs: [chime, alarm]}
+  - {from: closed, event: knock, stay: true, outputs: chime}
+  - {from: open, event: open, stay: true, outputs: [yes]}
+  - {from: open, event: remove, ignore: true, outputs: [alarm]}
+  - {from: open, event: knock, stay: true, outputs: []}

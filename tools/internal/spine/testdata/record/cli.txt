@@ -1112,6 +1112,15 @@ exit 0
 | options:
 |   -h, --help               show this help
 |
+=== in tools/internal/spine/testdata: spine hash drawings/outputs/spine.yaml
+exit 0
+--- stdout
+| spine@6ff7b84778f8
+| closed/open@2361092bc972
+| closed/remove@054342455112
+| open/open@fe132ab2f82b
+| open/remove@6c6a6ee2ab96
+|
 === in tools/internal/spine/testdata: spine hash seeds/spine.yaml
 exit 0
 --- stdout
