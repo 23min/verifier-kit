@@ -199,14 +199,14 @@ type search struct {
 	queued   map[string]bool
 	longest  int
 
-	n, started int     // runs of n steps are replaying; started of them have begun
-	run        *run    // the run replaying
-	at         int     // the step of the run being compared
-	state      string  // the spine's state before that step
+	n, started int      // runs of n steps are replaying; started of them have begun
+	run        *run     // the run replaying
+	at         int      // the step of the run being compared
+	state      string   // the spine's state before that step
 	want       Outcome  // what the spine does at that step; of kind "undefined" when it doesn't say
 	result     string   // what the code gave for the step: its result, or how it crashed
 	sent       []string // what the adapter says the step sent; nil when it says nothing
-	waiting    string  // the reply next answers: "new", "start", "apply" or "observe"; none at the end
+	waiting    string   // the reply next answers: "new", "start", "apply" or "observe"; none at the end
 
 	exercised, reported map[string]bool
 	runs                int
