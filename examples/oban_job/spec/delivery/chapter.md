@@ -10,7 +10,8 @@ chapter assumes, and why.
 
 ## 1. Glossary
 
-The rest of this chapter uses only these names for the states, events and variable of a job.
+The rest of this chapter uses only these names for the states, events, output and variable of a
+job.
 
 Things:
 
@@ -53,6 +54,12 @@ Events of a job:
 - **wait**: time passes until every backoff and every snooze is over; then the queue runs every
   job that is available.
 - **cancel**: an operator cancels the job.
+
+Output:
+
+- **send_mail**: the worker's call to the mail server to send the email. The worker makes it once
+  in each attempt, whatever the server answers. Only the call is named: the content of the
+  email, such as its address, is not part of it.
 
 Variable:
 
@@ -100,10 +107,19 @@ attempt, to the attempt's outcome within the step.
 6. **cancel.** An operator's cancel makes the job cancelled at once, from any state that is not
    final, and the worker doesn't run (A4).
 7. completed, cancelled and discarded are final. A job in one of them never runs again.
+8. **What a step sends.** A step in which the worker runs sends send_mail once, whatever the
+   answer: the worker calls the mail server once per attempt (rule 2), and runs at most once per
+   step (rule 5). A step in which the worker doesn't run sends nothing, whatever the answer. The
+   answer decides the job's outcome, not what the step sends. By event:
+   - run sends send_mail from available_0. From a retryable or scheduled job it sends nothing,
+     because the queue doesn't run the job (rule 3).
+   - wait sends send_mail from every state that is not final (rule 4).
+   - cancel sends nothing from any state that is not final, because the worker doesn't run
+     (rule 6).
 
 The outcome of a step in which the worker runs, by the job's state before the step and the
 answer (rules 2 to 4). "stays" means that the worker ran and the job ends the step in the state
-it started in.
+it started in. Each step in the table, including one that stays, sends send_mail once (rule 8).
 
 | Before | Step | accepted | failed | bounced | rate_limited |
 |---|---|---|---|---|---|
@@ -115,7 +131,8 @@ it started in.
 | scheduled_2 | wait | completed | discarded | cancelled | stays scheduled_2 |
 
 In every other step the answer doesn't matter: run leaves a retryable or scheduled job as it is
-(rule 3), and cancel makes any job that is not final cancelled (rule 6).
+(rule 3), and cancel makes any job that is not final cancelled (rule 6). These steps send nothing
+(rule 8).
 
 Oban's part and the app's. Oban decides what each state means, and the moves between them: a
 job inserted to run now is available; a failed attempt makes it retryable, or discarded at its
@@ -265,13 +282,15 @@ point, the chapter assumes the following, and says what in the documentation led
 
 ## 7. What the lifecycle does not show
 
-The lifecycle shows the job's state and count after each step, and nothing else.
+The lifecycle shows the job's state and count after each step, what the step sends, and nothing
+else.
 
 - How long a backoff or a snooze lasts. A wait waits out any length. The 30 times `attempt`
   seconds of `backoff/1` and the 60 seconds of the snooze are checked separately, against the
   worker's `backoff/1` and its snooze.
-- How often the worker ran. A snooze gives its attempt back, so the count doesn't show it. Oban
-  keeps a `snoozed` count in the job's `meta` instead
+- Oban's `snoozed` count. A snooze gives its attempt back, so the job's count doesn't show how
+  often the worker ran; send_mail does, once for each attempt, snoozed or not. Oban keeps its own
+  `snoozed` count in the job's `meta`
   (https://oban.hexdocs.pm/2.24.2/Oban.Worker.html#module-snoozing-jobs), outside the states.
 - That a job may never end. Nothing in the app limits snoozes, so a job rate limited at every
   wait stays scheduled for ever (D10 shows one round of it). The lifecycle allows this, and no

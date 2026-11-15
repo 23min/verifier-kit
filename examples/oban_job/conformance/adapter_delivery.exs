@@ -9,7 +9,8 @@
 #   apply    -> run:    the mail server will give `answer`; the queue runs its available jobs
 #               wait:   the same, after every backoff and snooze is over
 #               cancel: an operator cancels the job
-#               Oban refuses none of them, so each replies "ok"
+#               Oban refuses none of them, so each replies "ok"; and the step's outputs: one
+#               send_mail for each call the worker made to the mail server during it
 #   observe  -> the job's row: <state>_<attempt>, or the state alone when it is final
 #
 # What src/ must offer, in .ex files under src/. The checks in checks/delivery/ use the same
@@ -27,8 +28,14 @@
 # Time doesn't pass here: Oban runs in testing: :manual, and the queue runs only when the
 # adapter drains it, with with_scheduled: true for a wait.
 
+# The mail server: answers what the step's answer says, and counts the calls made to it.
 defmodule FakeServer do
-  def deliver(_to), do: :persistent_term.get(__MODULE__)
+  def deliver(_to) do
+    :counters.add(:persistent_term.get({__MODULE__, :calls}), 1, 1)
+    :persistent_term.get(__MODULE__)
+  end
+
+  def calls, do: :counters.get(:persistent_term.get({__MODULE__, :calls}), 1)
 end
 
 defmodule Adapter do
@@ -66,6 +73,7 @@ defmodule Adapter do
     # A raise is a divergence, as an exception from a Python adapter's apply() is.
     try do
       :persistent_term.put(FakeServer, @answers[answer])
+      before = FakeServer.calls()
 
       case event do
         "run" -> Oban.drain_queue(queue: :mail)
@@ -73,7 +81,7 @@ defmodule Adapter do
         "cancel" -> :ok = Mailer.cancel(id)
       end
 
-      {%{result: "ok"}, id}
+      {%{result: "ok", outputs: List.duplicate("send_mail", FakeServer.calls() - before)}, id}
     rescue
       e -> {%{error: Exception.format_banner(:error, e, __STACKTRACE__)}, id}
     end
@@ -87,6 +95,8 @@ defmodule Adapter do
   defp handle(request, id),
     do: {%{error: "cannot handle #{inspect(request)} with job #{inspect(id)}"}, id}
 end
+
+:persistent_term.put({FakeServer, :calls}, :counters.new(1, []))
 
 # Logs go to stderr, so that stdout holds only the protocol.
 :logger.update_handler_config(:default, :config, %{type: :standard_error})

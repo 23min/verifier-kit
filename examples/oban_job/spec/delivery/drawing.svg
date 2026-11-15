@@ -41,87 +41,87 @@
   <path class="e" d="M322.6,200 L366.6,200" marker-end="url(#arr)"/>
   <g class="move"><title>available_0 → completed</title>
   <path class="e" d="M394.7,233 Q154.4,458 97.9,784.4" marker-end="url(#arr)"/>
-  <text class="lb" x="113.2" y="414.3" text-anchor="middle"><tspan x="113.2" dy="0">run</tspan><tspan x="113.2" dy="18">[answer == 'accepted']</tspan><tspan x="113.2" dy="18">wait</tspan><tspan x="113.2" dy="18">[answer == 'accepted']</tspan></text>
+  <text class="lb" x="113.2" y="414.3" text-anchor="middle"><tspan x="113.2" dy="0">run / send_mail</tspan><tspan x="113.2" dy="18">[answer == 'accepted']</tspan><tspan x="113.2" dy="18">wait / send_mail</tspan><tspan x="113.2" dy="18">[answer == 'accepted']</tspan></text>
   </g>
   <g class="move"><title>available_0 → retryable_1</title>
   <path class="e" d="M395.2,233.2 Q210,410 394.5,586.1" marker-end="url(#arr)"/>
-  <text class="lb" x="180" y="338" text-anchor="middle"><tspan x="180" dy="0">run</tspan><tspan x="180" dy="18">[answer == 'failed']</tspan><tspan x="180" dy="18">wait</tspan><tspan x="180" dy="18">[answer == 'failed']</tspan></text>
+  <text class="lb" x="180" y="338" text-anchor="middle"><tspan x="180" dy="0">run / send_mail</tspan><tspan x="180" dy="18">[answer == 'failed']</tspan><tspan x="180" dy="18">wait / send_mail</tspan><tspan x="180" dy="18">[answer == 'failed']</tspan></text>
   </g>
   <g class="move"><title>available_0 → cancelled</title>
   <path class="e" d="M460.8,234.8 Q674.9,476.1 766.7,785.2" marker-end="url(#arr)"/>
-  <text class="lb" x="731.6" y="413.6" text-anchor="middle"><tspan x="731.6" dy="0">run</tspan><tspan x="731.6" dy="18">[answer == 'bounced']</tspan><tspan x="731.6" dy="18">wait</tspan><tspan x="731.6" dy="18">[answer == 'bounced']</tspan><tspan x="731.6" dy="18">cancel</tspan></text>
+  <text class="lb" x="731.6" y="413.6" text-anchor="middle"><tspan x="731.6" dy="0">run / send_mail</tspan><tspan x="731.6" dy="18">[answer == 'bounced']</tspan><tspan x="731.6" dy="18">wait / send_mail</tspan><tspan x="731.6" dy="18">[answer == 'bounced']</tspan><tspan x="731.6" dy="18">cancel</tspan></text>
   </g>
   <g class="move"><title>available_0 → scheduled_0</title>
   <path class="e" d="M430,240 Q430,305 430,369" marker-end="url(#arr)"/>
-  <text class="lb" x="610" y="183" text-anchor="middle"><tspan x="610" dy="0">run</tspan><tspan x="610" dy="18">[answer == 'rate_limited']</tspan><tspan x="610" dy="18">wait</tspan><tspan x="610" dy="18">[answer == 'rate_limited']</tspan></text>
+  <text class="lb" x="610" y="183" text-anchor="middle"><tspan x="610" dy="0">run / send_mail</tspan><tspan x="610" dy="18">[answer == 'rate_limited']</tspan><tspan x="610" dy="18">wait / send_mail</tspan><tspan x="610" dy="18">[answer == 'rate_limited']</tspan></text>
   </g>
   <g class="move"><title>retryable_1 → completed</title>
   <path class="e" d="M367.6,620.8 Q196.9,622.9 112,787.4" marker-end="url(#arr)"/>
-  <text class="lb" x="238" y="680" text-anchor="middle"><tspan x="238" dy="0">wait</tspan><tspan x="238" dy="18">[answer == 'accepted']</tspan></text>
+  <text class="lb" x="238" y="680" text-anchor="middle"><tspan x="238" dy="0">wait / send_mail</tspan><tspan x="238" dy="18">[answer == 'accepted']</tspan></text>
   </g>
   <g class="move"><title>retryable_1 → retryable_2</title>
   <path class="e" d="M395.2,653.2 Q210,830 394.5,1006.1" marker-end="url(#arr)"/>
-  <text class="lb" x="280" y="846" text-anchor="middle"><tspan x="280" dy="0">wait</tspan><tspan x="280" dy="18">[answer == 'failed']</tspan></text>
+  <text class="lb" x="280" y="846" text-anchor="middle"><tspan x="280" dy="0">wait / send_mail</tspan><tspan x="280" dy="18">[answer == 'failed']</tspan></text>
   </g>
   <g class="move"><title>retryable_1 → cancelled</title>
   <path class="e" d="M492.4,620.6 Q666.7,622.1 757,787.7" marker-end="url(#arr)"/>
-  <text class="lb" x="626" y="661" text-anchor="middle"><tspan x="626" dy="0">wait</tspan><tspan x="626" dy="18">[answer == 'bounced']</tspan><tspan x="626" dy="18">cancel</tspan></text>
+  <text class="lb" x="626" y="661" text-anchor="middle"><tspan x="626" dy="0">wait / send_mail</tspan><tspan x="626" dy="18">[answer == 'bounced']</tspan><tspan x="626" dy="18">cancel</tspan></text>
   </g>
   <g class="move"><title>retryable_1 → scheduled_1</title>
   <path class="e" d="M430,660 Q430,725 430,789" marker-end="url(#arr)"/>
-  <text class="lb" x="537.9" y="720.8" text-anchor="middle"><tspan x="537.9" dy="0">wait</tspan><tspan x="537.9" dy="18">[answer == 'rate_limited']</tspan></text>
+  <text class="lb" x="537.9" y="720.8" text-anchor="middle"><tspan x="537.9" dy="0">wait / send_mail</tspan><tspan x="537.9" dy="18">[answer == 'rate_limited']</tspan></text>
   </g>
   <g class="move"><title>retryable_2 → completed</title>
   <path class="e" d="M376,1019.9 Q239,969 127.6,865.1" marker-end="url(#arr)"/>
-  <text class="lb" x="269" y="988" text-anchor="middle"><tspan x="269" dy="0">wait</tspan><tspan x="269" dy="18">[answer == 'accepted']</tspan></text>
+  <text class="lb" x="269" y="988" text-anchor="middle"><tspan x="269" dy="0">wait / send_mail</tspan><tspan x="269" dy="18">[answer == 'accepted']</tspan></text>
   </g>
   <g class="move"><title>retryable_2 → discarded</title>
   <path class="e" d="M395.2,1073.2 Q210,1250 392.9,1424.5" marker-end="url(#arr)"/>
-  <text class="lb" x="217.6" y="1245.4" text-anchor="middle"><tspan x="217.6" dy="0">wait</tspan><tspan x="217.6" dy="18">[answer == 'failed']</tspan></text>
+  <text class="lb" x="217.6" y="1245.4" text-anchor="middle"><tspan x="217.6" dy="0">wait / send_mail</tspan><tspan x="217.6" dy="18">[answer == 'failed']</tspan></text>
   </g>
   <g class="move"><title>retryable_2 → cancelled</title>
   <path class="e" d="M491.9,1034.7 Q656.4,1020.7 753.5,871" marker-end="url(#arr)"/>
-  <text class="lb" x="621" y="975" text-anchor="middle"><tspan x="621" dy="0">wait</tspan><tspan x="621" dy="18">[answer == 'bounced']</tspan><tspan x="621" dy="18">cancel</tspan></text>
+  <text class="lb" x="621" y="975" text-anchor="middle"><tspan x="621" dy="0">wait / send_mail</tspan><tspan x="621" dy="18">[answer == 'bounced']</tspan><tspan x="621" dy="18">cancel</tspan></text>
   </g>
   <g class="move"><title>retryable_2 → scheduled_2</title>
   <path class="e" d="M430,1080 Q430,1145 430,1209" marker-end="url(#arr)"/>
-  <text class="lb" x="470" y="1141" text-anchor="middle"><tspan x="470" dy="0">wait</tspan><tspan x="470" dy="18">[answer == 'rate_limited']</tspan></text>
+  <text class="lb" x="470" y="1141" text-anchor="middle"><tspan x="470" dy="0">wait / send_mail</tspan><tspan x="470" dy="18">[answer == 'rate_limited']</tspan></text>
   </g>
   <g class="move"><title>scheduled_0 → completed</title>
   <path class="e" d="M381.2,434.9 Q166.7,544.5 102.1,785" marker-end="url(#arr)"/>
-  <text class="lb" x="263" y="578" text-anchor="middle"><tspan x="263" dy="0">wait</tspan><tspan x="263" dy="18">[answer == 'accepted']</tspan></text>
+  <text class="lb" x="263" y="578" text-anchor="middle"><tspan x="263" dy="0">wait / send_mail</tspan><tspan x="263" dy="18">[answer == 'accepted']</tspan></text>
   </g>
   <g class="move"><title>scheduled_0 → retryable_1</title>
   <path class="e" d="M430,450 Q430,515 430,579" marker-end="url(#arr)"/>
-  <text class="lb" x="420" y="501" text-anchor="middle"><tspan x="420" dy="0">wait</tspan><tspan x="420" dy="18">[answer == 'failed']</tspan></text>
+  <text class="lb" x="420" y="501" text-anchor="middle"><tspan x="420" dy="0">wait / send_mail</tspan><tspan x="420" dy="18">[answer == 'failed']</tspan></text>
   </g>
   <g class="move"><title>scheduled_0 → cancelled</title>
   <path class="e" d="M479.3,434.6 Q697.2,543.2 767.1,785.2" marker-end="url(#arr)"/>
-  <text class="lb" x="591" y="579" text-anchor="middle"><tspan x="591" dy="0">wait</tspan><tspan x="591" dy="18">[answer == 'bounced']</tspan><tspan x="591" dy="18">cancel</tspan></text>
+  <text class="lb" x="591" y="579" text-anchor="middle"><tspan x="591" dy="0">wait / send_mail</tspan><tspan x="591" dy="18">[answer == 'bounced']</tspan><tspan x="591" dy="18">cancel</tspan></text>
   </g>
   <g class="move"><title>scheduled_1 → completed</title>
   <path class="e" d="M384,802.9 Q260,730 136.8,802.5" marker-end="url(#arr)"/>
-  <text class="lb" x="230" y="746" text-anchor="middle"><tspan x="230" dy="0">wait</tspan><tspan x="230" dy="18">[answer == 'accepted']</tspan></text>
+  <text class="lb" x="230" y="746" text-anchor="middle"><tspan x="230" dy="0">wait / send_mail</tspan><tspan x="230" dy="18">[answer == 'accepted']</tspan></text>
   </g>
   <g class="move"><title>scheduled_1 → retryable_2</title>
   <path class="e" d="M430,870 Q430,935 430,999" marker-end="url(#arr)"/>
-  <text class="lb" x="514.4" y="930.8" text-anchor="middle"><tspan x="514.4" dy="0">wait</tspan><tspan x="514.4" dy="18">[answer == 'failed']</tspan></text>
+  <text class="lb" x="514.4" y="930.8" text-anchor="middle"><tspan x="514.4" dy="0">wait / send_mail</tspan><tspan x="514.4" dy="18">[answer == 'failed']</tspan></text>
   </g>
   <g class="move"><title>scheduled_1 → cancelled</title>
   <path class="e" d="M485.1,811.1 Q605,770 726.5,811.7" marker-end="url(#arr)"/>
-  <text class="lb" x="605" y="787" text-anchor="middle"><tspan x="605" dy="0">wait</tspan><tspan x="605" dy="18">[answer == 'bounced']</tspan><tspan x="605" dy="18">cancel</tspan></text>
+  <text class="lb" x="605" y="787" text-anchor="middle"><tspan x="605" dy="0">wait / send_mail</tspan><tspan x="605" dy="18">[answer == 'bounced']</tspan><tspan x="605" dy="18">cancel</tspan></text>
   </g>
   <g class="move"><title>scheduled_2 → completed</title>
   <path class="e" d="M381.2,1225.1 Q166.7,1115.5 102.1,875" marker-end="url(#arr)"/>
-  <text class="lb" x="213" y="1074" text-anchor="middle"><tspan x="213" dy="0">wait</tspan><tspan x="213" dy="18">[answer == 'accepted']</tspan></text>
+  <text class="lb" x="213" y="1074" text-anchor="middle"><tspan x="213" dy="0">wait / send_mail</tspan><tspan x="213" dy="18">[answer == 'accepted']</tspan></text>
   </g>
   <g class="move"><title>scheduled_2 → discarded</title>
   <path class="e" d="M430,1290 Q430,1355 430,1414" marker-end="url(#arr)"/>
-  <text class="lb" x="430" y="1351" text-anchor="middle"><tspan x="430" dy="0">wait</tspan><tspan x="430" dy="18">[answer == 'failed']</tspan></text>
+  <text class="lb" x="430" y="1351" text-anchor="middle"><tspan x="430" dy="0">wait / send_mail</tspan><tspan x="430" dy="18">[answer == 'failed']</tspan></text>
   </g>
   <g class="move"><title>scheduled_2 → cancelled</title>
   <path class="e" d="M479.3,1225.4 Q697.2,1116.8 767.1,874.8" marker-end="url(#arr)"/>
-  <text class="lb" x="726.6" y="1125.9" text-anchor="middle"><tspan x="726.6" dy="0">wait</tspan><tspan x="726.6" dy="18">[answer == 'bounced']</tspan><tspan x="726.6" dy="18">cancel</tspan></text>
+  <text class="lb" x="726.6" y="1125.9" text-anchor="middle"><tspan x="726.6" dy="0">wait / send_mail</tspan><tspan x="726.6" dy="18">[answer == 'bounced']</tspan><tspan x="726.6" dy="18">cancel</tspan></text>
   </g>
   <ellipse class="st design" cx="430" cy="200" rx="62.4" ry="40"/>
   <text class="sn" x="430" y="206" text-anchor="middle">available_0</text>
@@ -174,10 +174,10 @@
   <line class="rule" x1="24" y1="1751" x2="836" y2="1751"/>
   <text class="tx" x="24" y="1771">wait</text>
   <g class="rules"><title>scheduled_0/wait</title>
-  <text class="tx" x="95" y="1771">stay [answer == 'rate_limited']</text>
+  <text class="tx" x="95" y="1771">stay / send_mail [answer == 'rate_limited']</text>
   </g>
   <g class="rules"><title>scheduled_1/wait</title>
-  <text class="tx" x="465.5" y="1771">stay [answer == 'rate_limited']</text>
+  <text class="tx" x="465.5" y="1771">stay / send_mail [answer == 'rate_limited']</text>
   </g>
   <line class="rule" x1="24" y1="1779" x2="836" y2="1779"/>
   <text class="tx" x="24" y="1799">cancel</text>
@@ -191,7 +191,7 @@
   <line class="rule" x1="24" y1="1873" x2="836" y2="1873"/>
   <text class="tx" x="24" y="1893">wait</text>
   <g class="rules"><title>scheduled_2/wait</title>
-  <text class="tx" x="95" y="1893">stay [answer == 'rate_limited']</text>
+  <text class="tx" x="95" y="1893">stay / send_mail [answer == 'rate_limited']</text>
   </g>
   <line class="rule" x1="24" y1="1901" x2="836" y2="1901"/>
   <text class="tx" x="24" y="1921">cancel</text>
