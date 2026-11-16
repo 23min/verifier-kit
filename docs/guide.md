@@ -263,12 +263,18 @@ header says how to use it:
     "*": person
   roles:
     builder:
-      allow: ["src/*"]
+      allow: ["src/*", "pyproject.toml", "uv.lock"]   # the code, and your manifest and lock file
       deny: ["spec/*", "checks/*", "conformance/*", "mutation/*", ".verifier-kit/*", "verify",
              "policy.yaml", "integrations/*", ".claude/*", ".github/*"]
     person:
       allow: ["*"]
   ```
+
+  The builder changes the manifest and lock file as it changes `src/`: the packages the code
+  uses are part of the code, and the oracle judges what the code does. When the spine is about
+  a library rather than your own code, as oban_job's is about Oban, the library's pin is yours:
+  leave the two files out of the builder's `allow`, and out of prompt I and the Stop hook's
+  message.
 
 Files copied from those links lose their execute bit: run `chmod +x` on both hook scripts, and
 commit them that way.
@@ -281,10 +287,10 @@ commit them that way.
 
 ## 12. Build
 
-The builder works on a `build/*` branch, made for it, and changes `src/` until `./verify` passes.
-It can read the oracle but not change it. When it tries to finish, the Stop hook runs `./verify`
-and sends it back with the failing lines; after five attempts (`VERIFY_MAX_ATTEMPTS`) it stops
-for you. CI runs `./verify --full` on its pull request.
+The builder works on a `build/*` branch, made for it, and changes `src/` and the packages it
+uses until `./verify` passes. It can read the oracle but not change it. When it tries to finish,
+the Stop hook runs `./verify` and sends it back with the failing lines; after five attempts
+(`VERIFY_MAX_ATTEMPTS`) it stops for you. CI runs `./verify --full` on its pull request.
 
 - **An LLM**, the builder, does the work (prompt [I](#i-the-builder)).
 - **You** make its branch, take over when the Stop hook gives up, and merge when CI passes. A
@@ -416,8 +422,8 @@ mutant that survives. Don't change anything else.
 ### I. The builder
 
 ```text
-<the task>. You are on the branch build/<task>; change only src/. ./verify decides when you are
-done: when you try to finish, it runs and sends you back with what fails. The spec, the checks,
-the adapter, the mutants and the toolkit are fixed. If the spec looks wrong, stop and say so
-instead of working around it.
+<the task>. You are on the branch build/<task>; change only src/, and the manifest and lock
+file when you need a package. ./verify decides when you are done: when you try to finish, it
+runs and sends you back with what fails. The spec, the checks, the adapter, the mutants and the
+toolkit are fixed. If the spec looks wrong, stop and say so instead of working around it.
 ```
