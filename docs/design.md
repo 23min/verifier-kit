@@ -273,7 +273,8 @@ From here on, progress is tracked in GitHub issues, not in this table.
   but did see agents over-claim what they had shown. Agents have also been seen editing or
   deleting tests to make them pass (ImpossibleBench). The path guard and deny rules are there
   for that; read-only access and holdouts reduce it.
-- Two interpreters can share a misreading.
+- Two interpreters can share a misreading, and two readings haven't been compared with one reader
+  asked for its questions (#14, not planned).
 - The best-known successes had an oracle for free; business rules rarely do.
 - Specs as practiced (linked tickets) haven't been shown to reduce defects; executable checks
   are the untested bet.
