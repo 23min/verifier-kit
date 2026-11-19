@@ -22,6 +22,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"testing"
@@ -439,6 +440,21 @@ func pathWithout(t *testing.T, dir, name string) string {
 	return dir
 }
 
+// What env prints when a script's #!/usr/bin/env line names a program that isn't on PATH is the
+// system's wording, not ./verify's, and systems differ: GNU coreutils prints "/usr/bin/env:
+// 'python3': No such file or directory", and Ubuntu 26.04's env prints "env: 'python3': ..."
+// followed by a hint about -S.
+var (
+	envNotFound = regexp.MustCompile(`(?m)^(\s*)\S*env: '([^']+)': No such file or directory$`)
+	envHint     = regexp.MustCompile(`(?m)^\s*env: use -\[v\]S to pass options in shebang lines\n`)
+)
+
+// envWording gives env's message in one wording, so that the record holds what ./verify does.
+func envWording(s string) string {
+	s = envHint.ReplaceAllString(s, "")
+	return envNotFound.ReplaceAllString(s, "${1}env: '${2}': No such file or directory")
+}
+
 // environment is the test's own, without what ./verify reads, so that only a run's env sets
 // it, and in the C locale, so that the programs it runs write their messages alike everywhere.
 func environment() []string {
@@ -533,7 +549,7 @@ func TestRecord(t *testing.T) {
 		tmp = real // ./verify prints the folders it resolves
 	}
 	normal := func(s string) string {
-		return strings.ReplaceAll(strings.ReplaceAll(s, tmp, "$TMP"), repo, "$ROOT")
+		return envWording(strings.ReplaceAll(strings.ReplaceAll(s, tmp, "$TMP"), repo, "$ROOT"))
 	}
 	rec := record.Load(t, filepath.Join("testdata", "record"), *update, "./verify", "go -C tools test ./internal/verify/ -update")
 
