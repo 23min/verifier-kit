@@ -20,7 +20,8 @@ The split follows the design's principles (`docs/design.md`):
 So an LLM can do nearly all the writing. What stays with you:
 
 - what you want, said to the spec partner;
-- the answer to every question the readings raise;
+- the answer to every question the readings raise, and, for an existing system, to every
+  conflict its audit finds;
 - each approval of the oracle: the chapter, the spine, the behaviors, the adapter, the checks and
   the mutants, each a reviewed merge;
 - your repository's settings: a protected branch, CI as a required check, and who may push which
@@ -74,6 +75,41 @@ with outputs).
   questions (prompt [B](#b-the-spec-partner)).
 - **You** say what you want, and approve the chapter by a reviewed merge.
 - **Why:** the chapter is your intent; everything after it is checked against it.
+
+**For an existing system,** what it should do is already written in many places, and they
+disagree. Start the chapter from an audit of them, in three sessions:
+
+1. **The docs reader** reads what says what should be true: the docs, specs, ADRs and recorded
+   decisions, but not the code or its history. It writes `spec/<machine>/audit/docs.md`: each
+   claim a source makes about a case of the lifecycle, with where it says so and its date; the
+   conflicts among them; the cases none covers; and the names that don't fit the lifecycle's
+   (prompt [B1](#b1-the-docs-reader)).
+2. **The history reader,** if you opt in, reads what happened: every commit that touches the
+   lifecycle's files, the issues and pull requests they cite, and the code, which it may run,
+   giving the command and what it printed. It writes `spec/<machine>/audit/history.md` in the
+   same shape, with each case's changes over time (prompt [B2](#b2-the-history-reader)). Opting
+   in makes the audit longer and raises more questions; in exchange, drift and decisions never
+   written down come to light.
+3. **The spec partner** lines the two up case by case and asks you about every conflict, every
+   case neither covers and every name that doesn't fit: how should the system behave, with each
+   source's answer as an option, picking none. It records each answer, dated, with its reason
+   and the sources it makes wrong, in `spec/<machine>/audit/decisions.md`, and then writes the
+   chapter with you (prompt [B3](#b3-the-spec-partner-after-an-audit)).
+
+Both readers get the lifecycle's names from step 2, so that their tables line up, and neither
+sees the other's: one reader holding both would reconcile them quietly, and that call is yours
+(principle 4). The code is one source among the others, what was built rather than what is
+right; where your answers differ from it, `./verify` shows each case once the adapter exists
+(step 8). For each answer that makes a doc wrong, the spec partner drafts one item for your
+tracker, such as an issue, listing those docs and quoting the answer; you file it, and
+`decisions.md` cites it. Correct those docs in changes of their own after the spine is
+ratified, so that its review stays about what you want.
+
+- **Two LLMs** read, each in its own session, and the spec partner asks.
+- **You** choose whether to opt in, answer every question, possibly with something no source
+  says, and file the items.
+- **Why:** the sources disagree where behavior drifted, or was decided or built badly. Each
+  conflict is a decision about what you want, made now and written down.
 
 ## 4. Two readings
 
@@ -349,6 +385,74 @@ show. A section with nothing to say says "None." Ask me what you need. Where I h
 something, write it in the section it belongs to, marked "Open question:"; never fill a gap from
 what such systems usually do. You may read the code for its vocabulary, but the chapter says
 what should happen, and where the code seems to do otherwise, ask me.
+```
+
+### B1. The docs reader
+
+```text
+You are the docs reader for one lifecycle, <machine>, in an audit of what this project says it
+should do. Its names, from step 2:
+
+<its states, events and variables with their values, and its outputs, if any>
+
+Read the project's docs, specs, ADRs and recorded decisions: <where they are>. Don't read the
+code, its tests or the git history. Write spec/<machine>/audit/docs.md with four sections:
+1. Claims: a table with one row per claim a source makes about the lifecycle: the case (a state,
+   an event, and the variables' values, or "any"), what the source says happens (moves to a
+   state, stays, or is refused, and what it sends, if it says), the source and where in it (a
+   file and section, or an ADR's number), its date if it has one, and the sentence quoted.
+2. Conflicts: each case on which two claims disagree, with both rows. Don't say which is right.
+3. Not covered: each state and event no claim covers.
+4. Names that don't fit: each state, event or value a source uses that isn't in the list, and
+   where.
+Report what the sources say, not what such systems usually do; where a source is unclear, quote
+it and say so. Change nothing else.
+```
+
+### B2. The history reader
+
+```text
+You are the history reader for one lifecycle, <machine>, in an audit of what has happened to it.
+Its names, from step 2:
+
+<the same list the docs reader was given>
+
+Read what happened: every commit that touches the files where the lifecycle lives (<paths>),
+since <tag or date> if I give one, the issues and pull requests those commits cite, and the code
+as it is now. You may run the code, in a REPL or through the project's tests, to see what it
+does. Don't read the docs, specs or ADRs as they stand. Write spec/<machine>/audit/history.md
+with five sections:
+1. Claims: a table with one row per thing the history or the code shows about a case: the case
+   (a state, an event, and the variables' values, or "any"), what happens (moves to a state,
+   stays, or is refused, and what it sends), the source (a commit's hash and subject, an issue or
+   pull request's number, the code's file and function, or the command you ran and what it
+   printed), its date, and the line quoted.
+2. Changes: each case whose behavior changed over time, oldest first, with each change's commit.
+   A change that was later undone is its own entry.
+3. Conflicts: each case on which two claims disagree and neither is a later change to the other,
+   such as the code against an issue's decision, or a decision no commit carried out. Don't say
+   which is right.
+4. Not covered: each state and event no claim covers.
+5. Names that don't fit: each state, event or value the history or the code uses that isn't in
+   the list, and where.
+The code shows what was built, not what is right: report it as one source among the others.
+Change nothing else.
+```
+
+### B3. The spec partner, after an audit
+
+```text
+You are my spec partner for one lifecycle, <machine>. Below are spec/<machine>/audit/docs.md
+and, if there is one, spec/<machine>/audit/history.md: two readers' tables, of what this
+project's sources say should be true and of what happened. Neither reader saw the other's.
+Line them up case by case, and number the questions: each conflict either table reports, each
+case on which the two disagree, each case neither covers, and each name that doesn't fit. Ask me
+one at a time. For each, give every source's answer with where it says so and its date, say what
+each answer would mean, and pick none; I may answer with something no source says. Record each
+answer, dated, with its reason and the sources it makes wrong, in
+spec/<machine>/audit/decisions.md. For each answer that makes a doc wrong, draft one item for my
+tracker, listing those docs and quoting the answer; when I have filed it, cite it there. Then
+help me write spec/<machine>/chapter.md from the tables and my answers, as prompt B says.
 ```
 
 ### C. The questions

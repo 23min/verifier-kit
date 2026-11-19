@@ -96,7 +96,9 @@ exists, not as a bug later.
 
 You don't start with the spine. You start with a *chapter*: plain prose about the feature,
 written with an LLM as your spec partner. It has a glossary, the process, what must hold,
-scenarios, assumptions, and what it leaves out. Then:
+scenarios, assumptions, and what it leaves out. For an existing system, the chapter can start
+from an audit of what its docs and its history say
+([step 3 of the guide](guide.md#3-write-the-chapter)). Then:
 
 1. **Two readings.** Two readers, LLM sessions on different models that see neither the code nor
    each other, each turn the chapter into a spine.
