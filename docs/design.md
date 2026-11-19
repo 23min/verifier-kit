@@ -67,8 +67,10 @@ merged into the chapters, the oracle is updated to match, and the proposal is cl
 You and a spec partner (an LLM) write the change, chapter by chapter: intent, behavior written
 with glossary names only, what not to build, likely changes, and open questions stated rather
 than smoothed over. The glossary is a closed vocabulary; a name outside it is itself a finding.
-Ratification is a reviewed merge with code owners on `spec/`. Chapters need not be complete
-before building; the next loop finds what's missing.
+For an existing system, the chapter starts from an audit: two readers kept apart, one of what
+its docs say should be true and one of what happened, and each conflict becomes your decision
+(`docs/guide.md`, step 3). Ratification is a reviewed merge with code owners on `spec/`.
+Chapters need not be complete before building; the next loop finds what's missing.
 
 ### Interpretation loop (finds ambiguity, blocks nothing)
 
